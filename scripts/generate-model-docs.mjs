@@ -202,7 +202,7 @@ function generateMermaid(apiName, schemas, root) {
     mmd += `  class ${name} {\n`;
     for (const [pName, pDef] of Object.entries(props)) {
       const tl = typeLabel(pDef).replace(/[<>]/g, '');
-      const req = requiredSet.has(pName) ? '*' : '';
+      const req = requiredSet.has(pName) ? '\u2731' : '';
       mmd += `    ${tl} ${pName}${req}\n`;
     }
     mmd += `  }\n`;
