@@ -1,4 +1,4 @@
-# Governance Model
+# Governance Model (CONCEPT!)
 **Products & TradeItems API**
 
 ## 1. Purpose
