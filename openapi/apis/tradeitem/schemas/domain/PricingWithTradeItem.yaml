@@ -16,7 +16,7 @@ properties:
   supplierIdGln:
     description: |
       Global Location Number (GLN) of the supplier.
-      **ETIM xChange**: Inherited from `Supplier[].SupplierId.SupplierIdGln`
+      **ETIM xChange**: Inherited from `Supplier[].SupplierIdGln`
     $ref: ../../../../shared/schemas/identifiers/Gln.yaml
   
   supplierItemNumber:

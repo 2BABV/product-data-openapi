@@ -16,8 +16,8 @@ properties:
   supplierIdGln:
     description: |
       Global Location Number (GLN) of the supplier. Primary key component.
-      **ETIM xChange**: Inherited from `Supplier[].SupplierId.SupplierIdGln`
-      **Path**: `Supplier[].SupplierId.SupplierIdGln`
+      **ETIM xChange**: Inherited from `Supplier[].SupplierIdGln`
+      **Path**: `Supplier[].SupplierIdGln`
     $ref: ../../../../shared/schemas/identifiers/Gln.yaml
   
   supplierItemNumber:
@@ -60,7 +60,7 @@ properties:
   manufacturerIdGln:
     description: |
       Global Location Number (GLN) of the manufacturer (nullable).
-      **ETIM xChange**: Inherited from Product level `ManufacturerId.ManufacturerIdGln`
+      **ETIM xChange**: Inherited from Product level `ManufacturerIdGln`
       **Path**: `Supplier[].Product[].ProductIdentification.ManufacturerIdGln`
     anyOf:
       - $ref: ../../../../shared/schemas/identifiers/Gln.yaml

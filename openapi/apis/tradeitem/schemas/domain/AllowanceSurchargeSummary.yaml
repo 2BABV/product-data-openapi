@@ -33,7 +33,7 @@ properties:
       Part of the composite key for the trade item.
       
       **ETIM xChange**: `SupplierIdGln`  
-      **Path**: `Supplier[].SupplierId.SupplierIdGln`
+      **Path**: `Supplier[].SupplierIdGln`
     examples:
       - "1234567890123"
       - "8712423012485"

@@ -16,14 +16,16 @@ properties:
     $ref: ../../../../shared/schemas/identifiers/Gln.yaml
     description: |
       GLN (Global Location Number) of the supplier.
-      **ETIM xChange**: `SupplierId.IdValue` where `IdScheme` = `GLN`
+      **ETIM xChange**: `SupplierIdGln`
+      **Path**: `Supplier[].SupplierIdGln`
     examples:
       - "1234567890123"
   supplierItemNumber:
     type: string
     description: |
       The supplier's own item number for this trade item.
-      **ETIM xChange**: `TradeItemSupplierItemNumber`
+      **ETIM xChange**: `SupplierItemNumber`
+      **Path**: `Supplier[].Product[].TradeItem[].ItemIdentification.SupplierItemNumber`
     minLength: 1
     maxLength: 35
     examples:
