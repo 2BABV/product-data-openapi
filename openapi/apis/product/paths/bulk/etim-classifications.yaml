@@ -1,0 +1,104 @@
+get:
+  operationId: getBulkProductEtimClassificationFeatures
+  tags:
+    - Products bulk
+  summary: List product ETIM classifications
+  description: |
+    Retrieve product ETIM classification feature data in a flattened format with cursor-based pagination.
+    
+    **Flattened Structure**: Each row represents a single feature value within a product's ETIM classification.
+    This structure is optimized for:
+    - Predictable payload sizes (each row has consistent structure)
+    - Efficient cursor-based pagination by feature
+    - ETL/data warehouse ingestion
+    - Streaming data processing
+    
+    **Payload Optimization**: Optional properties with null values are omitted from the response
+    to minimize payload size. Clients should treat missing properties as null/not applicable.
+    
+    **Data Reconstruction**: To reconstruct the hierarchical structure:
+    1. Group rows by `manufacturerIdGln` + `manufacturerProductNumber` for products
+    2. Within each product, group by `etimClassCode` + `etimReleaseVersion` for classifications
+    3. Features are individual rows within each classification group
+    
+    **Classification-Only Rows**: Products with classifications but no features are represented
+    with `etimFeatureCode` omitted to ensure all classifications are included in the response.
+    
+    **ETIM Release Filtering**: Use the optional `etimReleaseVersion` query parameter
+    to filter classifications to a specific ETIM release version (e.g., "9.0", "10.0"). If omitted, latest etimReleaseVersion is returned.
+    
+    **Use case**: Ideal for bulk synchronization of ETIM classification data to external systems,
+    data warehouses, or analytics platforms.
+  parameters:
+    - $ref: ../../../../shared/parameters/query/cursor.yaml
+    - $ref: ../../../../shared/parameters/query/limit.yaml
+    - $ref: ../../../../shared/parameters/query/selection-id.yaml
+    - $ref: ../../../../shared/parameters/query/manufacturer-id-gln-filter.yaml
+    - $ref: ../../../../shared/parameters/query/mutation-date-time.yaml
+    - $ref: ../../../../shared/parameters/query/etim-release-version.yaml
+  responses:
+    '200':
+      description: Successfully retrieved product ETIM classification features
+      content:
+        application/json:
+          schema:
+            $ref: ../../schemas/responses/BulkProductEtimClassificationFeaturesResponse.yaml
+          examples:
+            multipleProducts:
+              summary: Multiple products with various feature types
+              value:
+                data:
+                  # Alphanumeric feature
+                  - manufacturerIdGln: "1234567890123"
+                    manufacturerProductNumber: "929002376910"
+                    etimClassCode: "EC002745"
+                    etimClassVersion: 1
+                    etimReleaseVersion: "9.0"
+                    etimFeatureCode: "EF000123"
+                    etimValueCode: "EV000789"
+                  # Numeric feature
+                  - manufacturerIdGln: "1234567890123"
+                    manufacturerProductNumber: "929002376910"
+                    etimClassCode: "EC002745"
+                    etimClassVersion: 1
+                    etimReleaseVersion: "9.0"
+                    etimFeatureCode: "EF000456"
+                    etimValueNumeric: 230.0
+                  # Logical feature
+                  - manufacturerIdGln: "1234567890123"
+                    manufacturerProductNumber: "929002376910"
+                    etimClassCode: "EC002745"
+                    etimClassVersion: 1
+                    etimReleaseVersion: "9.0"
+                    etimFeatureCode: "EF000789"
+                    etimValueLogical: true
+                  # Classification-only (no features)
+                  - manufacturerIdGln: "9876543210987"
+                    manufacturerProductNumber: "LED-12345-A"
+                    etimClassCode: "EC001234"
+                    etimClassVersion: 2
+                    etimReleaseVersion: "9.0"
+                meta:
+                  cursor: "eyJtYW51ZmFjdHVyZXJJZEdsbkgiOiI5ODc2NTQzMjEwOTg3IiwibWFudWZhY3R1cmVyUHJvZHVjdE51bWJlciI6IkxFRC0xMjM0NS1BIn0="
+                  hasNext: true
+                  hasPrev: false
+                  limit: 1000
+                  estimatedTotal: 245830
+            emptyResult:
+              summary: No classification features found
+              value:
+                data: []
+                meta:
+                  cursor: null
+                  hasNext: false
+                  hasPrev: false
+                  limit: 1000
+                  estimatedTotal: 0
+    '400':
+      $ref: ../../../../shared/responses/400-bad-request.yaml
+    '401':
+      $ref: ../../../../shared/responses/401-unauthorized.yaml
+    '403':
+      $ref: ../../../../shared/responses/403-forbidden.yaml
+    '500':
+      $ref: ../../../../shared/responses/500-internal-server-error.yaml

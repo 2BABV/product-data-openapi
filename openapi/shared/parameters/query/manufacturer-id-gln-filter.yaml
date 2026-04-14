@@ -1,0 +1,9 @@
+name: manufacturerIdGln
+in: query
+required: false
+schema:
+  $ref: ../../../shared/schemas/identifiers/Gln.yaml
+description: |
+  Filter products by manufacturer Global Location Number (GLN). 
+  A 13-digit identifier for the manufacturer of the products.
+example: "1234567890123"

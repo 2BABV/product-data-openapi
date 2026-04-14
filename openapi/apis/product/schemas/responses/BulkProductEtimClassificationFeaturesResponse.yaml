@@ -1,0 +1,84 @@
+type: object
+description: |
+  Bulk response containing flattened product ETIM classification features with cursor-based pagination.
+  
+  **Flattened Structure**: Each row represents a single feature value within a product's ETIM classification.
+  This structure is optimized for:
+  - Predictable payload sizes (each row has consistent structure)
+  - Efficient cursor-based pagination by feature
+  - ETL/data warehouse ingestion
+  - Streaming data processing
+  
+  **Payload Optimization**: Optional properties with null values are omitted from the response
+  to minimize payload size. Clients should treat missing properties as null/not applicable.
+  
+  **Data Reconstruction**: To reconstruct the hierarchical structure:
+  1. Group rows by `manufacturerIdGln` + `manufacturerProductNumber` for products
+  2. Within each product, group by `etimClassCode` + `etimClassVersion` for classifications
+  3. Features are individual rows within each classification group
+  
+  **Classification-Only Rows**: Products with classifications but no features are represented
+  with `etimFeatureCode` omitted to ensure all classifications are included.
+required:
+  - data
+  - meta
+properties:
+  data:
+    type: array
+    description: |
+      Array of flattened product ETIM classification features.
+      Each item represents a single feature value for a product classification.
+      
+      Rows are ordered by:
+      1. `manufacturerIdGln` (ascending)
+      2. `manufacturerProductNumber` (ascending)
+      3. `etimClassCode` (ascending)
+      4. `etimFeatureCode` (ascending, nulls first)
+    items:
+      $ref: ../domain/ProductEtimClassificationFeature.yaml
+  meta:
+    $ref: ../../../../shared/schemas/common/CursorPaginationMetadata.yaml
+    description: |
+      Cursor-based pagination metadata.
+      
+      The cursor encodes the position based on the composite key:
+      `manufacturerIdGln` + `manufacturerProductNumber` + `etimClassCode` + `etimFeatureCode`
+
+examples:
+  - data:
+      # Product 1, Classification 1, Feature 1 (Alphanumeric)
+      - manufacturerIdGln: "1234567890123"
+        manufacturerProductNumber: "929002376910"
+        etimClassCode: "EC002745"
+        etimClassVersion: 1
+        etimReleaseVersion: "9.0"
+        etimFeatureCode: "EF000123"
+        etimValueCode: "EV000789"
+      # Product 1, Classification 1, Feature 2 (Numeric)
+      - manufacturerIdGln: "1234567890123"
+        manufacturerProductNumber: "929002376910"
+        etimClassCode: "EC002745"
+        etimClassVersion: 1
+        etimReleaseVersion: "9.0"
+        etimFeatureCode: "EF000456"
+        etimValueNumeric: 230.0
+      # Product 1, Classification 1, Feature 3 (Logical)
+      - manufacturerIdGln: "1234567890123"
+        manufacturerProductNumber: "929002376910"
+        etimClassCode: "EC002745"
+        etimClassVersion: 1
+        etimReleaseVersion: "10.0"
+        etimFeatureCode: "EF000789"
+        etimValueLogical: true
+      # Product 2, Classification without features
+      - manufacturerIdGln: "9876543210987"
+        manufacturerProductNumber: "LED-12345-A"
+        etimClassCode: "EC001234"
+        etimClassVersion: 2
+        etimReleaseVersion: "11.0"
+    meta:
+      cursor: "eyJtYW51ZmFjdHVyZXJJZEdsbkgiOiI5ODc2NTQzMjEwOTg3IiwibWFudWZhY3R1cmVyUHJvZHVjdE51bWJlciI6IkxFRC0xMjM0NS1BIiwiZXRpbUNsYXNzQ29kZSI6IkVDMDAxMjM0IiwiZXRpbUZlYXR1cmVDb2RlIjpudWxsfQ=="
+      hasNext: true
+      hasPrev: false
+      limit: 1000
+      estimatedTotal: 245830

@@ -1,0 +1,101 @@
+get:
+  operationId: getBulkTradeItemDetails
+  tags:
+    - TradeItems bulk
+  summary: List trade item details
+  description: |
+    Retrieve trade item identification and details in bulk with cursor-based pagination.
+    
+    Returns a flat structure where each item includes its composite key 
+    (`supplierIdGln` + `supplierItemNumber`) along with all identification and details fields:
+    - Alternative item numbers (supplier, manufacturer, buyer)
+    - Global Trade Item Numbers (GTINs)
+    - Discount and bonus group information
+    - Validity and obsolescence dates
+    - Item status and condition
+    
+    **Note**: Item descriptions are available via `/trade-items/bulk/descriptions` endpoint.
+    
+    Use this endpoint for:
+    - Initial data synchronization
+    - Incremental updates (using `mutationDateTime` filter)
+    - Filtered data retrieval (using `selectionId` or `supplierIdGln`)
+    
+    **Pagination**: Use the `cursor` from the response `meta` to retrieve subsequent pages.
+    **Examples**: Example payloads show documented fields only. Clients must accept and ignore additional fields, including nested fields, when they are added in backward-compatible updates.
+  parameters:
+    - $ref: ../../../../shared/parameters/query/cursor.yaml
+    - $ref: ../../../../shared/parameters/query/limit.yaml
+    - $ref: ../../../../shared/parameters/query/selection-id.yaml
+    - $ref: ../../../../shared/parameters/query/supplier-id-gln-filter.yaml
+    - $ref: ../../../../shared/parameters/query/mutation-date-time.yaml
+  responses:
+    '200':
+      description: Successfully retrieved trade item details
+      content:
+        application/json:
+          schema:
+            $ref: ../../schemas/responses/BulkTradeItemDetailsResponse.yaml
+          examples:
+            multipleItems:
+              summary: Multiple trade items with pagination
+              value:
+                data:
+                  - supplierIdGln: "8712423012485"
+                    supplierItemNumber: "SKU-LAMP-001"
+                    supplierAltItemNumber: "ALT-SKU-001"
+                    manufacturerItemNumber: "MFR-12345"
+                    manufacturerIdGln: "9876543210987"
+                    manufacturerProductNumber: "929002376910"
+                    itemGtins:
+                      - "08712423012485"
+                    buyerItemNumber: null
+                    discountGroupId: "DG-LIGHTING"
+                    bonusGroupId: null
+                    itemValidityDate: "2024-01-01"
+                    itemObsolescenceDate: null
+                    itemStatus: "ACTIVE"
+                    itemCondition: "NEW"
+                    stockItem: true
+                    shelfLifePeriod: null
+                  - supplierIdGln: "8712423012485"
+                    supplierItemNumber: "SKU-TOOL-002"
+                    supplierAltItemNumber: null
+                    manufacturerItemNumber: "MFR-54321"
+                    manufacturerIdGln: "9876543210987"
+                    manufacturerProductNumber: "HAMMER-PRO-500"
+                    itemGtins:
+                      - "08712423054321"
+                    buyerItemNumber: "BUYER-002"
+                    discountGroupId: "DG-TOOLS"
+                    bonusGroupId: "BG-PREMIUM"
+                    itemValidityDate: "2023-06-01"
+                    itemObsolescenceDate: "2028-12-31"
+                    itemStatus: "ACTIVE"
+                    itemCondition: "NEW"
+                    stockItem: true
+                    shelfLifePeriod: null
+                meta:
+                  cursor: "eyJzdXBwbGllcklkR2xuIjoiODcxMjQyMzAxMjQ4NSIsInN1cHBsaWVySXRlbU51bWJlciI6IlNLVS1UT09MLTAwMiJ9"
+                  hasNext: true
+                  hasPrev: false
+                  limit: 100
+                  estimatedTotal: 15420
+            emptyResult:
+              summary: No items match the filter criteria
+              value:
+                data: []
+                meta:
+                  cursor: null
+                  hasNext: false
+                  hasPrev: false
+                  limit: 100
+                  estimatedTotal: 0
+    '400':
+      $ref: ../../../../shared/responses/400-bad-request.yaml
+    '401':
+      $ref: ../../../../shared/responses/401-unauthorized.yaml
+    '403':
+      $ref: ../../../../shared/responses/403-forbidden.yaml
+    '500':
+      $ref: ../../../../shared/responses/500-internal-server-error.yaml

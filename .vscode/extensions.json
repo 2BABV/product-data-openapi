@@ -1,0 +1,7 @@
+{
+    "recommendations": [
+        "bierner.markdown-mermaid",
+        "redocly.openapi-vs-code",
+        "ms-vscode.live-server"
+    ]
+}

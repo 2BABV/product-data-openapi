@@ -1,0 +1,45 @@
+apis:
+  product@v1:
+    root: ./apis/product/openapi.yaml
+    rules:
+      no-unused-components: error
+      no-invalid-media-type-examples: error
+  
+  tradeitem@v1:
+    root: ./apis/tradeitem/openapi.yaml
+    rules:
+      no-unused-components: error
+      no-invalid-media-type-examples: error
+  
+  tradeitem-domain@v1:
+    root: ./apis/tradeitem/openapi-domain.yaml
+    rules:
+      no-unused-components: error
+      no-invalid-media-type-examples: error
+
+  netprice@v1:
+    root: ./apis/netprice/openapi.yaml
+    rules:
+      no-unused-components: error
+      no-invalid-media-type-examples: error
+
+  stock@v1:
+    root: ./apis/stock/openapi.yaml
+    rules:
+      no-unused-components: error
+      no-invalid-media-type-examples: error
+
+# Shared linting rules for all APIs
+rules:
+  operation-description: error
+  operation-operationId: error
+  operation-summary: error
+  no-enum-type-mismatch: error
+  no-server-example.com: off
+  no-server-trailing-slash: error
+  boolean-parameter-prefixes: error
+  paths-kebab-case: error
+  operation-operationId-unique: error
+  parameter-description: error
+  tag-description: error
+  tags-alphabetical: off

@@ -1,0 +1,36 @@
+type: object
+description: |
+  Response containing enclosed items for a specific trade item.
+  Returns the trade item identification keys and a flat array of enclosed items,
+  each with a `packagingTypeCode` to identify the parent packaging unit.
+
+  Unlike the bulk endpoint `/trade-items/bulk/enclosed-items` which uses a flattened
+  structure optimized for ETL, this single-item endpoint returns enclosed items
+  in a nested format for easier consumption.
+
+  **ETIM xChange**: `TradeItemEnclosed[]`
+  **Path**: `Supplier[].Product[].TradeItem[].PackagingUnit[].TradeItemEnclosed[]`
+required:
+  - data
+properties:
+  data:
+    $ref: ./TradeItemEnclosedItemsResponseData.yaml
+examples:
+  - data:
+      supplierIdGln: "1234567890123"
+      supplierItemNumber: "SKU-12345"
+      enclosedItems:
+        - packagingTypeCode: BX
+          enclosedSupplierItemNumber: "WIDGET-001"
+          enclosedManufacturerItemNumber: "MFG-WIDGET-001"
+          enclosedItemGtins: ["4012345678901"]
+          enclosedItemQuantity: 5
+        - packagingTypeCode: BX
+          enclosedSupplierItemNumber: "SCREW-M8-50"
+          enclosedManufacturerItemNumber: null
+          enclosedItemGtins: null
+          enclosedItemQuantity: 100
+  - data:
+      supplierIdGln: "1234567890123"
+      supplierItemNumber: "SKU-12345"
+      enclosedItems: null

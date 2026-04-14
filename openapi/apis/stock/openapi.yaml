@@ -1,0 +1,54 @@
+openapi: 3.1.0
+info:
+  title: Stock API
+  version: 1.0.0
+  description: |
+    API for retrieving stock availability and quantity information for trade items.
+    
+    This API provides real-time stock information including available quantity and availability status.
+  contact:
+    name: 2BA API Support
+    email: api-support@2ba.nl
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+servers:
+  - url: https://{host}{basePath}/v1
+    description: Product Data OpenAPI - Stock API v1
+    variables:
+      host:
+        default: api.example.com
+        description: >-
+          Implementer-specific API hostname.
+          Examples: rest.2ba.nl, selectprerelease.artikelbeheer.nl,
+          acceptation-service-api-dsgo.etimix.com
+      basePath:
+        default: ''
+        description: >-
+          Optional path prefix (e.g. /api). Leave empty if the API
+          is served directly under the domain root.
+tags:
+  - name: Stock
+    description: Stock availability and quantity operations
+paths:
+  /stock/{supplierIdGln}/{supplierItemNumber}:
+    $ref: paths/stock.yaml
+security:
+  - oauth2:
+      - read:stock
+components:
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      description: |
+        OAuth 2.0 Client Credentials grant (RFC 6749 §4.4).
+        Supports both client_secret and client_assertion (RFC 7523) authentication.
+
+        The token URL is implementer-specific. Each implementer provides their own
+        OAuth 2.0 authorization server. The placeholder below must be replaced with
+        the actual token endpoint for your environment.
+      flows:
+        clientCredentials:
+          tokenUrl: https://auth.example.com/connect/token
+          scopes:
+            read:stock: Grants read access to stock information

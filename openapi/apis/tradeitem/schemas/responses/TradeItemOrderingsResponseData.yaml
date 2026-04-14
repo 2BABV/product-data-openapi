@@ -1,0 +1,57 @@
+type: object
+description: |
+  Single trade item identification keys with ordering information.
+  
+  **ETIM xChange**: `Ordering`
+  **Path**: `Supplier[].Product[].TradeItem[].Ordering`
+required:
+  - supplierIdGln
+  - supplierItemNumber
+  - ordering
+properties:
+  supplierIdGln:
+    $ref: ../../../../shared/schemas/identifiers/Gln.yaml
+    description: |
+      Global Location Number (GLN) uniquely identifying the supplier.
+      Part of the composite key for the trade item.
+    examples:
+      - "1234567890123"
+  supplierItemNumber:
+    type: string
+    minLength: 1
+    maxLength: 35
+    description: |
+      Supplier's unique item number/code.
+      Part of the composite key for the trade item.
+    examples:
+      - "SKU-12345"
+  ordering:
+    $ref: ../domain/TradeItemOrdering.yaml
+    description: |
+      Trade item ordering details including order unit, minimum quantities,
+      order step size, lead time, and unit conversions.
+examples:
+  - supplierIdGln: "1234567890123"
+    supplierItemNumber: "SKU-12345"
+    ordering:
+      orderUnit: C62
+      minimumOrderQuantity: 1
+      orderStepSize: 1
+      standardOrderLeadTime: 5
+      useUnit: null
+      useUnitConversionFactor: null
+      singleUseUnitQuantity: null
+      alternativeUseUnit: null
+      alternativeUseUnitConversionFactor: null
+  - supplierIdGln: "8712423012485"
+    supplierItemNumber: "SKU-CABLE-002"
+    ordering:
+      orderUnit: MTR
+      minimumOrderQuantity: 10
+      orderStepSize: 5
+      standardOrderLeadTime: 3
+      useUnit: MTR
+      useUnitConversionFactor: 1.0
+      singleUseUnitQuantity: 1.0
+      alternativeUseUnit: null
+      alternativeUseUnitConversionFactor: null

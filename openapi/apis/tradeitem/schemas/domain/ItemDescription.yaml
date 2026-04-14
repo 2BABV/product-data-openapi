@@ -1,0 +1,73 @@
+type: object
+description: |
+  Item description in a specific language.
+  Extracted from ETIM xChange `TradeItem.ItemDetails.ItemDescriptions[]` structure.
+required:
+  - descriptionLanguage
+  - minimalItemDescription
+properties:
+  descriptionLanguage:
+    description: |
+      Language code for the description in ISO 639-1 and ISO 3166-1 format (e.g., "en-GB", "de-DE").
+      Sourced from ETIM xChange `Language` at catalog level, denormalized into each description record.
+      **ETIM xChange**: `DescriptionLanguage`
+      **Path**: `Supplier[].Product[].TradeItem[].ItemDetails.ItemDescriptions[].DescriptionLanguage`
+    $ref: ../../../../shared/schemas/common/LanguageCode.yaml
+    examples:
+      - "en-GB"
+      - "de-DE"
+      - "nl-NL"
+  minimalItemDescription:
+    type: string
+    description: |
+      Minimal description of the trade item (short description).
+      **ETIM xChange**: `MinimalItemDescription`
+      **Path**: `Supplier[].Product[].TradeItem[].ItemDetails.ItemDescriptions[].MinimalItemDescription`
+    minLength: 1
+    maxLength: 80
+    examples:
+      - "Hammer 500g"
+      - "Screwdriver Phillips"
+  uniqueMainItemDescription:
+    type: ["string", "null"]
+    description: |
+      Extended unique description of the trade item (long description).
+      **ETIM xChange**: `UniqueMainItemDescription`
+      **Path**: `Supplier[].Product[].TradeItem[].ItemDetails.ItemDescriptions[].UniqueMainItemDescription`
+    minLength: 1
+    maxLength: 255
+    examples:
+      - "Professional claw hammer with fiberglass handle, 500g head weight, ergonomic grip"
+      - null
+  discountGroupDescription:
+    type: ["string", "null"]
+    description: |
+      Human-readable description of the discount group in this language.
+      **ETIM xChange**: `DiscountGroupDescription[].DiscountGroupDescription`
+      **Path**: `Supplier[].Product[].TradeItem[].ItemIdentification.DiscountGroupDescription[].DiscountGroupDescription`
+    minLength: 1
+    maxLength: 100
+    examples:
+      - "Standard tools discount group"
+      - null
+  bonusGroupDescription:
+    type: ["string", "null"]
+    description: |
+      Human-readable description of the bonus group in this language.
+      **ETIM xChange**: `BonusGroupDescription[].BonusGroupDescription`
+      **Path**: `Supplier[].Product[].TradeItem[].ItemIdentification.BonusGroupDescription[].BonusGroupDescription`
+    minLength: 1
+    maxLength: 100
+    examples:
+      - "Premium bonus tier"
+      - null
+examples:
+  - descriptionLanguage: "en-US"
+    minimalItemDescription: "Hammer 500g"
+    uniqueMainItemDescription: "Professional claw hammer with fiberglass handle, 500g head weight"
+    discountGroupDescription: "Standard tools discount group"
+    bonusGroupDescription: null
+  - descriptionLanguage: "de-DE"
+    minimalItemDescription: "Hammer 500g"
+    discountGroupDescription: "Standardwerkzeuge Rabattgruppe"
+    bonusGroupDescription: null

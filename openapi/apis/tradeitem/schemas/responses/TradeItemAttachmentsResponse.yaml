@@ -1,0 +1,41 @@
+type: object
+description: |
+  Response containing item attachments for a specific trade item.
+  Returns the trade item identification keys and a nested array of `ItemAttachment` objects.
+
+  Unlike the bulk endpoint `/trade-items/bulk/attachments` which uses a flattened structure
+  optimized for ETL, this single-item endpoint returns attachments in their natural
+  format for easier consumption.
+
+  **ETIM xChange**: `ItemAttachments[]`
+  **Path**: `Supplier[].Product[].TradeItem[].ItemAttachments[]`
+required:
+  - data
+properties:
+  data:
+    $ref: ./TradeItemAttachmentsResponseData.yaml
+examples:
+  - data:
+      supplierIdGln: "1234567890123"
+      supplierItemNumber: "SKU-12345"
+      attachments:
+        - attachmentType: "ATX001"
+          attachmentTypeSpecification: "MDX002"
+          attachmentLanguages: null
+          attachmentFilename: "product_image.jpg"
+          attachmentUri: "https://example.com/images/product.jpg"
+          attachmentDescription: "Front view product image"
+          attachmentIssueDate: "2024-01-15"
+          attachmentExpiryDate: null
+        - attachmentType: "ATX014"
+          attachmentTypeSpecification: "MDX005"
+          attachmentLanguages: ["en-GB"]
+          attachmentFilename: "datasheet-en.pdf"
+          attachmentUri: "https://cdn.supplier.com/datasheets/datasheet-en.pdf"
+          attachmentDescription: "Technical datasheet"
+          attachmentIssueDate: "2024-06-15"
+          attachmentExpiryDate: null
+  - data:
+      supplierIdGln: "1234567890123"
+      supplierItemNumber: "SKU-12345"
+      attachments: null

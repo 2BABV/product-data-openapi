@@ -1,0 +1,69 @@
+type: object
+required:
+  - attachmentType
+  - attachmentDetails
+properties:
+  attachmentType:
+    $ref: ../enums/AttachmentType.yaml
+    description: |
+      ETIM standardized type code for the attachment.
+      
+      **ETIM xChange**: `AttachmentType`  
+      **Path**: `Supplier[].Product[].ProductAttachments[].AttachmentType`
+  
+  attachmentTypeSpecification:
+    $ref: ../enums/AttachmentTypeSpecification.yaml
+    description: |
+      Additional specification code providing more detail about the attachment type.
+      
+      **ETIM xChange**: `AttachmentTypeSpecification`  
+      **Path**: `Supplier[].Product[].ProductAttachments[].AttachmentTypeSpecification`
+  
+  attachmentOrder:
+    type: ["integer", "null"]
+    minimum: 1
+    description: |
+      Display order/sequence number for this attachment when multiple attachments are present.
+      Lower numbers indicate higher priority or preferred display order.
+      
+      **ETIM xChange**: `AttachmentOrder`  
+      **Path**: `Supplier[].Product[].ProductAttachments[].AttachmentOrder`
+    examples:
+      - 1
+      - 2
+      - null
+  
+  attachmentDetails:
+    type: array
+    minItems: 1
+    items:
+      $ref: ./AttachmentDetails.yaml
+    description: |
+      Array of attachment file details. Multiple files can be provided for the same attachment type
+      (e.g., same datasheet in different languages or formats).
+      
+      **ETIM xChange**: `AttachmentDetails`  
+      **Path**: `Supplier[].Product[].ProductAttachments[].AttachmentDetails[]`
+
+examples:
+  - attachmentType: "ATX001"
+    attachmentTypeSpecification: "MDX002"
+    attachmentOrder: 1
+    attachmentDetails:
+      - attachmentUri: "https://images.manufacturer.com/products/LED-12345-front.jpg"
+        attachmentFilename: "LED-12345-front.jpg"
+        attachmentLanguage: ["en-GB"]
+        attachmentDescription:
+          - language: "en-GB"
+            attachmentDescription: "Front view product image"
+  - attachmentType: "ATX014"
+    attachmentOrder: 2
+    attachmentDetails:
+      - attachmentUri: "https://cdn.manufacturer.com/products/datasheets/LED-12345-en.pdf"
+        attachmentFilename: "LED-12345-datasheet-en.pdf"
+        attachmentLanguage: ["en-GB"]
+        attachmentIssueDate: "2024-06-15"
+      - attachmentUri: "https://cdn.manufacturer.com/products/datasheets/LED-12345-de.pdf"
+        attachmentFilename: "LED-12345-datasheet-de.pdf"
+        attachmentLanguage: ["de-DE"]
+        attachmentIssueDate: "2024-06-15"

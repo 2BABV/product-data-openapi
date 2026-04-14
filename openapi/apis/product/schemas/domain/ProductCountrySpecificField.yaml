@@ -1,0 +1,52 @@
+type: object
+required:
+  - countryCode
+  - fieldName
+  - fieldValue
+properties:
+  countryCode:
+    $ref: ../../../../shared/schemas/common/CountryCode.yaml
+    description: |
+      ISO 3166-1 alpha-2 country code for which this field is specific.
+      
+      **ETIM xChange**: `CountryCode`  
+      **Path**: `Supplier[].Product[].ProductCountrySpecificFields[].CountryCode`
+  
+  fieldName:
+    type: string
+    minLength: 1
+    maxLength: 100
+    description: |
+      Name of the country-specific field or attribute.
+      
+      **ETIM xChange**: `FieldName`  
+      **Path**: `Supplier[].Product[].ProductCountrySpecificFields[].FieldName`
+    examples:
+      - "TaxCategory"
+      - "RegulatoryApprovalNumber"
+      - "LocalProductName"
+  
+  fieldValue:
+    type: string
+    minLength: 1
+    maxLength: 1000
+    description: |
+      Value of the country-specific field.
+      
+      **ETIM xChange**: `FieldValue`  
+      **Path**: `Supplier[].Product[].ProductCountrySpecificFields[].FieldValue`
+    examples:
+      - "Standard"
+      - "REG-2024-12345"
+      - "Lokales Produkt Name"
+
+examples:
+  - countryCode: "DE"
+    fieldName: "TaxCategory"
+    fieldValue: "Standard"
+  - countryCode: "FR"
+    fieldName: "RegulatoryApprovalNumber"
+    fieldValue: "FR-REG-2024-12345"
+  - countryCode: "NL"
+    fieldName: "LocalProductName"
+    fieldValue: "LED Slimme Lamp"

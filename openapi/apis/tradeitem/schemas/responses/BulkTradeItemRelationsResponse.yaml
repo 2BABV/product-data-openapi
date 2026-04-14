@@ -1,0 +1,49 @@
+type: object
+description: |
+  Bulk response containing item relations with cursor-based pagination.
+  
+  Each item in the `data` array represents a single relation between a trade item
+  and a related item. A trade item with 5 relations will result in 5 rows.
+  
+  This flattened structure is optimized for ETL/data warehouse ingestion and
+  streaming data processing.
+required:
+  - data
+  - meta
+properties:
+  data:
+    type: array
+    description: Array of item relations. Each row is one relation per trade item.
+    items:
+      $ref: ../domain/ItemRelationSummary.yaml
+  meta:
+    $ref: ../../../../shared/schemas/common/CursorPaginationMetadata.yaml
+examples:
+  - data:
+      - supplierIdGln: "1234567890123"
+        supplierItemNumber: "SKU-12345"
+        relatedSupplierItemNumber: "SPART-001"
+        relatedManufacturerItemNumber: "MFG-SPART-100"
+        relatedItemGtins: ["4012345678918"]
+        relationType: SPAREPART
+        relatedItemQuantity: 2
+      - supplierIdGln: "1234567890123"
+        supplierItemNumber: "SKU-12345"
+        relatedSupplierItemNumber: "ACC-789"
+        relatedManufacturerItemNumber: null
+        relatedItemGtins: null
+        relationType: ACCESSORY
+        relatedItemQuantity: 1
+      - supplierIdGln: "9876543210987"
+        supplierItemNumber: "SKU-CABLE-002"
+        relatedSupplierItemNumber: "SKU-CABLE-003"
+        relatedManufacturerItemNumber: "MFG-CABLE-V2"
+        relatedItemGtins: ["8712345678901"]
+        relationType: SUCCESSOR
+        relatedItemQuantity: 1
+    meta:
+      cursor: "eyJpZCI6MTIzfQ=="
+      hasNext: true
+      hasPrev: false
+      limit: 100
+      estimatedTotal: 8450

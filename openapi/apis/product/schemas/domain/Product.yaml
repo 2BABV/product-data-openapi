@@ -1,0 +1,349 @@
+type: object
+description: |
+  Product information from manufacturer perspective with comprehensive technical details, 
+  classifications, and lifecycle data according to ETIM xChange V2.0 specification.
+  
+  This schema flattens the ETIM xChange Product structure for efficient API consumption,
+  with key identification fields at the top level and complex nested structures as references.
+required:
+  - manufacturerIdGln
+  - manufacturerProductNumber
+  - productDescriptions
+  - productValidityDate
+properties:
+  # =========================================================================
+  # KEY IDENTIFICATION FIELDS (flattened from ProductIdentification)
+  # =========================================================================
+  
+  manufacturerIdGln:
+    $ref: ../../../../shared/schemas/identifiers/Gln.yaml
+    description: |
+      Global Location Number (GLN) of the manufacturer. Part of the primary composite key together with manufacturerProductNumber.
+      
+      **ETIM xChange**: `ManufacturerIdGln`  
+      **Path**: `Supplier[].Product[].ProductIdentification.ManufacturerIdGln`
+    examples:
+      - "1234567890123"
+  
+  manufacturerProductNumber:
+    type: string
+    minLength: 1
+    maxLength: 35
+    description: |
+      Manufacturer's unique product number (MPN). Part of the primary composite key together with manufacturerIdGln.
+      
+      **ETIM xChange**: `ManufacturerProductNumber`  
+      **Path**: `Supplier[].Product[].ProductIdentification.ManufacturerProductNumber`
+    examples:
+      - "LED-12345-A"
+      - "929002376910"
+  
+  productGtins:
+    type: ["array", "null"]
+    uniqueItems: true
+    items:
+      $ref: ../../../../shared/schemas/identifiers/Gtin.yaml
+    description: |
+      Array of Global Trade Item Numbers (GTIN-8, GTIN-12, GTIN-13, GTIN-14).
+      
+      **ETIM xChange**: `ProductGtin`  
+      **Path**: `Supplier[].Product[].ProductIdentification.ProductGtin[]`
+    examples:
+      - ["8718699673826", "8718699673833"]
+      - null
+  
+  unbrandedProduct:
+    type: ["boolean", "null"]
+    description: |
+      Indicates if this is an unbranded/white-label product.
+      
+      **ETIM xChange**: `UnbrandedProduct`  
+      **Path**: `Supplier[].Product[].ProductIdentification.UnbrandedProduct`
+    examples:
+      - false
+      - true
+      - null
+  
+  brandName:
+    type: ["string", "null"]
+    minLength: 1
+    maxLength: 50
+    description: |
+      Brand name of the product.
+      
+      **ETIM xChange**: `BrandName`  
+      **Path**: `Supplier[].Product[].ProductIdentification.BrandName`
+    examples:
+      - "Hue"
+      - "Master"
+      - null
+  
+  # =========================================================================
+  # PRODUCT LIFECYCLE DATES (flattened from ProductIdentification)
+  # =========================================================================
+  
+  productAnnouncementDate:
+    type: ["string", "null"]
+    format: date
+    description: |
+      Date when product was officially announced. ISO 8601 date format (YYYY-MM-DD).
+      
+      **ETIM xChange**: `ProductAnnouncementDate`  
+      **Path**: `Supplier[].Product[].ProductIdentification.ProductAnnouncementDate`
+    examples:
+      - "2024-01-15"
+      - null
+  
+  productValidityDate:
+    type: string
+    format: date
+    description: |
+      Date from which product is valid for sale. ISO 8601 date format (YYYY-MM-DD).
+      Defaults to CatalogueValidityStart if not overridden at the product level.
+      
+      **ETIM xChange**: `ProductValidityDate`  
+      **Path**: `Supplier[].Product[].ProductIdentification.ProductValidityDate`  
+      **Default from**: `CatalogueValidityStart`
+    examples:
+      - "2024-03-01"
+  
+  productObsolescenceDate:
+    type: ["string", "null"]
+    format: date
+    description: |
+      Date when product becomes obsolete. ISO 8601 date format (YYYY-MM-DD).
+      
+      **ETIM xChange**: `ProductObsolescenceDate`  
+      **Path**: `Supplier[].Product[].ProductIdentification.ProductObsolescenceDate`
+    examples:
+      - "2027-12-31"
+      - null
+  
+  # =========================================================================
+  # CUSTOMS AND ORIGIN (flattened from ProductIdentification)
+  # =========================================================================
+  
+  customsCommodityCode:
+    type: ["string", "null"]
+    minLength: 6
+    maxLength: 16
+    description: |
+      Harmonized System (HS) customs commodity code for international trade.
+      
+      **ETIM xChange**: `CustomsCommodityCode`  
+      **Path**: `Supplier[].Product[].ProductIdentification.CustomsCommodityCode`
+    examples:
+      - "8539502090"
+      - null
+  
+  factorCustomsCommodityCode:
+    type: ["number", "null"]
+    format: decimal
+    minimum: 0
+    multipleOf: 0.0001
+    maximum: 99999999999.9999
+    description: |
+      Factor for customs commodity code calculations. Supports up to 4 decimal places.
+      Converted from ETIM xChange string pattern to number type.
+      
+      **ETIM xChange**: `FactorCustomsCommodityCode` (string with pattern)  
+      **Path**: `Supplier[].Product[].ProductIdentification.FactorCustomsCommodityCode`
+    examples:
+      - 1.0
+      - 0.75
+      - null
+  
+  countryOfOrigin:
+    type: ["array", "null"]
+    uniqueItems: true
+    items:
+      type: string
+      pattern: "^[A-Z]{2}$"
+    description: |
+      ISO 3166-1 alpha-2 country codes where the product is manufactured.
+      
+      **ETIM xChange**: `CountryOfOrigin`  
+      **Path**: `Supplier[].Product[].ProductIdentification.CountryOfOrigin[]`
+    examples:
+      - ["NL", "DE"]
+      - ["CN"]
+      - null
+  
+  # =========================================================================
+  # PRODUCT DETAILS (flattened from ProductDetails)
+  # =========================================================================
+  
+  productStatus:
+    $ref: ../enums/ProductStatus.yaml
+    description: |
+      Current product lifecycle status.
+      
+      **ETIM xChange**: `ProductStatus`  
+      **Path**: `Supplier[].Product[].ProductDetails.ProductStatus`
+  
+  productType:
+    $ref: ../enums/ProductType.yaml
+    description: |
+      Type classification of the product.
+      
+      **ETIM xChange**: `ProductType`  
+      **Path**: `Supplier[].Product[].ProductDetails.ProductType`
+  
+  customisableProduct:
+    type: ["boolean", "null"]
+    description: |
+      Indicates if product can be customized by customer.
+      
+      **ETIM xChange**: `CustomisableProduct`  
+      **Path**: `Supplier[].Product[].ProductDetails.CustomisableProduct`
+    examples:
+      - false
+      - null
+  
+  hasSerialNumber:
+    type: ["boolean", "null"]
+    description: |
+      Indicates if product has individual serial numbers for tracking.
+      
+      **ETIM xChange**: `HasSerialNumber`  
+      **Path**: `Supplier[].Product[].ProductDetails.HasSerialNumber`
+    examples:
+      - true
+      - false
+      - null
+  
+  warrantyConsumer:
+    type: ["integer", "null"]
+    minimum: 0
+    exclusiveMaximum: 1000
+    description: |
+      Consumer warranty period in months.
+      
+      **ETIM xChange**: `WarrantyConsumer`  
+      **Path**: `Supplier[].Product[].ProductDetails.WarrantyConsumer`
+    examples:
+      - 24
+      - 36
+      - null
+  
+  warrantyBusiness:
+    type: ["integer", "null"]
+    minimum: 0
+    exclusiveMaximum: 1000
+    description: |
+      Business/commercial warranty period in months.
+      
+      **ETIM xChange**: `WarrantyBusiness`  
+      **Path**: `Supplier[].Product[].ProductDetails.WarrantyBusiness`
+    examples:
+      - 60
+      - 84
+      - null
+  
+  relatedManufacturerProductGroup:
+    type: ["array", "null"]
+    uniqueItems: true
+    items:
+      type: string
+      minLength: 1
+      maxLength: 50
+    description: |
+      Array of product group identifiers this product belongs to within the manufacturer's catalog.
+      
+      **ETIM xChange**: `RelatedManufacturerProductGroup`  
+      **Path**: `Supplier[].Product[].ProductDetails.RelatedManufacturerProductGroup[]`
+    examples:
+      - ["LED-BULBS", "SMART-LIGHTING"]
+      - null
+  
+  # =========================================================================
+  # COMPLEX NESTED STRUCTURES (kept as references)
+  # =========================================================================
+  
+  productDescriptions:
+    type: array
+    minItems: 1
+    items:
+      $ref: ./ProductDescription.yaml
+    description: |
+      Multilingual product descriptions (minimal, unique, full, marketing text, specifications).
+      
+      **ETIM xChange**: `ProductDescriptions`  
+      **Path**: `Supplier[].Product[].ProductDetails.ProductDescriptions[]`
+  
+  productRelations:
+    type: ["array", "null"]
+    items:
+      $ref: ./ProductRelation.yaml
+    description: |
+      Related products and their relationship types (accessories, spare parts, successors, etc.).
+      
+      **ETIM xChange**: `ProductRelations`  
+      **Path**: `Supplier[].Product[].ProductRelations[]`
+  
+  productAttachments:
+    type: ["array", "null"]
+    items:
+      $ref: ./ProductAttachment.yaml
+    description: |
+      Product documents, images, videos, and other attachments.
+      
+      **ETIM xChange**: `ProductAttachments`  
+      **Path**: `Supplier[].Product[].ProductAttachments[]`
+  
+  etimClassifications:
+    type: ["array", "null"]
+    items:
+      $ref: ./EtimClassification.yaml
+    description: |
+      ETIM class and feature classifications with feature values.
+      
+      **ETIM xChange**: `EtimClassification`  
+      **Path**: `Supplier[].Product[].EtimClassification[]`
+  
+  legislation:
+    anyOf:
+      - $ref: ./Legislation.yaml
+      - type: "null"
+    description: |
+      Legal compliance information (CE, RoHS, REACH, WEEE, hazardous materials, etc.).
+      
+      **ETIM xChange**: `Legislation`  
+      **Path**: `Supplier[].Product[].Legislation`
+  
+  lcaEnvironmental:
+    anyOf:
+      - $ref: ./LcaEnvironmental.yaml
+      - type: "null"
+    description: |
+      Life Cycle Assessment and Environmental Product Declaration (EPD) data.
+      
+      **ETIM xChange**: `LcaEnvironmental`  
+      **Path**: `Supplier[].Product[].LcaEnvironmental`
+  
+  productCountrySpecificFields:
+    type: ["array", "null"]
+    items:
+      $ref: ./ProductCountrySpecificField.yaml
+    description: |
+      Country-specific product fields and extensions.
+      
+      **ETIM xChange**: `ProductCountrySpecificFields`  
+      **Path**: `Supplier[].Product[].ProductCountrySpecificFields[]`
+
+examples:
+  - manufacturerIdGln: "1234567890123"
+    manufacturerProductNumber: "929002376910"
+    productGtins: ["8718699673826"]
+    brandName: "Hue"
+    productStatus: "ACTIVE"
+    productType: "PHYSICAL"
+    warrantyConsumer: 24
+    productDescriptions:
+      - descriptionLanguage: "en-GB"
+        minimalProductDescription: "LED Smart Bulb E27"
+        uniqueMainProductDescription: "Philips Hue White and Color Ambiance E27 LED Smart Bulb"
+    etimClassifications:
+      - etimClassCode: "EC002745"
+        etimClassVersion: 1
+        etimReleaseVersion: "9.0"

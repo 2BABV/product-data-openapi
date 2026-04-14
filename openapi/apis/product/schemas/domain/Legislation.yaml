@@ -1,0 +1,284 @@
+type: object
+properties:
+  electricComponentContained:
+    type: ["boolean", "null"]
+    description: |
+      Indicates if the product contains electrical or electronic components.
+      
+      **ETIM xChange**: `ElectricComponentContained`  
+      **Path**: `Supplier[].Product[].Legislation.ElectricComponentContained`
+    examples:
+      - true
+      - false
+      - null
+  
+  batteryContained:
+    type: ["boolean", "null"]
+    description: |
+      Indicates if the product contains batteries or accumulators.
+      
+      **ETIM xChange**: `BatteryContained`  
+      **Path**: `Supplier[].Product[].Legislation.BatteryContained`
+    examples:
+      - true
+      - false
+      - null
+  
+  weeeCategory:
+    $ref: ../enums/WeeeCategory.yaml
+    description: |
+      WEEE (Waste Electrical and Electronic Equipment) category according to EU directive.
+      
+      **ETIM xChange**: `WeeeCategory`  
+      **Path**: `Supplier[].Product[].Legislation.WeeeCategory`
+  
+  rohsIndicator:
+    type: ["string", "null"]
+    enum:
+      - "true"
+      - "false"
+      - "exempt"
+      - null
+    description: |
+      RoHS (Restriction of Hazardous Substances) compliance indicator.
+      - `true`: Compliant with RoHS
+      - `false`: Not compliant
+      - `exempt`: Exempt from RoHS requirements
+      
+      **ETIM xChange**: `RohsIndicator`  
+      **Path**: `Supplier[].Product[].Legislation.RohsIndicator`
+    examples:
+      - "true"
+      - "exempt"
+      - null
+  
+  rohsExemptionNumber:
+    type: ["string", "null"]
+    minLength: 1
+    maxLength: 20
+    description: |
+      RoHS exemption number if product is exempt from certain RoHS requirements.
+      
+      **ETIM xChange**: `RohsExemptionNumber`  
+      **Path**: `Supplier[].Product[].Legislation.RohsExemptionNumber`
+    examples:
+      - "6(c)"
+      - "7(a)"
+      - null
+  
+  ceMarking:
+    type: ["boolean", "null"]
+    description: |
+      Indicates if the product has CE marking (European Conformity).
+      
+      **ETIM xChange**: `CeMarking`  
+      **Path**: `Supplier[].Product[].Legislation.CeMarking`
+    examples:
+      - true
+      - false
+      - null
+  
+  sdsIndicator:
+    type: ["boolean", "null"]
+    description: |
+      Indicates if a Safety Data Sheet (SDS/MSDS) is available for the product.
+      
+      **ETIM xChange**: `SdsIndicator`  
+      **Path**: `Supplier[].Product[].Legislation.SdsIndicator`
+    examples:
+      - true
+      - false
+      - null
+  
+  reachIndicator:
+    type: ["string", "null"]
+    enum:
+      - "true"
+      - "false"
+      - "no data"
+      - null
+    description: |
+      REACH (Registration, Evaluation, Authorisation of Chemicals) indicator for SVHC substances.
+      - `true`: Contains SVHC (Substances of Very High Concern)
+      - `false`: Does not contain SVHC substances
+      - `no data`: Information not available
+      
+      **ETIM xChange**: `ReachIndicator`  
+      **Path**: `Supplier[].Product[].Legislation.ReachIndicator`
+    examples:
+      - "false"
+      - "no data"
+      - null
+  
+  reachDate:
+    type: ["string", "null"]
+    format: date
+    description: |
+      Date of REACH regulation applicability or assessment. ISO 8601 date format (YYYY-MM-DD).
+      
+      **ETIM xChange**: `ReachDate`  
+      **Path**: `Supplier[].Product[].Legislation.ReachDate`
+    examples:
+      - "2024-01-15"
+      - null
+  
+  scipNumber:
+    type: ["string", "null"]
+    minLength: 36
+    maxLength: 36
+    description: |
+      SCIP (Substances of Concern In articles as such or in complex objects (Products)) database number.
+      UUID format identifier for ECHA database registration.
+      
+      **ETIM xChange**: `ScipNumber`  
+      **Path**: `Supplier[].Product[].Legislation.ScipNumber`
+    examples:
+      - "550e8400-e29b-41d4-a716-446655440000"
+      - null
+  
+  ufiCode:
+    type: ["string", "null"]
+    pattern: "^[a-zA-Z0-9]{4}[-]{1}[a-zA-Z0-9]{4}[-]{1}[a-zA-Z0-9]{4}[-]{1}[a-zA-Z0-9]{4}$"
+    description: |
+      UFI (Unique Formula Identifier) code for hazardous mixtures according to CLP regulation.
+      Format: XXXX-XXXX-XXXX-XXXX
+      
+      **ETIM xChange**: `UfiCode`  
+      **Path**: `Supplier[].Product[].Legislation.UfiCode`
+    examples:
+      - "D000-A0B1-C2D3-E4F5"
+      - null
+  
+  unNumber:
+    type: ["string", "null"]
+    pattern: "^[0-9]{4}$"
+    description: |
+      UN Number for dangerous goods transport classification. 4-digit code.
+      
+      **ETIM xChange**: `UnNumber`  
+      **Path**: `Supplier[].Product[].Legislation.UnNumber`
+    examples:
+      - "1950"
+      - "3082"
+      - null
+  
+  hazardClass:
+    type: ["array", "null"]
+    uniqueItems: true
+    items:
+      type: string
+      enum:
+        - "1"
+        - "2.1"
+        - "2.2"
+        - "2.3"
+        - "3"
+        - "4.1"
+        - "4.2"
+        - "4.3"
+        - "5.1"
+        - "5.2"
+        - "6.1"
+        - "6.2"
+        - "7"
+        - "8"
+        - "9"
+    description: |
+      UN hazard class codes for dangerous goods.
+      
+      - `1`: Explosives
+      - `2.1`: Flammable gases
+      - `2.2`: Non-flammable gases
+      - `2.3`: Toxic gases
+      - `3`: Flammable liquids
+      - `4.1`: Flammable solids
+      - `4.2`: Spontaneously combustible
+      - `4.3`: Dangerous when wet
+      - `5.1`: Oxidizing substances
+      - `5.2`: Organic peroxides
+      - `6.1`: Toxic substances
+      - `6.2`: Infectious substances
+      - `7`: Radioactive material
+      - `8`: Corrosive substances
+      - `9`: Miscellaneous dangerous goods
+      
+      **ETIM xChange**: `HazardClass`  
+      **Path**: `Supplier[].Product[].Legislation.HazardClass[]`
+    examples:
+      - ["3", "8"]
+      - null
+  
+  adrCategory:
+    type: ["string", "null"]
+    enum:
+      - "0"
+      - "1"
+      - "2"
+      - "3"
+      - "4"
+      - null
+    description: |
+      ADR (European Agreement concerning International Carriage of Dangerous Goods by Road) transport category.
+      
+      - `0`: No ADR restrictions
+      - `1`: Limited quantities
+      - `2`: Category 2
+      - `3`: Category 3
+      - `4`: Category 4
+      
+      **ETIM xChange**: `AdrCategory`  
+      **Path**: `Supplier[].Product[].Legislation.AdrCategory`
+    examples:
+      - "0"
+      - "2"
+      - null
+  
+  netWeightHazardousSubstances:
+    type: ["number", "null"]
+    format: decimal
+    minimum: 0
+    multipleOf: 0.0001
+    maximum: 999999999999.9999
+    description: |
+      Net weight of hazardous substances in the product (typically in grams or kilograms).
+      Converted from ETIM xChange string pattern to number type.
+      
+      **ETIM xChange**: `NetWeightHazardousSubstances` (string with pattern)  
+      **Path**: `Supplier[].Product[].Legislation.NetWeightHazardousSubstances`
+    examples:
+      - 1.5
+      - 0.25
+      - 1250.75
+      - null
+  
+  volumeHazardousSubstances:
+    type: ["number", "null"]
+    format: decimal
+    minimum: 0
+    multipleOf: 0.0001
+    maximum: 999999999999.9999
+    description: |
+      Volume of hazardous substances in the product (typically in milliliters or liters).
+      Converted from ETIM xChange string pattern to number type.
+      
+      **ETIM xChange**: `VolumeHazardousSubstances` (string with pattern)  
+      **Path**: `Supplier[].Product[].Legislation.VolumeHazardousSubstances`
+    examples:
+      - 500.0
+      - 1.25
+      - null
+
+examples:
+  - electricComponentContained: true
+    batteryContained: false
+    weeeCategory: "5"
+    rohsIndicator: "true"
+    ceMarking: true
+    reachIndicator: "false"
+    reachDate: "2024-01-15"
+  - electricComponentContained: false
+    sdsIndicator: true
+    unNumber: "1950"
+    hazardClass: ["3"]
+    adrCategory: "2"
+    netWeightHazardousSubstances: 250.5

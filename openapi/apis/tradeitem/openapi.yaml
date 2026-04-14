@@ -1,0 +1,273 @@
+openapi: 3.1.0
+info:
+  title: Trade Item API
+  version: 1.0.0-Preview1
+  description: |
+    API for managing trade item information, specifications based on ETIM xChange V2.0.
+    
+    ## Features
+
+    - Individual trade item operations via `/trade-items`
+    - Bulk data retrieval via `/trade-items/bulk/*` endpoints with cursor-based pagination
+    
+    ## Data Model
+
+    Based on ETIM xChange V2.0 Trade Item schema.
+    Flattened structure with minimal nesting for efficient API consumption.
+  contact:
+    name: Trade Item API Support
+    email: support@tradeitem.2ba.nl
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+
+servers:
+  - url: https://{host}{basePath}/v1
+    description: Product Data OpenAPI - Trade Item API v1
+    variables:
+      host:
+        default: api.example.com
+        description: >-
+          Implementer-specific API hostname.
+          Examples: rest.2ba.nl, selectprerelease.artikelbeheer.nl,
+          acceptation-service-api-dsgo.etimix.com
+      basePath:
+        default: ''
+        description: >-
+          Optional path prefix (e.g. /api). Leave empty if the API
+          is served directly under the domain root.
+
+tags:
+  - name: TradeItems single
+    description: Single trade item operations
+    x-displayName: Single Trade Item
+  - name: TradeItems bulk
+    description: Bulk data retrieval operations with cursor-based pagination for high-volume data exchange
+    x-displayName: Bulk Trade Items
+
+x-tagGroups:
+  - name: Trade Items
+    tags:
+      - TradeItems single
+      - TradeItems bulk
+
+paths:
+  # Single trade item endpoints
+  /trade-items/{supplierIdGln}/{supplierItemNumber}/details:
+    $ref: ./paths/trade-item-details.yaml
+  
+  /trade-items/{supplierIdGln}/{supplierItemNumber}/descriptions:
+    $ref: ./paths/trade-item-descriptions.yaml
+  
+  /trade-items/{supplierIdGln}/{supplierItemNumber}/orderings:
+    $ref: ./paths/trade-item-orderings.yaml
+  
+  /trade-items/{supplierIdGln}/{supplierItemNumber}/pricings:
+    $ref: ./paths/trade-item-pricings.yaml
+  
+  /trade-items/{supplierIdGln}/{supplierItemNumber}/allowance-surcharges:
+    $ref: ./paths/trade-item-allowance-surcharges.yaml
+  
+  /trade-items/{supplierIdGln}/{supplierItemNumber}/relations:
+    $ref: ./paths/trade-item-relations.yaml
+  
+  /trade-items/{supplierIdGln}/{supplierItemNumber}/logistics-details:
+    $ref: ./paths/trade-item-logistics-details.yaml
+  
+  /trade-items/{supplierIdGln}/{supplierItemNumber}/attachments:
+    $ref: ./paths/trade-item-attachments.yaml
+  
+  /trade-items/{supplierIdGln}/{supplierItemNumber}/enclosed-items:
+    $ref: ./paths/trade-item-enclosed-items.yaml
+  
+  # Bulk operations
+  # Note: /trade-items/bulk/details consolidates what would have been separate
+  # trade-items and item-identifications endpoints since
+  # TradeItemDetailsSummary combines ItemIdentification + ItemDetails from ETIM xChange
+  /trade-items/bulk/details:
+    $ref: ./paths/bulk/details.yaml
+  /trade-items/bulk/descriptions:
+    $ref: ./paths/bulk/descriptions.yaml
+  /trade-items/bulk/orderings:
+    $ref: ./paths/bulk/orderings.yaml
+  /trade-items/bulk/pricings:
+    $ref: ./paths/bulk/pricings.yaml
+  /trade-items/bulk/allowance-surcharges:
+    $ref: ./paths/bulk/allowance-surcharges.yaml
+  /trade-items/bulk/relations:
+    $ref: ./paths/bulk/relations.yaml
+  /trade-items/bulk/logistics-details:
+    $ref: ./paths/bulk/logistics-details.yaml
+  /trade-items/bulk/attachments:
+    $ref: ./paths/bulk/attachments.yaml
+  /trade-items/bulk/enclosed-items:
+    $ref: ./paths/bulk/enclosed-items.yaml
+    
+components:
+  schemas:
+    # Shared components from other domains
+    ProblemDetails:
+      $ref: ../../shared/schemas/common/ProblemDetails.yaml
+    TechnicalId:
+      $ref: ../../shared/schemas/identifiers/TechnicalId.yaml
+    
+    # Domain schemas
+    TradeItemDetails:
+      $ref: ./schemas/domain/TradeItemDetails.yaml
+    TradeItemDetailsSummary:
+      $ref: ./schemas/domain/TradeItemDetailsSummary.yaml
+    ItemDescriptionsSummary:
+      $ref: ./schemas/domain/ItemDescriptionsSummary.yaml
+    TradeItemOrdering:
+      $ref: ./schemas/domain/TradeItemOrdering.yaml
+    TradeItemOrderingsSummary:
+      $ref: ./schemas/domain/TradeItemOrderingsSummary.yaml
+    TradeItemPricing:
+      $ref: ./schemas/domain/TradeItemPricing.yaml
+    TradeItemPricingsSummary:
+      $ref: ./schemas/domain/TradeItemPricingsSummary.yaml
+    AllowanceSurcharge:
+      $ref: ./schemas/domain/AllowanceSurcharge.yaml
+    AllowanceSurchargeSummary:
+      $ref: ./schemas/domain/AllowanceSurchargeSummary.yaml
+    ItemRelation:
+      $ref: ./schemas/domain/ItemRelation.yaml
+    ItemRelationSummary:
+      $ref: ./schemas/domain/ItemRelationSummary.yaml
+    ItemLogistics:
+      $ref: ./schemas/domain/ItemLogistics.yaml
+    ItemLogisticsSummary:
+      $ref: ./schemas/domain/ItemLogisticsSummary.yaml
+    ItemAttachment:
+      $ref: ./schemas/domain/ItemAttachment.yaml
+    ItemAttachmentSummary:
+      $ref: ./schemas/domain/ItemAttachmentSummary.yaml
+    TradeItemEnclosed:
+      $ref: ./schemas/domain/TradeItemEnclosed.yaml
+    TradeItemEnclosedSummary:
+      $ref: ./schemas/domain/TradeItemEnclosedSummary.yaml
+    AttachmentType:
+      $ref: ./schemas/enums/AttachmentType.yaml
+    AttachmentTypeSpecification:
+      $ref: ./schemas/enums/AttachmentTypeSpecification.yaml
+    RelationType:
+      $ref: ./schemas/enums/RelationType.yaml
+    
+    # Shared schemas
+    CursorPaginationMetadata:
+      $ref: ../../shared/schemas/common/CursorPaginationMetadata.yaml
+    
+    # Response schemas
+    TradeItemResponse:
+      $ref: ./schemas/responses/TradeItemResponse.yaml
+    TradeItemResponseData:
+      $ref: ./schemas/responses/TradeItemResponseData.yaml
+    TradeItemDetailsResponse:
+      $ref: ./schemas/responses/TradeItemDetailsResponse.yaml
+    TradeItemDetailsResponseData:
+      $ref: ./schemas/responses/TradeItemDetailsResponseData.yaml
+    TradeItemDescriptionsResponse:
+      $ref: ./schemas/responses/TradeItemDescriptionsResponse.yaml
+    TradeItemDescriptionsResponseData:
+      $ref: ./schemas/responses/TradeItemDescriptionsResponseData.yaml
+    BulkTradeItemDetailsResponse:
+      $ref: ./schemas/responses/BulkTradeItemDetailsResponse.yaml
+    BulkTradeItemDescriptionsResponse:
+      $ref: ./schemas/responses/BulkTradeItemDescriptionsResponse.yaml
+    TradeItemOrderingsResponse:
+      $ref: ./schemas/responses/TradeItemOrderingsResponse.yaml
+    TradeItemOrderingsResponseData:
+      $ref: ./schemas/responses/TradeItemOrderingsResponseData.yaml
+    BulkTradeItemOrderingsResponse:
+      $ref: ./schemas/responses/BulkTradeItemOrderingsResponse.yaml
+    TradeItemPricingsResponse:
+      $ref: ./schemas/responses/TradeItemPricingsResponse.yaml
+    TradeItemPricingsResponseData:
+      $ref: ./schemas/responses/TradeItemPricingsResponseData.yaml
+    BulkTradeItemPricingsResponse:
+      $ref: ./schemas/responses/BulkTradeItemPricingsResponse.yaml
+    BulkAllowanceSurchargesResponse:
+      $ref: ./schemas/responses/BulkAllowanceSurchargesResponse.yaml
+    TradeItemAllowanceSurchargesResponse:
+      $ref: ./schemas/responses/TradeItemAllowanceSurchargesResponse.yaml
+    TradeItemAllowanceSurchargesResponseData:
+      $ref: ./schemas/responses/TradeItemAllowanceSurchargesResponseData.yaml
+    TradeItemAllowanceSurchargeItem:
+      $ref: ./schemas/responses/TradeItemAllowanceSurchargeItem.yaml
+    TradeItemRelationsResponse:
+      $ref: ./schemas/responses/TradeItemRelationsResponse.yaml
+    TradeItemRelationsResponseData:
+      $ref: ./schemas/responses/TradeItemRelationsResponseData.yaml
+    BulkTradeItemRelationsResponse:
+      $ref: ./schemas/responses/BulkTradeItemRelationsResponse.yaml
+    TradeItemLogisticsDetailsResponse:
+      $ref: ./schemas/responses/TradeItemLogisticsDetailsResponse.yaml
+    TradeItemLogisticsDetailsResponseData:
+      $ref: ./schemas/responses/TradeItemLogisticsDetailsResponseData.yaml
+    BulkTradeItemLogisticsDetailsResponse:
+      $ref: ./schemas/responses/BulkTradeItemLogisticsDetailsResponse.yaml
+    TradeItemAttachmentsResponse:
+      $ref: ./schemas/responses/TradeItemAttachmentsResponse.yaml
+    TradeItemAttachmentsResponseData:
+      $ref: ./schemas/responses/TradeItemAttachmentsResponseData.yaml
+    BulkTradeItemAttachmentsResponse:
+      $ref: ./schemas/responses/BulkTradeItemAttachmentsResponse.yaml
+    TradeItemEnclosedItemsResponse:
+      $ref: ./schemas/responses/TradeItemEnclosedItemsResponse.yaml
+    TradeItemEnclosedItemsResponseData:
+      $ref: ./schemas/responses/TradeItemEnclosedItemsResponseData.yaml
+    TradeItemEnclosedItem:
+      $ref: ./schemas/responses/TradeItemEnclosedItem.yaml
+    BulkTradeItemEnclosedItemsResponse:
+      $ref: ./schemas/responses/BulkTradeItemEnclosedItemsResponse.yaml
+
+  parameters:
+    SupplierIdGln:
+      $ref: ../../shared/parameters/query/supplier-id-gln-filter.yaml
+    SupplierIdGlnPath:
+      $ref: ../../shared/parameters/path/supplier-id-gln.yaml
+    SupplierItemNumberPath:
+      $ref: ../../shared/parameters/path/supplier-item-number.yaml
+    Cursor:
+      $ref: ../../shared/parameters/query/cursor.yaml
+    Limit:
+      $ref: ../../shared/parameters/query/limit.yaml
+    SelectionId:
+      $ref: ../../shared/parameters/query/selection-id.yaml
+    MutationDateTime:
+      $ref: ../../shared/parameters/query/mutation-date-time.yaml
+    Language:
+      $ref: ../../shared/parameters/query/language.yaml
+
+  responses:
+    BadRequest:
+      $ref: ../../shared/responses/400-bad-request.yaml
+    Unauthorized:
+      $ref: ../../shared/responses/401-unauthorized.yaml
+    Forbidden:
+      $ref: ../../shared/responses/403-forbidden.yaml
+    NotFound:
+      $ref: ../../shared/responses/404-not-found.yaml
+    InternalServerError:
+      $ref: ../../shared/responses/500-internal-server-error.yaml
+
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      description: |
+        OAuth 2.0 Client Credentials grant (RFC 6749 §4.4).
+        Supports both client_secret and client_assertion (RFC 7523) authentication.
+
+        The token URL is implementer-specific. Each implementer provides their own
+        OAuth 2.0 authorization server. The placeholder below must be replaced with
+        the actual token endpoint for your environment.
+      flows:
+        clientCredentials:
+          tokenUrl: https://auth.example.com/connect/token
+          scopes:
+            read:tradeitems: Grants read access to trade items
+            write:tradeitems: Grants write access to trade items
+
+security:
+  - oauth2:
+      - read:tradeitems

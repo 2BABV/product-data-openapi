@@ -1,0 +1,56 @@
+type: object
+description: |
+  Single trade item identification keys with enclosed items.
+
+  **Packaging Reference**: Each enclosed item includes a `packagingTypeCode` to enable
+  correlation with the corresponding packaging unit from the main trade item response.
+
+  **ETIM xChange**: `TradeItemEnclosed[]`
+  **Path**: `Supplier[].Product[].TradeItem[].PackagingUnit[].TradeItemEnclosed[]`
+required:
+  - supplierIdGln
+  - supplierItemNumber
+properties:
+  supplierIdGln:
+    $ref: ../../../../shared/schemas/identifiers/Gln.yaml
+    description: Global Location Number (GLN) uniquely identifying the supplier
+    examples:
+      - "1234567890123"
+  supplierItemNumber:
+    type: string
+    minLength: 1
+    maxLength: 35
+    description: Supplier's unique item number
+    examples:
+      - "SKU-12345"
+  enclosedItems:
+    type: ["array", "null"]
+    description: |
+      Array of enclosed items across all packaging units.
+      Each item includes a `packagingTypeCode` to identify which packaging unit
+      contains the enclosed trade item.
+      Returns null if no enclosed items are available.
+    items:
+      $ref: ./TradeItemEnclosedItem.yaml
+examples:
+  - supplierIdGln: "1234567890123"
+    supplierItemNumber: "SKU-12345"
+    enclosedItems:
+      - packagingTypeCode: BX
+        enclosedSupplierItemNumber: "WIDGET-001"
+        enclosedManufacturerItemNumber: "MFG-WIDGET-001"
+        enclosedItemGtins: ["4012345678901"]
+        enclosedItemQuantity: 5
+      - packagingTypeCode: BX
+        enclosedSupplierItemNumber: "SCREW-M8-50"
+        enclosedManufacturerItemNumber: null
+        enclosedItemGtins: null
+        enclosedItemQuantity: 100
+      - packagingTypeCode: PF
+        enclosedSupplierItemNumber: "WIDGET-001"
+        enclosedManufacturerItemNumber: "MFG-WIDGET-001"
+        enclosedItemGtins: ["4012345678901"]
+        enclosedItemQuantity: 50
+  - supplierIdGln: "1234567890123"
+    supplierItemNumber: "SKU-12345"
+    enclosedItems: null

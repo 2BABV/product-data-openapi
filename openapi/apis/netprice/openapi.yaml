@@ -1,0 +1,73 @@
+openapi: 3.1.0
+info:
+  title: Net Price API
+  version: 1.0.0
+  description: |
+    API for retrieving net prices of trade items based on allowance conditions. The net price is the price after applying any relevant discounts or allowances for the specified quantity and currency.
+    The returned netPrice is the netPriceInOrderUnit. If the priceUnitFactor or the priceQuantity in the related tradeitem pricing object is other than 1, this value may differ from the netPrice within that pricing object.
+  contact:
+    name: Net Price API Support
+    email: support@netprice.2ba.nl
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+
+servers:
+  - url: https://{host}{basePath}/v1
+    description: Product Data OpenAPI - Net Price API v1
+    variables:
+      host:
+        default: api.example.com
+        description: >-
+          Implementer-specific API hostname.
+          Examples: rest.2ba.nl, selectprerelease.artikelbeheer.nl,
+          acceptation-service-api-dsgo.etimix.com
+      basePath:
+        default: ''
+        description: >-
+          Optional path prefix (e.g. /api). Leave empty if the API
+          is served directly under the domain root.
+
+paths:
+  /netprices/{supplierIdGln}/item-number/{supplierItemNumber}:
+    $ref: ./paths/netprices-by-item-number.yaml
+  /netprices/{supplierIdGln}/item-gtin/{itemGtin}:
+    $ref: ./paths/netprices-by-item-gtin.yaml
+
+components:
+  schemas:
+    # Shared components from other domains
+    ProblemDetails:
+      $ref: ../../shared/schemas/common/ProblemDetails.yaml
+    
+  responses:
+    BadRequest:
+      $ref: ../../shared/responses/400-bad-request.yaml
+    Unauthorized:
+      $ref: ../../shared/responses/401-unauthorized.yaml
+    Forbidden:
+      $ref: ../../shared/responses/403-forbidden.yaml
+    NotFound:
+      $ref: ../../shared/responses/404-not-found.yaml
+    InternalServerError:
+      $ref: ../../shared/responses/500-internal-server-error.yaml
+
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      description: |
+        OAuth 2.0 Client Credentials grant (RFC 6749 §4.4).
+        Supports both client_secret and client_assertion (RFC 7523) authentication.
+
+        The token URL is implementer-specific. Each implementer provides their own
+        OAuth 2.0 authorization server. The placeholder below must be replaced with
+        the actual token endpoint for your environment.
+      flows:
+        clientCredentials:
+          tokenUrl: https://auth.example.com/connect/token
+          scopes:
+            read:netprices: Grants read access to net prices
+
+security:
+  - oauth2:
+      - read:netprices

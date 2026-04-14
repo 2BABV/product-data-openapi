@@ -1,0 +1,225 @@
+type: object
+description: |
+  Pricing information for a trade item including prices, price unit, and validity dates.
+  Extracted from ETIM xChange `TradeItem.Pricing[]` structure.
+  
+  **Allowances & Surcharges**: Included as nested array in the complete `TradeItemResponse`.
+  Always `null` in subresource (`/pricings`) and bulk (`/trade-items/bulk/pricings`) responses —
+  use the separate `/allowance-surcharges` or `/trade-items/bulk/allowance-surcharges` endpoints for flat retrieval.
+  
+  **ETIM xChange**: `Pricing`
+  **Path**: `Supplier[].Product[].TradeItem[].Pricing[]`
+required:
+  - pricingRef
+  - priceUnit
+  - priceQuantity
+  - currencyCode
+  - priceValidityDate
+properties:
+  pricingRef:
+    description: |
+      Server-generated opaque reference key that uniquely identifies this pricing entry
+      within the scope of a trade item (identified by `supplierIdGln` + `supplierItemNumber`).
+      
+      This is a technical identifier not present in the ETIM xChange domain model.
+      Use `pricingRef` to correlate pricing entries with their allowances/surcharges
+      from the `/allowance-surcharges` endpoint.
+    $ref: ../../../../shared/schemas/identifiers/TechnicalId.yaml
+    examples:
+      - "price-c62-1-20250101"
+      - "f47ac10b-58cc-4372-a567-0e02b2c3d479"
+  priceUnit:
+    description: |
+      Unit for which the price applies (e.g., pieces, boxes, meters).
+      
+      **ETIM xChange**: `PriceUnit`
+      **Path**: `Supplier[].Product[].TradeItem[].Pricing[].PriceUnit`
+    $ref: ../../../../shared/schemas/common/UnitCodes.yaml
+    examples:
+      - C62  # Piece
+      - BX   # Box
+      - MTR  # Meter
+  priceUnitFactor:
+    type: ["number", "null"]
+    format: decimal
+    description: |
+      Factor to convert price unit to order unit (converted from ETIM xChange string to number).
+      
+      **ETIM xChange**: `PriceUnitFactor` (string with pattern)
+      **Path**: `Supplier[].Product[].TradeItem[].Pricing[].PriceUnitFactor`
+    minimum: 0
+    multipleOf: 0.0001
+    maximum: 99999999999.9999
+    examples:
+      - 1.0
+      - 100.0
+      - null
+  priceQuantity:
+    type: number
+    format: decimal
+    description: |
+      Quantity for which the price applies (converted from ETIM xChange string to number).
+      
+      **ETIM xChange**: `PriceQuantity` (string with pattern)
+      **Path**: `Supplier[].Product[].TradeItem[].Pricing[].PriceQuantity`
+    minimum: 0
+    multipleOf: 0.0001
+    maximum: 99999.9999
+    examples:
+      - 1
+      - 10
+      - 100
+  currencyCode:
+    description: |
+      Currency code for all monetary values in this pricing entry.
+      Sourced from ETIM xChange `CurrencyCode` at catalog level.
+    $ref: ../../../../shared/schemas/common/CurrencyCode.yaml
+    examples:
+      - EUR
+  priceOnRequest:
+    type: ["boolean", "null"]
+    description: |
+      Indicates whether the price is available only on request.
+      
+      **ETIM xChange**: `PriceOnRequest`
+      **Path**: `Supplier[].Product[].TradeItem[].Pricing[].PriceOnRequest`
+    examples:
+      - false
+      - true
+      - null
+  grossListPrice:
+    type: ["number", "null"]
+    format: decimal
+    description: |
+      Gross list price (before discounts) (converted from ETIM xChange string to number).
+      
+      **ETIM xChange**: `GrossListPrice` (string with pattern)
+      **Path**: `Supplier[].Product[].TradeItem[].Pricing[].GrossListPrice`
+    minimum: 0
+    multipleOf: 0.0001
+    maximum: 99999999999.9999
+    examples:
+      - 130.0
+      - 1500.0
+      - null
+  netPrice:
+    type: ["number", "null"]
+    format: decimal
+    description: |
+      Net price (after discounts, before tax) (converted from ETIM xChange string to number).
+      
+      **ETIM xChange**: `NetPrice` (string with pattern)
+      **Path**: `Supplier[].Product[].TradeItem[].Pricing[].NetPrice`
+    minimum: 0
+    multipleOf: 0.0001
+    maximum: 99999999999.9999
+    examples:
+      - 100.0
+      - 1200.0
+      - null
+  recommendedRetailPrice:
+    type: ["number", "null"]
+    format: decimal
+    description: |
+      Recommended retail price (MSRP) (converted from ETIM xChange string to number).
+      
+      **ETIM xChange**: `RecommendedRetailPrice` (string with pattern)
+      **Path**: `Supplier[].Product[].TradeItem[].Pricing[].RecommendedRetailPrice`
+    minimum: 0
+    multipleOf: 0.0001
+    maximum: 99999999999.9999
+    examples:
+      - 150.0
+      - 1800.0
+      - null
+  vat:
+    type: ["number", "null"]
+    format: decimal
+    description: |
+      VAT/tax percentage (converted from ETIM xChange string to number).
+      
+      **ETIM xChange**: `Vat` (string with pattern)
+      **Path**: `Supplier[].Product[].TradeItem[].Pricing[].Vat`
+    minimum: 0
+    multipleOf: 0.01
+    maximum: 99.99
+    examples:
+      - 21.0
+      - 19.0
+      - null
+  priceValidityDate:
+    type: string
+    format: date
+    description: |
+      Date from which the price is valid. ISO 8601 date format (YYYY-MM-DD).
+      Defaults to CatalogueValidityStart if not overridden at the pricing level.
+      
+      **ETIM xChange**: `PriceValidityDate`  
+      **Path**: `Supplier[].Product[].TradeItem[].Pricing[].PriceValidityDate`  
+      **Default from**: `CatalogueValidityStart`
+    examples:
+      - "2025-01-01"
+  priceExpiryDate:
+    type: ["string", "null"]
+    format: date
+    description: |
+      Date when the price expires. ISO 8601 date format (YYYY-MM-DD).
+      
+      **ETIM xChange**: `PriceExpiryDate`
+      **Path**: `Supplier[].Product[].TradeItem[].Pricing[].PriceExpiryDate`
+    examples:
+      - "2025-12-31"
+      - null
+  allowanceSurcharges:
+    type: ["array", "null"]
+    description: |
+      Allowances and surcharges applied to this pricing entry.
+      
+      **Populated** in the complete `TradeItemResponse` (nested inside each pricing entry).
+      **Always `null`** in subresource (`/pricings`) and bulk (`/trade-items/bulk/pricings`) responses.
+      For flat retrieval, use the dedicated `/allowance-surcharges` or `/trade-items/bulk/allowance-surcharges` endpoints.
+      
+      **ETIM xChange**: `AllowanceSurcharge[]`
+      **Path**: `Supplier[].Product[].TradeItem[].Pricing[].AllowanceSurcharge[]`
+    items:
+      $ref: ./AllowanceSurcharge.yaml
+    examples:
+      - - allowanceSurchargeIndicator: ALLOWANCE
+          allowanceSurchargeType: AEQ
+          allowanceSurchargeSequenceNumber: 1
+          allowanceSurchargePercentage: 10
+          allowanceSurchargeMinimumQuantity: 100
+      - null
+
+examples:
+  - pricingRef: "price-c62-1-20250101"
+    priceUnit: C62
+    priceUnitFactor: null
+    priceQuantity: 1
+    currencyCode: EUR
+    priceOnRequest: false
+    grossListPrice: 130.0
+    netPrice: 100.0
+    recommendedRetailPrice: 150.0
+    vat: 21.0
+    priceValidityDate: "2025-01-01"
+    priceExpiryDate: "2025-12-31"
+    allowanceSurcharges:
+      - allowanceSurchargeIndicator: ALLOWANCE
+        allowanceSurchargeType: AEQ
+        allowanceSurchargeSequenceNumber: 1
+        allowanceSurchargePercentage: 10
+        allowanceSurchargeMinimumQuantity: 100
+  - pricingRef: "price-mtr-1-20250101"
+    priceUnit: MTR
+    priceUnitFactor: 1.0
+    priceQuantity: 1
+    currencyCode: EUR
+    priceOnRequest: false
+    grossListPrice: 2.50
+    netPrice: 1.99
+    recommendedRetailPrice: 3.49
+    vat: 21.0
+    priceValidityDate: "2025-01-01"
+    priceExpiryDate: "2025-06-30"
+    allowanceSurcharges: null

@@ -1,0 +1,32 @@
+get:
+  operationId: getBulkProducts
+  tags:
+    - Products bulk
+  summary: List products
+  description: |
+    Retrieve comprehensive product information in bulk with cursor-based pagination.
+    Returns full product data including identifications, descriptions, classifications,
+    legislation, LCA data, and all related information.
+    
+    Use this endpoint for complete product data synchronization.
+  parameters:
+    - $ref: ../../../../shared/parameters/query/cursor.yaml
+    - $ref: ../../../../shared/parameters/query/limit.yaml
+    - $ref: ../../../../shared/parameters/query/selection-id.yaml
+    - $ref: ../../../../shared/parameters/query/manufacturer-id-gln-filter.yaml
+    - $ref: ../../../../shared/parameters/query/mutation-date-time.yaml
+  responses:
+    '200':
+      description: Successfully retrieved products
+      content:
+        application/json:
+          schema:
+            $ref: ../../schemas/responses/BulkProductsResponse.yaml
+    '400':
+      $ref: ../../../../shared/responses/400-bad-request.yaml
+    '401':
+      $ref: ../../../../shared/responses/401-unauthorized.yaml
+    '403':
+      $ref: ../../../../shared/responses/403-forbidden.yaml
+    '500':
+      $ref: ../../../../shared/responses/500-internal-server-error.yaml

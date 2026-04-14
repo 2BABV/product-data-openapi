@@ -1,0 +1,90 @@
+get:
+  operationId: getProductDescriptions
+  tags:
+    - Products single
+  summary: Get product descriptions
+  description: |
+    Retrieve multilingual descriptions for a specific manufacturer product combination.
+    
+    This endpoint returns product descriptions including minimal, unique main, full descriptions,
+    marketing text, specification text, application instructions, keywords, and product page URLs
+    for each available language.
+    
+    **Language filtering**: Use the optional `language` query parameter to filter
+    descriptions to specific language(s). If not specified, all available languages are returned.
+    
+    **Nested structure**: Unlike the bulk endpoint `/products/bulk/descriptions` which uses
+    a flattened structure optimized for ETL, this single-product endpoint returns descriptions
+    in their natural nested format for easier consumption.
+    
+    **No pagination** - Returns all descriptions for the specified product.
+  parameters:
+    - $ref: ../../../shared/parameters/path/manufacturer-id-gln.yaml
+    - $ref: ../../../shared/parameters/path/manufacturer-product-number.yaml
+    - $ref: ../../../shared/parameters/query/language.yaml
+  responses:
+    '200':
+      description: Successfully retrieved product descriptions
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/responses/ProductDescriptionsResponse.yaml
+          examples:
+            multipleLanguages:
+              summary: Product with multiple language descriptions
+              value:
+                data:
+                  manufacturerIdGln: "1234567890123"
+                  manufacturerProductNumber: "929002376910"
+                  descriptions:
+                    - descriptionLanguage: "en-GB"
+                      minimalProductDescription: "LED Smart Bulb E27 White & Color"
+                      uniqueMainProductDescription: "Philips Hue White and Color Ambiance E27 LED Smart Bulb, 806 lumens, Bluetooth"
+                      fullProductDescription: "The Philips Hue White and Color Ambiance E27 LED Smart Bulb offers 16 million colors and 50,000 shades of white light."
+                      productKeyword:
+                        - "smart lighting"
+                        - "LED"
+                        - "color"
+                      productPageUrl: "https://www.philips.com/products/hue-white-color-e27"
+                    - descriptionLanguage: "de-DE"
+                      minimalProductDescription: "LED Smart-Lampe E27 Weiß & Farbe"
+                      uniqueMainProductDescription: "Philips Hue White and Color Ambiance E27 LED Smart-Lampe, 806 Lumen, Bluetooth"
+            singleLanguage:
+              summary: Filtered to single language
+              value:
+                data:
+                  manufacturerIdGln: "1234567890123"
+                  manufacturerProductNumber: "929002376910"
+                  descriptions:
+                    - descriptionLanguage: "en-GB"
+                      minimalProductDescription: "LED Smart Bulb E27"
+                      uniqueMainProductDescription: "Philips Hue LED Smart Bulb"
+            noDescriptions:
+              summary: Product without descriptions
+              value:
+                data:
+                  manufacturerIdGln: "1234567890123"
+                  manufacturerProductNumber: "929002376910"
+                  descriptions: null
+    '400':
+      $ref: ../../../shared/responses/400-bad-request.yaml
+    '401':
+      $ref: ../../../shared/responses/401-unauthorized.yaml
+    '403':
+      $ref: ../../../shared/responses/403-forbidden.yaml
+    '404':
+      description: Product not found
+      content:
+        application/json:
+          schema:
+            $ref: ../../../shared/schemas/common/ProblemDetails.yaml
+          examples:
+            notFound:
+              summary: Product not found
+              value:
+                type: about:blank
+                title: Not Found
+                status: 404
+                detail: "No product found with manufacturer GLN '1234567890123' and product number '929002376910'"
+    '500':
+      $ref: ../../../shared/responses/500-internal-server-error.yaml

@@ -1,0 +1,43 @@
+type: object
+description: |
+  Response containing LCA environmental data for a single product.
+  The product key is at the root level, with LCA environmental data nested inside.
+  
+  This structure aligns with other single-product subresource responses
+  (`/identification`, `/details`, `/descriptions`, `/etim-classifications`).
+  
+  Contains Environmental Product Declaration (EPD) information, declared units,
+  reference lifetime, third-party verification status, and life cycle assessment
+  declarations for different stages.
+required:
+  - data
+properties:
+  data:
+    $ref: ./ProductLcaEnvironmentalResponseData.yaml
+examples:
+  - data:
+      manufacturerIdGln: "1234567890123"
+      manufacturerProductNumber: "929002376910"
+      lcaEnvironmental:
+        declaredUnitUnit: "PCE"
+        declaredUnitQuantity: 1
+        lcaReferenceLifetime: 25
+        thirdPartyVerification: "externally"
+        epdValidityStartDate: "2024-01-01"
+        epdValidityExpiryDate: "2029-12-31"
+        epdOperatorName: "The International EPD System"
+        operatorEpdId: "S-P-12345"
+        productCategoryRulesDescription: "PCR 2019:14 Lighting equipment"
+        lcaDeclaration:
+          - lifeCycleStage: "A1-A3"
+            lcaDeclarationIndicator: "MDE"
+            declaredUnitGwpTotal: 15.75
+            declaredUnitGwpFossil: 14.25
+            declaredUnitGwpBiogenic: 1.2
+          - lifeCycleStage: "C1-C4"
+            lcaDeclarationIndicator: "AGG"
+            declaredUnitGwpTotal: 2.5
+  - data:
+      manufacturerIdGln: "1234567890123"
+      manufacturerProductNumber: "LED-NO-EPD-001"
+      lcaEnvironmental: null

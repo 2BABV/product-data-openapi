@@ -1,0 +1,31 @@
+get:
+  operationId: getBulkProductDetails
+  tags:
+    - Products bulk
+  summary: List product details
+  description: |
+    Retrieve product detail information in bulk with cursor-based pagination.
+    Returns product status, type, descriptions, warranties, and product groups.
+    
+    Use this endpoint for product status synchronization.
+  parameters:
+    - $ref: ../../../../shared/parameters/query/cursor.yaml
+    - $ref: ../../../../shared/parameters/query/limit.yaml
+    - $ref: ../../../../shared/parameters/query/selection-id.yaml
+    - $ref: ../../../../shared/parameters/query/manufacturer-id-gln-filter.yaml
+    - $ref: ../../../../shared/parameters/query/mutation-date-time.yaml
+  responses:
+    '200':
+      description: Successfully retrieved product details
+      content:
+        application/json:
+          schema:
+            $ref: ../../schemas/responses/BulkProductDetailsResponse.yaml
+    '400':
+      $ref: ../../../../shared/responses/400-bad-request.yaml
+    '401':
+      $ref: ../../../../shared/responses/401-unauthorized.yaml
+    '403':
+      $ref: ../../../../shared/responses/403-forbidden.yaml
+    '500':
+      $ref: ../../../../shared/responses/500-internal-server-error.yaml

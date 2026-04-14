@@ -1,0 +1,17 @@
+type: object
+description: Response containing stock availability and quantity information for a specific trade item
+required:
+  - data
+properties:
+  data:
+    $ref: ../domain/Stock.yaml
+examples:
+  - data:
+      quantity: 150.50
+      available: true
+  - data:
+      quantity: 0
+      available: false
+  - data:
+      quantity: 2.5
+      available: true

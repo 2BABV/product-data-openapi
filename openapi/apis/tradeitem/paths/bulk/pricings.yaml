@@ -1,0 +1,89 @@
+get:
+  operationId: getBulkTradeItemPricings
+  summary: List trade item pricings
+  description: |
+    Retrieve trade item pricing information in bulk with cursor-based pagination.
+    Returns pricing details including net prices, gross list prices, recommended retail prices,
+    VAT, price validity periods, and the catalog-level currency code.
+    
+    **Allowances & Surcharges**: The `allowanceSurcharges` property is always `null` in this response.
+    Use the separate `/trade-items/bulk/allowance-surcharges` endpoint for flat retrieval.
+    
+    **Flattened Structure**: Each row represents a single price entry with embedded composite key
+    (`supplierIdGln` + `supplierItemNumber`). This follows the same pattern as 
+    `/products/bulk/etim-classifications` - 1 row per data point.
+    
+    A trade item with multiple price tiers (e.g., quantity breaks, validity periods) will have
+    multiple rows with the same composite key but different pricing data.
+    
+    This endpoint is optimized for:
+    - Predictable payload sizes per row
+    - Efficient cursor-based pagination
+    - ETL/data warehouse ingestion
+    - Price synchronization scenarios
+    
+    **ETIM xChange**: Bulk retrieval of `Pricing[]` data  
+    **Path**: `Supplier[].Product[].TradeItem[].Pricing[]`
+  tags:
+    - TradeItems bulk
+  parameters:
+    - $ref: ../../../../shared/parameters/query/cursor.yaml
+    - $ref: ../../../../shared/parameters/query/limit.yaml
+    - $ref: ../../../../shared/parameters/query/selection-id.yaml
+    - $ref: ../../../../shared/parameters/query/mutation-date-time.yaml
+    - $ref: ../../../../shared/parameters/query/supplier-id-gln-filter.yaml
+  responses:
+    '200':
+      description: Successfully retrieved trade item pricing entries (1 row per price)
+      content:
+        application/json:
+          schema:
+            $ref: ../../schemas/responses/BulkTradeItemPricingsResponse.yaml
+          examples:
+            success:
+              summary: Successful bulk retrieval (flattened - 1 row per price entry)
+              value:
+                data:
+                  - supplierIdGln: "8712423012485"
+                    supplierItemNumber: "SKU-LAMP-001"
+                    pricingRef: "price-c62-1-20250101"
+                    priceUnit: "C62"
+                    priceQuantity: 1
+                    currencyCode: "EUR"
+                    priceOnRequest: false
+                    grossListPrice: 12.99
+                    netPrice: 9.99
+                    recommendedRetailPrice: 15.99
+                    vat: 21.0
+                    priceValidityDate: "2025-01-01"
+                    priceExpiryDate: "2025-12-31"
+                  - supplierIdGln: "8712423012485"
+                    supplierItemNumber: "SKU-CABLE-002"
+                    pricingRef: "price-mtr-1-20250101"
+                    priceUnit: "MTR"
+                    priceQuantity: 1
+                    currencyCode: "EUR"
+                    netPrice: 1.99
+                    priceValidityDate: "2025-01-01"
+                  - supplierIdGln: "8712423012485"
+                    supplierItemNumber: "SKU-CABLE-002"
+                    pricingRef: "price-mtr-100-20250101"
+                    priceUnit: "MTR"
+                    priceQuantity: 100
+                    currencyCode: "EUR"
+                    netPrice: 1.59
+                    priceValidityDate: "2025-01-01"
+                meta:
+                  cursor: "eyJzdXBwbGllcklkR2xuIjoiODcxMjQyMzAxMjQ4NSIsInByaWNlUXVhbnRpdHkiOjEwMH0="
+                  hasNext: true
+                  hasPrev: false
+                  limit: 100
+                  estimatedTotal: 24850
+    '400':
+      $ref: ../../../../shared/responses/400-bad-request.yaml
+    '401':
+      $ref: ../../../../shared/responses/401-unauthorized.yaml
+    '403':
+      $ref: ../../../../shared/responses/403-forbidden.yaml
+    '500':
+      $ref: ../../../../shared/responses/500-internal-server-error.yaml

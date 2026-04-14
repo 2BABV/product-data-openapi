@@ -1,0 +1,109 @@
+get:
+  operationId: getTradeItemAttachments
+  tags:
+    - TradeItems single
+  summary: Get trade item attachments
+  description: |
+    Retrieve attachments for a specific trade item.
+
+    This endpoint returns all attachments associated with the trade item,
+    including product images, datasheets, technical drawings, certificates,
+    manuals, and other document types.
+
+    **Flat structure**: Each attachment entry represents a single file with its
+    type, specification, filename, URI, and metadata.
+
+    Unlike the bulk endpoint `/trade-items/bulk/attachments` which adds trade item
+    identification keys to each row for ETL optimization, this single-item endpoint
+    returns attachments scoped to the specified trade item.
+
+    **No pagination** - Returns all attachments for the specified trade item.
+
+    **ETIM xChange**: `ItemAttachments[]`
+    **Path**: `Supplier[].Product[].TradeItem[].ItemAttachments[]`
+  parameters:
+    - $ref: ../../../shared/parameters/path/supplier-id-gln.yaml
+    - $ref: ../../../shared/parameters/path/supplier-item-number.yaml
+  responses:
+    '200':
+      description: Successfully retrieved trade item attachments
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/responses/TradeItemAttachmentsResponse.yaml
+          examples:
+            multipleAttachments:
+              summary: Trade item with multiple attachments
+              value:
+                data:
+                  supplierIdGln: "1234567890123"
+                  supplierItemNumber: "SKU-12345"
+                  attachments:
+                    - attachmentType: "ATX001"
+                      attachmentTypeSpecification: "MDX002"
+                      attachmentLanguages: null
+                      attachmentFilename: "product_image.jpg"
+                      attachmentUri: "https://example.com/images/product.jpg"
+                      attachmentDescription: "Front view product image"
+                      attachmentIssueDate: "2024-01-15"
+                      attachmentExpiryDate: null
+                    - attachmentType: "ATX014"
+                      attachmentTypeSpecification: "MDX005"
+                      attachmentLanguages: ["en-GB"]
+                      attachmentFilename: "datasheet-en.pdf"
+                      attachmentUri: "https://cdn.supplier.com/datasheets/datasheet-en.pdf"
+                      attachmentDescription: "Technical datasheet"
+                      attachmentIssueDate: "2024-06-15"
+                      attachmentExpiryDate: null
+                    - attachmentType: "ATX026"
+                      attachmentTypeSpecification: null
+                      attachmentLanguages: null
+                      attachmentFilename: "ce-certificate.pdf"
+                      attachmentUri: "https://cdn.supplier.com/certs/ce-certificate.pdf"
+                      attachmentDescription: null
+                      attachmentIssueDate: "2024-03-01"
+                      attachmentExpiryDate: "2029-03-01"
+            singleAttachment:
+              summary: Trade item with one attachment
+              value:
+                data:
+                  supplierIdGln: "8712423012485"
+                  supplierItemNumber: "SKU-LAMP-001"
+                  attachments:
+                    - attachmentType: "ATX001"
+                      attachmentTypeSpecification: "MDX002"
+                      attachmentLanguages: null
+                      attachmentFilename: "lamp-front.jpg"
+                      attachmentUri: "https://example.com/images/lamp-front.jpg"
+                      attachmentDescription: "Front view"
+                      attachmentIssueDate: null
+                      attachmentExpiryDate: null
+            noAttachments:
+              summary: Trade item without attachments
+              value:
+                data:
+                  supplierIdGln: "1234567890123"
+                  supplierItemNumber: "SKU-12345"
+                  attachments: null
+    '400':
+      $ref: ../../../shared/responses/400-bad-request.yaml
+    '401':
+      $ref: ../../../shared/responses/401-unauthorized.yaml
+    '403':
+      $ref: ../../../shared/responses/403-forbidden.yaml
+    '404':
+      description: Trade item not found
+      content:
+        application/json:
+          schema:
+            $ref: ../../../shared/schemas/common/ProblemDetails.yaml
+          examples:
+            notFound:
+              summary: Trade item not found
+              value:
+                type: about:blank
+                title: Not Found
+                status: 404
+                detail: "No trade item found with supplier GLN '1234567890123' and item number 'UNKNOWN-SKU'"
+    '500':
+      $ref: ../../../shared/responses/500-internal-server-error.yaml

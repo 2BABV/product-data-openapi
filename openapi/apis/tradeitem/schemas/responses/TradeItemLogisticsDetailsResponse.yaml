@@ -1,0 +1,35 @@
+type: object
+description: |
+  Response containing item logistics details for a specific trade item.
+  Returns the trade item identification keys and a nested array of `ItemLogistics` objects,
+  each defining base item dimensions, weight, and volume.
+  
+  Unlike the bulk endpoint `/trade-items/bulk/logistics-details` which uses a flattened structure
+  optimized for ETL, this single-item endpoint returns logistics in their natural
+  nested format for easier consumption.
+  
+  **ETIM xChange**: `ItemLogisticDetails[]`
+  **Path**: `Supplier[].Product[].TradeItem[].ItemLogisticDetails[]`
+required:
+  - data
+properties:
+  data:
+    $ref: ./TradeItemLogisticsDetailsResponseData.yaml
+examples:
+  - data:
+      supplierIdGln: "1234567890123"
+      supplierItemNumber: "SKU-12345"
+      itemLogistics:
+        - baseItemNetLength: 96.0
+          baseItemNetWidth: 5.0
+          baseItemNetHeight: 56.0
+          baseItemNetDiameter: null
+          netDimensionUnit: CMT
+          baseItemNetWeight: 0.26
+          netWeightUnit: KGM
+          baseItemNetVolume: 68.0
+          netVolumeUnit: MMQ
+  - data:
+      supplierIdGln: "1234567890123"
+      supplierItemNumber: "SKU-12345"
+      itemLogistics: null

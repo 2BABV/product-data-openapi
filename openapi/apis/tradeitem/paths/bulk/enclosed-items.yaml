@@ -1,0 +1,72 @@
+get:
+  operationId: getBulkTradeItemEnclosedItems
+  tags:
+    - TradeItems bulk
+  summary: List trade item enclosed items
+  description: |
+    Retrieve trade item enclosed items in bulk with cursor-based pagination.
+    Returns a flattened structure where each row represents a single enclosed item
+    within a packaging unit, with the trade item identifier (`supplierIdGln` + `supplierItemNumber`)
+    and packaging context (`packagingTypeCode`).
+
+    A trade item with 2 packaging units, each containing 3 enclosed items,
+    will result in 6 rows.
+
+    This flattened structure is optimized for:
+    - Predictable payload sizes per row
+    - Efficient cursor-based pagination
+    - ETL/data warehouse ingestion
+    - Streaming data processing
+  parameters:
+    - $ref: ../../../../shared/parameters/query/cursor.yaml
+    - $ref: ../../../../shared/parameters/query/limit.yaml
+    - $ref: ../../../../shared/parameters/query/selection-id.yaml
+    - $ref: ../../../../shared/parameters/query/supplier-id-gln-filter.yaml
+    - $ref: ../../../../shared/parameters/query/mutation-date-time.yaml
+  responses:
+    '200':
+      description: Successfully retrieved trade item enclosed items
+      content:
+        application/json:
+          schema:
+            $ref: ../../schemas/responses/BulkTradeItemEnclosedItemsResponse.yaml
+          examples:
+            multipleItems:
+              summary: Multiple enclosed items across trade items
+              value:
+                data:
+                  - supplierIdGln: "1234567890123"
+                    supplierItemNumber: "SKU-KIT-001"
+                    packagingTypeCode: BX
+                    enclosedSupplierItemNumber: "WIDGET-001"
+                    enclosedManufacturerItemNumber: "MFG-WIDGET-001"
+                    enclosedItemGtins: ["4012345678901"]
+                    enclosedItemQuantity: 5
+                  - supplierIdGln: "1234567890123"
+                    supplierItemNumber: "SKU-KIT-001"
+                    packagingTypeCode: BX
+                    enclosedSupplierItemNumber: "SCREW-M8-50"
+                    enclosedManufacturerItemNumber: null
+                    enclosedItemGtins: null
+                    enclosedItemQuantity: 100
+                  - supplierIdGln: "9876543210987"
+                    supplierItemNumber: "SKU-PALLET-002"
+                    packagingTypeCode: PF
+                    enclosedSupplierItemNumber: "WIDGET-001"
+                    enclosedManufacturerItemNumber: "MFG-WIDGET-001"
+                    enclosedItemGtins: ["4012345678901"]
+                    enclosedItemQuantity: 50
+                meta:
+                  cursor: "eyJpZCI6MTIzfQ=="
+                  hasNext: true
+                  hasPrev: false
+                  limit: 100
+                  estimatedTotal: 2340
+    '400':
+      $ref: ../../../../shared/responses/400-bad-request.yaml
+    '401':
+      $ref: ../../../../shared/responses/401-unauthorized.yaml
+    '403':
+      $ref: ../../../../shared/responses/403-forbidden.yaml
+    '500':
+      $ref: ../../../../shared/responses/500-internal-server-error.yaml

@@ -1,0 +1,13 @@
+name: etimReleaseVersion
+in: query
+required: false
+schema:
+  type: string
+  pattern: "^[0-9]{1,2}[.]{1}[0-9]{1}|DYNAMIC$"
+  examples:
+    - "9.0"
+    - "10.0"
+    - "DYNAMIC"
+description: |
+  Filter ETIM classifications by ETIM release version.
+  Format: Major.Minor version number (e.g., "9.0", "10.0") or "DYNAMIC" for dynamic releases.

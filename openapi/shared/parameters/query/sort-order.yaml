@@ -1,0 +1,17 @@
+name: sortOrder
+in: query
+required: false
+schema:
+  type: string
+  enum:
+    - asc
+    - desc
+  default: asc
+description: Sort order for results
+examples:
+  ascending:
+    value: asc
+    summary: Ascending order
+  descending:
+    value: desc
+    summary: Descending order

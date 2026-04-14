@@ -1,0 +1,248 @@
+type: object
+description: |
+  Packaging unit information describing hierarchical packaging levels (e.g., piece, box, pallet).
+  Extracted from ETIM xChange `TradeItem.PackagingUnit[]` structure.
+required:
+  - packagingTypeCode
+properties:
+  supplierPackagingNumber:
+    type: ["string", "null"]
+    description: |
+      Supplier's packaging number for this packaging unit.
+      **ETIM xChange**: `SupplierPackagingNumber`
+      **Path**: `Supplier[].Product[].TradeItem[].PackagingUnit[].PackagingIdentification.SupplierPackagingNumber`
+    minLength: 1
+    maxLength: 35
+    examples:
+      - "PKG-12345"
+      - null
+  manufacturerPackagingNumber:
+    type: ["string", "null"]
+    description: |
+      Manufacturer's packaging number for this packaging unit.
+      **ETIM xChange**: `ManufacturerPackagingNumber`
+      **Path**: `Supplier[].Product[].TradeItem[].PackagingUnit[].PackagingIdentification.ManufacturerPackagingNumber`
+    minLength: 1
+    maxLength: 35
+    examples:
+      - "MFG-PKG-789"
+      - null
+  packagingGtins:
+    type: ["array", "null"]
+    description: |
+      Array of GTINs for this packaging unit.
+      **ETIM xChange**: `PackagingGtin[]`
+      **Path**: `Supplier[].Product[].TradeItem[].PackagingUnit[].PackagingIdentification.PackagingGtin[]`
+    uniqueItems: true
+    items:
+      $ref: ../../../../shared/schemas/identifiers/Gtin.yaml
+    examples:
+      - ["04012345678901"]
+      - null
+  packagingTypeCode:
+    description: |
+      Type of packaging (box, pallet, etc.).
+      **ETIM xChange**: `PackagingTypeCode`
+      **Path**: `Supplier[].Product[].TradeItem[].PackagingUnit[].PackagingIdentification.PackagingTypeCode`
+    $ref: ../enums/PackagingTypeCode.yaml
+    examples:
+      - BX   # Box
+      - PF   # Pallet
+      - C62  # Piece
+  packagingUnitName:
+    type: ["string", "null"]
+    description: |
+      Human-readable name of the packaging unit. Flattened from multilingual array.
+      **ETIM xChange**: `PackagingUnitName[].PackagingUnitName`
+      **Path**: `Supplier[].Product[].TradeItem[].PackagingUnit[].PackagingIdentification.PackagingUnitName[].PackagingUnitName`
+    minLength: 1
+    maxLength: 20
+    examples:
+      - "Box"
+      - "Pallet"
+      - null
+  packagingQuantity:
+    type: ["number", "null"]
+    format: decimal
+    description: |
+      Quantity of base items in this packaging unit (converted from ETIM xChange string to number).
+      **ETIM xChange**: `PackagingQuantity` (string with pattern)
+      **Path**: `Supplier[].Product[].TradeItem[].PackagingUnit[].PackagingIdentification.PackagingQuantity`
+    minimum: 0
+    multipleOf: 0.0001
+    maximum: 999999999999.9999
+    examples:
+      - 10
+      - 100
+      - 1000
+      - null
+  tradeItemPrimaryPackaging:
+    type: ["boolean", "null"]
+    description: |
+      Indicates whether this is the primary/consumer packaging.
+      **ETIM xChange**: `TradeItemPrimaryPackaging`
+      **Path**: `Supplier[].Product[].TradeItem[].PackagingUnit[].PackagingIdentification.TradeItemPrimaryPackaging`
+    examples:
+      - true
+      - false
+      - null
+  packagingGs1Code128:
+    type: ["string", "null"]
+    description: |
+      GS1-128 barcode for the packaging unit.
+      **ETIM xChange**: `PackagingGs1Code128`
+      **Path**: `Supplier[].Product[].TradeItem[].PackagingUnit[].PackagingIdentification.PackagingGs1Code128`
+    minLength: 1
+    maxLength: 48
+    examples:
+      - "01040123456789011710123456"
+      - null
+  grossLength:
+    type: ["number", "null"]
+    format: decimal
+    description: |
+      Gross length of the packaging in specified unit (converted from ETIM xChange string to number).
+      **ETIM xChange**: `GrossLength` (string with pattern)
+      **Path**: `Supplier[].Product[].TradeItem[].PackagingUnit[].PackagingLogistics.GrossLength`
+    minimum: 0
+    multipleOf: 0.0001
+    maximum: 999999999999.9999
+    examples:
+      - 40.0
+      - 120.0
+      - null
+  grossWidth:
+    type: ["number", "null"]
+    format: decimal
+    description: |
+      Gross width of the packaging in specified unit (converted from ETIM xChange string to number).
+      **ETIM xChange**: `GrossWidth` (string with pattern)
+      **Path**: `Supplier[].Product[].TradeItem[].PackagingUnit[].PackagingLogistics.GrossWidth`
+    minimum: 0
+    multipleOf: 0.0001
+    maximum: 999999999999.9999
+    examples:
+      - 30.0
+      - 80.0
+      - null
+  grossHeight:
+    type: ["number", "null"]
+    format: decimal
+    description: |
+      Gross height of the packaging in specified unit (converted from ETIM xChange string to number).
+      **ETIM xChange**: `GrossHeight` (string with pattern)
+      **Path**: `Supplier[].Product[].TradeItem[].PackagingUnit[].PackagingLogistics.GrossHeight`
+    minimum: 0
+    multipleOf: 0.0001
+    maximum: 999999999999.9999
+    examples:
+      - 20.0
+      - 100.0
+      - null
+  grossDiameter:
+    type: ["number", "null"]
+    format: decimal
+    description: |
+      Gross diameter of the packaging in specified unit (for cylindrical packaging) (converted from ETIM xChange string to number).
+      **ETIM xChange**: `GrossDiameter` (string with pattern)
+      **Path**: `Supplier[].Product[].TradeItem[].PackagingUnit[].PackagingLogistics.GrossDiameter`
+    minimum: 0
+    multipleOf: 0.0001
+    maximum: 999999999999.9999
+    examples:
+      - 15.0
+      - null
+  grossDimensionUnit:
+    type: ["string", "null"]
+    description: |
+      Unit of measurement for gross dimensions (CMT=centimeter, MTR=meter, etc.).
+      **ETIM xChange**: `GrossDimensionUnit`
+      **Path**: `Supplier[].Product[].TradeItem[].PackagingUnit[].PackagingLogistics.GrossDimensionUnit`
+    enum:
+      - CMT  # Centimeter
+      - DMT  # Decimeter
+      - KMT  # Kilometer
+      - MMT  # Millimeter
+      - MTR  # Meter
+      - FOT  # Foot
+      - INH  # Inch
+      - SMI  # Mile (statute mile)
+      - YRD  # Yard
+      - null
+    examples:
+      - CMT
+      - MTR
+      - null
+  grossWeight:
+    type: ["number", "null"]
+    format: decimal
+    description: |
+      Gross weight of the packaging in specified unit (converted from ETIM xChange string to number).
+      **ETIM xChange**: `GrossWeight` (string with pattern)
+      **Path**: `Supplier[].Product[].TradeItem[].PackagingUnit[].PackagingLogistics.GrossWeight`
+    minimum: 0
+    multipleOf: 0.0001
+    maximum: 999999999999.9999
+    examples:
+      - 500.0
+      - 15000.0
+      - null
+  grossWeightUnit:
+    type: ["string", "null"]
+    description: |
+      Unit of measurement for gross weight (GRM=gram, KGM=kilogram, etc.).
+      **ETIM xChange**: `GrossWeightUnit`
+      **Path**: `Supplier[].Product[].TradeItem[].PackagingUnit[].PackagingLogistics.GrossWeightUnit`
+    enum:
+      - GRM  # Gram
+      - KGM  # Kilogram
+      - MGM  # Milligram
+      - TNE  # Metric ton
+      - LTN  # Long ton (UK)
+      - LBR  # Pound
+      - ONZ  # Ounce
+      - null
+    examples:
+      - GRM
+      - KGM
+      - null
+  tradeItemEnclosed:
+    type: ["array", "null"]
+    description: |
+      Array of trade items enclosed within this packaging unit.
+      Describes which other trade items are physically contained in this package.
+      **ETIM xChange**: `TradeItemEnclosed[]`
+      **Path**: `Supplier[].Product[].TradeItem[].PackagingUnit[].TradeItemEnclosed[]`
+    items:
+      $ref: ./TradeItemEnclosed.yaml
+    examples:
+      - - enclosedSupplierItemNumber: "WIDGET-001"
+          enclosedManufacturerItemNumber: "MFG-WIDGET-001"
+          enclosedItemGtins: ["4012345678901"]
+          enclosedItemQuantity: 5
+      - null
+examples:
+  - supplierPackagingNumber: "PKG-001"
+    manufacturerPackagingNumber: null
+    packagingGtins: ["04012345678901"]
+    packagingTypeCode: BX
+    packagingUnitName: "Box"
+    packagingQuantity: 10
+    tradeItemPrimaryPackaging: false
+    packagingGs1Code128: null
+    grossLength: 40.0
+    grossWidth: 30.0
+    grossHeight: 20.0
+    grossDiameter: null
+    grossDimensionUnit: CMT
+    grossWeight: 5000.0
+    grossWeightUnit: GRM
+    tradeItemEnclosed:
+      - enclosedSupplierItemNumber: "WIDGET-001"
+        enclosedManufacturerItemNumber: "MFG-WIDGET-001"
+        enclosedItemGtins: ["4012345678901"]
+        enclosedItemQuantity: 5
+      - enclosedSupplierItemNumber: "SCREW-M8-50"
+        enclosedManufacturerItemNumber: null
+        enclosedItemGtins: null
+        enclosedItemQuantity: 100

@@ -1,0 +1,81 @@
+type: object
+description: |
+  Single trade item identification keys with pricing information.
+  
+  A trade item may have multiple pricing entries for different conditions, 
+  customer groups, or validity periods.
+  
+  **ETIM xChange**: `Pricing[]`
+  **Path**: `Supplier[].Product[].TradeItem[].Pricing[]`
+required:
+  - supplierIdGln
+  - supplierItemNumber
+  - pricings
+properties:
+  supplierIdGln:
+    $ref: ../../../../shared/schemas/identifiers/Gln.yaml
+    description: |
+      Global Location Number (GLN) uniquely identifying the supplier.
+      Part of the composite key for the trade item.
+    examples:
+      - "1234567890123"
+  supplierItemNumber:
+    type: string
+    minLength: 1
+    maxLength: 35
+    description: |
+      Supplier's unique item number/code.
+      Part of the composite key for the trade item.
+    examples:
+      - "SKU-12345"
+  pricings:
+    type: array
+    description: |
+      Array of pricing information for this trade item. A trade item may have
+      multiple pricing entries for different conditions, customer groups, or
+      validity periods.
+    items:
+      $ref: ../domain/TradeItemPricing.yaml
+examples:
+  - supplierIdGln: "1234567890123"
+    supplierItemNumber: "SKU-12345"
+    pricings:
+      - pricingRef: "price-c62-1-20250101"
+        priceUnit: C62
+        priceUnitFactor: null
+        priceQuantity: 1
+        currencyCode: EUR
+        priceOnRequest: false
+        grossListPrice: 130.0
+        netPrice: 100.0
+        recommendedRetailPrice: 150.0
+        vat: 21.0
+        priceValidityDate: "2025-01-01"
+        priceExpiryDate: "2025-12-31"
+  - supplierIdGln: "8712423012485"
+    supplierItemNumber: "SKU-CABLE-002"
+    pricings:
+      - pricingRef: "price-mtr-1-20250101"
+        priceUnit: MTR
+        priceUnitFactor: 1.0
+        priceQuantity: 1
+        currencyCode: EUR
+        priceOnRequest: false
+        grossListPrice: 2.50
+        netPrice: 1.99
+        recommendedRetailPrice: 3.49
+        vat: 21.0
+        priceValidityDate: "2025-01-01"
+        priceExpiryDate: "2025-06-30"
+      - pricingRef: "price-mtr-100-20250101"
+        priceUnit: MTR
+        priceUnitFactor: 1.0
+        priceQuantity: 100
+        currencyCode: EUR
+        priceOnRequest: false
+        grossListPrice: 2.00
+        netPrice: 1.59
+        recommendedRetailPrice: 2.99
+        vat: 21.0
+        priceValidityDate: "2025-01-01"
+        priceExpiryDate: "2025-06-30"

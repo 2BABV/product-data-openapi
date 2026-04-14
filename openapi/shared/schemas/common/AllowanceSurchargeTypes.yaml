@@ -1,0 +1,34 @@
+type: string
+description: |
+  Allowance and surcharge type codes for pricing adjustments.
+  These codes define the reason for price adjustments.
+enum:
+  - AAT    # Discount
+  - ABL    # Assembly allowance
+  - ADO    # Administrative discount
+  - ADR    # Handling discount  
+  - ADZ    # Promotional discount
+  - AEM    # Environmental handling fee
+  - AEO    # Early payment discount
+  - AEP    # Prompt payment discount
+  - AEQ    # Quantity discount
+  - CAI    # Cash discount
+  - DAE    # Dangerous goods surcharge
+  - DBD    # Delivery surcharge
+  - FC     # Freight charge
+  - HD     # Handling charge
+  - INS    # Insurance
+  - MAC    # Machine allowance
+  - MAT    # Material allowance
+  - PAD    # Packaging discount
+  - PI     # Price increase
+  - QD     # Quantity discount
+  - RAD    # Rebate discount
+  - SH     # Shipping and handling
+  - TD     # Trade discount
+  - WHE    # Warehousing
+  - X21    # Extended ETIM allowance/surcharge code
+examples:
+  - "TD"
+  - "QD"
+  - "FC"

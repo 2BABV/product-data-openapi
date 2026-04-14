@@ -1,0 +1,101 @@
+get:
+  operationId: getProductAttachments
+  tags:
+    - Products single
+  summary: Get product attachments
+  description: |
+    Retrieve attachments for a specific manufacturer product combination.
+
+    This endpoint returns product attachments including images, datasheets, technical drawings,
+    certificates, manuals, and other document types. Each attachment contains type information
+    and one or more file detail records (e.g., the same datasheet in different languages or formats).
+
+    **Nested structure**: Unlike the bulk endpoint `/products/bulk/attachments` which uses
+    a flattened structure optimized for ETL, this single-product endpoint returns attachments
+    in their natural nested format for easier consumption.
+
+    **No pagination** - Returns all attachments for the specified product.
+
+    **ETIM xChange**: `ProductAttachments[]`
+    **Path**: `Supplier[].Product[].ProductAttachments[]`
+  parameters:
+    - $ref: ../../../shared/parameters/path/manufacturer-id-gln.yaml
+    - $ref: ../../../shared/parameters/path/manufacturer-product-number.yaml
+  responses:
+    '200':
+      description: Successfully retrieved product attachments
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/responses/ProductAttachmentsResponse.yaml
+          examples:
+            multipleAttachments:
+              summary: Product with multiple attachments
+              value:
+                data:
+                  manufacturerIdGln: "1234567890123"
+                  manufacturerProductNumber: "929002376910"
+                  attachments:
+                    - attachmentType: "ATX001"
+                      attachmentTypeSpecification: "MDX002"
+                      attachmentOrder: 1
+                      attachmentDetails:
+                        - attachmentUri: "https://images.manufacturer.com/products/LED-12345-front.jpg"
+                          attachmentFilename: "LED-12345-front.jpg"
+                          attachmentLanguage: ["en-GB"]
+                          attachmentDescription:
+                            - language: "en-GB"
+                              attachmentDescription: "Front view product image"
+                    - attachmentType: "ATX014"
+                      attachmentOrder: 2
+                      attachmentDetails:
+                        - attachmentUri: "https://cdn.manufacturer.com/products/datasheets/LED-12345-en.pdf"
+                          attachmentFilename: "LED-12345-datasheet-en.pdf"
+                          attachmentLanguage: ["en-GB"]
+                          attachmentIssueDate: "2024-06-15"
+                        - attachmentUri: "https://cdn.manufacturer.com/products/datasheets/LED-12345-de.pdf"
+                          attachmentFilename: "LED-12345-datasheet-de.pdf"
+                          attachmentLanguage: ["de-DE"]
+                          attachmentIssueDate: "2024-06-15"
+            singleAttachment:
+              summary: Product with one attachment
+              value:
+                data:
+                  manufacturerIdGln: "1234567890123"
+                  manufacturerProductNumber: "929002376910"
+                  attachments:
+                    - attachmentType: "ATX001"
+                      attachmentTypeSpecification: "MDX002"
+                      attachmentOrder: 1
+                      attachmentDetails:
+                        - attachmentUri: "https://images.manufacturer.com/products/LED-12345-front.jpg"
+                          attachmentFilename: "LED-12345-front.jpg"
+            noAttachments:
+              summary: Product without attachments
+              value:
+                data:
+                  manufacturerIdGln: "1234567890123"
+                  manufacturerProductNumber: "929002376910"
+                  attachments: null
+    '400':
+      $ref: ../../../shared/responses/400-bad-request.yaml
+    '401':
+      $ref: ../../../shared/responses/401-unauthorized.yaml
+    '403':
+      $ref: ../../../shared/responses/403-forbidden.yaml
+    '404':
+      description: Product not found
+      content:
+        application/json:
+          schema:
+            $ref: ../../../shared/schemas/common/ProblemDetails.yaml
+          examples:
+            notFound:
+              summary: Product not found
+              value:
+                type: about:blank
+                title: Not Found
+                status: 404
+                detail: "No product found with manufacturer GLN '1234567890123' and product number '929002376910'"
+    '500':
+      $ref: ../../../shared/responses/500-internal-server-error.yaml

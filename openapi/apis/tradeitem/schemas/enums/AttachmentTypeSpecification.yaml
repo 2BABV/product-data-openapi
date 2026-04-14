@@ -1,0 +1,90 @@
+type: ["string", "null"]
+enum:
+  - "MDX002"
+  - "MDX005"
+  - "MDX007"
+  - "MDX008"
+  - "MDX010"
+  - "MDX012"
+  - "MDX013"
+  - "MDX014"
+  - "MDX015"
+  - "MDX016"
+  - "MDX017"
+  - "MDX018"
+  - "MDX019"
+  - "MDX020"
+  - "MDX021"
+  - "MDX022"
+  - "MDX023"
+  - "MDX024"
+  - "MDX025"
+  - "MDX026"
+  - "MDX027"
+  - "MDX028"
+  - "MDX029"
+  - "MDX030"
+  - "MDX033"
+  - "MDX034"
+  - "MDX035"
+  - "MDX037"
+  - "MDX038"
+  - "MDX039"
+  - "MDX041"
+  - "MDX042"
+  - "MDX045"
+  - "MDX047"
+  - "MDX048"
+  - "MDX049"
+  - "MDX050"
+  - "MDX051"
+  - "MDX052"
+  - "MDX053"
+  - "MDX054"
+  - "MDX055"
+  - "MDX057"
+  - "MDX058"
+  - "MDX059"
+  - "MDX060"
+  - "MDX061"
+  - "MDX062"
+  - "MDX063"
+  - "MDX064"
+  - "MDX065"
+  - "MDX100"
+  - "MDX101"
+  - "MDX102"
+  - "MDX103"
+  - "MDX104"
+  - "MDX105"
+  - "MDX106"
+  - "MDX107"
+  - "MDX108"
+  - "MDX109"
+  - "MDX999"
+  - null
+description: |
+  ETIM standardized media/attachment specification codes providing additional detail about the attachment type.
+
+  Examples:
+  - `MDX002`: Front view
+  - `MDX005`: Side view
+  - `MDX007`: Technical specification
+  - `MDX010`: Wiring diagram
+  - `MDX020`: Assembly instructions
+  - `MDX100`: Video
+  - `MDX101`: 3D model
+  - `MDX105`: M4A
+  - `MDX106`: WMA
+  - `MDX107`: AIFF
+  - `MDX108`: APE
+  - `MDX109`: WEBM
+  - `MDX999`: Other
+
+  **ETIM xChange**: `AttachmentTypeSpecification`  
+  **Path**: `Supplier[].Product[].TradeItem[].ItemAttachments[].AttachmentTypeSpecification`
+examples:
+  - "MDX002"
+  - "MDX007"
+  - "MDX020"
+  - null

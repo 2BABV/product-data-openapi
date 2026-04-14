@@ -1,0 +1,10 @@
+type: string
+description: |
+  Language code in ISO 639-1 + ISO 3166-1 format (e.g., "en-GB", "de-DE").
+  
+  **ETIM xChange**: `Language`
+pattern: "^[a-z]{2}[-][A-Z]{2}$"
+examples:
+  - "en-GB"
+  - "nl-NL"
+  - "de-DE"

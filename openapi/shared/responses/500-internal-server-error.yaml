@@ -1,0 +1,13 @@
+description: Internal Server Error - An unexpected error occurred
+content:
+  application/problem+json:
+    schema:
+      $ref: ../schemas/common/ProblemDetails.yaml
+    examples:
+      internal-server-error:
+        summary: Internal Server Error example
+        value:
+          type: about:blank
+          title: Internal Server Error
+          status: 500
+          detail: An unexpected error occurred. Please try again later

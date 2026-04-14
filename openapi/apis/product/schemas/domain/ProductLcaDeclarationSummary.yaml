@@ -1,0 +1,694 @@
+type: object
+description: |
+  Flattened product LCA declaration for bulk retrieval.
+  Each row represents a single life cycle declaration within a product's LCA environmental data.
+  
+  This flattened structure is optimized for:
+  - Predictable payload sizes per row
+  - Efficient cursor-based pagination
+  - ETL/data warehouse ingestion
+  - Streaming data processing
+  
+  **Payload Optimization**: Optional properties with null values are omitted from the response
+  to minimize payload size. Clients should treat missing properties as null/not applicable.
+  
+  **Parent context fields**: Key fields from the parent LcaEnvironmental object are included
+  (`declaredUnitUnit`, `declaredUnitQuantity`, `lcaReferenceLifetime`, `thirdPartyVerification`,
+  `epdValidityStartDate`, `epdValidityExpiryDate`, `epdOperatorName`, `epdOperatorUri`,
+  `operatorEpdId`, `manufacturerEpdId`, `productCategoryRulesDescription`, `productCategoryRulesUri`,
+  `productSpecificRulesDescription`, `productSpecificRulesUri`)
+  to provide necessary context for interpreting the environmental indicators.
+required:
+  - manufacturerIdGln
+  - manufacturerProductNumber
+  - lifeCycleStage
+  - lcaDeclarationIndicator
+  - declaredUnitUnit
+  - declaredUnitQuantity
+  - lcaReferenceLifetime
+  - thirdPartyVerification
+  - epdValidityStartDate
+properties:
+  # Product key fields
+  manufacturerIdGln:
+    $ref: ../../../../shared/schemas/identifiers/Gln.yaml
+    description: |
+      GLN (Global Location Number) of the product manufacturer.
+      Part of the composite product identifier.
+      
+      **ETIM xChange**: `ManufacturerIdGln`
+      **Path**: `Supplier[].Product[].ProductIdentification.ManufacturerIdGln`
+    examples:
+      - "1234567890123"
+  
+  manufacturerProductNumber:
+    type: string
+    minLength: 1
+    maxLength: 35
+    description: |
+      Manufacturer's product number/code.
+      Part of the composite product identifier.
+      
+      **ETIM xChange**: `ManufacturerProductNumber`
+      **Path**: `Supplier[].Product[].ProductIdentification.ManufacturerProductNumber`
+    examples:
+      - "929002376910"
+      - "LED-12345-A"
+  
+  # Parent LcaEnvironmental context fields
+  declaredUnitUnit:
+    type: string
+    enum:
+      - "KGM"
+      - "LTR"
+      - "MTK"
+      - "MTQ"
+      - "MTR"
+      - "PCE"
+      - "TNE"
+      - "FOT"
+      - "FTK"
+      - "FTQ"
+      - "LBR"
+      - "LTN"
+      - "YDK"
+      - "YRD"
+    description: |
+      Unit of measurement for the declared/functional unit in LCA.
+      
+      Metric units:
+      - `KGM`: Kilogram
+      - `LTR`: Liter
+      - `MTK`: Square meter
+      - `MTQ`: Cubic meter
+      - `MTR`: Meter
+      - `PCE`: Piece/unit
+      - `TNE`: Tonne
+      
+      Imperial units:
+      - `FOT`: Foot
+      - `FTK`: Square foot
+      - `FTQ`: Cubic foot
+      - `LBR`: Pound
+      - `LTN`: Long ton
+      - `YDK`: Square yard
+      - `YRD`: Yard
+      
+      **ETIM xChange**: `DeclaredUnitUnit`
+      **Path**: `Supplier[].Product[].LcaEnvironmental.DeclaredUnitUnit`
+    examples:
+      - "KGM"
+      - "PCE"
+      - "MTK"
+  
+  declaredUnitQuantity:
+    type: number
+    format: decimal
+    minimum: 0
+    multipleOf: 0.0001
+    maximum: 99999999999.9999
+    description: |
+      Quantity of the declared/functional unit for LCA calculations.
+      Converted from ETIM xChange string pattern to number type.
+      
+      **ETIM xChange**: `DeclaredUnitQuantity` (string with pattern)
+      **Path**: `Supplier[].Product[].LcaEnvironmental.DeclaredUnitQuantity`
+    examples:
+      - 1
+      - 10.5
+      - 100
+  
+  lcaReferenceLifetime:
+    type: integer
+    minimum: 0
+    description: |
+      Reference service life/lifetime for LCA calculations in years.
+      
+      **ETIM xChange**: `LcaReferenceLifetime`
+      **Path**: `Supplier[].Product[].LcaEnvironmental.LcaReferenceLifetime`
+    examples:
+      - 25
+      - 10
+      - 50
+  
+  thirdPartyVerification:
+    type: string
+    enum:
+      - "none"
+      - "internally"
+      - "externally"
+    description: |
+      Type of third-party verification for LCA/EPD data.
+      
+      - `none`: No third-party verification
+      - `internally`: Internal verification
+      - `externally`: External independent verification
+      
+      **ETIM xChange**: `ThirdPartyVerification`
+      **Path**: `Supplier[].Product[].LcaEnvironmental.ThirdPartyVerification`
+    examples:
+      - "externally"
+      - "none"
+  
+  # EPD metadata fields (parent LcaEnvironmental context)
+  epdValidityStartDate:
+    type: string
+    format: date
+    description: |
+      Start date of EPD validity period. ISO 8601 date format (YYYY-MM-DD).
+      Defaults to CatalogueValidityStart if not overridden at the product level.
+      
+      **ETIM xChange**: `EpdValidityStartDate`
+      **Path**: `Supplier[].Product[].LcaEnvironmental.EpdValidityStartDate`
+      **Default from**: `CatalogueValidityStart`
+    examples:
+      - "2024-01-01"
+  
+  epdValidityExpiryDate:
+    type: ["string", "null"]
+    format: date
+    description: |
+      Expiry date of EPD validity period. ISO 8601 date format (YYYY-MM-DD).
+      
+      **ETIM xChange**: `EpdValidityExpiryDate`
+      **Path**: `Supplier[].Product[].LcaEnvironmental.EpdValidityExpiryDate`
+    examples:
+      - "2029-12-31"
+      - null
+  
+  epdOperatorName:
+    type: ["string", "null"]
+    minLength: 1
+    maxLength: 100
+    description: |
+      Name of the EPD program operator that published the Environmental Product Declaration.
+      
+      **ETIM xChange**: `EpdOperatorName`
+      **Path**: `Supplier[].Product[].LcaEnvironmental.EpdOperatorName`
+    examples:
+      - "IBU - Institut Bauen und Umwelt e.V."
+      - "The International EPD System"
+      - null
+  
+  epdOperatorUri:
+    type: ["string", "null"]
+    format: uri
+    description: |
+      URI/URL to the EPD program operator's website.
+      
+      **ETIM xChange**: `EpdOperatorUri`
+      **Path**: `Supplier[].Product[].LcaEnvironmental.EpdOperatorUri`
+    examples:
+      - "https://ibu-epd.com"
+      - "https://www.environdec.com"
+      - null
+  
+  operatorEpdId:
+    type: ["string", "null"]
+    minLength: 1
+    maxLength: 35
+    description: |
+      EPD identifier assigned by the program operator.
+      
+      **ETIM xChange**: `OperatorEpdId`
+      **Path**: `Supplier[].Product[].LcaEnvironmental.OperatorEpdId`
+    examples:
+      - "EPD-IBU-2024-001234"
+      - null
+  
+  manufacturerEpdId:
+    type: ["string", "null"]
+    minLength: 1
+    maxLength: 35
+    description: |
+      EPD identifier assigned by the manufacturer for internal reference.
+      
+      **ETIM xChange**: `ManufacturerEpdId`
+      **Path**: `Supplier[].Product[].LcaEnvironmental.ManufacturerEpdId`
+    examples:
+      - "MFR-EPD-LED-2024-001"
+      - null
+  
+  productCategoryRulesDescription:
+    type: ["string", "null"]
+    minLength: 1
+    maxLength: 100
+    description: |
+      Description of the Product Category Rules (PCR) used for the LCA/EPD.
+      PCR defines the rules for the environmental assessment of a specific product category.
+      
+      **ETIM xChange**: `ProductCategoryRulesDescription`
+      **Path**: `Supplier[].Product[].LcaEnvironmental.ProductCategoryRulesDescription`
+    examples:
+      - "PCR 2019:14 Lighting equipment"
+      - "EN 15804+A2 Construction products"
+      - null
+  
+  productCategoryRulesUri:
+    type: ["string", "null"]
+    format: uri
+    description: |
+      URI/URL to the Product Category Rules (PCR) document.
+      
+      **ETIM xChange**: `ProductCategoryRulesUri`
+      **Path**: `Supplier[].Product[].LcaEnvironmental.ProductCategoryRulesUri`
+    examples:
+      - "https://www.environdec.com/pcr-library/pcr-2019-14"
+      - null
+  
+  productSpecificRulesDescription:
+    type: ["string", "null"]
+    minLength: 1
+    maxLength: 100
+    description: |
+      Description of Product Specific Rules (PSR) applied in addition to PCR.
+      PSR provides additional rules for sub-categories within a PCR.
+      
+      **ETIM xChange**: `ProductSpecificRulesDescription`
+      **Path**: `Supplier[].Product[].LcaEnvironmental.ProductSpecificRulesDescription`
+    examples:
+      - "PSR for LED lamps and luminaires"
+      - null
+  
+  productSpecificRulesUri:
+    type: ["string", "null"]
+    format: uri
+    description: |
+      URI/URL to the Product Specific Rules (PSR) document.
+      
+      **ETIM xChange**: `ProductSpecificRulesUri`
+      **Path**: `Supplier[].Product[].LcaEnvironmental.ProductSpecificRulesUri`
+    examples:
+      - "https://www.environdec.com/psr-library/psr-led-lighting"
+      - null
+  
+  # LcaDeclaration fields (flattened)
+  lifeCycleStage:
+    type: string
+    enum:
+      - "A1"
+      - "A2"
+      - "A3"
+      - "A1-A3"
+      - "A4"
+      - "A5"
+      - "B1"
+      - "B2"
+      - "B3"
+      - "B4"
+      - "B5"
+      - "B6"
+      - "B7"
+      - "B1-B7"
+      - "C1"
+      - "C2"
+      - "C3"
+      - "C4"
+      - "C1-C4"
+      - "D"
+    description: |
+      Life cycle assessment stage according to EN 15804.
+      
+      Product stage (A):
+      - `A1`: Raw material supply
+      - `A2`: Transport to manufacturer
+      - `A3`: Manufacturing
+      - `A1-A3`: Combined product stage
+      - `A4`: Transport to building site
+      - `A5`: Installation into building
+      
+      Use stage (B):
+      - `B1`: Use/Application
+      - `B2`: Maintenance
+      - `B3`: Repair
+      - `B4`: Replacement
+      - `B5`: Refurbishment
+      - `B6`: Operational energy use
+      - `B7`: Operational water use
+      - `B1-B7`: Combined use stage
+      
+      End of life stage (C):
+      - `C1`: Deconstruction/demolition
+      - `C2`: Transport to waste processing
+      - `C3`: Waste processing
+      - `C4`: Disposal
+      - `C1-C4`: Combined end of life stage
+      
+      Beyond life cycle (D):
+      - `D`: Reuse, recovery, recycling potential
+      
+      **ETIM xChange**: `LifeCycleStage`
+      **Path**: `Supplier[].Product[].LcaEnvironmental.LcaDeclaration[].LifeCycleStage`
+    examples:
+      - "A1-A3"
+      - "B6"
+      - "C1-C4"
+  
+  lcaDeclarationIndicator:
+    type: string
+    enum:
+      - "MDE"
+      - "MND"
+      - "MNR"
+      - "AGG"
+    description: |
+      Type of LCA declaration data.
+      
+      - `MDE`: Manufacturer-specific data with external verification
+      - `MND`: Manufacturer-specific data without external verification
+      - `MNR`: Manufacturer-specific data not representative
+      - `AGG`: Industry average/aggregated data
+      
+      **ETIM xChange**: `LcaDeclarationIndicator`
+      **Path**: `Supplier[].Product[].LcaEnvironmental.LcaDeclaration[].LcaDeclarationIndicator`
+    examples:
+      - "MDE"
+      - "AGG"
+  
+  # Environmental indicators
+  declaredUnitGwpTotal:
+    type: ["number", "null"]
+    format: decimal
+    description: |
+      Total Global Warming Potential (GWP) in kg CO2 equivalent per declared unit.
+      
+      **ETIM xChange**: `DeclaredUnitGwpTotal`
+      **Path**: `Supplier[].Product[].LcaEnvironmental.LcaDeclaration[].DeclaredUnitGwpTotal`
+    examples:
+      - 15.75
+      - 0.85
+  
+  declaredUnitGwpFossil:
+    type: ["number", "null"]
+    format: decimal
+    description: |
+      Fossil Global Warming Potential in kg CO2 equivalent per declared unit.
+      
+      **ETIM xChange**: `DeclaredUnitGwpFossil`
+      **Path**: `Supplier[].Product[].LcaEnvironmental.LcaDeclaration[].DeclaredUnitGwpFossil`
+    examples:
+      - 14.25
+  
+  declaredUnitGwpBiogenic:
+    type: ["number", "null"]
+    format: decimal
+    description: |
+      Biogenic Global Warming Potential in kg CO2 equivalent per declared unit.
+      
+      **ETIM xChange**: `DeclaredUnitGwpBiogenic`
+      **Path**: `Supplier[].Product[].LcaEnvironmental.LcaDeclaration[].DeclaredUnitGwpBiogenic`
+    examples:
+      - 1.2
+  
+  declaredUnitGwpLuluc:
+    type: ["number", "null"]
+    format: decimal
+    description: |
+      Global Warming Potential from Land Use and Land Use Change (GWP-LULUC) 
+      in kg CO2 equivalent per declared unit.
+      
+      **ETIM xChange**: `DeclaredUnitGwpLuluc`
+      **Path**: `Supplier[].Product[].LcaEnvironmental.LcaDeclaration[].DeclaredUnitGwpLuluc`
+    examples:
+      - 0.25
+  
+  declaredUnitAp:
+    type: ["number", "null"]
+    format: decimal
+    description: |
+      Acidification Potential (AP) in kg SO2 equivalent per declared unit.
+      
+      **ETIM xChange**: `DeclaredUnitAp`
+      **Path**: `Supplier[].Product[].LcaEnvironmental.LcaDeclaration[].DeclaredUnitAp`
+    examples:
+      - 0.05
+  
+  declaredUnitEpFreshwater:
+    type: ["number", "null"]
+    format: decimal
+    description: |
+      Eutrophication Potential for freshwater in kg PO4 equivalent per declared unit.
+      
+      **ETIM xChange**: `DeclaredUnitEpFreshwater`
+      **Path**: `Supplier[].Product[].LcaEnvironmental.LcaDeclaration[].DeclaredUnitEpFreshwater`
+    examples:
+      - 0.002
+  
+  declaredUnitEpMarine:
+    type: ["number", "null"]
+    format: decimal
+    description: |
+      Eutrophication Potential for marine water (EP-marine) in kg N equivalent per declared unit.
+      
+      **ETIM xChange**: `DeclaredUnitEpMarine`
+      **Path**: `Supplier[].Product[].LcaEnvironmental.LcaDeclaration[].DeclaredUnitEpMarine`
+    examples:
+      - 0.0015
+  
+  declaredUnitEpTerrestrial:
+    type: ["number", "null"]
+    format: decimal
+    description: |
+      Eutrophication Potential for terrestrial ecosystems (EP-terrestrial) 
+      in mol N equivalent per declared unit.
+      
+      **ETIM xChange**: `DeclaredUnitEpTerrestrial`
+      **Path**: `Supplier[].Product[].LcaEnvironmental.LcaDeclaration[].DeclaredUnitEpTerrestrial`
+    examples:
+      - 0.12
+  
+  declaredUnitPocp:
+    type: ["number", "null"]
+    format: decimal
+    description: |
+      Photochemical Ozone Creation Potential (POCP) in kg NMVOC equivalent per declared unit.
+      Also known as summer smog potential.
+      
+      **ETIM xChange**: `DeclaredUnitPocp`
+      **Path**: `Supplier[].Product[].LcaEnvironmental.LcaDeclaration[].DeclaredUnitPocp`
+    examples:
+      - 0.035
+  
+  declaredUnitOdp:
+    type: ["number", "null"]
+    format: decimal
+    description: |
+      Ozone Depletion Potential (ODP) in kg CFC-11 equivalent per declared unit.
+      
+      **ETIM xChange**: `DeclaredUnitOdp`
+      **Path**: `Supplier[].Product[].LcaEnvironmental.LcaDeclaration[].DeclaredUnitOdp`
+    examples:
+      - 0.0000012
+  
+  declaredUnitAdpe:
+    type: ["number", "null"]
+    format: decimal
+    description: |
+      Abiotic Depletion Potential for non-fossil resources (ADP-elements) 
+      in kg Sb equivalent per declared unit.
+      
+      **ETIM xChange**: `DeclaredUnitAdpe`
+      **Path**: `Supplier[].Product[].LcaEnvironmental.LcaDeclaration[].DeclaredUnitAdpe`
+    examples:
+      - 0.00025
+  
+  declaredUnitAdpf:
+    type: ["number", "null"]
+    format: decimal
+    description: |
+      Abiotic Depletion Potential for fossil resources (ADP-fossil) in MJ per declared unit.
+      
+      **ETIM xChange**: `DeclaredUnitAdpf`
+      **Path**: `Supplier[].Product[].LcaEnvironmental.LcaDeclaration[].DeclaredUnitAdpf`
+    examples:
+      - 185.5
+  
+  declaredUnitWdp:
+    type: ["number", "null"]
+    format: decimal
+    description: |
+      Water Deprivation Potential (WDP) in m³ world equivalent per declared unit.
+      
+      **ETIM xChange**: `DeclaredUnitWdp`
+      **Path**: `Supplier[].Product[].LcaEnvironmental.LcaDeclaration[].DeclaredUnitWdp`
+    examples:
+      - 2.5
+  
+  declaredUnitPert:
+    type: ["number", "null"]
+    format: decimal
+    description: |
+      Use of renewable primary energy resources (PERT) in MJ per declared unit.
+      Total renewable primary energy.
+      
+      **ETIM xChange**: `DeclaredUnitPert`
+      **Path**: `Supplier[].Product[].LcaEnvironmental.LcaDeclaration[].DeclaredUnitPert`
+    examples:
+      - 45.2
+  
+  declaredUnitPenrt:
+    type: ["number", "null"]
+    format: decimal
+    description: |
+      Use of non-renewable primary energy resources (PENRT) in MJ per declared unit.
+      Total non-renewable primary energy.
+      
+      **ETIM xChange**: `DeclaredUnitPenrt`
+      **Path**: `Supplier[].Product[].LcaEnvironmental.LcaDeclaration[].DeclaredUnitPenrt`
+    examples:
+      - 195.8
+  
+  declaredUnitPm:
+    type: ["number", "null"]
+    format: decimal
+    description: |
+      Particulate Matter emissions (PM) expressed as disease incidence per declared unit.
+      
+      **ETIM xChange**: `DeclaredUnitPm`
+      **Path**: `Supplier[].Product[].LcaEnvironmental.LcaDeclaration[].DeclaredUnitPm`
+    examples:
+      - 0.0000015
+  
+  declaredUnitIrp:
+    type: ["number", "null"]
+    format: decimal
+    description: |
+      Ionising Radiation Potential (IRP) in kBq U235 equivalent per declared unit.
+      
+      **ETIM xChange**: `DeclaredUnitIrp`
+      **Path**: `Supplier[].Product[].LcaEnvironmental.LcaDeclaration[].DeclaredUnitIrp`
+    examples:
+      - 1.25
+  
+  declaredUnitEtpfw:
+    type: ["number", "null"]
+    format: decimal
+    description: |
+      Ecotoxicity Potential for freshwater (ETP-fw) in CTUe (Comparative Toxic Unit for ecosystems) 
+      per declared unit.
+      
+      **ETIM xChange**: `DeclaredUnitEtpfw`
+      **Path**: `Supplier[].Product[].LcaEnvironmental.LcaDeclaration[].DeclaredUnitEtpfw`
+    examples:
+      - 125.5
+  
+  declaredUnitHtpc:
+    type: ["number", "null"]
+    format: decimal
+    description: |
+      Human Toxicity Potential - cancer effects (HTP-c) in CTUh (Comparative Toxic Unit for humans) 
+      per declared unit.
+      
+      **ETIM xChange**: `DeclaredUnitHtpc`
+      **Path**: `Supplier[].Product[].LcaEnvironmental.LcaDeclaration[].DeclaredUnitHtpc`
+    examples:
+      - 0.0000025
+  
+  declaredUnitHtpnc:
+    type: ["number", "null"]
+    format: decimal
+    description: |
+      Human Toxicity Potential - non-cancer effects (HTP-nc) in CTUh (Comparative Toxic Unit for humans) 
+      per declared unit.
+      
+      **ETIM xChange**: `DeclaredUnitHtpnc`
+      **Path**: `Supplier[].Product[].LcaEnvironmental.LcaDeclaration[].DeclaredUnitHtpnc`
+    examples:
+      - 0.000045
+  
+  declaredUnitSqp:
+    type: ["number", "null"]
+    format: decimal
+    description: |
+      Soil Quality Potential (SQP) - dimensionless indicator per declared unit.
+      Measures the impact on soil quality.
+      
+      **ETIM xChange**: `DeclaredUnitSqp`
+      **Path**: `Supplier[].Product[].LcaEnvironmental.LcaDeclaration[].DeclaredUnitSqp`
+    examples:
+      - 15.5
+
+examples:
+  # Production stage declaration with common indicators
+  - manufacturerIdGln: "1234567890123"
+    manufacturerProductNumber: "929002376910"
+    declaredUnitUnit: "PCE"
+    declaredUnitQuantity: 1
+    lcaReferenceLifetime: 25
+    thirdPartyVerification: "externally"
+    epdValidityStartDate: "2024-01-01"
+    epdValidityExpiryDate: "2029-12-31"
+    epdOperatorName: "The International EPD System"
+    epdOperatorUri: "https://www.environdec.com"
+    operatorEpdId: "S-P-12345"
+    manufacturerEpdId: "MFR-EPD-LED-2024-001"
+    productCategoryRulesDescription: "PCR 2019:14 Lighting equipment"
+    productCategoryRulesUri: "https://www.environdec.com/pcr-library/pcr-2019-14"
+    lifeCycleStage: "A1-A3"
+    lcaDeclarationIndicator: "MDE"
+    declaredUnitGwpTotal: 15.75
+    declaredUnitGwpFossil: 14.25
+    declaredUnitGwpBiogenic: 1.2
+    declaredUnitGwpLuluc: 0.3
+    declaredUnitAp: 0.05
+    declaredUnitEpFreshwater: 0.002
+    declaredUnitPocp: 0.035
+    declaredUnitOdp: 0.0000012
+    declaredUnitAdpf: 185.5
+    declaredUnitPert: 45.2
+    declaredUnitPenrt: 195.8
+  
+  # End-of-life stage declaration (same product, EPD metadata repeated)
+  - manufacturerIdGln: "1234567890123"
+    manufacturerProductNumber: "929002376910"
+    declaredUnitUnit: "PCE"
+    declaredUnitQuantity: 1
+    lcaReferenceLifetime: 25
+    thirdPartyVerification: "externally"
+    epdValidityStartDate: "2024-01-01"
+    epdValidityExpiryDate: "2029-12-31"
+    epdOperatorName: "The International EPD System"
+    epdOperatorUri: "https://www.environdec.com"
+    operatorEpdId: "S-P-12345"
+    manufacturerEpdId: "MFR-EPD-LED-2024-001"
+    productCategoryRulesDescription: "PCR 2019:14 Lighting equipment"
+    productCategoryRulesUri: "https://www.environdec.com/pcr-library/pcr-2019-14"
+    lifeCycleStage: "C1-C4"
+    lcaDeclarationIndicator: "AGG"
+    declaredUnitGwpTotal: 2.5
+    declaredUnitGwpFossil: 2.3
+    declaredUnitAdpf: 35.0
+  
+  # Benefits beyond system boundary (Module D, same product)
+  - manufacturerIdGln: "1234567890123"
+    manufacturerProductNumber: "929002376910"
+    declaredUnitUnit: "PCE"
+    declaredUnitQuantity: 1
+    lcaReferenceLifetime: 25
+    thirdPartyVerification: "externally"
+    epdValidityStartDate: "2024-01-01"
+    epdValidityExpiryDate: "2029-12-31"
+    epdOperatorName: "The International EPD System"
+    epdOperatorUri: "https://www.environdec.com"
+    operatorEpdId: "S-P-12345"
+    manufacturerEpdId: "MFR-EPD-LED-2024-001"
+    productCategoryRulesDescription: "PCR 2019:14 Lighting equipment"
+    productCategoryRulesUri: "https://www.environdec.com/pcr-library/pcr-2019-14"
+    lifeCycleStage: "D"
+    lcaDeclarationIndicator: "MDE"
+    declaredUnitGwpTotal: -5.2
+    declaredUnitAdpf: -45.0
+  
+  # Different product with kg-based declared unit (internally verified, no EPD operator)
+  - manufacturerIdGln: "9876543210987"
+    manufacturerProductNumber: "CABLE-CU-100M"
+    declaredUnitUnit: "KGM"
+    declaredUnitQuantity: 1
+    lcaReferenceLifetime: 50
+    thirdPartyVerification: "internally"
+    epdValidityStartDate: "2023-06-15"
+    lifeCycleStage: "A1-A3"
+    lcaDeclarationIndicator: "MND"
+    declaredUnitGwpTotal: 8.5
+    declaredUnitAdpe: 0.0015
+    declaredUnitAdpf: 120.0

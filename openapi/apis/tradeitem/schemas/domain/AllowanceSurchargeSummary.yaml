@@ -1,0 +1,198 @@
+type: object
+description: |
+  Flattened allowance or surcharge for bulk retrieval.
+  Each row represents a single allowance/surcharge entry with embedded keys for joining
+  back to the parent trade item and pricing entry.
+  
+  This flattened structure is optimized for:
+  - Predictable payload sizes per row
+  - Efficient cursor-based pagination
+  - ETL/data warehouse ingestion (star schema: pricing fact + surcharges fact)
+  - Streaming data processing
+  
+  **Join Keys**: Use `supplierIdGln` + `supplierItemNumber` + `pricingRef` to join
+  with `/trade-items/bulk/pricings` data.
+  
+  **ETIM xChange**: `AllowanceSurcharge`
+  **Path**: `Supplier[].Product[].TradeItem[].Pricing[].AllowanceSurcharge[]`
+required:
+  - supplierIdGln
+  - supplierItemNumber
+  - pricingRef
+  - allowanceSurchargeIndicator
+  - allowanceSurchargeType
+properties:
+  # =========================================================================
+  # TRADE ITEM KEY FIELDS
+  # =========================================================================
+  
+  supplierIdGln:
+    $ref: ../../../../shared/schemas/identifiers/Gln.yaml
+    description: |
+      Global Location Number (GLN) of the supplier. 13-digit GS1 identifier.
+      Part of the composite key for the trade item.
+      
+      **ETIM xChange**: `SupplierIdGln`  
+      **Path**: `Supplier[].SupplierId.SupplierIdGln`
+    examples:
+      - "1234567890123"
+      - "8712423012485"
+  
+  supplierItemNumber:
+    type: string
+    minLength: 1
+    maxLength: 35
+    description: |
+      Supplier's unique item number. Part of the composite key for the trade item.
+      
+      **ETIM xChange**: `SupplierItemNumber`  
+      **Path**: `Supplier[].Product[].TradeItem[].ItemIdentification.SupplierItemNumber`
+    examples:
+      - "SKU-12345"
+      - "ITEM-ABC-789"
+  
+  pricingRef:
+    description: |
+      Server-generated opaque reference key that identifies the parent pricing entry.
+      Use this to correlate with the corresponding pricing record from the
+      `/trade-items/bulk/pricings` endpoint.
+      
+      This is a technical identifier not present in the ETIM xChange domain model.
+    $ref: ../../../../shared/schemas/identifiers/TechnicalId.yaml
+    examples:
+      - "price-c62-1-20250101"
+      - "f47ac10b-58cc-4372-a567-0e02b2c3d479"
+  
+  # =========================================================================
+  # ALLOWANCE/SURCHARGE FIELDS
+  # =========================================================================
+  
+  allowanceSurchargeIndicator:
+    type: string
+    description: |
+      Indicates whether this price adjustment is an allowance (discount) or a surcharge (additional charge).
+      
+      **ETIM xChange**: `AllowanceSurchargeIndicator`
+      **Path**: `Supplier[].Product[].TradeItem[].Pricing[].AllowanceSurcharge[].AllowanceSurchargeIndicator`
+    enum:
+      - ALLOWANCE
+      - SURCHARGE
+    examples:
+      - ALLOWANCE
+      - SURCHARGE
+  
+  allowanceSurchargeType:
+    description: |
+      Code describing the reason for the allowance or surcharge.
+      
+      **ETIM xChange**: `AllowanceSurchargeType`
+      **Path**: `Supplier[].Product[].TradeItem[].Pricing[].AllowanceSurcharge[].AllowanceSurchargeType`
+    $ref: ../../../../shared/schemas/common/AllowanceSurchargeTypes.yaml
+  
+  allowanceSurchargeSequenceNumber:
+    type: ["integer", "null"]
+    description: |
+      Sequence number used to order multiple allowances or surcharges applied to the same price.
+      
+      **ETIM xChange**: `AllowanceSurchargeSequenceNumber`
+      **Path**: `Supplier[].Product[].TradeItem[].Pricing[].AllowanceSurcharge[].AllowanceSurchargeSequenceNumber`
+    minimum: 1
+    examples:
+      - 1
+      - 2
+  
+  allowanceSurchargeValidityDate:
+    type: ["string", "null"]
+    format: date
+    description: |
+      Date from which the allowance or surcharge becomes valid. ISO 8601 date format (YYYY-MM-DD).
+      
+      **ETIM xChange**: `AllowanceSurchargeValidityDate`
+      **Path**: `Supplier[].Product[].TradeItem[].Pricing[].AllowanceSurcharge[].AllowanceSurchargeValidityDate`
+    examples:
+      - "2025-01-01"
+  
+  allowanceSurchargeAmount:
+    type: ["number", "null"]
+    format: decimal
+    description: |
+      Fixed monetary amount of the allowance or surcharge.
+      Mutually exclusive with `allowanceSurchargePercentage` (typically one or the other is set).
+      
+      **ETIM xChange**: `AllowanceSurchargeAmount` (string with pattern)
+      **Path**: `Supplier[].Product[].TradeItem[].Pricing[].AllowanceSurcharge[].AllowanceSurchargeAmount`
+    minimum: 0
+    multipleOf: 0.0001
+    maximum: 99999999999.9999
+    examples:
+      - 15.50
+      - 250.00
+  
+  allowanceSurchargePercentage:
+    type: ["number", "null"]
+    format: decimal
+    description: |
+      Percentage rate of the allowance or surcharge.
+      Mutually exclusive with `allowanceSurchargeAmount` (typically one or the other is set).
+      
+      **ETIM xChange**: `AllowanceSurchargePercentage` (string with pattern)
+      **Path**: `Supplier[].Product[].TradeItem[].Pricing[].AllowanceSurcharge[].AllowanceSurchargePercentage`
+    minimum: 0
+    multipleOf: 0.001
+    maximum: 999.999
+    examples:
+      - 5.5
+      - 12.75
+  
+  allowanceSurchargeMinimumQuantity:
+    type: ["number", "null"]
+    format: decimal
+    description: |
+      Minimum ordered quantity required for the allowance or surcharge to apply.
+      
+      **ETIM xChange**: `AllowanceSurchargeMinimumQuantity` (string with pattern)
+      **Path**: `Supplier[].Product[].TradeItem[].Pricing[].AllowanceSurcharge[].AllowanceSurchargeMinimumQuantity`
+    minimum: 0
+    multipleOf: 0.0001
+    maximum: 999999999999.9999
+    examples:
+      - 10
+      - 50
+
+examples:
+  # Percentage-based allowance (discount)
+  - supplierIdGln: "8712423012485"
+    supplierItemNumber: "SKU-LAMP-001"
+    pricingRef: "price-c62-1-20250101"
+    allowanceSurchargeIndicator: ALLOWANCE
+    allowanceSurchargeType: AEQ
+    allowanceSurchargeSequenceNumber: 1
+    allowanceSurchargePercentage: 5.5
+    allowanceSurchargeMinimumQuantity: 50
+  
+  # Fixed amount surcharge
+  - supplierIdGln: "8712423012485"
+    supplierItemNumber: "SKU-CABLE-002"
+    pricingRef: "price-mtr-1-20250101"
+    allowanceSurchargeIndicator: SURCHARGE
+    allowanceSurchargeType: DBD
+    allowanceSurchargeSequenceNumber: 1
+    allowanceSurchargeAmount: 25.00
+  
+  # Multiple surcharges for same price (different sequence numbers)
+  - supplierIdGln: "8712423012485"
+    supplierItemNumber: "SKU-TOOL-003"
+    pricingRef: "price-c62-1-20250101"
+    allowanceSurchargeIndicator: ALLOWANCE
+    allowanceSurchargeType: AEQ
+    allowanceSurchargeSequenceNumber: 1
+    allowanceSurchargePercentage: 10.0
+    allowanceSurchargeMinimumQuantity: 100
+  - supplierIdGln: "8712423012485"
+    supplierItemNumber: "SKU-TOOL-003"
+    pricingRef: "price-c62-1-20250101"
+    allowanceSurchargeIndicator: ALLOWANCE
+    allowanceSurchargeType: AEQ
+    allowanceSurchargeSequenceNumber: 2
+    allowanceSurchargePercentage: 15.0
+    allowanceSurchargeMinimumQuantity: 500

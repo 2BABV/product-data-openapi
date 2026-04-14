@@ -1,0 +1,57 @@
+type: object
+description: |
+  Single product identification keys with product attachment data.
+  Returns the product composite key and a nested array of `ProductAttachment` objects,
+  each containing attachment type, specification, ordering, and detailed file information.
+required:
+  - manufacturerIdGln
+  - manufacturerProductNumber
+properties:
+  manufacturerIdGln:
+    $ref: ../../../../shared/schemas/identifiers/Gln.yaml
+    description: Global Location Number (GLN) uniquely identifying the manufacturer
+    examples:
+      - "1234567890123"
+  manufacturerProductNumber:
+    type: string
+    minLength: 1
+    maxLength: 35
+    description: Manufacturer's unique product number/code
+    examples:
+      - "929002376910"
+  attachments:
+    type: ["array", "null"]
+    description: |
+      Array of product attachments. Each item contains an attachment type with
+      one or more attachment detail records (e.g., same datasheet in different languages).
+      Returns null if no attachments are available.
+    items:
+      $ref: ../domain/ProductAttachment.yaml
+examples:
+  - manufacturerIdGln: "1234567890123"
+    manufacturerProductNumber: "929002376910"
+    attachments:
+      - attachmentType: "ATX001"
+        attachmentTypeSpecification: "MDX002"
+        attachmentOrder: 1
+        attachmentDetails:
+          - attachmentUri: "https://images.manufacturer.com/products/LED-12345-front.jpg"
+            attachmentFilename: "LED-12345-front.jpg"
+            attachmentLanguage: ["en-GB"]
+            attachmentDescription:
+              - language: "en-GB"
+                attachmentDescription: "Front view product image"
+      - attachmentType: "ATX014"
+        attachmentOrder: 2
+        attachmentDetails:
+          - attachmentUri: "https://cdn.manufacturer.com/products/datasheets/LED-12345-en.pdf"
+            attachmentFilename: "LED-12345-datasheet-en.pdf"
+            attachmentLanguage: ["en-GB"]
+            attachmentIssueDate: "2024-06-15"
+          - attachmentUri: "https://cdn.manufacturer.com/products/datasheets/LED-12345-de.pdf"
+            attachmentFilename: "LED-12345-datasheet-de.pdf"
+            attachmentLanguage: ["de-DE"]
+            attachmentIssueDate: "2024-06-15"
+  - manufacturerIdGln: "1234567890123"
+    manufacturerProductNumber: "929002376910"
+    attachments: null

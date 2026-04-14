@@ -1,0 +1,374 @@
+type: object
+required:
+  - lifeCycleStage
+  - lcaDeclarationIndicator
+properties:
+  lifeCycleStage:
+    type: string
+    enum:
+      - "A1"
+      - "A2"
+      - "A3"
+      - "A1-A3"
+      - "A4"
+      - "A5"
+      - "B1"
+      - "B2"
+      - "B3"
+      - "B4"
+      - "B5"
+      - "B6"
+      - "B7"
+      - "B1-B7"
+      - "C1"
+      - "C2"
+      - "C3"
+      - "C4"
+      - "C1-C4"
+      - "D"
+    description: |
+      Life cycle assessment stage according to EN 15804.
+      
+      Product stage (A):
+      - `A1`: Raw material supply
+      - `A2`: Transport to manufacturer
+      - `A3`: Manufacturing
+      - `A1-A3`: Combined product stage
+      - `A4`: Transport to building site
+      - `A5`: Installation into building
+      
+      Use stage (B):
+      - `B1`: Use/Application
+      - `B2`: Maintenance
+      - `B3`: Repair
+      - `B4`: Replacement
+      - `B5`: Refurbishment
+      - `B6`: Operational energy use
+      - `B7`: Operational water use
+      - `B1-B7`: Combined use stage
+      
+      End of life stage (C):
+      - `C1`: Deconstruction/demolition
+      - `C2`: Transport to waste processing
+      - `C3`: Waste processing
+      - `C4`: Disposal
+      - `C1-C4`: Combined end of life stage
+      
+      Beyond life cycle (D):
+      - `D`: Reuse, recovery, recycling potential
+      
+      **ETIM xChange**: `LifeCycleStage`  
+      **Path**: `Supplier[].Product[].LcaEnvironmental.LcaDeclaration[].LifeCycleStage`
+    examples:
+      - "A1-A3"
+      - "B6"
+      - "C1-C4"
+  
+  lcaDeclarationIndicator:
+    type: string
+    enum:
+      - "MDE"
+      - "MND"
+      - "MNR"
+      - "AGG"
+    description: |
+      Type of LCA declaration data.
+      
+      - `MDE`: Manufacturer-specific data with external verification
+      - `MND`: Manufacturer-specific data without external verification
+      - `MNR`: Manufacturer-specific data not representative
+      - `AGG`: Industry average/aggregated data
+      
+      **ETIM xChange**: `LcaDeclarationIndicator`  
+      **Path**: `Supplier[].Product[].LcaEnvironmental.LcaDeclaration[].LcaDeclarationIndicator`
+    examples:
+      - "MDE"
+      - "AGG"
+  
+  declaredUnitGwpTotal:
+    type: ["number", "null"]
+    format: decimal
+    description: |
+      Total Global Warming Potential (GWP) in kg CO2 equivalent per declared unit.
+      
+      **ETIM xChange**: `DeclaredUnitGwpTotal`  
+      **Path**: `Supplier[].Product[].LcaEnvironmental.LcaDeclaration[].DeclaredUnitGwpTotal`
+    examples:
+      - 15.75
+      - 0.85
+      - null
+  
+  declaredUnitGwpFossil:
+    type: ["number", "null"]
+    format: decimal
+    description: |
+      Fossil Global Warming Potential in kg CO2 equivalent per declared unit.
+      
+      **ETIM xChange**: `DeclaredUnitGwpFossil`  
+      **Path**: `Supplier[].Product[].LcaEnvironmental.LcaDeclaration[].DeclaredUnitGwpFossil`
+    examples:
+      - 14.25
+      - null
+  
+  declaredUnitGwpBiogenic:
+    type: ["number", "null"]
+    format: decimal
+    description: |
+      Biogenic Global Warming Potential in kg CO2 equivalent per declared unit.
+      
+      **ETIM xChange**: `DeclaredUnitGwpBiogenic`  
+      **Path**: `Supplier[].Product[].LcaEnvironmental.LcaDeclaration[].DeclaredUnitGwpBiogenic`
+    examples:
+      - 1.2
+      - null
+  
+  declaredUnitAp:
+    type: ["number", "null"]
+    format: decimal
+    description: |
+      Acidification Potential (AP) in kg SO2 equivalent per declared unit.
+      
+      **ETIM xChange**: `DeclaredUnitAp`  
+      **Path**: `Supplier[].Product[].LcaEnvironmental.LcaDeclaration[].DeclaredUnitAp`
+    examples:
+      - 0.05
+      - null
+  
+  declaredUnitEpFreshwater:
+    type: ["number", "null"]
+    format: decimal
+    description: |
+      Eutrophication Potential for freshwater in kg PO4 equivalent per declared unit.
+      
+      **ETIM xChange**: `DeclaredUnitEpFreshwater`  
+      **Path**: `Supplier[].Product[].LcaEnvironmental.LcaDeclaration[].DeclaredUnitEpFreshwater`
+    examples:
+      - 0.002
+      - null
+  
+  declaredUnitOdp:
+    type: ["number", "null"]
+    format: decimal
+    description: |
+      Ozone Depletion Potential (ODP) in kg CFC-11 equivalent per declared unit.
+      
+      **ETIM xChange**: `DeclaredUnitOdp`  
+      **Path**: `Supplier[].Product[].LcaEnvironmental.LcaDeclaration[].DeclaredUnitOdp`
+    examples:
+      - 0.0000012
+      - null
+  
+  declaredUnitGwpLuluc:
+    type: ["number", "null"]
+    format: decimal
+    description: |
+      Global Warming Potential from Land Use and Land Use Change (GWP-LULUC) 
+      in kg CO2 equivalent per declared unit.
+      
+      **ETIM xChange**: `DeclaredUnitGwpLuluc`  
+      **Path**: `Supplier[].Product[].LcaEnvironmental.LcaDeclaration[].DeclaredUnitGwpLuluc`
+    examples:
+      - 0.25
+      - null
+  
+  declaredUnitEpMarine:
+    type: ["number", "null"]
+    format: decimal
+    description: |
+      Eutrophication Potential for marine water (EP-marine) in kg N equivalent per declared unit.
+      
+      **ETIM xChange**: `DeclaredUnitEpMarine`  
+      **Path**: `Supplier[].Product[].LcaEnvironmental.LcaDeclaration[].DeclaredUnitEpMarine`
+    examples:
+      - 0.0015
+      - null
+  
+  declaredUnitEpTerrestrial:
+    type: ["number", "null"]
+    format: decimal
+    description: |
+      Eutrophication Potential for terrestrial ecosystems (EP-terrestrial) 
+      in mol N equivalent per declared unit.
+      
+      **ETIM xChange**: `DeclaredUnitEpTerrestrial`  
+      **Path**: `Supplier[].Product[].LcaEnvironmental.LcaDeclaration[].DeclaredUnitEpTerrestrial`
+    examples:
+      - 0.12
+      - null
+  
+  declaredUnitPocp:
+    type: ["number", "null"]
+    format: decimal
+    description: |
+      Photochemical Ozone Creation Potential (POCP) in kg NMVOC equivalent per declared unit.
+      Also known as summer smog potential.
+      
+      **ETIM xChange**: `DeclaredUnitPocp`  
+      **Path**: `Supplier[].Product[].LcaEnvironmental.LcaDeclaration[].DeclaredUnitPocp`
+    examples:
+      - 0.035
+      - null
+  
+  declaredUnitAdpe:
+    type: ["number", "null"]
+    format: decimal
+    description: |
+      Abiotic Depletion Potential for non-fossil resources (ADP-elements) 
+      in kg Sb equivalent per declared unit.
+      
+      **ETIM xChange**: `DeclaredUnitAdpe`  
+      **Path**: `Supplier[].Product[].LcaEnvironmental.LcaDeclaration[].DeclaredUnitAdpe`
+    examples:
+      - 0.00025
+      - null
+  
+  declaredUnitAdpf:
+    type: ["number", "null"]
+    format: decimal
+    description: |
+      Abiotic Depletion Potential for fossil resources (ADP-fossil) in MJ per declared unit.
+      
+      **ETIM xChange**: `DeclaredUnitAdpf`  
+      **Path**: `Supplier[].Product[].LcaEnvironmental.LcaDeclaration[].DeclaredUnitAdpf`
+    examples:
+      - 185.5
+      - null
+  
+  declaredUnitWdp:
+    type: ["number", "null"]
+    format: decimal
+    description: |
+      Water Deprivation Potential (WDP) in m³ world equivalent per declared unit.
+      
+      **ETIM xChange**: `DeclaredUnitWdp`  
+      **Path**: `Supplier[].Product[].LcaEnvironmental.LcaDeclaration[].DeclaredUnitWdp`
+    examples:
+      - 2.5
+      - null
+  
+  declaredUnitPert:
+    type: ["number", "null"]
+    format: decimal
+    description: |
+      Use of renewable primary energy resources (PERT) in MJ per declared unit.
+      Total renewable primary energy.
+      
+      **ETIM xChange**: `DeclaredUnitPert`  
+      **Path**: `Supplier[].Product[].LcaEnvironmental.LcaDeclaration[].DeclaredUnitPert`
+    examples:
+      - 45.2
+      - null
+  
+  declaredUnitPenrt:
+    type: ["number", "null"]
+    format: decimal
+    description: |
+      Use of non-renewable primary energy resources (PENRT) in MJ per declared unit.
+      Total non-renewable primary energy.
+      
+      **ETIM xChange**: `DeclaredUnitPenrt`  
+      **Path**: `Supplier[].Product[].LcaEnvironmental.LcaDeclaration[].DeclaredUnitPenrt`
+    examples:
+      - 195.8
+      - null
+  
+  declaredUnitPm:
+    type: ["number", "null"]
+    format: decimal
+    description: |
+      Particulate Matter emissions (PM) expressed as disease incidence per declared unit.
+      
+      **ETIM xChange**: `DeclaredUnitPm`  
+      **Path**: `Supplier[].Product[].LcaEnvironmental.LcaDeclaration[].DeclaredUnitPm`
+    examples:
+      - 0.0000015
+      - null
+  
+  declaredUnitIrp:
+    type: ["number", "null"]
+    format: decimal
+    description: |
+      Ionising Radiation Potential (IRP) in kBq U235 equivalent per declared unit.
+      
+      **ETIM xChange**: `DeclaredUnitIrp`  
+      **Path**: `Supplier[].Product[].LcaEnvironmental.LcaDeclaration[].DeclaredUnitIrp`
+    examples:
+      - 1.25
+      - null
+  
+  declaredUnitEtpfw:
+    type: ["number", "null"]
+    format: decimal
+    description: |
+      Ecotoxicity Potential for freshwater (ETP-fw) in CTUe (Comparative Toxic Unit for ecosystems) 
+      per declared unit.
+      
+      **ETIM xChange**: `DeclaredUnitEtpfw`  
+      **Path**: `Supplier[].Product[].LcaEnvironmental.LcaDeclaration[].DeclaredUnitEtpfw`
+    examples:
+      - 125.5
+      - null
+  
+  declaredUnitHtpc:
+    type: ["number", "null"]
+    format: decimal
+    description: |
+      Human Toxicity Potential - cancer effects (HTP-c) in CTUh (Comparative Toxic Unit for humans) 
+      per declared unit.
+      
+      **ETIM xChange**: `DeclaredUnitHtpc`  
+      **Path**: `Supplier[].Product[].LcaEnvironmental.LcaDeclaration[].DeclaredUnitHtpc`
+    examples:
+      - 0.0000025
+      - null
+  
+  declaredUnitHtpnc:
+    type: ["number", "null"]
+    format: decimal
+    description: |
+      Human Toxicity Potential - non-cancer effects (HTP-nc) in CTUh (Comparative Toxic Unit for humans) 
+      per declared unit.
+      
+      **ETIM xChange**: `DeclaredUnitHtpnc`  
+      **Path**: `Supplier[].Product[].LcaEnvironmental.LcaDeclaration[].DeclaredUnitHtpnc`
+    examples:
+      - 0.000045
+      - null
+  
+  declaredUnitSqp:
+    type: ["number", "null"]
+    format: decimal
+    description: |
+      Soil Quality Potential (SQP) - dimensionless indicator per declared unit.
+      Measures the impact on soil quality.
+      
+      **ETIM xChange**: `DeclaredUnitSqp`  
+      **Path**: `Supplier[].Product[].LcaEnvironmental.LcaDeclaration[].DeclaredUnitSqp`
+    examples:
+      - 15.5
+      - null
+
+examples:
+  - lifeCycleStage: "A1-A3"
+    lcaDeclarationIndicator: "MDE"
+    declaredUnitGwpTotal: 15.75
+    declaredUnitGwpFossil: 14.25
+    declaredUnitGwpBiogenic: 1.2
+    declaredUnitGwpLuluc: 0.3
+    declaredUnitAp: 0.05
+    declaredUnitEpFreshwater: 0.002
+    declaredUnitEpMarine: 0.0015
+    declaredUnitEpTerrestrial: 0.12
+    declaredUnitPocp: 0.035
+    declaredUnitOdp: 0.0000012
+    declaredUnitAdpe: 0.00025
+    declaredUnitAdpf: 185.5
+    declaredUnitWdp: 2.5
+    declaredUnitPert: 45.2
+    declaredUnitPenrt: 195.8
+  - lifeCycleStage: "C1-C4"
+    lcaDeclarationIndicator: "AGG"
+    declaredUnitGwpTotal: 2.5
+    declaredUnitGwpFossil: 2.3
+    declaredUnitGwpBiogenic: 0.15
+    declaredUnitAdpf: 35.0

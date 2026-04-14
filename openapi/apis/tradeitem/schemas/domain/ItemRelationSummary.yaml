@@ -1,0 +1,142 @@
+type: object
+description: |
+  Flattened item relation for bulk retrieval.
+  Each row represents a single relationship between a trade item and a related item,
+  with the trade item identifier embedded at top level.
+  
+  A trade item with 5 relations (e.g., 2 accessories, 2 spare parts, 1 successor)
+  will result in 5 rows.
+  
+  This flattened structure is optimized for:
+  - Predictable payload sizes per row
+  - Efficient cursor-based pagination
+  - ETL/data warehouse ingestion
+  - Streaming data processing
+  
+  **ETIM xChange**: `ItemRelations[]`  
+  **Path**: `Supplier[].Product[].TradeItem[].ItemRelations[]`
+required:
+  - supplierIdGln
+  - supplierItemNumber
+  - relatedSupplierItemNumber
+  - relationType
+  - relatedItemQuantity
+properties:
+  # =========================================================================
+  # TRADE ITEM KEY FIELDS
+  # =========================================================================
+  
+  supplierIdGln:
+    $ref: ../../../../shared/schemas/identifiers/Gln.yaml
+    description: |
+      Global Location Number (GLN) identifying the supplier.
+      13-digit GS1 identifier. Part of the composite trade item identifier.
+    examples:
+      - "1234567890123"
+      - "8712423012485"
+  
+  supplierItemNumber:
+    type: string
+    minLength: 1
+    maxLength: 35
+    description: |
+      Supplier's unique item identifier.
+      Part of the composite trade item identifier.
+      
+      **ETIM xChange**: `SupplierItemNumber`  
+      **Path**: `Supplier[].Product[].TradeItem[].ItemIdentification.SupplierItemNumber`
+    examples:
+      - "SKU-12345"
+      - "ITEM-ABC-789"
+
+  # =========================================================================
+  # ITEM RELATION FIELDS
+  # =========================================================================
+  
+  relatedSupplierItemNumber:
+    type: string
+    description: |
+      Supplier item number of the related trade item.
+      **ETIM xChange**: `RelatedSupplierItemNumber`
+      **Path**: `Supplier[].Product[].TradeItem[].ItemRelations[].RelatedSupplierItemNumber`
+    minLength: 1
+    maxLength: 35
+    examples:
+      - "SPART-001"
+      - "ACC-789"
+  
+  relatedManufacturerItemNumber:
+    type: ["string", "null"]
+    description: |
+      Manufacturer item number of the related trade item.
+      **ETIM xChange**: `RelatedManufacturerItemNumber`
+      **Path**: `Supplier[].Product[].TradeItem[].ItemRelations[].RelatedManufacturerItemNumber`
+    minLength: 1
+    maxLength: 35
+    examples:
+      - "MFG-PART-456"
+      - null
+  
+  relatedItemGtins:
+    type: ["array", "null"]
+    description: |
+      Array of GTINs for the related trade item.
+      **ETIM xChange**: `RelatedItemGtin[]`
+      **Path**: `Supplier[].Product[].TradeItem[].ItemRelations[].RelatedItemGtin[]`
+    uniqueItems: true
+    items:
+      $ref: ../../../../shared/schemas/identifiers/Gtin.yaml
+    examples:
+      - ["4012345678918"]
+      - null
+  
+  relationType:
+    description: |
+      Type of relationship between this item and the related item.
+      **ETIM xChange**: `RelationType`
+      **Path**: `Supplier[].Product[].TradeItem[].ItemRelations[].RelationType`
+    $ref: ../enums/RelationType.yaml
+    examples:
+      - SPAREPART
+      - ACCESSORY
+      - MANDATORY
+  
+  relatedItemQuantity:
+    type: integer
+    description: |
+      Quantity of the related item required or recommended (converted from ETIM xChange string to integer).
+      **ETIM xChange**: `RelatedItemQuantity`
+      **Path**: `Supplier[].Product[].TradeItem[].ItemRelations[].RelatedItemQuantity`
+    minimum: 1
+    examples:
+      - 1
+      - 4
+      - 10
+
+examples:
+  # Spare part relation
+  - supplierIdGln: "8712423012485"
+    supplierItemNumber: "SKU-LAMP-001"
+    relatedSupplierItemNumber: "SPART-001"
+    relatedManufacturerItemNumber: "MFG-SPART-100"
+    relatedItemGtins: ["4012345678918"]
+    relationType: SPAREPART
+    relatedItemQuantity: 2
+  
+  # Accessory relation
+  - supplierIdGln: "8712423012485"
+    supplierItemNumber: "SKU-LAMP-001"
+    relatedSupplierItemNumber: "ACC-789"
+    relatedManufacturerItemNumber: null
+    relatedItemGtins: null
+    relationType: ACCESSORY
+    relatedItemQuantity: 1
+  
+  # Successor relation (different trade item)
+  - supplierIdGln: "9876543210987"
+    supplierItemNumber: "SKU-CABLE-002"
+    relatedSupplierItemNumber: "SKU-CABLE-003"
+    relatedManufacturerItemNumber: "MFG-CABLE-V2"
+    relatedItemGtins: ["8712345678901"]
+    relationType: SUCCESSOR
+    relatedItemQuantity: 1

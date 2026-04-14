@@ -1,0 +1,24 @@
+type: ["string", "null"]
+enum:
+  - "PRE-LAUNCH"
+  - "ACTIVE"
+  - "ON HOLD"
+  - "PLANNED WITHDRAWAL"
+  - "OBSOLETE"
+  - null
+description: |
+  Current product lifecycle status.
+  
+  - `PRE-LAUNCH`: Product announced but not yet available for sale
+  - `ACTIVE`: Product is currently available for sale
+  - `ON HOLD`: Product temporarily unavailable
+  - `PLANNED WITHDRAWAL`: Product scheduled for discontinuation
+  - `OBSOLETE`: Product no longer available
+  
+  **ETIM xChange**: `ProductStatus`  
+  **Path**: `Supplier[].Product[].ProductDetails.ProductStatus`
+examples:
+  - "ACTIVE"
+  - "PRE-LAUNCH"
+  - "OBSOLETE"
+  - null

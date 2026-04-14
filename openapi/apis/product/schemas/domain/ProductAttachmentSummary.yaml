@@ -1,0 +1,173 @@
+type: object
+description: |
+  Flattened product attachment for bulk retrieval.
+  Each row represents a single attachment file with the product identifier
+  and attachment-level fields denormalized.
+
+  A product with 2 attachment types, each with 2 files (e.g., different languages),
+  will result in 4 rows.
+
+  This flattened structure is optimized for:
+  - Predictable payload sizes per row
+  - Efficient cursor-based pagination
+  - ETL/data warehouse ingestion
+  - Streaming data processing
+
+  **Payload Optimization**: Optional properties with null values may be omitted from the response
+  to minimize payload size. Clients should treat missing properties as null/not applicable.
+
+  **ETIM xChange**: `ProductAttachments[].AttachmentDetails[]`  
+  **Path**: `Supplier[].Product[].ProductAttachments[].AttachmentDetails[]`
+required:
+  - manufacturerIdGln
+  - manufacturerProductNumber
+  - attachmentType
+  - attachmentUri
+properties:
+  # =========================================================================
+  # PRODUCT KEY FIELDS
+  # =========================================================================
+
+  manufacturerIdGln:
+    $ref: ../../../../shared/schemas/identifiers/Gln.yaml
+    description: |
+      Global Location Number (GLN) identifying the manufacturer.
+      13-digit GS1 identifier. Part of the composite product identifier.
+    examples:
+      - "1234567890123"
+
+  manufacturerProductNumber:
+    type: string
+    minLength: 1
+    maxLength: 35
+    description: |
+      Manufacturer's unique product identifier.
+      Part of the composite product identifier.
+      
+      **ETIM xChange**: `ManufacturerProductNumber`  
+      **Path**: `Supplier[].Product[].ProductIdentification.ManufacturerProductNumber`
+    examples:
+      - "929002376910"
+      - "ABC-12345-XYZ"
+
+  # =========================================================================
+  # ATTACHMENT-LEVEL FIELDS (denormalized from ProductAttachment)
+  # =========================================================================
+
+  attachmentType:
+    $ref: ../enums/AttachmentType.yaml
+    description: |
+      ETIM standardized type code for the attachment.
+      Denormalized from the parent attachment record.
+
+      **ETIM xChange**: `AttachmentType`  
+      **Path**: `Supplier[].Product[].ProductAttachments[].AttachmentType`
+
+  attachmentTypeSpecification:
+    $ref: ../enums/AttachmentTypeSpecification.yaml
+    description: |
+      Additional specification code providing more detail about the attachment type.
+      Denormalized from the parent attachment record.
+
+      **ETIM xChange**: `AttachmentTypeSpecification`  
+      **Path**: `Supplier[].Product[].ProductAttachments[].AttachmentTypeSpecification`
+
+  attachmentOrder:
+    type: ["integer", "null"]
+    minimum: 1
+    description: |
+      Display order/sequence number for this attachment when multiple attachments are present.
+      Lower numbers indicate higher priority or preferred display order.
+      Denormalized from the parent attachment record.
+
+      **ETIM xChange**: `AttachmentOrder`  
+      **Path**: `Supplier[].Product[].ProductAttachments[].AttachmentOrder`
+    examples:
+      - 1
+      - 2
+      - null
+
+  # =========================================================================
+  # ATTACHMENT DETAIL FIELDS (one row per detail)
+  # =========================================================================
+
+  attachmentFilename:
+    type: ["string", "null"]
+    minLength: 1
+    maxLength: 100
+    description: |
+      Original filename of the attachment (maximum 100 characters).
+
+      **ETIM xChange**: `AttachmentFilename`  
+      **Path**: `Supplier[].Product[].ProductAttachments[].AttachmentDetails[].AttachmentFilename`
+    examples:
+      - "LED-12345-datasheet.pdf"
+      - "product-front-view.jpg"
+      - null
+
+  attachmentUri:
+    type: string
+    format: uri
+    description: |
+      URI/URL to access the attachment file.
+
+      **ETIM xChange**: `AttachmentUri`  
+      **Path**: `Supplier[].Product[].ProductAttachments[].AttachmentDetails[].AttachmentUri`
+    examples:
+      - "https://cdn.manufacturer.com/products/datasheets/LED-12345.pdf"
+      - "https://images.manufacturer.com/products/LED-12345-front.jpg"
+
+  attachmentIssueDate:
+    type: ["string", "null"]
+    format: date
+    description: |
+      Date when the attachment was issued or published. ISO 8601 date format (YYYY-MM-DD).
+
+      **ETIM xChange**: `AttachmentIssueDate`  
+      **Path**: `Supplier[].Product[].ProductAttachments[].AttachmentDetails[].AttachmentIssueDate`
+    examples:
+      - "2024-06-15"
+      - null
+
+  attachmentExpiryDate:
+    type: ["string", "null"]
+    format: date
+    description: |
+      Date when the attachment expires or becomes obsolete. ISO 8601 date format (YYYY-MM-DD).
+
+      **ETIM xChange**: `AttachmentExpiryDate`  
+      **Path**: `Supplier[].Product[].ProductAttachments[].AttachmentDetails[].AttachmentExpiryDate`
+    examples:
+      - "2026-12-31"
+      - null
+
+examples:
+  - manufacturerIdGln: "0000333000005"
+    manufacturerProductNumber: "18591-P47"
+    attachmentType: "ATX015"
+    attachmentTypeSpecification: null
+    attachmentOrder: 1
+    attachmentFilename: "c0c8542e86907655140d81c9699e7a4c.jpg"
+    attachmentUri: "http://att.2ba.nl/0000333000005/PPI/c0/c0c8/c0c8542e86907655140d81c9699e7a4c.jpg"
+    attachmentIssueDate: null
+    attachmentExpiryDate: null
+
+  - manufacturerIdGln: "0000333000005"
+    manufacturerProductNumber: "18591-P47"
+    attachmentType: "ATX018"
+    attachmentTypeSpecification: null
+    attachmentOrder: 1
+    attachmentFilename: "c0c8542e86907655140d81c9699e7a4c.jpg"
+    attachmentUri: "http://att.2ba.nl/0000333000005/PPI/c0/c0c8/c0c8542e86907655140d81c9699e7a4c.jpg"
+    attachmentIssueDate: null
+    attachmentExpiryDate: null
+
+  - manufacturerIdGln: "0000333000005"
+    manufacturerProductNumber: "3244 br hg 47"
+    attachmentType: "ATX015"
+    attachmentTypeSpecification: null
+    attachmentOrder: 1
+    attachmentFilename: "9af382818c2af00d8ce97a6b95667b74.jpg"
+    attachmentUri: "http://att.2ba.nl/0000333000005/PPI/9a/9af3/9af382818c2af00d8ce97a6b95667b74.jpg"
+    attachmentIssueDate: null
+    attachmentExpiryDate: null

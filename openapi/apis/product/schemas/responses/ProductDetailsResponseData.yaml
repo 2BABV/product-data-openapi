@@ -1,0 +1,44 @@
+type: object
+description: |
+  Single product identification keys with core product details.
+  The product key is at the root level, with details nested inside.
+required:
+  - manufacturerIdGln
+  - manufacturerProductNumber
+properties:
+  manufacturerIdGln:
+    $ref: ../../../../shared/schemas/identifiers/Gln.yaml
+    description: Global Location Number (GLN) uniquely identifying the manufacturer
+    examples:
+      - "1234567890123"
+  manufacturerProductNumber:
+    type: string
+    minLength: 1
+    maxLength: 35
+    description: Manufacturer's unique product number/code
+    examples:
+      - "929002376910"
+  details:
+    $ref: ../domain/ProductDetails.yaml
+    description: |
+      Core product information including identifiers,
+      brand, dates, customs data, status, warranties, and product groups.
+examples:
+  - manufacturerIdGln: "1234567890123"
+    manufacturerProductNumber: "929002376910"
+    details:
+      productGtins:
+        - "8718699673826"
+      brandName: "Hue"
+      productValidityDate: "2024-03-01"
+      countryOfOrigin:
+        - "NL"
+      productStatus: "ACTIVE"
+      productType: "PHYSICAL"
+      customisableProduct: false
+      hasSerialNumber: true
+      warrantyConsumer: 24
+      warrantyBusiness: 36
+      relatedManufacturerProductGroup:
+        - "Smart Lighting"
+        - "LED Bulbs"

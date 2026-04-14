@@ -1,0 +1,87 @@
+get:
+  operationId: getProductDetails
+  tags:
+    - Products single
+  summary: Get product details
+  description: |
+    Retrieve core product information for a specific manufacturer product combination.
+    
+    This endpoint returns comprehensive product information including
+    identifiers (GTINs), brand, lifecycle dates, customs data, status, type, 
+    warranties, and product groups for a single product identified by the composite key of
+    `manufacturerIdGln` and `manufacturerProductNumber`.
+    
+    The product key is at the root level, with details nested inside.
+    This structure aligns with other single-product subresource responses.
+
+    **Examples**: Example payloads show documented fields only. Clients must accept and ignore additional fields, including nested fields, when they are added in backward-compatible updates.
+    
+    **Product descriptions**: For multilingual product descriptions, use the dedicated
+    `/descriptions` subresource which supports language filtering.
+    
+    **No pagination** - Returns exactly one product's details or 404 if not found.
+  parameters:
+    - $ref: ../../../shared/parameters/path/manufacturer-id-gln.yaml
+    - $ref: ../../../shared/parameters/path/manufacturer-product-number.yaml
+  responses:
+    '200':
+      description: Successfully retrieved product details
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/responses/ProductDetailsResponse.yaml
+          examples:
+            fullDetails:
+              summary: Complete product details
+              value:
+                data:
+                  manufacturerIdGln: "1234567890123"
+                  manufacturerProductNumber: "929002376910"
+                  details:
+                    productGtins:
+                      - "8718699673826"
+                    brandName: "Hue"
+                    productValidityDate: "2024-03-01"
+                    countryOfOrigin:
+                      - "NL"
+                    productStatus: "ACTIVE"
+                    productType: "PHYSICAL"
+                    customisableProduct: false
+                    hasSerialNumber: true
+                    warrantyConsumer: 24
+                    warrantyBusiness: 36
+                    relatedManufacturerProductGroup:
+                      - "Smart Lighting"
+                      - "LED Bulbs"
+            minimalDetails:
+              summary: Minimal product details
+              value:
+                data:
+                  manufacturerIdGln: "1234567890123"
+                  manufacturerProductNumber: "LED-12345-A"
+                  details:
+                    productValidityDate: "2024-03-01"
+                    productStatus: "ACTIVE"
+                    productType: "PHYSICAL"
+    '400':
+      $ref: ../../../shared/responses/400-bad-request.yaml
+    '401':
+      $ref: ../../../shared/responses/401-unauthorized.yaml
+    '403':
+      $ref: ../../../shared/responses/403-forbidden.yaml
+    '404':
+      description: Product not found
+      content:
+        application/json:
+          schema:
+            $ref: ../../../shared/schemas/common/ProblemDetails.yaml
+          examples:
+            notFound:
+              summary: Product not found
+              value:
+                type: about:blank
+                title: Not Found
+                status: 404
+                detail: "No product found with manufacturer GLN '1234567890123' and product number '929002376910'"
+    '500':
+      $ref: ../../../shared/responses/500-internal-server-error.yaml

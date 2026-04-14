@@ -1,0 +1,92 @@
+type: string
+description: |
+  Unit of measurement codes following UN/CEFACT Rec. 20 standard.
+  Categories:
+  - Weight: GRM, KGM, MGM, TNE, LTN, LBR, ONZ
+  - Length: CMT, DTM, KTM, MMT, MTR, FOT, INH, SMI, YRD
+  - Area: CMK, CMQ, MMK, MMQ, MTK, MTQ, FTQ, INQ
+  - Volume: LTR, MLT, HLT
+  - Time: ANN, DAY, HUR, MIN, SEC, WEE
+  - Quantity: C62, DZN, NMP, NPL, NRL, PA, PF, PK, PL, PR, PU, RG, RL, RO, SA, SET, ST, TN, TU, Z2, Z3
+  - Container: BE, BG, BO, BX, CA, CI, CL, CQ, CR, CS, CT, DR
+enum:
+  # Time units
+  - ANN    # Year
+  - DAY    # Day
+  - HUR    # Hour
+  - MIN    # Minute
+  - SEC    # Second
+  - WEE    # Week
+  # Weight units
+  - GRM    # Gram
+  - KGM    # Kilogram
+  - MGM    # Milligram
+  - TNE    # Tonne (metric ton)
+  - LTN    # Ton (UK or US)
+  - LBR    # Pound
+  - ONZ    # Ounce
+  # Length units
+  - CMT    # Centimetre
+  - KTM    # Kilometre
+  - MMT    # Millimetre
+  - MTR    # Metre
+  - FOT    # Foot
+  - INH    # Inch
+  - SMI    # Statute mile
+  - YRD    # Yard
+  # Area units
+  - CMK    # Square centimetre
+  - CMQ    # Cubic centimetre
+  - MMK    # Square millimetre
+  - MMQ    # Cubic millimetre
+  - MTK    # Square metre
+  - MTQ    # Cubic metre
+  - FTQ    # Cubic foot
+  - INQ    # Cubic inch
+  # Volume units
+  - LTR    # Litre
+  - MLT    # Millilitre
+  - HLT    # Hectolitre
+  # Container/Package units
+  - BE     # Bundle
+  - BG     # Bag
+  - BO     # Bottle
+  - BX     # Box
+  - CA     # Case
+  - CI     # Canister
+  - CL     # Coil
+  - CQ     # Cartridge
+  - CR     # Crate
+  - CS     # Cassette
+  - CT     # Carton
+  - DR     # Drum
+  # Quantity units
+  - C62    # One (piece)
+  - DZN    # Dozen
+  - NMP    # Number of packs
+  - NPL    # Number of plies
+  - NRL    # Number of rolls
+  - PA     # Packet
+  - PF     # Pallet (lift)
+  - PK     # Pack
+  - PL     # Pail
+  - PR     # Pair
+  - PU     # Tray
+  - RG     # Ring
+  - RL     # Reel
+  - RO     # Roll
+  - SA     # Sack
+  - SET    # Set
+  - ST     # Sheet
+  - TN     # Tin
+  - TU     # Tube
+  - Z2     # Bale
+  - Z3     # Batch
+  # Other units
+  - D99    # Other unit
+  - KG     # Kilogram (alternative)
+examples:
+  - "C62"
+  - "KGM"
+  - "MTR"
+  - "LTR"

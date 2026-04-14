@@ -1,0 +1,138 @@
+type: object
+required:
+  - descriptionLanguage
+  - minimalProductDescription
+properties:
+  descriptionLanguage:
+    description: |
+      Language code for the description in ISO 639-1 and ISO 3166-1 format (e.g., "en-GB", "de-DE").
+      Sourced from ETIM xChange `Language` at catalog level, denormalized into each description record.
+      
+      **ETIM xChange**: `DescriptionLanguage`  
+      **Path**: `Supplier[].Product[].ProductDetails.ProductDescriptions[].DescriptionLanguage`
+    $ref: ../../../../shared/schemas/common/LanguageCode.yaml
+    examples:
+      - "en-GB"
+      - "de-DE"
+      - "nl-NL"
+  
+  minimalProductDescription:
+    type: string
+    minLength: 1
+    maxLength: 80
+    description: |
+      Short product description (maximum 80 characters). Minimal required description for product identification.
+      
+      **ETIM xChange**: `MinimalProductDescription`  
+      **Path**: `Supplier[].Product[].ProductDetails.ProductDescriptions[].MinimalProductDescription`
+    examples:
+      - "LED Smart Bulb E27 White"
+      - "Industrial Motor 3-Phase"
+  
+  uniqueMainProductDescription:
+    type: ["string", "null"]
+    minLength: 1
+    maxLength: 255
+    description: |
+      Unique main product description (maximum 255 characters). 
+      A concise but comprehensive description that uniquely identifies the product.
+      
+      **ETIM xChange**: `UniqueMainProductDescription`  
+      **Path**: `Supplier[].Product[].ProductDetails.ProductDescriptions[].UniqueMainProductDescription`
+    examples:
+      - "Philips Hue White and Color Ambiance E27 LED Smart Bulb, 806 lumens, Bluetooth compatible"
+      - null
+  
+  fullProductDescription:
+    type: ["string", "null"]
+    minLength: 1
+    maxLength: 10000
+    description: |
+      Complete detailed product description (maximum 10,000 characters).
+      Comprehensive technical and functional description of the product.
+      
+      **ETIM xChange**: `FullProductDescription`  
+      **Path**: `Supplier[].Product[].ProductDetails.ProductDescriptions[].FullProductDescription`
+    examples:
+      - "The Philips Hue White and Color Ambiance E27 LED Smart Bulb offers 16 million colors and 50,000 shades of white light..."
+      - null
+  
+  productMarketingText:
+    type: ["string", "null"]
+    minLength: 1
+    maxLength: 10000
+    description: |
+      Marketing-focused product text (maximum 10,000 characters).
+      Promotional content highlighting product benefits and features for customers.
+      
+      **ETIM xChange**: `ProductMarketingText`  
+      **Path**: `Supplier[].Product[].ProductDetails.ProductDescriptions[].ProductMarketingText`
+    examples:
+      - "Transform your home with smart lighting that adapts to your lifestyle..."
+      - null
+  
+  productSpecificationText:
+    type: ["string", "null"]
+    minLength: 1
+    maxLength: 10000
+    description: |
+      Technical specification text (maximum 10,000 characters).
+      Detailed technical specifications and characteristics of the product.
+      
+      **ETIM xChange**: `ProductSpecificationText`  
+      **Path**: `Supplier[].Product[].ProductDetails.ProductDescriptions[].ProductSpecificationText`
+    examples:
+      - "Technical Specifications: Voltage: 220-240V, Power: 9W, Luminous flux: 806 lm..."
+      - null
+  
+  productApplicationInstructions:
+    type: ["string", "null"]
+    minLength: 1
+    maxLength: 10000
+    description: |
+      Product application and usage instructions (maximum 10,000 characters).
+      Guidelines on how to use and apply the product correctly.
+      
+      **ETIM xChange**: `ProductApplicationInstructions`  
+      **Path**: `Supplier[].Product[].ProductDetails.ProductDescriptions[].ProductApplicationInstructions`
+    examples:
+      - "Installation: Screw the bulb into an E27 socket. Connect to the Philips Hue Bridge..."
+      - null
+  
+  productKeyword:
+    type: ["array", "null"]
+    uniqueItems: true
+    items:
+      type: string
+      minLength: 1
+      maxLength: 50
+    description: |
+      Keywords for product search and categorization (maximum 50 characters each).
+      Array of search terms and keywords associated with the product.
+      
+      **ETIM xChange**: `ProductKeyword`  
+      **Path**: `Supplier[].Product[].ProductDetails.ProductDescriptions[].ProductKeyword[]`
+    examples:
+      - ["smart lighting", "LED", "color", "Bluetooth", "energy efficient"]
+      - null
+  
+  productPageUrl:
+    type: ["string", "null"]
+    format: uri
+    description: |
+      URL to the manufacturer's product page.
+      Direct link to detailed product information on the manufacturer's website.
+      
+      **ETIM xChange**: `ProductPageUrl`  
+      **Path**: `Supplier[].Product[].ProductDetails.ProductDescriptions[].ProductPageUrl`
+    examples:
+      - "https://www.philips.com/products/hue-white-color-e27"
+      - null
+
+examples:
+  - descriptionLanguage: "en-GB"
+    minimalProductDescription: "LED Smart Bulb E27 White & Color"
+    uniqueMainProductDescription: "Philips Hue White and Color Ambiance E27 LED Smart Bulb, 806 lumens, Bluetooth"
+    fullProductDescription: "The Philips Hue White and Color Ambiance E27 LED Smart Bulb offers 16 million colors and 50,000 shades of white light. Control it with your smartphone or voice using Alexa, Google Assistant, or Apple HomeKit."
+    productKeyword: ["smart lighting", "LED", "color", "Bluetooth"]
+    productPageUrl: "https://www.philips.com/products/hue-white-color-e27"

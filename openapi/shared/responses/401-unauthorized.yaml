@@ -1,0 +1,13 @@
+description: Unauthorized - Authentication required or failed
+content:
+  application/problem+json:
+    schema:
+      $ref: ../schemas/common/ProblemDetails.yaml
+    examples:
+      unauthorized:
+        summary: Unauthorized access example
+        value:
+          type: about:blank
+          title: Unauthorized
+          status: 401
+          detail: Authentication is required and has failed or has not yet been provided

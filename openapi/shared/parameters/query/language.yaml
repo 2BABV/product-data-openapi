@@ -1,0 +1,22 @@
+name: language
+in: query
+description: |
+  Filter results by language code(s).
+  Uses ISO 639-1 language code with ISO 3166-1 country code (e.g., "en-GB", "de-DE", "nl-NL").
+  
+  If not specified, all available languages are returned.
+  Multiple languages can be specified to return descriptions in those languages only.
+required: false
+schema:
+  type: array
+  items:
+    $ref: ../../schemas/common/LanguageCode.yaml
+style: form
+explode: true
+examples:
+  singleLanguage:
+    summary: Single language filter
+    value: ["en-GB"]
+  multipleLanguages:
+    summary: Multiple language filter
+    value: ["en-GB", "de-DE", "nl-NL"]

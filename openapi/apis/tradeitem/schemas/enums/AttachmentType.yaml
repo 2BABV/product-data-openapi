@@ -1,0 +1,57 @@
+type: string
+enum:
+  - "ATX001"
+  - "ATX002"
+  - "ATX003"
+  - "ATX004"
+  - "ATX010"
+  - "ATX011"
+  - "ATX012"
+  - "ATX013"
+  - "ATX014"
+  - "ATX015"
+  - "ATX016"
+  - "ATX017"
+  - "ATX018"
+  - "ATX019"
+  - "ATX020"
+  - "ATX021"
+  - "ATX022"
+  - "ATX023"
+  - "ATX024"
+  - "ATX025"
+  - "ATX026"
+  - "ATX099"
+description: |
+  ETIM standardized attachment/document type codes for trade item attachments.
+
+  Trade item codes (per ETIM xChange V2.0 schema):
+  - `ATX001`: Product image
+  - `ATX002`: Ambience photo
+  - `ATX003`: Technical image
+  - `ATX004`: Technical drawing
+  - `ATX010`: User manual
+  - `ATX011`: Installation guide
+  - `ATX012`: Maintenance manual
+  - `ATX013`: Spare parts list
+  - `ATX014`: Data sheet
+  - `ATX015`: Product brochure
+  - `ATX016`: Product video
+  - `ATX017`: Safety data sheet (SDS/MSDS)
+  - `ATX018`: Declaration of conformity
+  - `ATX019`: Test report
+  - `ATX020`: Marketing text
+  - `ATX021`: Dimension drawing
+  - `ATX022`: Circuit diagram
+  - `ATX023`: Application example
+  - `ATX024`: CAD file
+  - `ATX025`: BIM model
+  - `ATX026`: Certificate (CE, RoHS, etc.)
+  - `ATX099`: Other attachment type
+
+  **ETIM xChange**: `AttachmentType`  
+  **Path**: `Supplier[].Product[].TradeItem[].ItemAttachments[].AttachmentType`
+examples:
+  - "ATX001"
+  - "ATX014"
+  - "ATX010"

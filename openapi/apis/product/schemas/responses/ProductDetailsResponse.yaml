@@ -1,0 +1,35 @@
+type: object
+description: |
+  Response containing core product information for a single product.
+  The product key is at the root level, with details nested inside.
+  
+  This structure aligns with other single-product subresource responses
+  (`/descriptions`, `/etim-classifications`).
+  
+  Note: Product descriptions are available through the dedicated `/descriptions` subresource
+  which supports language filtering.
+required:
+  - data
+properties:
+  data:
+    $ref: ./ProductDetailsResponseData.yaml
+examples:
+  - data:
+      manufacturerIdGln: "1234567890123"
+      manufacturerProductNumber: "929002376910"
+      details:
+        productGtins:
+          - "8718699673826"
+        brandName: "Hue"
+        productValidityDate: "2024-03-01"
+        countryOfOrigin:
+          - "NL"
+        productStatus: "ACTIVE"
+        productType: "PHYSICAL"
+        customisableProduct: false
+        hasSerialNumber: true
+        warrantyConsumer: 24
+        warrantyBusiness: 36
+        relatedManufacturerProductGroup:
+          - "Smart Lighting"
+          - "LED Bulbs"

@@ -1,0 +1,199 @@
+type: object
+description: |
+  Core product information for bulk retrieval combining identification and details.
+  Contains all key fields plus manufacturer info, identifiers, lifecycle dates, and operational details.
+  
+  For product descriptions (text content), use the dedicated `/products/bulk/descriptions` endpoint
+  which supports language filtering.
+required:
+  - manufacturerIdGln
+  - manufacturerProductNumber
+  - productValidityDate
+properties:
+  # =========================================================================
+  # KEY FIELDS (required for bulk retrieval)
+  # =========================================================================
+  
+  manufacturerIdGln:
+    $ref: ../../../../shared/schemas/identifiers/Gln.yaml
+    description: |
+      Global Location Number (GLN) identifying the manufacturer.
+      13-digit GS1 identifier.
+    examples:
+      - "1234567890123"
+  
+  manufacturerProductNumber:
+    type: string
+    minLength: 1
+    maxLength: 35
+    description: |
+      Manufacturer's unique product identifier.
+      
+      **ETIM xChange**: `ManufacturerProductNumber`  
+      **Path**: `Supplier[].Product[].ProductIdentification.ManufacturerProductNumber`
+    examples:
+      - "929002376910"
+      - "ABC-12345-XYZ"
+  
+  # =========================================================================
+  # IDENTIFICATION
+  # =========================================================================
+  
+  productGtins:
+    type: ["array", "null"]
+    uniqueItems: true
+    items:
+      $ref: ../../../../shared/schemas/identifiers/Gtin.yaml
+    description: |
+      Global Trade Item Numbers (GTINs) for the product.
+      Can include GTIN-8, GTIN-12, GTIN-13, or GTIN-14.
+  
+  unbrandedProduct:
+    type: ["boolean", "null"]
+    description: |
+      Indicates whether this is an unbranded/white-label product.
+  
+  brandName:
+    type: ["string", "null"]
+    minLength: 1
+    maxLength: 50
+    description: |
+      Brand name of the product.
+  
+  # =========================================================================
+  # LIFECYCLE DATES
+  # =========================================================================
+  
+  productAnnouncementDate:
+    type: ["string", "null"]
+    format: date
+    description: |
+      Date when the product was announced. ISO 8601 date format (YYYY-MM-DD).
+  
+  productValidityDate:
+    type: string
+    format: date
+    description: |
+      Date when the product becomes valid/available. ISO 8601 date format (YYYY-MM-DD).
+      Defaults to CatalogueValidityStart if not overridden at the product level.
+      
+      **ETIM xChange**: `ProductValidityDate`  
+      **Path**: `Supplier[].Product[].ProductIdentification.ProductValidityDate`  
+      **Default from**: `CatalogueValidityStart`
+  
+  productObsolescenceDate:
+    type: ["string", "null"]
+    format: date
+    description: |
+      Date when the product becomes obsolete. ISO 8601 date format (YYYY-MM-DD).
+  
+  # =========================================================================
+  # CUSTOMS AND ORIGIN
+  # =========================================================================
+  
+  customsCommodityCode:
+    type: ["string", "null"]
+    minLength: 6
+    maxLength: 16
+    description: |
+      Customs/HS commodity code for the product.
+  
+  factorCustomsCommodityCode:
+    type: ["number", "null"]
+    format: decimal
+    minimum: 0
+    multipleOf: 0.0001
+    maximum: 99999999999.9999
+    description: |
+      Factor for customs commodity code calculations. Supports up to 4 decimal places.
+      Converted from ETIM xChange string pattern to number type.
+      
+      **ETIM xChange**: `FactorCustomsCommodityCode` (string with pattern)  
+      **Path**: `Supplier[].Product[].ProductIdentification.FactorCustomsCommodityCode`
+    examples:
+      - 1.0
+      - 0.75
+      - null
+  
+  countryOfOrigin:
+    type: ["array", "null"]
+    uniqueItems: true
+    items:
+      type: string
+      pattern: "^[A-Z]{2}$"
+    description: |
+      ISO 3166-1 alpha-2 country codes for country of origin.
+  
+  # =========================================================================
+  # PRODUCT DETAILS
+  # =========================================================================
+  
+  productStatus:
+    $ref: ../enums/ProductStatus.yaml
+  
+  productType:
+    $ref: ../enums/ProductType.yaml
+  
+  customisableProduct:
+    type: ["boolean", "null"]
+    description: |
+      Indicates whether the product can be customised.
+      
+      **ETIM xChange**: `CustomisableProduct`  
+      **Path**: `Supplier[].Product[].ProductDetails.CustomisableProduct`
+  
+  hasSerialNumber:
+    type: ["boolean", "null"]
+    description: |
+      Indicates whether the product has a serial number.
+      
+      **ETIM xChange**: `HasSerialNumber`  
+      **Path**: `Supplier[].Product[].ProductDetails.HasSerialNumber`
+  
+  warrantyConsumer:
+    type: ["integer", "null"]
+    minimum: 0
+    exclusiveMaximum: 1000
+    description: |
+      Consumer warranty period in months.
+      
+      **ETIM xChange**: `WarrantyConsumer`  
+      **Path**: `Supplier[].Product[].ProductDetails.WarrantyConsumer`
+  
+  warrantyBusiness:
+    type: ["integer", "null"]
+    minimum: 0
+    exclusiveMaximum: 1000
+    description: |
+      Business/B2B warranty period in months.
+      
+      **ETIM xChange**: `WarrantyBusiness`  
+      **Path**: `Supplier[].Product[].ProductDetails.WarrantyBusiness`
+  
+  relatedManufacturerProductGroup:
+    type: ["array", "null"]
+    uniqueItems: true
+    items:
+      type: string
+      minLength: 1
+      maxLength: 50
+    description: |
+      Related manufacturer product groups for categorization.
+      
+      **ETIM xChange**: `RelatedManufacturerProductGroup`  
+      **Path**: `Supplier[].Product[].ProductDetails.RelatedManufacturerProductGroup[]`
+
+examples:
+  - manufacturerIdGln: "1234567890123"
+    manufacturerProductNumber: "929002376910"
+    productGtins: ["8718699673826"]
+    brandName: "Hue"
+    productValidityDate: "2024-03-01"
+    countryOfOrigin: ["NL"]
+    productStatus: "ACTIVE"
+    productType: "PHYSICAL"
+    customisableProduct: false
+    hasSerialNumber: true
+    warrantyConsumer: 24
+    warrantyBusiness: 12
+    relatedManufacturerProductGroup: ["Smart Lighting", "LED Bulbs"]

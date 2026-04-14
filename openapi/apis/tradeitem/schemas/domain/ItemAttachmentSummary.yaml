@@ -1,0 +1,183 @@
+type: object
+description: |
+  Flattened trade item attachment for bulk retrieval.
+  Each row represents a single attachment with the trade item identifier embedded at top level.
+
+  A trade item with 3 attachments (e.g., 1 image, 1 datasheet, 1 certificate)
+  will result in 3 rows.
+
+  This flattened structure is optimized for:
+  - Predictable payload sizes per row
+  - Efficient cursor-based pagination
+  - ETL/data warehouse ingestion
+  - Streaming data processing
+
+  **Payload Optimization**: Optional properties with null values may be omitted from the response
+  to minimize payload size. Clients should treat missing properties as null/not applicable.
+
+  **ETIM xChange**: `ItemAttachments[]`  
+  **Path**: `Supplier[].Product[].TradeItem[].ItemAttachments[]`
+required:
+  - supplierIdGln
+  - supplierItemNumber
+  - attachmentType
+  - attachmentUri
+properties:
+  # =========================================================================
+  # TRADE ITEM KEY FIELDS
+  # =========================================================================
+
+  supplierIdGln:
+    $ref: ../../../../shared/schemas/identifiers/Gln.yaml
+    description: |
+      Global Location Number (GLN) identifying the supplier.
+      13-digit GS1 identifier. Part of the composite trade item identifier.
+    examples:
+      - "1234567890123"
+      - "8712423012485"
+
+  supplierItemNumber:
+    type: string
+    minLength: 1
+    maxLength: 35
+    description: |
+      Supplier's unique item identifier.
+      Part of the composite trade item identifier.
+
+      **ETIM xChange**: `SupplierItemNumber`  
+      **Path**: `Supplier[].Product[].TradeItem[].ItemIdentification.SupplierItemNumber`
+    examples:
+      - "SKU-12345"
+      - "ITEM-ABC-789"
+
+  # =========================================================================
+  # ATTACHMENT FIELDS
+  # =========================================================================
+
+  attachmentType:
+    $ref: ../enums/AttachmentType.yaml
+    description: |
+      Type of attachment (image, document, certificate, etc.).
+
+      **ETIM xChange**: `AttachmentType`  
+      **Path**: `Supplier[].Product[].TradeItem[].ItemAttachments[].AttachmentType`
+
+  attachmentTypeSpecification:
+    $ref: ../enums/AttachmentTypeSpecification.yaml
+    description: |
+      Additional specification code providing more detail about the attachment type.
+
+      **ETIM xChange**: `AttachmentTypeSpecification`  
+      **Path**: `Supplier[].Product[].TradeItem[].ItemAttachments[].AttachmentTypeSpecification`
+
+  attachmentLanguages:
+    type: ["array", "null"]
+    description: |
+      Languages for which the attachment is applicable (e.g., "en-GB", "de-DE").
+
+      **ETIM xChange**: `AttachmentLanguage[]`  
+      **Path**: `Supplier[].Product[].TradeItem[].ItemAttachments[].AttachmentDetails[].AttachmentLanguage[]`
+    uniqueItems: true
+    items:
+      $ref: ../../../../shared/schemas/common/LanguageCode.yaml
+    examples:
+      - ["en-GB", "de-DE"]
+      - null
+
+  attachmentFilename:
+    type: ["string", "null"]
+    minLength: 1
+    maxLength: 100
+    description: |
+      Filename of the attachment.
+
+      **ETIM xChange**: `AttachmentFilename`  
+      **Path**: `Supplier[].Product[].TradeItem[].ItemAttachments[].AttachmentDetails[].AttachmentFilename`
+    examples:
+      - "product_image.jpg"
+      - "manual_en.pdf"
+      - null
+
+  attachmentUri:
+    type: string
+    format: uri
+    description: |
+      URI/URL to the attachment file.
+
+      **ETIM xChange**: `AttachmentUri`  
+      **Path**: `Supplier[].Product[].TradeItem[].ItemAttachments[].AttachmentDetails[].AttachmentUri`
+    examples:
+      - "https://example.com/attachments/product_image.jpg"
+      - "https://cdn.supplier.com/manuals/manual_en.pdf"
+
+  attachmentDescription:
+    type: ["string", "null"]
+    minLength: 1
+    maxLength: 255
+    description: |
+      Human-readable description of the attachment.
+
+      **ETIM xChange**: `AttachmentDescription[].AttachmentDescription`  
+      **Path**: `Supplier[].Product[].TradeItem[].ItemAttachments[].AttachmentDetails[].AttachmentDescription[].AttachmentDescription`
+    examples:
+      - "Front view product image"
+      - "User manual in English"
+      - null
+
+  attachmentIssueDate:
+    type: ["string", "null"]
+    format: date
+    description: |
+      Date when the attachment was issued. ISO 8601 date format (YYYY-MM-DD).
+
+      **ETIM xChange**: `AttachmentIssueDate`  
+      **Path**: `Supplier[].Product[].TradeItem[].ItemAttachments[].AttachmentDetails[].AttachmentIssueDate`
+    examples:
+      - "2024-01-15"
+      - null
+
+  attachmentExpiryDate:
+    type: ["string", "null"]
+    format: date
+    description: |
+      Date when the attachment expires. ISO 8601 date format (YYYY-MM-DD).
+
+      **ETIM xChange**: `AttachmentExpiryDate`  
+      **Path**: `Supplier[].Product[].TradeItem[].ItemAttachments[].AttachmentDetails[].AttachmentExpiryDate`
+    examples:
+      - "2026-12-31"
+      - null
+
+examples:
+  - supplierIdGln: "8712423012485"
+    supplierItemNumber: "SKU-LAMP-001"
+    attachmentType: "ATX001"
+    attachmentTypeSpecification: "MDX002"
+    attachmentLanguages: null
+    attachmentFilename: "product_image.jpg"
+    attachmentUri: "https://example.com/images/product.jpg"
+    attachmentDescription: "Front view product image"
+    attachmentIssueDate: "2024-01-15"
+    attachmentExpiryDate: null
+
+  - supplierIdGln: "8712423012485"
+    supplierItemNumber: "SKU-LAMP-001"
+    attachmentType: "ATX014"
+    attachmentTypeSpecification: "MDX005"
+    attachmentLanguages: ["en-GB"]
+    attachmentFilename: "datasheet-en.pdf"
+    attachmentUri: "https://cdn.supplier.com/datasheets/datasheet-en.pdf"
+    attachmentDescription: "Technical datasheet"
+    attachmentIssueDate: "2024-06-15"
+    attachmentExpiryDate: null
+
+  - supplierIdGln: "9876543210987"
+    supplierItemNumber: "ITEM-67890"
+    attachmentType: "ATX026"
+    attachmentTypeSpecification: null
+    attachmentLanguages: null
+    attachmentFilename: "ce-certificate.pdf"
+    attachmentUri: "https://cdn.supplier.com/certs/ce-certificate.pdf"
+    attachmentDescription: null
+    attachmentIssueDate: "2024-03-01"
+    attachmentExpiryDate: "2029-03-01"

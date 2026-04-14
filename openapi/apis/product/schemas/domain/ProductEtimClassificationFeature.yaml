@@ -1,0 +1,291 @@
+type: object
+description: |
+  Flattened product ETIM classification feature for bulk retrieval.
+  Each row represents a single feature value within a product's ETIM classification.
+  
+  This flattened structure is optimized for:
+  - Predictable payload sizes per row
+  - Efficient cursor-based pagination
+  - ETL/data warehouse ingestion
+  - Streaming data processing
+  
+  **Payload Optimization**: Optional properties with null values are omitted from the response
+  to minimize payload size. Clients should treat missing properties as null/not applicable.
+  
+  **Classification-only rows**: Products with classification but no features are represented
+  with `etimFeatureCode` omitted (or null if explicitly set).
+required:
+  - manufacturerIdGln
+  - manufacturerProductNumber
+  - etimClassCode
+  - etimReleaseVersion
+properties:
+  manufacturerIdGln:
+    $ref: ../../../../shared/schemas/identifiers/Gln.yaml
+    description: |
+      GLN (Global Location Number) of the product manufacturer.
+      Part of the composite product identifier.
+    examples:
+      - "1234567890123"
+  
+  manufacturerProductNumber:
+    type: string
+    minLength: 1
+    maxLength: 35
+    description: |
+      Manufacturer's product number/code.
+      Part of the composite product identifier.
+    examples:
+      - "929002376910"
+      - "LED-12345-A"
+  
+  etimClassCode:
+    type: string
+    pattern: "^EC[0-9]{6}$"
+    description: |
+      ETIM class code identifying the product category. Format: EC followed by 6 digits.
+      
+      **ETIM xChange**: `EtimClassCode`
+      **Path**: `Supplier[].Product[].EtimClassification[].EtimClassCode`
+    examples:
+      - "EC000123"
+      - "EC002745"
+  
+  etimClassVersion:
+    type: ["integer", "null"]
+    minimum: 1
+    description: |
+      Version number of the ETIM class. Incremented when class definition changes.
+      Optional field matching ETIM xChange specification. Omitted when not applicable.
+      
+      **ETIM xChange**: `EtimClassVersion`
+      **Path**: `Supplier[].Product[].EtimClassification[].EtimClassVersion`
+    examples:
+      - 1
+      - 2
+  
+  etimReleaseVersion:
+    type: string
+    pattern: "^[0-9]{1,2}[.]{1}[0-9]{1}|DYNAMIC$"
+    description: |
+      ETIM release version where this classification is valid.
+      Release number (e.g., "9.0", "10.0", "11.0") or "DYNAMIC".
+      
+      **ETIM xChange**: `EtimReleaseVersion`
+      **Path**: `Supplier[].Product[].EtimClassification[].EtimReleaseVersion`
+    examples:
+      - "9.0"
+      - "10.0"
+      - "11.0"
+      - "DYNAMIC"
+  
+  etimDynamicReleaseDate:
+    type: ["string", "null"]
+    format: date
+    description: |
+      Release date for dynamic ETIM classes. ISO 8601 date format (YYYY-MM-DD).
+      Only present when `etimReleaseVersion` is "DYNAMIC". Omitted when not applicable.
+      
+      **ETIM xChange**: `EtimDynamicReleaseDate`
+      **Path**: `Supplier[].Product[].EtimClassification[].EtimDynamicReleaseDate`
+    examples:
+      - "2024-06-15"
+
+  # TODO: ETIM Modelling Classes (etimModellingClassCode, etimModellingClassVersion)
+  # Reserved for future implementation. See EtimClassification.yaml for details.
+
+  etimFeatureCode:
+    type: ["string", "null"]
+    pattern: "^EF([0-9]{6}|I[0-9]{5}|[A-Z]{2}[0-9]{4})$"
+    description: |
+      ETIM standardized feature code identifying a specific product characteristic.
+      Format: EF followed by 6 digits, or EFI followed by 5 digits, or EF followed by 2 letters and 4 digits.
+      
+      Omitted for classification-only rows (product has class but no features).
+      
+      **ETIM xChange**: `EtimFeatureCode`
+      **Path**: `Supplier[].Product[].EtimClassification[].EtimFeatures[].EtimFeatureCode`
+    examples:
+      - "EF000123"
+      - "EFI00456"
+  
+  etimValueCode:
+    type: ["string", "null"]
+    pattern: "^EV[0-9]{6}$"
+    description: |
+      ETIM standardized value code for alphanumeric features (e.g., enumerations, selections).
+      Format: EV followed by 6 digits.
+      Only present for alphanumeric feature types. Omitted when not applicable.
+      
+      **ETIM xChange**: `EtimValueCode`
+      **Path**: `Supplier[].Product[].EtimClassification[].EtimFeatures[].EtimValueCode`
+    examples:
+      - "EV000789"
+  
+  etimValueNumeric:
+    type: ["number", "null"]
+    format: decimal
+    multipleOf: 0.0001
+    minimum: -999999999999.9999
+    maximum: 999999999999.9999
+    description: |
+      Numeric value for the ETIM feature (supports up to 4 decimal places).
+      Only present for numeric feature types. Omitted when not applicable.
+      
+      **ETIM xChange**: `EtimValueNumeric`
+      **Path**: `Supplier[].Product[].EtimClassification[].EtimFeatures[].EtimValueNumeric`
+    examples:
+      - 230.0
+      - 50.5
+  
+  etimValueRangeLower:
+    type: ["number", "null"]
+    format: decimal
+    multipleOf: 0.0001
+    minimum: -999999999999.9999
+    maximum: 999999999999.9999
+    description: |
+      Lower bound of a numeric range for the feature value.
+      Only present for range feature types. Omitted when not applicable.
+      
+      **ETIM xChange**: `EtimValueRangeLower`
+      **Path**: `Supplier[].Product[].EtimClassification[].EtimFeatures[].EtimValueRangeLower`
+    examples:
+      - 100.0
+      - 0.5
+  
+  etimValueRangeUpper:
+    type: ["number", "null"]
+    format: decimal
+    multipleOf: 0.0001
+    minimum: -999999999999.9999
+    maximum: 999999999999.9999
+    description: |
+      Upper bound of a numeric range for the feature value.
+      Only present for range feature types. Omitted when not applicable.
+      
+      **ETIM xChange**: `EtimValueRangeUpper`
+      **Path**: `Supplier[].Product[].EtimClassification[].EtimFeatures[].EtimValueRangeUpper`
+    examples:
+      - 240.0
+      - 60.0
+  
+  etimValueLogical:
+    type: ["boolean", "null"]
+    description: |
+      Boolean/logical value for yes/no type features.
+      Only present for logical feature types. Omitted when not applicable.
+      
+      **ETIM xChange**: `EtimValueLogical`
+      **Path**: `Supplier[].Product[].EtimClassification[].EtimFeatures[].EtimValueLogical`
+    examples:
+      - true
+      - false
+  
+  etimValueDetails:
+    type: ["array", "null"]
+    items:
+      type: object
+      required:
+        - language
+        - etimValueDetails
+      properties:
+        language:
+          description: |
+            Language code for the value details.
+            Sourced from ETIM xChange `Language` at catalog level, denormalized into each record.
+          $ref: ../../../../shared/schemas/common/LanguageCode.yaml
+          examples:
+            - "en-GB"
+            - "nl-NL"
+        etimValueDetails:
+          type: string
+          minLength: 1
+          maxLength: 255
+          description: Free-text details about the feature value
+          examples:
+            - "Special coating applied"
+    description: |
+      Multilingual free-text descriptions providing additional details about the feature value.
+      Omitted when not applicable.
+      
+      **ETIM xChange**: `EtimValueDetails`
+      **Path**: `Supplier[].Product[].EtimClassification[].EtimFeatures[].EtimValueDetails[]`
+    examples:
+      - - language: "en-GB"
+          etimValueDetails: "Certified for outdoor use"
+  
+  reasonNoValue:
+    type: ["string", "null"]
+    enum:
+      - "MV"
+      - "NA"
+      - "UN"
+      - null
+    description: |
+      Reason code when no feature value is provided.
+      Omitted when a value is present.
+      
+      - `MV`: Multiple values - feature has multiple applicable values
+      - `NA`: Not applicable - feature does not apply to this product
+      - `UN`: Unknown - value is currently unknown or unavailable
+      
+      **ETIM xChange**: `ReasonNoValue`
+      **Path**: `Supplier[].Product[].EtimClassification[].EtimFeatures[].ReasonNoValue`
+    examples:
+      - "NA"
+      - "MV"
+
+examples:
+  # Alphanumeric feature with value code
+  - manufacturerIdGln: "1234567890123"
+    manufacturerProductNumber: "929002376910"
+    etimClassCode: "EC002745"
+    etimClassVersion: 1
+    etimReleaseVersion: "9.0"
+    etimFeatureCode: "EF000123"
+    etimValueCode: "EV000789"
+  
+  # Numeric feature
+  - manufacturerIdGln: "1234567890123"
+    manufacturerProductNumber: "929002376910"
+    etimClassCode: "EC002745"
+    etimClassVersion: 1
+    etimReleaseVersion: "9.0"
+    etimFeatureCode: "EF000456"
+    etimValueNumeric: 230.0
+  
+  # Range feature
+  - manufacturerIdGln: "1234567890123"
+    manufacturerProductNumber: "929002376910"
+    etimClassCode: "EC002745"
+    etimClassVersion: 1
+    etimReleaseVersion: "10.0"
+    etimFeatureCode: "EF000789"
+    etimValueRangeLower: 100.0
+    etimValueRangeUpper: 240.0
+  
+  # Logical/boolean feature
+  - manufacturerIdGln: "1234567890123"
+    manufacturerProductNumber: "929002376910"
+    etimClassCode: "EC002745"
+    etimClassVersion: 1
+    etimReleaseVersion: "10.0"
+    etimFeatureCode: "EF001234"
+    etimValueLogical: true
+  
+  # Classification-only row (no features)
+  - manufacturerIdGln: "9876543210987"
+    manufacturerProductNumber: "LED-12345-A"
+    etimClassCode: "EC001234"
+    etimClassVersion: 2
+    etimReleaseVersion: "11.0"
+  
+  # Feature with reason no value
+  - manufacturerIdGln: "1234567890123"
+    manufacturerProductNumber: "929002376910"
+    etimClassCode: "EC002745"
+    etimClassVersion: 1
+    etimReleaseVersion: "9.0"
+    etimFeatureCode: "EF005678"
+    reasonNoValue: "NA"

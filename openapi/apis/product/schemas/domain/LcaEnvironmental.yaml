@@ -1,0 +1,301 @@
+type: object
+required:
+  - declaredUnitUnit
+  - declaredUnitQuantity
+  - lcaReferenceLifetime
+  - thirdPartyVerification
+  - lcaDeclaration
+  - epdValidityStartDate
+properties:
+  declaredUnitUnit:
+    type: string
+    enum:
+      - "KGM"
+      - "LTR"
+      - "MTK"
+      - "MTQ"
+      - "MTR"
+      - "PCE"
+      - "TNE"
+      - "FOT"
+      - "FTK"
+      - "FTQ"
+      - "LBR"
+      - "LTN"
+      - "YDK"
+      - "YRD"
+    description: |
+      Unit of measurement for the declared/functional unit in LCA.
+      
+      Metric units:
+      - `KGM`: Kilogram
+      - `LTR`: Liter
+      - `MTK`: Square meter
+      - `MTQ`: Cubic meter
+      - `MTR`: Meter
+      - `PCE`: Piece/unit
+      - `TNE`: Tonne
+      
+      Imperial units:
+      - `FOT`: Foot
+      - `FTK`: Square foot
+      - `FTQ`: Cubic foot
+      - `LBR`: Pound
+      - `LTN`: Long ton
+      - `YDK`: Square yard
+      - `YRD`: Yard
+      
+      **ETIM xChange**: `DeclaredUnitUnit`  
+      **Path**: `Supplier[].Product[].LcaEnvironmental.DeclaredUnitUnit`
+    examples:
+      - "KGM"
+      - "PCE"
+      - "MTK"
+  
+  declaredUnitQuantity:
+    type: number
+    format: decimal
+    minimum: 0
+    multipleOf: 0.0001
+    maximum: 99999999999.9999
+    description: |
+      Quantity of the declared/functional unit for LCA calculations.
+      Converted from ETIM xChange string pattern to number type.
+      
+      **ETIM xChange**: `DeclaredUnitQuantity` (string with pattern)  
+      **Path**: `Supplier[].Product[].LcaEnvironmental.DeclaredUnitQuantity`
+    examples:
+      - 1
+      - 10.5
+      - 100
+  
+  functionalUnitDescription:
+    type: ["array", "null"]
+    items:
+      type: object
+      required:
+        - language
+        - functionalUnitDescription
+      properties:
+        language:
+          description: |
+            Language code for the description.
+            Sourced from ETIM xChange `Language` at catalog level, denormalized into each record.
+          $ref: ../../../../shared/schemas/common/LanguageCode.yaml
+          examples:
+            - "en-GB"
+        functionalUnitDescription:
+          type: string
+          minLength: 1
+          maxLength: 10000
+          description: Description of the functional unit
+          examples:
+            - "One LED bulb providing 806 lumens for 25,000 hours"
+    description: |
+      Multilingual descriptions of the functional unit for LCA.
+      
+      **ETIM xChange**: `FunctionalUnitDescription`  
+      **Path**: `Supplier[].Product[].LcaEnvironmental.FunctionalUnitDescription[]`
+    examples:
+      - - language: "en-GB"
+          functionalUnitDescription: "One LED bulb providing 806 lumens for 25,000 hours"
+      - null
+  
+  lcaReferenceLifetime:
+    type: integer
+    minimum: 0
+    description: |
+      Reference service life/lifetime for LCA calculations in years.
+      
+      **ETIM xChange**: `LcaReferenceLifetime`  
+      **Path**: `Supplier[].Product[].LcaEnvironmental.LcaReferenceLifetime`
+    examples:
+      - 25
+      - 10
+      - 50
+  
+  thirdPartyVerification:
+    type: string
+    enum:
+      - "none"
+      - "internally"
+      - "externally"
+    description: |
+      Type of third-party verification for LCA/EPD data.
+      
+      - `none`: No third-party verification
+      - `internally`: Internal verification
+      - `externally`: External independent verification
+      
+      **ETIM xChange**: `ThirdPartyVerification`  
+      **Path**: `Supplier[].Product[].LcaEnvironmental.ThirdPartyVerification`
+    examples:
+      - "externally"
+      - "none"
+  
+  epdValidityStartDate:
+    type: string
+    format: date
+    description: |
+      Start date of EPD validity period. ISO 8601 date format (YYYY-MM-DD).
+      Defaults to CatalogueValidityStart if not overridden at the product level.
+      
+      **ETIM xChange**: `EpdValidityStartDate`  
+      **Path**: `Supplier[].Product[].LcaEnvironmental.EpdValidityStartDate`  
+      **Default from**: `CatalogueValidityStart`
+    examples:
+      - "2024-01-01"
+  
+  epdValidityExpiryDate:
+    type: ["string", "null"]
+    format: date
+    description: |
+      Expiry date of EPD validity period. ISO 8601 date format (YYYY-MM-DD).
+      
+      **ETIM xChange**: `EpdValidityExpiryDate`  
+      **Path**: `Supplier[].Product[].LcaEnvironmental.EpdValidityExpiryDate`
+    examples:
+      - "2029-12-31"
+      - null
+  
+  epdOperatorName:
+    type: ["string", "null"]
+    minLength: 1
+    maxLength: 100
+    description: |
+      Name of the EPD program operator that published the Environmental Product Declaration.
+      
+      **ETIM xChange**: `EpdOperatorName`  
+      **Path**: `Supplier[].Product[].LcaEnvironmental.EpdOperatorName`
+    examples:
+      - "IBU - Institut Bauen und Umwelt e.V."
+      - "The International EPD System"
+      - null
+  
+  epdOperatorUri:
+    type: ["string", "null"]
+    format: uri
+    description: |
+      URI/URL to the EPD program operator's website.
+      
+      **ETIM xChange**: `EpdOperatorUri`  
+      **Path**: `Supplier[].Product[].LcaEnvironmental.EpdOperatorUri`
+    examples:
+      - "https://ibu-epd.com"
+      - "https://www.environdec.com"
+      - null
+  
+  operatorEpdId:
+    type: ["string", "null"]
+    minLength: 1
+    maxLength: 35
+    description: |
+      EPD identifier assigned by the program operator.
+      
+      **ETIM xChange**: `OperatorEpdId`  
+      **Path**: `Supplier[].Product[].LcaEnvironmental.OperatorEpdId`
+    examples:
+      - "EPD-IBU-2024-001234"
+      - null
+  
+  manufacturerEpdId:
+    type: ["string", "null"]
+    minLength: 1
+    maxLength: 35
+    description: |
+      EPD identifier assigned by the manufacturer for internal reference.
+      
+      **ETIM xChange**: `ManufacturerEpdId`  
+      **Path**: `Supplier[].Product[].LcaEnvironmental.ManufacturerEpdId`
+    examples:
+      - "MFR-EPD-LED-2024-001"
+      - null
+  
+  productCategoryRulesDescription:
+    type: ["string", "null"]
+    minLength: 1
+    maxLength: 100
+    description: |
+      Description of the Product Category Rules (PCR) used for the LCA/EPD.
+      PCR defines the rules for the environmental assessment of a specific product category.
+      
+      **ETIM xChange**: `ProductCategoryRulesDescription`  
+      **Path**: `Supplier[].Product[].LcaEnvironmental.ProductCategoryRulesDescription`
+    examples:
+      - "PCR 2019:14 Lighting equipment"
+      - "EN 15804+A2 Construction products"
+      - null
+  
+  productCategoryRulesUri:
+    type: ["string", "null"]
+    format: uri
+    description: |
+      URI/URL to the Product Category Rules (PCR) document.
+      
+      **ETIM xChange**: `ProductCategoryRulesUri`  
+      **Path**: `Supplier[].Product[].LcaEnvironmental.ProductCategoryRulesUri`
+    examples:
+      - "https://www.environdec.com/pcr-library/pcr-2019-14"
+      - null
+  
+  productSpecificRulesDescription:
+    type: ["string", "null"]
+    minLength: 1
+    maxLength: 100
+    description: |
+      Description of Product Specific Rules (PSR) applied in addition to PCR.
+      PSR provides additional rules for sub-categories within a PCR.
+      
+      **ETIM xChange**: `ProductSpecificRulesDescription`  
+      **Path**: `Supplier[].Product[].LcaEnvironmental.ProductSpecificRulesDescription`
+    examples:
+      - "PSR for LED lamps and luminaires"
+      - null
+  
+  productSpecificRulesUri:
+    type: ["string", "null"]
+    format: uri
+    description: |
+      URI/URL to the Product Specific Rules (PSR) document.
+      
+      **ETIM xChange**: `ProductSpecificRulesUri`  
+      **Path**: `Supplier[].Product[].LcaEnvironmental.ProductSpecificRulesUri`
+    examples:
+      - "https://www.environdec.com/psr-library/psr-led-lighting"
+      - null
+  
+  lcaDeclaration:
+    type: array
+    minItems: 1
+    items:
+      $ref: ./LcaDeclaration.yaml
+    description: |
+      Array of LCA declarations for different life cycle stages.
+      
+      **ETIM xChange**: `LcaDeclaration`  
+      **Path**: `Supplier[].Product[].LcaEnvironmental.LcaDeclaration[]`
+
+examples:
+  - declaredUnitUnit: "PCE"
+    declaredUnitQuantity: 1
+    lcaReferenceLifetime: 25
+    thirdPartyVerification: "externally"
+    epdValidityStartDate: "2024-01-01"
+    epdValidityExpiryDate: "2029-12-31"
+    epdOperatorName: "The International EPD System"
+    epdOperatorUri: "https://www.environdec.com"
+    operatorEpdId: "S-P-12345"
+    manufacturerEpdId: "MFR-EPD-LED-2024-001"
+    productCategoryRulesDescription: "PCR 2019:14 Lighting equipment"
+    productCategoryRulesUri: "https://www.environdec.com/pcr-library/pcr-2019-14"
+    functionalUnitDescription:
+      - language: "en-GB"
+        functionalUnitDescription: "One LED bulb providing 806 lumens for 25,000 hours"
+    lcaDeclaration:
+      - lifeCycleStage: "A1-A3"
+        lcaDeclarationIndicator: "MDE"
+        declaredUnitGwpTotal: 15.75
+        declaredUnitGwpFossil: 14.25
+      - lifeCycleStage: "C1-C4"
+        lcaDeclarationIndicator: "AGG"
+        declaredUnitGwpTotal: 2.5

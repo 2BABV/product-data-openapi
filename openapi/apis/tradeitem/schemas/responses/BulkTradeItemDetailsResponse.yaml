@@ -1,0 +1,64 @@
+type: object
+description: |
+  Response containing trade item identification and details in bulk with cursor-based pagination.
+  
+  Each item in the `data` array includes its composite key (`supplierIdGln` + `supplierItemNumber`)
+  along with all identification and details fields in a flat structure.
+  
+  Use the `cursor` from `meta` to retrieve the next page of results.
+required:
+  - data
+  - meta
+properties:
+  data:
+    type: array
+    description: Array of trade item details summaries with embedded keys
+    items:
+      $ref: ../domain/TradeItemDetailsSummary.yaml
+  meta:
+    $ref: ../../../../shared/schemas/common/CursorPaginationMetadata.yaml
+    description: Cursor-based pagination metadata
+
+examples:
+  - data:
+      - supplierIdGln: "8712423012485"
+        supplierItemNumber: "SKU-LAMP-001"
+        supplierAltItemNumber: "ALT-SKU-001"
+        manufacturerItemNumber: "MFR-12345"
+        manufacturerIdGln: "9876543210987"
+        manufacturerProductNumber: "929002376910"
+        itemGtins:
+          - "08712423012485"
+          - "12345678901234"
+        buyerItemNumber: null
+        discountGroupId: "DG-LIGHTING"
+        bonusGroupId: null
+        itemValidityDate: "2024-01-01"
+        itemObsolescenceDate: null
+        itemStatus: "ACTIVE"
+        itemCondition: "NEW"
+        stockItem: true
+        shelfLifePeriod: null
+      - supplierIdGln: "8712423012485"
+        supplierItemNumber: "SKU-TOOL-002"
+        supplierAltItemNumber: null
+        manufacturerItemNumber: "MFR-54321"
+        manufacturerIdGln: "9876543210987"
+        manufacturerProductNumber: "HAMMER-PRO-500"
+        itemGtins:
+          - "08712423054321"
+        buyerItemNumber: "BUYER-002"
+        discountGroupId: "DG-TOOLS"
+        bonusGroupId: "BG-PREMIUM"
+        itemValidityDate: "2023-06-01"
+        itemObsolescenceDate: "2028-12-31"
+        itemStatus: "ACTIVE"
+        itemCondition: "NEW"
+        stockItem: true
+        shelfLifePeriod: null
+    meta:
+      cursor: "eyJzdXBwbGllcklkR2xuIjoiODcxMjQyMzAxMjQ4NSIsInN1cHBsaWVySXRlbU51bWJlciI6IlNLVS1UT09MLTAwMiJ9"
+      hasNext: true
+      hasPrev: false
+      limit: 100
+      estimatedTotal: 15420

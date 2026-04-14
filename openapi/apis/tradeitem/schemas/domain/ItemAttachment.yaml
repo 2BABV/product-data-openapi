@@ -1,0 +1,97 @@
+type: object
+description: |
+  Attachment information for trade items (images, documents, certificates, etc.).
+  Extracted from ETIM xChange `TradeItem.ItemAttachments[]` structure.
+required:
+  - attachmentType
+  - attachmentUri
+properties:
+  attachmentType:
+    $ref: ../enums/AttachmentType.yaml
+    description: |
+      Type of attachment (image, document, certificate, etc.).
+      **ETIM xChange**: `AttachmentType`
+      **Path**: `Supplier[].Product[].TradeItem[].ItemAttachments[].AttachmentType`
+  
+  attachmentTypeSpecification:
+    $ref: ../enums/AttachmentTypeSpecification.yaml
+    description: |
+      Additional specification code providing more detail about the attachment type.
+      **ETIM xChange**: `AttachmentTypeSpecification`
+      **Path**: `Supplier[].Product[].TradeItem[].ItemAttachments[].AttachmentTypeSpecification`
+  
+  attachmentLanguages:
+    type: ["array", "null"]
+    description: |
+      Languages for which the attachment is applicable (e.g., 'en-GB', 'de-DE').
+      **ETIM xChange**: `AttachmentLanguage[]`
+      **Path**: `Supplier[].Product[].TradeItem[].ItemAttachments[].AttachmentDetails[].AttachmentLanguage[]`
+    uniqueItems: true
+    items:
+      $ref: ../../../../shared/schemas/common/LanguageCode.yaml
+    examples:
+      - ["en-GB", "de-DE"]
+      - null
+  attachmentFilename:
+    type: ["string", "null"]
+    description: |
+      Filename of the attachment.
+      **ETIM xChange**: `AttachmentFilename`
+      **Path**: `Supplier[].Product[].TradeItem[].ItemAttachments[].AttachmentDetails[].AttachmentFilename`
+    minLength: 1
+    maxLength: 100
+    examples:
+      - "product_image.jpg"
+      - "manual_en.pdf"
+      - null
+  attachmentUri:
+    type: string
+    format: uri
+    description: |
+      URI/URL to the attachment file.
+      **ETIM xChange**: `AttachmentUri`
+      **Path**: `Supplier[].Product[].TradeItem[].ItemAttachments[].AttachmentDetails[].AttachmentUri`
+    examples:
+      - "https://example.com/attachments/product_image.jpg"
+      - "https://cdn.supplier.com/manuals/manual_en.pdf"
+  attachmentDescription:
+    type: ["string", "null"]
+    description: |
+      Human-readable description of the attachment. Flattened from multilingual array.
+      **ETIM xChange**: `AttachmentDescription[].AttachmentDescription`
+      **Path**: `Supplier[].Product[].TradeItem[].ItemAttachments[].AttachmentDetails[].AttachmentDescription[].AttachmentDescription`
+    minLength: 1
+    maxLength: 255
+    examples:
+      - "Front view product image"
+      - "User manual in English"
+      - null
+  attachmentIssueDate:
+    type: ["string", "null"]
+    format: date
+    description: |
+      Date when the attachment was issued. ISO 8601 date format (YYYY-MM-DD).
+      **ETIM xChange**: `AttachmentIssueDate`
+      **Path**: `Supplier[].Product[].TradeItem[].ItemAttachments[].AttachmentDetails[].AttachmentIssueDate`
+    examples:
+      - "2024-01-15"
+      - null
+  attachmentExpiryDate:
+    type: ["string", "null"]
+    format: date
+    description: |
+      Date when the attachment expires. ISO 8601 date format (YYYY-MM-DD).
+      **ETIM xChange**: `AttachmentExpiryDate`
+      **Path**: `Supplier[].Product[].TradeItem[].ItemAttachments[].AttachmentDetails[].AttachmentExpiryDate`
+    examples:
+      - "2026-12-31"
+      - null
+examples:
+  - attachmentType: "ATX001"
+    attachmentTypeSpecification: "MDX002"
+    attachmentLanguages: null
+    attachmentFilename: "product_image.jpg"
+    attachmentUri: "https://example.com/images/product.jpg"
+    attachmentDescription: "Front view product image"
+    attachmentIssueDate: "2024-01-15"
+    attachmentExpiryDate: null

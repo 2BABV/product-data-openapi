@@ -1,0 +1,51 @@
+type: object
+required:
+  - relatedManufacturerProductNumber
+properties:
+  relatedManufacturerProductNumber:
+    type: string
+    minLength: 1
+    maxLength: 35
+    description: |
+      Manufacturer's product number (MPN) of the related product.
+      
+      **ETIM xChange**: `RelatedManufacturerProductNumber`  
+      **Path**: `Supplier[].Product[].ProductRelations[].RelatedProducts[].RelatedManufacturerProductNumber`
+    examples:
+      - "LED-ACC-001"
+      - "SPARE-MOTOR-42"
+  
+  relatedProductGtin:
+    type: ["array", "null"]
+    uniqueItems: true
+    items:
+      $ref: ../../../../shared/schemas/identifiers/Gtin.yaml
+    description: |
+      Array of GTIN (Global Trade Item Number) codes for the related product.
+      Supports GTIN-8, GTIN-12, GTIN-13, and GTIN-14 formats.
+      
+      **ETIM xChange**: `RelatedProductGtin`  
+      **Path**: `Supplier[].Product[].ProductRelations[].RelatedProducts[].RelatedProductGtin[]`
+    examples:
+      - ["8718699673840"]
+      - null
+  
+  relatedProductQuantity:
+    type: ["integer", "null"]
+    minimum: 1
+    description: |
+      Quantity of the related product required or included (e.g., number of spare parts needed).
+      
+      **ETIM xChange**: `RelatedProductQuantity`  
+      **Path**: `Supplier[].Product[].ProductRelations[].RelatedProducts[].RelatedProductQuantity`
+    examples:
+      - 1
+      - 4
+      - null
+
+examples:
+  - relatedManufacturerProductNumber: "LED-ACC-001"
+    relatedProductGtin: ["8718699673840"]
+    relatedProductQuantity: 1
+  - relatedManufacturerProductNumber: "SPARE-MOTOR-42"
+    relatedProductQuantity: 2

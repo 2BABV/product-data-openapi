@@ -1,0 +1,70 @@
+type: object
+description: |
+  Defines a relationship between trade items (e.g., accessories, spare parts, related products).
+  Extracted from ETIM xChange `TradeItem.ItemRelations[]` structure.
+required:
+  - relatedSupplierItemNumber
+  - relationType
+  - relatedItemQuantity
+properties:
+  relatedSupplierItemNumber:
+    type: string
+    description: |
+      Supplier item number of the related trade item.
+      **ETIM xChange**: `RelatedSupplierItemNumber`
+      **Path**: `Supplier[].Product[].TradeItem[].ItemRelations[].RelatedSupplierItemNumber`
+    minLength: 1
+    maxLength: 35
+    examples:
+      - "SPART-001"
+      - "ACC-789"
+  relatedManufacturerItemNumber:
+    type: ["string", "null"]
+    description: |
+      Manufacturer item number of the related trade item.
+      **ETIM xChange**: `RelatedManufacturerItemNumber`
+      **Path**: `Supplier[].Product[].TradeItem[].ItemRelations[].RelatedManufacturerItemNumber`
+    minLength: 1
+    maxLength: 35
+    examples:
+      - "MFG-PART-456"
+      - null
+  relatedItemGtins:
+    type: ["array", "null"]
+    description: |
+      Array of GTINs for the related trade item.
+      **ETIM xChange**: `RelatedItemGtin[]`
+      **Path**: `Supplier[].Product[].TradeItem[].ItemRelations[].RelatedItemGtin[]`
+    uniqueItems: true
+    items:
+      $ref: ../../../../shared/schemas/identifiers/Gtin.yaml
+    examples:
+      - ["4012345678918"]
+      - null
+  relationType:
+    description: |
+      Type of relationship between this item and the related item.
+      **ETIM xChange**: `RelationType`
+      **Path**: `Supplier[].Product[].TradeItem[].ItemRelations[].RelationType`
+    $ref: ../enums/RelationType.yaml
+    examples:
+      - SPAREPART
+      - ACCESSORY
+      - MANDATORY
+  relatedItemQuantity:
+    type: integer
+    description: |
+      Quantity of the related item required or recommended (converted from ETIM xChange string to integer).
+      **ETIM xChange**: `RelatedItemQuantity` (string with pattern in ETIM, converted to integer)
+      **Path**: `Supplier[].Product[].TradeItem[].ItemRelations[].RelatedItemQuantity`
+    minimum: 1
+    examples:
+      - 1
+      - 4
+      - 10
+examples:
+  - relatedSupplierItemNumber: "SPART-001"
+    relatedManufacturerItemNumber: "MFG-SPART-100"
+    relatedItemGtins: ["4012345678918"]
+    relationType: SPAREPART
+    relatedItemQuantity: 2

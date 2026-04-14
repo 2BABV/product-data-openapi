@@ -1,0 +1,44 @@
+type: object
+description: |
+  Single trade item identification keys with multilingual descriptions.
+required:
+  - supplierIdGln
+  - supplierItemNumber
+properties:
+  supplierIdGln:
+    $ref: ../../../../shared/schemas/identifiers/Gln.yaml
+    description: Global Location Number (GLN) uniquely identifying the supplier
+    examples:
+      - "1234567890123"
+  supplierItemNumber:
+    type: string
+    minLength: 1
+    maxLength: 35
+    description: Supplier's unique item number
+    examples:
+      - "SKU-12345"
+  descriptions:
+    type: ["array", "null"]
+    description: |
+      Array of trade item descriptions. Each item contains descriptions in a specific language.
+      Returns null if no descriptions are available, or an empty array if filtering
+      by language yields no matches.
+    items:
+      $ref: ../domain/ItemDescription.yaml
+examples:
+  - supplierIdGln: "1234567890123"
+    supplierItemNumber: "SKU-12345"
+    descriptions:
+      - descriptionLanguage: "en-GB"
+        minimalItemDescription: "LED Lamp 10W E27"
+        uniqueMainItemDescription: "Professional LED lamp with E27 socket, 10W warm white"
+        discountGroupDescription: "Lighting products discount group"
+        bonusGroupDescription: null
+      - descriptionLanguage: "de-DE"
+        minimalItemDescription: "LED Lampe 10W E27"
+        uniqueMainItemDescription: "Professionelle LED-Lampe mit E27-Fassung, 10W warmweiß"
+        discountGroupDescription: "Beleuchtungsprodukte Rabattgruppe"
+        bonusGroupDescription: null
+  - supplierIdGln: "1234567890123"
+    supplierItemNumber: "SKU-12345"
+    descriptions: null

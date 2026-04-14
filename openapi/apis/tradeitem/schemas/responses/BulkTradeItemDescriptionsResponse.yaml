@@ -1,0 +1,49 @@
+type: object
+description: |
+  Bulk response containing trade item descriptions with cursor-based pagination.
+  
+  Each item in the `data` array represents a single language description for a trade item.
+  A trade item with descriptions in 3 languages will result in 3 rows.
+  
+  This flattened structure is optimized for ETL/data warehouse ingestion and
+  streaming data processing.
+required:
+  - data
+  - meta
+properties:
+  data:
+    type: array
+    description: Array of trade item descriptions. Each row is one language per trade item.
+    items:
+      $ref: ../domain/ItemDescriptionsSummary.yaml
+  meta:
+    $ref: ../../../../shared/schemas/common/CursorPaginationMetadata.yaml
+examples:
+  - data:
+      - supplierIdGln: "1234567890123"
+        supplierItemNumber: "SKU-12345"
+        descriptionLanguage: "en-GB"
+        minimalItemDescription: "LED Lamp 10W E27"
+        uniqueMainItemDescription: "Professional LED lamp with E27 socket, 10W warm white"
+        discountGroupDescription: "Lighting products discount group"
+        bonusGroupDescription: null
+      - supplierIdGln: "1234567890123"
+        supplierItemNumber: "SKU-12345"
+        descriptionLanguage: "de-DE"
+        minimalItemDescription: "LED Lampe 10W E27"
+        uniqueMainItemDescription: "Professionelle LED-Lampe mit E27-Fassung, 10W warmweiß"
+        discountGroupDescription: "Beleuchtungsprodukte Rabattgruppe"
+        bonusGroupDescription: null
+      - supplierIdGln: "1234567890123"
+        supplierItemNumber: "SKU-67890"
+        descriptionLanguage: "en-GB"
+        minimalItemDescription: "Hammer 500g"
+        uniqueMainItemDescription: "Professional claw hammer with fiberglass handle"
+        discountGroupDescription: "Hand tools discount group"
+        bonusGroupDescription: "Premium tier"
+    meta:
+      cursor: "eyJpZCI6MTIzfQ=="
+      hasNext: true
+      hasPrev: false
+      limit: 100
+      estimatedTotal: 15420

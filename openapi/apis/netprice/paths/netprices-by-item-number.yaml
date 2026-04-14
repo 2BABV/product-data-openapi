@@ -1,0 +1,75 @@
+get:
+  operationId: getTradeItemNetPriceByItemNumber
+  description: Get the net price of a specific trade item by supplierIdGln and supplierItemNumber
+  parameters:
+    - name: supplierIdGln
+      in: path
+      description: The supplier GLN (Global Location Number)
+      required: true
+      schema:
+        $ref: ../../../shared/schemas/identifiers/Gln.yaml
+    - name: supplierItemNumber
+      in: path
+      description: Supplier's unique item number
+      required: true
+      schema:
+        type: string
+        minLength: 1
+        maxLength: 35
+    - name: quantity
+      in: query
+      description: get the price for a specific quantity (optional)
+      required: false
+      schema:
+        # Minimum: 0.0001, maximum: unlimited within datatype, multipleOf: 0.0001
+        $ref: ../../../shared/schemas/common/PriceQuantity.yaml
+        default: 1
+        example: 99.50
+    - name: currency
+      in: query
+      description: Currency code for the price. Defaults to EUR if not specified.
+      required: false
+      schema:
+        $ref: ../../../shared/schemas/common/CurrencyCode.yaml
+        default: EUR
+        example: EUR
+  summary: Get net price by item number
+  security:
+      - oauth2:
+          - 'read:netprices'
+  responses:
+    '200':
+      description: Net price found
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/responses/NetPriceResponse.yaml
+          examples:
+            singleUnit:
+              summary: Net price for a single unit
+              value:
+                netPriceInOrderUnit: 12.50
+                currency: EUR
+                quantity: 1
+            bulkOrder:
+              summary: Net price for bulk quantity with volume discount applied
+              value:
+                netPriceInOrderUnit: 1250.00
+                currency: EUR
+                quantity: 100
+            smallQuantity:
+              summary: Net price for fractional quantity
+              value:
+                netPriceInOrderUnit: 0.1234
+                currency: USD
+                quantity: 0.01
+    '400':
+      $ref: ../../../shared/responses/400-bad-request.yaml
+    '401':
+      $ref: ../../../shared/responses/401-unauthorized.yaml
+    '403':
+      $ref: ../../../shared/responses/403-forbidden.yaml
+    '404':
+      $ref: ../../../shared/responses/404-not-found.yaml
+    '500':
+      $ref: ../../../shared/responses/500-internal-server-error.yaml

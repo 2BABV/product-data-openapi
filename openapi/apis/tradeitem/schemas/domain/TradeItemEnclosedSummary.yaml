@@ -1,0 +1,148 @@
+type: object
+description: |
+  Flattened enclosed item for bulk retrieval.
+  Each row represents a single enclosed item within a packaging unit,
+  with the trade item identifier (`supplierIdGln` + `supplierItemNumber`)
+  and packaging context (`packagingTypeCode`) embedded at top level.
+
+  A trade item with 2 packaging units, each containing 3 enclosed items,
+  will result in 6 rows.
+
+  This flattened structure is optimized for:
+  - Predictable payload sizes per row
+  - Efficient cursor-based pagination
+  - ETL/data warehouse ingestion
+  - Streaming data processing
+
+  **ETIM xChange**: `TradeItemEnclosed[]`
+  **Path**: `Supplier[].Product[].TradeItem[].PackagingUnit[].TradeItemEnclosed[]`
+required:
+  - supplierIdGln
+  - supplierItemNumber
+  - packagingTypeCode
+  - enclosedSupplierItemNumber
+  - enclosedItemQuantity
+properties:
+  # =========================================================================
+  # TRADE ITEM KEY FIELDS
+  # =========================================================================
+
+  supplierIdGln:
+    $ref: ../../../../shared/schemas/identifiers/Gln.yaml
+    description: |
+      Global Location Number (GLN) identifying the supplier.
+      13-digit GS1 identifier. Part of the composite trade item identifier.
+    examples:
+      - "1234567890123"
+      - "8712423012485"
+
+  supplierItemNumber:
+    type: string
+    minLength: 1
+    maxLength: 35
+    description: |
+      Supplier's unique item identifier.
+      Part of the composite trade item identifier.
+
+      **ETIM xChange**: `SupplierItemNumber`
+      **Path**: `Supplier[].Product[].TradeItem[].ItemIdentification.SupplierItemNumber`
+    examples:
+      - "SKU-12345"
+      - "ITEM-KIT-001"
+
+  # =========================================================================
+  # PACKAGING UNIT CONTEXT
+  # =========================================================================
+
+  packagingTypeCode:
+    description: |
+      Type of packaging unit that contains this enclosed item.
+      Denormalized from the parent `PackagingUnit` for flat bulk structure.
+
+      **ETIM xChange**: `PackagingTypeCode`
+      **Path**: `Supplier[].Product[].TradeItem[].PackagingUnit[].PackagingIdentification.PackagingTypeCode`
+    $ref: ../enums/PackagingTypeCode.yaml
+    examples:
+      - BX   # Box
+      - PF   # Pallet
+
+  # =========================================================================
+  # ENCLOSED ITEM FIELDS
+  # =========================================================================
+
+  enclosedSupplierItemNumber:
+    type: string
+    description: |
+      Supplier item number of the enclosed trade item.
+      **ETIM xChange**: `SupplierItemNumber`
+      **Path**: `Supplier[].Product[].TradeItem[].PackagingUnit[].TradeItemEnclosed[].SupplierItemNumber`
+    minLength: 1
+    maxLength: 35
+    examples:
+      - "WIDGET-001"
+      - "SCREW-M8-50"
+
+  enclosedManufacturerItemNumber:
+    type: ["string", "null"]
+    description: |
+      Manufacturer item number of the enclosed trade item.
+      **ETIM xChange**: `ManufacturerItemNumber`
+      **Path**: `Supplier[].Product[].TradeItem[].PackagingUnit[].TradeItemEnclosed[].ManufacturerItemNumber`
+    minLength: 1
+    maxLength: 35
+    examples:
+      - "MFG-WIDGET-001"
+      - null
+
+  enclosedItemGtins:
+    type: ["array", "null"]
+    description: |
+      Array of GTINs for the enclosed trade item.
+      **ETIM xChange**: `ItemGtin[]`
+      **Path**: `Supplier[].Product[].TradeItem[].PackagingUnit[].TradeItemEnclosed[].ItemGtin[]`
+    uniqueItems: true
+    items:
+      $ref: ../../../../shared/schemas/identifiers/Gtin.yaml
+    examples:
+      - ["4012345678901"]
+      - null
+
+  enclosedItemQuantity:
+    type: integer
+    description: |
+      Quantity of this enclosed item within the packaging unit.
+      **ETIM xChange**: `EnclosedItemQuantity`
+      **Path**: `Supplier[].Product[].TradeItem[].PackagingUnit[].TradeItemEnclosed[].EnclosedItemQuantity`
+    minimum: 1
+    examples:
+      - 1
+      - 5
+      - 100
+
+examples:
+  # Enclosed item in a box
+  - supplierIdGln: "8712423012485"
+    supplierItemNumber: "SKU-KIT-001"
+    packagingTypeCode: BX
+    enclosedSupplierItemNumber: "WIDGET-001"
+    enclosedManufacturerItemNumber: "MFG-WIDGET-001"
+    enclosedItemGtins: ["4012345678901"]
+    enclosedItemQuantity: 5
+
+  # Another enclosed item in the same box
+  - supplierIdGln: "8712423012485"
+    supplierItemNumber: "SKU-KIT-001"
+    packagingTypeCode: BX
+    enclosedSupplierItemNumber: "SCREW-M8-50"
+    enclosedManufacturerItemNumber: null
+    enclosedItemGtins: null
+    enclosedItemQuantity: 100
+
+  # Enclosed item on a pallet (different packaging unit)
+  - supplierIdGln: "9876543210987"
+    supplierItemNumber: "SKU-PALLET-002"
+    packagingTypeCode: PF
+    enclosedSupplierItemNumber: "WIDGET-001"
+    enclosedManufacturerItemNumber: "MFG-WIDGET-001"
+    enclosedItemGtins: ["4012345678901"]
+    enclosedItemQuantity: 50

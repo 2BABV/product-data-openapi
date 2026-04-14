@@ -1,0 +1,13 @@
+name: supplierIdGln
+in: path
+description: |
+  Global Location Number (GLN) of the supplier. Must be a valid 13-digit GLN.
+  Part of the composite key for identifying a unique trade item.
+required: true
+schema:
+  type: string
+  pattern: "^[0-9]{13}$"
+  minLength: 13
+  maxLength: 13
+  description: 13-digit Global Location Number
+example: "1234567890123"

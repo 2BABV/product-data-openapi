@@ -1,0 +1,71 @@
+get:
+  operationId: getBulkTradeItemRelations
+  tags:
+    - TradeItems bulk
+  summary: List trade item relations
+  description: |
+    Retrieve trade item relations in bulk with cursor-based pagination.
+    Returns a flattened structure where each row represents a single relation
+    with the trade item identifier (`supplierIdGln` + `supplierItemNumber`).
+    
+    A trade item with 5 relations (e.g., 2 accessories, 2 spare parts, 1 successor)
+    will result in 5 rows.
+    
+    This flattened structure is optimized for:
+    - Predictable payload sizes per row
+    - Efficient cursor-based pagination
+    - ETL/data warehouse ingestion
+    - Streaming data processing
+  parameters:
+    - $ref: ../../../../shared/parameters/query/cursor.yaml
+    - $ref: ../../../../shared/parameters/query/limit.yaml
+    - $ref: ../../../../shared/parameters/query/selection-id.yaml
+    - $ref: ../../../../shared/parameters/query/supplier-id-gln-filter.yaml
+    - $ref: ../../../../shared/parameters/query/mutation-date-time.yaml
+  responses:
+    '200':
+      description: Successfully retrieved trade item relations
+      content:
+        application/json:
+          schema:
+            $ref: ../../schemas/responses/BulkTradeItemRelationsResponse.yaml
+          examples:
+            multipleItems:
+              summary: Multiple trade item relations
+              value:
+                data:
+                  - supplierIdGln: "1234567890123"
+                    supplierItemNumber: "SKU-12345"
+                    relatedSupplierItemNumber: "SPART-001"
+                    relatedManufacturerItemNumber: "MFG-SPART-100"
+                    relatedItemGtins: ["4012345678918"]
+                    relationType: "SPAREPART"
+                    relatedItemQuantity: 2
+                  - supplierIdGln: "1234567890123"
+                    supplierItemNumber: "SKU-12345"
+                    relatedSupplierItemNumber: "ACC-789"
+                    relatedManufacturerItemNumber: null
+                    relatedItemGtins: null
+                    relationType: "ACCESSORY"
+                    relatedItemQuantity: 1
+                  - supplierIdGln: "9876543210987"
+                    supplierItemNumber: "SKU-CABLE-002"
+                    relatedSupplierItemNumber: "SKU-CABLE-003"
+                    relatedManufacturerItemNumber: "MFG-CABLE-V2"
+                    relatedItemGtins: ["8712345678901"]
+                    relationType: "SUCCESSOR"
+                    relatedItemQuantity: 1
+                meta:
+                  cursor: "eyJpZCI6MTIzfQ=="
+                  hasNext: true
+                  hasPrev: false
+                  limit: 100
+                  estimatedTotal: 8450
+    '400':
+      $ref: ../../../../shared/responses/400-bad-request.yaml
+    '401':
+      $ref: ../../../../shared/responses/401-unauthorized.yaml
+    '403':
+      $ref: ../../../../shared/responses/403-forbidden.yaml
+    '500':
+      $ref: ../../../../shared/responses/500-internal-server-error.yaml

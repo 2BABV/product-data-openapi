@@ -1,0 +1,12 @@
+name: manufacturerProductNumber
+in: path
+description: |
+  Manufacturer's unique product number (MPN). Part of the composite key for identifying a unique product.
+  Together with manufacturerIdGln, this uniquely identifies a product.
+required: true
+schema:
+  type: string
+  minLength: 1
+  maxLength: 35
+  description: Manufacturer product number (1-35 characters)
+example: "929002376910"

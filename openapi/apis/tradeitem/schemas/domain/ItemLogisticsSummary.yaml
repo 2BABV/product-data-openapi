@@ -1,0 +1,230 @@
+type: object
+description: |
+  Flattened item logistics for bulk retrieval.
+  Each row represents a single logistics entry for a trade item,
+  with the trade item identifier embedded at top level.
+  
+  A trade item typically has 0 or 1 logistics entries. Items with logistics data
+  will result in 1 row per logistics entry.
+  
+  This flattened structure is optimized for:
+  - Predictable payload sizes per row
+  - Efficient cursor-based pagination
+  - ETL/data warehouse ingestion
+  - Streaming data processing
+  
+  **ETIM xChange**: `ItemLogisticDetails[]`  
+  **Path**: `Supplier[].Product[].TradeItem[].ItemLogisticDetails[]`
+required:
+  - supplierIdGln
+  - supplierItemNumber
+properties:
+  # =========================================================================
+  # TRADE ITEM KEY FIELDS
+  # =========================================================================
+  
+  supplierIdGln:
+    $ref: ../../../../shared/schemas/identifiers/Gln.yaml
+    description: |
+      Global Location Number (GLN) identifying the supplier.
+      13-digit GS1 identifier. Part of the composite trade item identifier.
+    examples:
+      - "1234567890123"
+      - "8712423012485"
+  
+  supplierItemNumber:
+    type: string
+    minLength: 1
+    maxLength: 35
+    description: |
+      Supplier's unique item identifier.
+      Part of the composite trade item identifier.
+      
+      **ETIM xChange**: `SupplierItemNumber`  
+      **Path**: `Supplier[].Product[].TradeItem[].ItemIdentification.SupplierItemNumber`
+    examples:
+      - "SKU-12345"
+      - "ITEM-ABC-789"
+
+  # =========================================================================
+  # ITEM LOGISTICS FIELDS
+  # =========================================================================
+
+  baseItemNetLength:
+    type: ["number", "null"]
+    format: decimal
+    description: |
+      Net length of the base item in specified unit (converted from ETIM xChange string to number).
+      **ETIM xChange**: `BaseItemNetLength` (string with pattern)
+      **Path**: `Supplier[].Product[].TradeItem[].ItemLogisticDetails[].BaseItemNetLength`
+    minimum: 0
+    multipleOf: 0.0001
+    maximum: 999999999999.9999
+    examples:
+      - 25.5
+      - 100.0
+      - null
+
+  baseItemNetWidth:
+    type: ["number", "null"]
+    format: decimal
+    description: |
+      Net width of the base item in specified unit (converted from ETIM xChange string to number).
+      **ETIM xChange**: `BaseItemNetWidth` (string with pattern)
+      **Path**: `Supplier[].Product[].TradeItem[].ItemLogisticDetails[].BaseItemNetWidth`
+    minimum: 0
+    multipleOf: 0.0001
+    maximum: 999999999999.9999
+    examples:
+      - 15.25
+      - 50.0
+      - null
+
+  baseItemNetHeight:
+    type: ["number", "null"]
+    format: decimal
+    description: |
+      Net height of the base item in specified unit (converted from ETIM xChange string to number).
+      **ETIM xChange**: `BaseItemNetHeight` (string with pattern)
+      **Path**: `Supplier[].Product[].TradeItem[].ItemLogisticDetails[].BaseItemNetHeight`
+    minimum: 0
+    multipleOf: 0.0001
+    maximum: 999999999999.9999
+    examples:
+      - 10.5
+      - 30.0
+      - null
+
+  baseItemNetDiameter:
+    type: ["number", "null"]
+    format: decimal
+    description: |
+      Net diameter of the base item in specified unit (for cylindrical items) (converted from ETIM xChange string to number).
+      **ETIM xChange**: `BaseItemNetDiameter` (string with pattern)
+      **Path**: `Supplier[].Product[].TradeItem[].ItemLogisticDetails[].BaseItemNetDiameter`
+    minimum: 0
+    multipleOf: 0.0001
+    maximum: 999999999999.9999
+    examples:
+      - 8.75
+      - null
+
+  netDimensionUnit:
+    type: ["string", "null"]
+    description: |
+      Unit of measurement for net dimensions (CMT=centimeter, MTR=meter, etc.).
+      **ETIM xChange**: `NetDimensionUnit`
+      **Path**: `Supplier[].Product[].TradeItem[].ItemLogisticDetails[].NetDimensionUnit`
+    enum:
+      - CMT  # Centimeter
+      - DMT  # Decimeter
+      - KMT  # Kilometer
+      - MMT  # Millimeter
+      - MTR  # Meter
+      - FOT  # Foot
+      - INH  # Inch
+      - SMI  # Mile (statute mile)
+      - YRD  # Yard
+      - null
+    examples:
+      - CMT
+      - MTR
+      - null
+
+  baseItemNetWeight:
+    type: ["number", "null"]
+    format: decimal
+    description: |
+      Net weight of the base item in specified unit (converted from ETIM xChange string to number).
+      **ETIM xChange**: `BaseItemNetWeight` (string with pattern)
+      **Path**: `Supplier[].Product[].TradeItem[].ItemLogisticDetails[].BaseItemNetWeight`
+    minimum: 0
+    multipleOf: 0.0001
+    maximum: 999999999999.9999
+    examples:
+      - 1.5
+      - 1250.75
+      - null
+
+  netWeightUnit:
+    type: ["string", "null"]
+    description: |
+      Unit of measurement for net weight (GRM=gram, KGM=kilogram, etc.).
+      **ETIM xChange**: `NetWeightUnit`
+      **Path**: `Supplier[].Product[].TradeItem[].ItemLogisticDetails[].NetWeightUnit`
+    enum:
+      - GRM  # Gram
+      - KGM  # Kilogram
+      - MGM  # Milligram
+      - TNE  # Metric ton
+      - LTN  # Long ton (UK)
+      - LBR  # Pound
+      - ONZ  # Ounce
+      - null
+    examples:
+      - GRM
+      - KGM
+      - null
+
+  baseItemNetVolume:
+    type: ["number", "null"]
+    format: decimal
+    description: |
+      Net volume of the base item in specified unit (converted from ETIM xChange string to number).
+      **ETIM xChange**: `BaseItemNetVolume` (string with pattern)
+      **Path**: `Supplier[].Product[].TradeItem[].ItemLogisticDetails[].BaseItemNetVolume`
+    minimum: 0
+    multipleOf: 0.0001
+    maximum: 999999999999.9999
+    examples:
+      - 0.5
+      - 10.25
+      - null
+
+  netVolumeUnit:
+    type: ["string", "null"]
+    description: |
+      Unit of measurement for net volume (LTR=liter, MTQ=cubic meter, etc.).
+      **ETIM xChange**: `NetVolumeUnit`
+      **Path**: `Supplier[].Product[].TradeItem[].ItemLogisticDetails[].NetVolumeUnit`
+    enum:
+      - FTQ  # Cubic foot
+      - INQ  # Cubic inch
+      - MTQ  # Cubic meter
+      - MMQ  # Cubic millimeter
+      - OZA  # Fluid ounce (US)
+      - GLL  # Gallon (US)
+      - LTR  # Liter
+      - MLT  # Milliliter
+      - PT   # Pint (US)
+      - QT   # Quart (US)
+      - null
+    examples:
+      - LTR
+      - MTQ
+      - null
+
+examples:
+  - supplierIdGln: "8712423012485"
+    supplierItemNumber: "SKU-LAMP-001"
+    baseItemNetLength: 96.0
+    baseItemNetWidth: 5.0
+    baseItemNetHeight: 56.0
+    baseItemNetDiameter: null
+    netDimensionUnit: CMT
+    baseItemNetWeight: 0.26
+    netWeightUnit: KGM
+    baseItemNetVolume: 68.0
+    netVolumeUnit: MMQ
+
+  - supplierIdGln: "1234567890123"
+    supplierItemNumber: "SKU-12345"
+    baseItemNetLength: 25.5
+    baseItemNetWidth: 15.0
+    baseItemNetHeight: 10.0
+    baseItemNetDiameter: null
+    netDimensionUnit: CMT
+    baseItemNetWeight: 500.0
+    netWeightUnit: GRM
+    baseItemNetVolume: null
+    netVolumeUnit: null

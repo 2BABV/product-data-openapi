@@ -1,0 +1,14 @@
+type: string
+description: |
+  Status of the trade item in its lifecycle.
+  **ETIM xChange**: `ItemStatus`
+  **Path**: `Supplier[].Product[].TradeItem[].ItemDetails.ItemStatus`
+enum:
+  - PRE-LAUNCH
+  - ACTIVE
+  - ON HOLD
+  - PLANNED WITHDRAWAL
+  - OBSOLETE
+examples:
+  - ACTIVE
+  - OBSOLETE

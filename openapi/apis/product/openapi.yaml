@@ -1,0 +1,249 @@
+openapi: 3.1.0
+info:
+  title: Product API
+  version: 1.0.0-Preview1
+  description: |
+    API for managing product information, specifications, and categories based on ETIM xChange V2.0.
+    
+    ## Features
+    
+    - Individual product operations via `/products`
+    - Bulk data retrieval via `/products/bulk/*` endpoints with cursor-based pagination
+    
+    ## Data Model
+    
+    Based on ETIM xChange V2.0 Product schema (excluding TradeItem).
+    Flattened structure with minimal nesting for efficient API consumption.
+  contact:
+    name: Product API Support
+    email: support@product.2ba.nl
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+
+servers:
+  - url: https://{host}{basePath}/v1
+    description: Product Data OpenAPI - Product API v1
+    variables:
+      host:
+        default: api.example.com
+        description: >-
+          Implementer-specific API hostname.
+          Examples: rest.2ba.nl, selectprerelease.artikelbeheer.nl,
+          acceptation-service-api-dsgo.etimix.com
+      basePath:
+        default: ''
+        description: >-
+          Optional path prefix (e.g. /api). Leave empty if the API
+          is served directly under the domain root.
+
+tags:
+  - name: Products single
+    description: Product management operations
+    x-displayName: Single Product
+  - name: Products bulk
+    description: Bulk data retrieval operations for products with cursor-based pagination
+    x-displayName: Bulk Products
+
+x-tagGroups:
+  - name: Products
+    tags:
+      - Products single
+      - Products bulk
+
+paths:
+  /products/{manufacturerIdGln}/{manufacturerProductNumber}:
+    $ref: paths/products.yaml
+  
+  /products/{manufacturerIdGln}/{manufacturerProductNumber}/details:
+    $ref: paths/product-details.yaml
+  
+  /products/{manufacturerIdGln}/{manufacturerProductNumber}/descriptions:
+    $ref: paths/product-descriptions.yaml
+  
+  /products/{manufacturerIdGln}/{manufacturerProductNumber}/etim-classifications:
+    $ref: paths/product-etim-classifications.yaml
+  
+  /products/{manufacturerIdGln}/{manufacturerProductNumber}/lca-environmental:
+    $ref: paths/product-lca-environmental.yaml
+  
+  /products/{manufacturerIdGln}/{manufacturerProductNumber}/attachments:
+    $ref: paths/product-attachments.yaml
+  
+  /products/bulk/details:
+    $ref: paths/bulk/details.yaml
+  
+  /products/bulk/descriptions:
+    $ref: paths/bulk/descriptions.yaml
+  
+  /products/bulk/etim-classifications:
+    $ref: paths/bulk/etim-classifications.yaml
+  
+  /products/bulk/lca-environmental:
+    $ref: paths/bulk/lca-environmental.yaml
+  
+  /products/bulk/attachments:
+    $ref: paths/bulk/attachments.yaml
+
+components:
+  schemas:
+    # Domain schemas
+    # Product:
+    #   $ref: schemas/domain/Product.yaml
+    ProductDetails:
+      $ref: schemas/domain/ProductDetails.yaml
+    ProductDetailsSummary:
+      $ref: schemas/domain/ProductDetailsSummary.yaml
+    ProductDescriptionsSummary:
+      $ref: schemas/domain/ProductDescriptionsSummary.yaml
+    # ProductEtimClassificationsSummary:
+    #   $ref: schemas/domain/ProductEtimClassificationsSummary.yaml
+    ProductDescription:
+      $ref: schemas/domain/ProductDescription.yaml
+    # ProductRelation:
+    #   $ref: schemas/domain/ProductRelation.yaml
+    # RelatedProduct:
+    #   $ref: schemas/domain/RelatedProduct.yaml
+    ProductAttachment:
+      $ref: schemas/domain/ProductAttachment.yaml
+    AttachmentDetails:
+      $ref: schemas/domain/AttachmentDetails.yaml
+    ProductAttachmentSummary:
+      $ref: schemas/domain/ProductAttachmentSummary.yaml
+    EtimClassification:
+      $ref: schemas/domain/EtimClassification.yaml
+    EtimFeature:
+      $ref: schemas/domain/EtimFeature.yaml
+    ProductEtimClassificationFeature:
+      $ref: schemas/domain/ProductEtimClassificationFeature.yaml
+    LcaEnvironmental:
+      $ref: schemas/domain/LcaEnvironmental.yaml
+    LcaDeclaration:
+      $ref: schemas/domain/LcaDeclaration.yaml
+    ProductLcaDeclarationSummary:
+      $ref: schemas/domain/ProductLcaDeclarationSummary.yaml
+    # Legislation:
+    #   $ref: schemas/domain/Legislation.yaml
+    # LcaEnvironmental:
+    #   $ref: schemas/domain/LcaEnvironmental.yaml
+    # LcaDeclaration:
+    #   $ref: schemas/domain/LcaDeclaration.yaml
+    # ProductCountrySpecificField:
+    #   $ref: schemas/domain/ProductCountrySpecificField.yaml
+    
+    # Enum schemas
+    ProductStatus:
+      $ref: schemas/enums/ProductStatus.yaml
+    ProductType:
+      $ref: schemas/enums/ProductType.yaml
+    # ProductRelationType:
+    #   $ref: schemas/enums/ProductRelationType.yaml
+    AttachmentType:
+      $ref: schemas/enums/AttachmentType.yaml
+    AttachmentTypeSpecification:
+      $ref: schemas/enums/AttachmentTypeSpecification.yaml
+    WeeeCategory:
+      $ref: schemas/enums/WeeeCategory.yaml
+    
+    # Response schemas
+    ProductResponse:
+      $ref: schemas/responses/ProductResponse.yaml
+    ProductResponseData:
+      $ref: schemas/responses/ProductResponseData.yaml
+    ProductDetailsResponse:
+      $ref: schemas/responses/ProductDetailsResponse.yaml
+    ProductDetailsResponseData:
+      $ref: schemas/responses/ProductDetailsResponseData.yaml
+    ProductDescriptionsResponse:
+      $ref: schemas/responses/ProductDescriptionsResponse.yaml
+    ProductDescriptionsResponseData:
+      $ref: schemas/responses/ProductDescriptionsResponseData.yaml
+    ProductEtimClassificationsResponse:
+      $ref: schemas/responses/ProductEtimClassificationsResponse.yaml
+    ProductEtimClassificationsResponseData:
+      $ref: schemas/responses/ProductEtimClassificationsResponseData.yaml
+    # BulkProductsResponse:
+    #   $ref: schemas/responses/BulkProductsResponse.yaml
+    BulkProductDetailsResponse:
+      $ref: schemas/responses/BulkProductDetailsResponse.yaml
+    BulkProductDescriptionsResponse:
+      $ref: schemas/responses/BulkProductDescriptionsResponse.yaml
+    # BulkProductEtimClassificationsResponse:
+    #   $ref: schemas/responses/BulkProductEtimClassificationsResponse.yaml
+    BulkProductEtimClassificationFeaturesResponse:
+      $ref: schemas/responses/BulkProductEtimClassificationFeaturesResponse.yaml
+    ProductLcaEnvironmentalResponse:
+      $ref: schemas/responses/ProductLcaEnvironmentalResponse.yaml
+    ProductLcaEnvironmentalResponseData:
+      $ref: schemas/responses/ProductLcaEnvironmentalResponseData.yaml
+    BulkProductLcaDeclarationsResponse:
+      $ref: schemas/responses/BulkProductLcaDeclarationsResponse.yaml
+    ProductAttachmentsResponse:
+      $ref: schemas/responses/ProductAttachmentsResponse.yaml
+    ProductAttachmentsResponseData:
+      $ref: schemas/responses/ProductAttachmentsResponseData.yaml
+    BulkProductAttachmentsResponse:
+      $ref: schemas/responses/BulkProductAttachmentsResponse.yaml
+    
+    # Shared schemas
+    TechnicalId:
+      $ref: ../../shared/schemas/identifiers/TechnicalId.yaml
+    ProblemDetails:
+      $ref: ../../shared/schemas/common/ProblemDetails.yaml
+    CursorPaginationMetadata:
+      $ref: ../../shared/schemas/common/CursorPaginationMetadata.yaml
+
+  parameters:
+    # Path parameters
+    ManufacturerIdGlnPath:
+      $ref: ../../shared/parameters/path/manufacturer-id-gln.yaml
+    ManufacturerProductNumberPath:
+      $ref: ../../shared/parameters/path/manufacturer-product-number.yaml
+    
+    # Query parameters
+    Cursor:
+      $ref: ../../shared/parameters/query/cursor.yaml
+    Limit:
+      $ref: ../../shared/parameters/query/limit.yaml
+    SelectionId:
+      $ref: ../../shared/parameters/query/selection-id.yaml
+    ManufacturerIdGln:
+      $ref: ../../shared/parameters/query/manufacturer-id-gln-filter.yaml
+    MutationDateTime:
+      $ref: ../../shared/parameters/query/mutation-date-time.yaml
+    Language:
+      $ref: ../../shared/parameters/query/language.yaml
+    LifeCycleStage:
+      $ref: ../../shared/parameters/query/life-cycle-stage.yaml
+
+  responses:
+    BadRequest:
+      $ref: ../../shared/responses/400-bad-request.yaml
+    Unauthorized:
+      $ref: ../../shared/responses/401-unauthorized.yaml
+    Forbidden:
+      $ref: ../../shared/responses/403-forbidden.yaml
+    NotFound:
+      $ref: ../../shared/responses/404-not-found.yaml
+    InternalServerError:
+      $ref: ../../shared/responses/500-internal-server-error.yaml
+
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      description: |
+        OAuth 2.0 Client Credentials grant (RFC 6749 §4.4).
+        Supports both client_secret and client_assertion (RFC 7523) authentication.
+
+        The token URL is implementer-specific. Each implementer provides their own
+        OAuth 2.0 authorization server. The placeholder below must be replaced with
+        the actual token endpoint for your environment.
+      flows:
+        clientCredentials:
+          tokenUrl: https://auth.example.com/connect/token
+          scopes:
+            read:products: Grants read access to products
+
+security:
+  - oauth2:
+      - read:products

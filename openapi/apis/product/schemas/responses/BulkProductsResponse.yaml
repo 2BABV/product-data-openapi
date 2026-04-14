@@ -1,0 +1,33 @@
+type: object
+required:
+  - data
+  - meta
+properties:
+  data:
+    type: array
+    items:
+      $ref: ../domain/Product.yaml
+    description: Array of product objects with full product information
+  meta:
+    $ref: ../../../../shared/schemas/common/CursorPaginationMetadata.yaml
+    description: Cursor-based pagination metadata
+
+examples:
+  - data:
+      - manufacturerIdGln: "1234567890123"
+        manufacturerProductNumber: "929002376910"
+        productGtins: ["8718699673826"]
+        brandName: "Hue"
+        productStatus: "ACTIVE"
+        productType: "PHYSICAL"
+        warrantyConsumer: 24
+        productDescriptions:
+          - descriptionLanguage: "en-GB"
+            minimalProductDescription: "LED Smart Bulb E27"
+            uniqueMainProductDescription: "Philips Hue White and Color Ambiance E27 LED Smart Bulb"
+    meta:
+      cursor: "eyJpZCI6MTIzfQ=="
+      hasNext: true
+      hasPrev: false
+      limit: 100
+      estimatedTotal: 1523

@@ -1,0 +1,82 @@
+get:
+  operationId: getProductEtimClassifications
+  tags:
+    - Products single
+  summary: Get product ETIM classifications
+  description: |
+    Retrieve all ETIM classification information for a specific manufacturer product combination.
+    
+    This endpoint returns all ETIM classifications (class codes, features, version information)
+    for a single product identified by the composite key of `manufacturerIdGln` and
+    `manufacturerProductNumber`.
+    
+    **ETIM Classification Filtering**: Use the optional `etimReleaseVersion` query parameter
+    to filter classifications to a specific release version (e.g., "9.0", "10.0"). If omitted, the latest etimReleaseVersion is returned.
+    
+    **No pagination** - Returns all ETIM classifications for the specified product.
+    A product can have multiple ETIM classifications across different releases.
+    
+    **Use case**: Ideal for retrieving detailed ETIM classification data for a single
+    product without fetching all product details.
+  parameters:
+    - $ref: ../../../shared/parameters/path/manufacturer-id-gln.yaml
+    - $ref: ../../../shared/parameters/path/manufacturer-product-number.yaml
+    - $ref: ../../../shared/parameters/query/etim-release-version.yaml
+  responses:
+    '200':
+      description: Successfully retrieved product ETIM classifications
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/responses/ProductEtimClassificationsResponse.yaml
+          examples:
+            multipleClassifications:
+              summary: Product with multiple ETIM classifications
+              value:
+                data:
+                  manufacturerIdGln: "1234567890123"
+                  manufacturerProductNumber: "929002376910"
+                  etimClassifications:
+                    - etimClassCode: "EC002745"
+                      etimClassVersion: 1
+                      etimReleaseVersion: "9.0"
+                      etimFeatures:
+                        - etimFeatureCode: "EF000123"
+                          etimValueCode: "EV000789"
+                        - etimFeatureCode: "EF000456"
+                          etimValueNumeric: 230.0
+                    - etimClassCode: "EC001234"
+                      etimClassVersion: 2
+                      etimReleaseVersion: "11.0"
+                      etimFeatures:
+                        - etimFeatureCode: "EF000789"
+                          etimValueLogical: true
+            noClassifications:
+              summary: Product without ETIM classifications
+              value:
+                data:
+                  manufacturerIdGln: "1234567890123"
+                  manufacturerProductNumber: "LED-12345-A"
+                  etimClassifications: null
+    '400':
+      $ref: ../../../shared/responses/400-bad-request.yaml
+    '401':
+      $ref: ../../../shared/responses/401-unauthorized.yaml
+    '403':
+      $ref: ../../../shared/responses/403-forbidden.yaml
+    '404':
+      description: Product not found
+      content:
+        application/json:
+          schema:
+            $ref: ../../../shared/schemas/common/ProblemDetails.yaml
+          examples:
+            notFound:
+              summary: Product not found
+              value:
+                type: about:blank
+                title: Not Found
+                status: 404
+                detail: "No product found with manufacturer GLN '1234567890123' and product number '929002376910'"
+    '500':
+      $ref: ../../../shared/responses/500-internal-server-error.yaml

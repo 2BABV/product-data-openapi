@@ -1,0 +1,12 @@
+name: supplierItemNumber
+in: path
+description: |
+  Supplier's unique item number. Must be 1-35 characters.
+  Part of the composite key for identifying a unique trade item.
+required: true
+schema:
+  type: string
+  minLength: 1
+  maxLength: 35
+  description: Supplier's item identifier
+example: "ART-12345"

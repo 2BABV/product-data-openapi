@@ -1,0 +1,84 @@
+type: object
+description: |
+  An enclosed trade item with packaging unit context.
+  Each item includes a `packagingTypeCode` to identify which packaging unit
+  contains the enclosed item, enabling correlation with the packaging data
+  from the main trade item response.
+
+  This is a response-specific schema not present in the ETIM xChange domain model.
+
+  **ETIM xChange**: `TradeItemEnclosed`
+  **Path**: `Supplier[].Product[].TradeItem[].PackagingUnit[].TradeItemEnclosed[]`
+required:
+  - packagingTypeCode
+  - enclosedSupplierItemNumber
+  - enclosedItemQuantity
+properties:
+  packagingTypeCode:
+    description: |
+      Type of packaging unit that contains this enclosed item.
+      Use this to correlate with the corresponding packaging unit from the main trade item response.
+
+      This is a contextual identifier denormalized from the parent `PackagingUnit`.
+      **ETIM xChange**: `PackagingTypeCode`
+      **Path**: `Supplier[].Product[].TradeItem[].PackagingUnit[].PackagingIdentification.PackagingTypeCode`
+    $ref: ../enums/PackagingTypeCode.yaml
+    examples:
+      - BX   # Box
+      - PF   # Pallet
+  enclosedSupplierItemNumber:
+    type: string
+    description: |
+      Supplier item number of the enclosed trade item.
+      **ETIM xChange**: `SupplierItemNumber`
+      **Path**: `Supplier[].Product[].TradeItem[].PackagingUnit[].TradeItemEnclosed[].SupplierItemNumber`
+    minLength: 1
+    maxLength: 35
+    examples:
+      - "WIDGET-001"
+      - "SCREW-M8-50"
+  enclosedManufacturerItemNumber:
+    type: ["string", "null"]
+    description: |
+      Manufacturer item number of the enclosed trade item.
+      **ETIM xChange**: `ManufacturerItemNumber`
+      **Path**: `Supplier[].Product[].TradeItem[].PackagingUnit[].TradeItemEnclosed[].ManufacturerItemNumber`
+    minLength: 1
+    maxLength: 35
+    examples:
+      - "MFG-WIDGET-001"
+      - null
+  enclosedItemGtins:
+    type: ["array", "null"]
+    description: |
+      Array of GTINs for the enclosed trade item.
+      **ETIM xChange**: `ItemGtin[]`
+      **Path**: `Supplier[].Product[].TradeItem[].PackagingUnit[].TradeItemEnclosed[].ItemGtin[]`
+    uniqueItems: true
+    items:
+      $ref: ../../../../shared/schemas/identifiers/Gtin.yaml
+    examples:
+      - ["4012345678901"]
+      - null
+  enclosedItemQuantity:
+    type: integer
+    description: |
+      Quantity of this enclosed item within the packaging unit.
+      **ETIM xChange**: `EnclosedItemQuantity`
+      **Path**: `Supplier[].Product[].TradeItem[].PackagingUnit[].TradeItemEnclosed[].EnclosedItemQuantity`
+    minimum: 1
+    examples:
+      - 1
+      - 5
+      - 100
+examples:
+  - packagingTypeCode: BX
+    enclosedSupplierItemNumber: "WIDGET-001"
+    enclosedManufacturerItemNumber: "MFG-WIDGET-001"
+    enclosedItemGtins: ["4012345678901"]
+    enclosedItemQuantity: 5
+  - packagingTypeCode: PF
+    enclosedSupplierItemNumber: "SCREW-M8-50"
+    enclosedManufacturerItemNumber: null
+    enclosedItemGtins: null
+    enclosedItemQuantity: 100

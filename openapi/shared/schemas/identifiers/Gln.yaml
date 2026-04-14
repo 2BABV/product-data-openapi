@@ -1,0 +1,8 @@
+type: string
+description: Global Location Number (GLN) - 13 digit GS1 identifier
+pattern: '^\d{13}$'
+minLength: 13
+maxLength: 13
+examples:
+  - '4012345000016'
+  - '8712345678906'

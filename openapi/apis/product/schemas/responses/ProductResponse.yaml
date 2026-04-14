@@ -1,0 +1,71 @@
+type: object
+description: |
+  Response containing a single product with all its components.
+  
+  The product key (`manufacturerIdGln` + `manufacturerProductNumber`) is at the root level,
+  with nested objects for each component:
+  - `details`: GTINs, brand, dates, customs data, status, warranties
+  - `descriptions`: Array of multilingual descriptions (nested, not flattened)
+  - `etimClassifications`: Array of ETIM classifications with embedded features (nested)
+  - `lcaEnvironmental`: Life Cycle Assessment and Environmental Product Declaration (EPD) data
+  
+  This structure aligns with the subresource endpoints (`/details`, 
+  `/descriptions`, `/etim-classifications`, `/lca-environmental`) which all include the key at the root level.
+required:
+  - data
+properties:
+  data:
+    $ref: ./ProductResponseData.yaml
+examples:
+  - data:
+      manufacturerIdGln: "1234567890123"
+      manufacturerProductNumber: "929002376910"
+      details:
+        productGtins:
+          - "8718699673826"
+        brandName: "Hue"
+        productAnnouncementDate: "2024-01-15"
+        productValidityDate: "2024-03-01"
+        productObsolescenceDate: null
+        customsCommodityCode: "8539502090"
+        countryOfOrigin:
+          - "NL"
+        productStatus: "ACTIVE"
+        productType: "PHYSICAL"
+        customisableProduct: false
+        hasSerialNumber: true
+        warrantyConsumer: 24
+        warrantyBusiness: 36
+      descriptions:
+        - descriptionLanguage: "en-GB"
+          minimalProductDescription: "LED Smart Bulb E27"
+          uniqueMainProductDescription: "Philips Hue White and Color Ambiance E27 LED Smart Bulb with Bluetooth"
+          productKeyword:
+            - "smart lighting"
+            - "LED"
+            - "color"
+      etimClassifications:
+        - etimClassCode: "EC002745"
+          etimClassVersion: 1
+          etimReleaseVersion: "9.0"
+          etimFeatures:
+            - etimFeatureCode: "EF012345"
+              etimValueNumeric: 10
+      lcaEnvironmental:
+        declaredUnitUnit: "PCE"
+        declaredUnitQuantity: 1
+        lcaReferenceLifetime: 25
+        thirdPartyVerification: "externally"
+        epdValidityStartDate: "2024-01-01"
+        epdValidityExpiryDate: "2029-12-31"
+        epdOperatorName: "The International EPD System"
+        epdOperatorUri: "https://www.environdec.com"
+        operatorEpdId: "S-P-12345"
+        lcaDeclaration:
+          - lifeCycleStage: "A1-A3"
+            lcaDeclarationIndicator: "MDE"
+            declaredUnitGwpTotal: 15.75
+            declaredUnitGwpFossil: 14.25
+          - lifeCycleStage: "C1-C4"
+            lcaDeclarationIndicator: "AGG"
+            declaredUnitGwpTotal: 2.5

@@ -1,0 +1,119 @@
+get:
+  operationId: getProduct
+  tags:
+    - Products single
+  summary: Get product
+  description: |
+    Retrieve the complete product information for a specific manufacturer product combination.
+    
+    This endpoint returns a single product identified by the composite key of
+    `manufacturerIdGln` and `manufacturerProductNumber`. The product key is at the root level,
+    with nested objects for each component:
+    
+    - **details**: GTINs, brand, dates, customs data, status, warranties
+    - **descriptions**: Multilingual product descriptions (nested array)
+    - **etimClassifications**: ETIM classifications with embedded features (nested array)
+    - **lcaEnvironmental**: Life Cycle Assessment and Environmental Product Declaration (EPD) data
+    - **attachments**: Product documents, images, videos, and other attachments (nested array)
+    
+    **Subresources**: Each component is also available as a dedicated subresource:
+    - `/details` - Core product information
+    - `/descriptions` - Multilingual descriptions with language filtering
+    - `/etim-classifications` - ETIM classifications with features
+    - `/lca-environmental` - Life Cycle Assessment and EPD data
+    - `/attachments` - Product documents, images, and certificates
+    
+    **ETIM Classification Filtering**: Use the optional `etimReleaseVersion` query parameter
+    to filter ETIM classifications to a specific release version (e.g., "9.0", "10.0").
+
+    **Examples**: Example payloads show documented fields only. Clients must accept and ignore additional fields, including nested fields, when they are added in backward-compatible updates.
+    
+    **No pagination** - Returns exactly one product document or 404 if not found.
+    
+    **Composite Key**: The combination of manufacturer GLN and product number uniquely
+    identifies a product in the system.
+  parameters:
+    - $ref: ../../../shared/parameters/path/manufacturer-id-gln.yaml
+    - $ref: ../../../shared/parameters/path/manufacturer-product-number.yaml
+    - $ref: ../../../shared/parameters/query/etim-release-version.yaml
+  responses:
+    '200':
+      description: Successfully retrieved the product
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/responses/ProductResponse.yaml
+          examples:
+            fullProduct:
+              summary: Complete product with all components
+              value:
+                data:
+                  manufacturerIdGln: "1234567890123"
+                  manufacturerProductNumber: "929002376910"
+                  details:
+                    productGtins:
+                      - "8718699673826"
+                    brandName: "Hue"
+                    productAnnouncementDate: "2024-01-15"
+                    productValidityDate: "2024-03-01"
+                    productObsolescenceDate: null
+                    customsCommodityCode: "8539502090"
+                    countryOfOrigin:
+                      - "NL"
+                    productStatus: "ACTIVE"
+                    productType: "PHYSICAL"
+                    customisableProduct: false
+                    hasSerialNumber: true
+                    warrantyConsumer: 24
+                    warrantyBusiness: 36
+                  descriptions:
+                    - descriptionLanguage: "en-GB"
+                      minimalProductDescription: "LED Smart Bulb"
+                      uniqueMainProductDescription: "Philips Hue White and Color Ambiance E27 LED Smart Bulb"
+                  etimClassifications:
+                    - etimClassCode: "EC002745"
+                      etimClassVersion: 1
+                      etimReleaseVersion: "9.0"
+                      etimFeatures:
+                        - etimFeatureCode: "EF012345"
+                          etimValueNumeric: 10
+                  attachments:
+                    - attachmentType: "ATX001"
+                      attachmentOrder: 1
+                      attachmentDetails:
+                        - attachmentUri: "https://images.manufacturer.com/products/LED-12345-front.jpg"
+                          attachmentFilename: "LED-12345-front.jpg"
+            minimalProduct:
+              summary: Minimal product with required fields only
+              value:
+                data:
+                  manufacturerIdGln: "1234567890123"
+                  manufacturerProductNumber: "LED-12345-A"
+                  details:
+                    productValidityDate: "2025-01-01"
+                  descriptions:
+                    - descriptionLanguage: "en-GB"
+                      minimalProductDescription: "LED Lamp"
+                  etimClassifications: null
+    '400':
+      $ref: ../../../shared/responses/400-bad-request.yaml
+    '401':
+      $ref: ../../../shared/responses/401-unauthorized.yaml
+    '403':
+      $ref: ../../../shared/responses/403-forbidden.yaml
+    '404':
+      description: Product not found
+      content:
+        application/json:
+          schema:
+            $ref: ../../../shared/schemas/common/ProblemDetails.yaml
+          examples:
+            notFound:
+              summary: Product not found
+              value:
+                type: about:blank
+                title: Not Found
+                status: 404
+                detail: "No product found with manufacturer GLN '1234567890123' and product number '929002376910'"
+    '500':
+      $ref: ../../../shared/responses/500-internal-server-error.yaml

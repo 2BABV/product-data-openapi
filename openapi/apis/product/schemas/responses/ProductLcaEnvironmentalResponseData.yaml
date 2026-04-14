@@ -1,0 +1,52 @@
+type: object
+description: |
+  Single product identification keys with LCA environmental data.
+required:
+  - manufacturerIdGln
+  - manufacturerProductNumber
+properties:
+  manufacturerIdGln:
+    $ref: ../../../../shared/schemas/identifiers/Gln.yaml
+    description: Global Location Number (GLN) uniquely identifying the manufacturer
+    examples:
+      - "1234567890123"
+  manufacturerProductNumber:
+    type: string
+    minLength: 1
+    maxLength: 35
+    description: Manufacturer's unique product number/code
+    examples:
+      - "929002376910"
+  lcaEnvironmental:
+    anyOf:
+      - $ref: ../domain/LcaEnvironmental.yaml
+      - type: "null"
+    description: |
+      LCA environmental data including EPD information, declared units,
+      and life cycle assessment declarations. Null if no LCA data is available
+      for this product.
+examples:
+  - manufacturerIdGln: "1234567890123"
+    manufacturerProductNumber: "929002376910"
+    lcaEnvironmental:
+      declaredUnitUnit: "PCE"
+      declaredUnitQuantity: 1
+      lcaReferenceLifetime: 25
+      thirdPartyVerification: "externally"
+      epdValidityStartDate: "2024-01-01"
+      epdValidityExpiryDate: "2029-12-31"
+      epdOperatorName: "The International EPD System"
+      operatorEpdId: "S-P-12345"
+      productCategoryRulesDescription: "PCR 2019:14 Lighting equipment"
+      lcaDeclaration:
+        - lifeCycleStage: "A1-A3"
+          lcaDeclarationIndicator: "MDE"
+          declaredUnitGwpTotal: 15.75
+          declaredUnitGwpFossil: 14.25
+          declaredUnitGwpBiogenic: 1.2
+        - lifeCycleStage: "C1-C4"
+          lcaDeclarationIndicator: "AGG"
+          declaredUnitGwpTotal: 2.5
+  - manufacturerIdGln: "1234567890123"
+    manufacturerProductNumber: "LED-NO-EPD-001"
+    lcaEnvironmental: null

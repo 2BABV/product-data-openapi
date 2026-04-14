@@ -1,0 +1,140 @@
+type: object
+description: |
+  Single product data with all its components.
+  
+  The product key (`manufacturerIdGln` + `manufacturerProductNumber`) is at the root level,
+  with nested objects for each component:
+  - `details`: GTINs, brand, dates, customs data, status, warranties
+  - `descriptions`: Array of multilingual descriptions (nested, not flattened)
+  - `etimClassifications`: Array of ETIM classifications with embedded features (nested)
+  - `lcaEnvironmental`: Life Cycle Assessment and Environmental Product Declaration (EPD) data
+  - `attachments`: Product documents, images, videos, and other attachments (nested)
+  
+  This structure aligns with the subresource endpoints (`/details`, `/descriptions`,
+  `/etim-classifications`, `/lca-environmental`, `/attachments`) which all include
+  the key at the root level.
+required:
+  - manufacturerIdGln
+  - manufacturerProductNumber
+  - details
+properties:
+  manufacturerIdGln:
+    $ref: ../../../../shared/schemas/identifiers/Gln.yaml
+    description: Global Location Number (GLN) uniquely identifying the manufacturer
+    examples:
+      - "1234567890123"
+  manufacturerProductNumber:
+    type: string
+    minLength: 1
+    maxLength: 35
+    description: Manufacturer's unique product number/code
+    examples:
+      - "929002376910"
+  details:
+    $ref: ../domain/ProductDetails.yaml
+    description: |
+      Core product information including GTINs, brand,
+      dates, customs data, status, type, warranties, and product groups.
+  descriptions:
+    type: ["array", "null"]
+    description: |
+      Array of multilingual product descriptions. Each item contains descriptions
+      in a specific language. Returns null if no descriptions are available.
+    items:
+      $ref: ../domain/ProductDescription.yaml
+  etimClassifications:
+    type: ["array", "null"]
+    description: |
+      Array of ETIM classifications for this product with embedded features.
+      Returns null if the product has no ETIM classifications.
+      Multiple classifications can exist across different ETIM releases.
+    items:
+      $ref: ../domain/EtimClassification.yaml
+  lcaEnvironmental:
+    anyOf:
+      - $ref: ../domain/LcaEnvironmental.yaml
+      - type: "null"
+    description: |
+      Life Cycle Assessment and Environmental Product Declaration (EPD) data.
+      Returns null if the product has no LCA/EPD data.
+      
+      **ETIM xChange**: `LcaEnvironmental`  
+      **Path**: `Supplier[].Product[].LcaEnvironmental`
+  attachments:
+    type: ["array", "null"]
+    description: |
+      Array of product attachments including images, documents, certificates, and other files.
+      Each item groups attachment details by type and order.
+      Returns null if the product has no attachments.
+      
+      **ETIM xChange**: `ProductAttachments`  
+      **Path**: `Supplier[].Product[].ProductAttachments[]`
+    items:
+      $ref: ../domain/ProductAttachment.yaml
+examples:
+  - manufacturerIdGln: "1234567890123"
+    manufacturerProductNumber: "929002376910"
+    details:
+      productGtins:
+        - "8718699673826"
+      brandName: "Hue"
+      productAnnouncementDate: "2024-01-15"
+      productValidityDate: "2024-03-01"
+      productObsolescenceDate: null
+      customsCommodityCode: "8539502090"
+      countryOfOrigin:
+        - "NL"
+      productStatus: "ACTIVE"
+      productType: "PHYSICAL"
+      customisableProduct: false
+      hasSerialNumber: true
+      warrantyConsumer: 24
+      warrantyBusiness: 36
+    descriptions:
+      - descriptionLanguage: "en-GB"
+        minimalProductDescription: "LED Smart Bulb E27"
+        uniqueMainProductDescription: "Philips Hue White and Color Ambiance E27 LED Smart Bulb with Bluetooth"
+        productKeyword:
+          - "smart lighting"
+          - "LED"
+          - "color"
+    etimClassifications:
+      - etimClassCode: "EC002745"
+        etimClassVersion: 1
+        etimReleaseVersion: "9.0"
+        etimFeatures:
+          - etimFeatureCode: "EF012345"
+            etimValueNumeric: 10
+    lcaEnvironmental:
+      declaredUnitUnit: "PCE"
+      declaredUnitQuantity: 1
+      lcaReferenceLifetime: 25
+      thirdPartyVerification: "externally"
+      epdValidityStartDate: "2024-01-01"
+      epdValidityExpiryDate: "2029-12-31"
+      epdOperatorName: "The International EPD System"
+      epdOperatorUri: "https://www.environdec.com"
+      operatorEpdId: "S-P-12345"
+      lcaDeclaration:
+        - lifeCycleStage: "A1-A3"
+          lcaDeclarationIndicator: "MDE"
+          declaredUnitGwpTotal: 15.75
+          declaredUnitGwpFossil: 14.25
+        - lifeCycleStage: "C1-C4"
+          lcaDeclarationIndicator: "AGG"
+          declaredUnitGwpTotal: 2.5
+    attachments:
+      - attachmentType: "ATX001"
+        attachmentTypeSpecification: "MDX002"
+        attachmentOrder: 1
+        attachmentDetails:
+          - attachmentUri: "https://images.manufacturer.com/products/LED-12345-front.jpg"
+            attachmentFilename: "LED-12345-front.jpg"
+            attachmentLanguage: ["en-GB"]
+      - attachmentType: "ATX014"
+        attachmentOrder: 2
+        attachmentDetails:
+          - attachmentUri: "https://cdn.manufacturer.com/products/datasheets/LED-12345-en.pdf"
+            attachmentFilename: "LED-12345-datasheet-en.pdf"
+            attachmentLanguage: ["en-GB"]
+            attachmentIssueDate: "2024-06-15"

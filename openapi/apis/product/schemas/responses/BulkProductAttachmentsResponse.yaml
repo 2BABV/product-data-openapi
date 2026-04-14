@@ -1,0 +1,52 @@
+type: object
+required:
+  - data
+  - meta
+properties:
+  data:
+    type: array
+    items:
+      $ref: ../domain/ProductAttachmentSummary.yaml
+    description: |
+      Array of flattened product attachments.
+      Each row represents a single attachment file with the product identifier
+      and attachment-level fields denormalized.
+  meta:
+    $ref: ../../../../shared/schemas/common/CursorPaginationMetadata.yaml
+    description: Cursor-based pagination metadata
+
+examples:
+  - data:
+      - manufacturerIdGln: "0000333000005"
+        manufacturerProductNumber: "18591-P47"
+        attachmentType: "ATX015"
+        attachmentTypeSpecification: null
+        attachmentOrder: 1
+        attachmentFilename: "c0c8542e86907655140d81c9699e7a4c.jpg"
+        attachmentUri: "http://att.2ba.nl/0000333000005/PPI/c0/c0c8/c0c8542e86907655140d81c9699e7a4c.jpg"
+        attachmentIssueDate: null
+        attachmentExpiryDate: null
+      - manufacturerIdGln: "0000333000005"
+        manufacturerProductNumber: "18591-P47"
+        attachmentType: "ATX018"
+        attachmentTypeSpecification: null
+        attachmentOrder: 1
+        attachmentFilename: "c0c8542e86907655140d81c9699e7a4c.jpg"
+        attachmentUri: "http://att.2ba.nl/0000333000005/PPI/c0/c0c8/c0c8542e86907655140d81c9699e7a4c.jpg"
+        attachmentIssueDate: null
+        attachmentExpiryDate: null
+      - manufacturerIdGln: "0000333000005"
+        manufacturerProductNumber: "3244 br hg 47"
+        attachmentType: "ATX015"
+        attachmentTypeSpecification: null
+        attachmentOrder: 1
+        attachmentFilename: "9af382818c2af00d8ce97a6b95667b74.jpg"
+        attachmentUri: "http://att.2ba.nl/0000333000005/PPI/9a/9af3/9af382818c2af00d8ce97a6b95667b74.jpg"
+        attachmentIssueDate: null
+        attachmentExpiryDate: null
+    meta:
+      cursor: "eyJpZCI6MTIzfQ=="
+      hasNext: true
+      hasPrev: false
+      limit: 100
+      estimatedTotal: 15420

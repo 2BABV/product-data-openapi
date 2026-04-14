@@ -1,0 +1,61 @@
+openapi: 3.1.0
+info:
+  title: TradeItem Domain
+  version: 1.0.0
+  description: |
+    API for managing trade items, supplier information, and GTIN data.
+  contact:
+    name: TradeItem API Support
+    email: support@tradeitem.2ba.nl
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+
+servers:
+  - url: https://{host}{basePath}/v1
+    description: Product Data OpenAPI - Trade Item Domain API v1
+    variables:
+      host:
+        default: api.example.com
+        description: >-
+          Implementer-specific API hostname.
+          Examples: rest.2ba.nl, selectprerelease.artikelbeheer.nl,
+          acceptation-service-api-dsgo.etimix.com
+      basePath:
+        default: ''
+        description: >-
+          Optional path prefix (e.g. /api). Leave empty if the API
+          is served directly under the domain root.
+
+paths:
+  /trade-items/supplier:
+    get: 
+      operationId: getSupplierSchema
+      summary: Supplier Schema
+      description: This endpoint exists solely for documentation purposes to display the Supplier schema.
+      tags:
+        - Schema Documentation
+      security: []
+      responses:
+        '200':
+          description: Supplier Schema
+          content:
+            application/json:
+              schema:
+                $ref: schemas/domain/Supplier.yaml
+  /trade-items/tradeitem:
+    get: 
+      operationId: getTradeItemSchema
+      summary: Trade Item Schema
+      description: This endpoint exists solely for documentation purposes to display the Trade Item schema.
+      tags:
+        - Schema Documentation
+      security: []
+      responses:
+        '200':
+          description: Trade Item Schema
+          content:
+            application/json:
+              schema:
+                $ref: schemas/domain/TradeItem.yaml
+                      

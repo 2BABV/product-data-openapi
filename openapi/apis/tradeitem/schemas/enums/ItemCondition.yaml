@@ -1,0 +1,12 @@
+type: string
+description: |
+  Physical condition of the trade item.
+  **ETIM xChange**: `ItemCondition`
+  **Path**: `Supplier[].Product[].TradeItem[].ItemDetails.ItemCondition`
+enum:
+  - NEW
+  - USED
+  - REFURBISHED
+examples:
+  - NEW
+  - REFURBISHED

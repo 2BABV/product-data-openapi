@@ -1,0 +1,11 @@
+name: mutationDateTime
+in: query
+description: |
+  Filter results by mutation timestamp (RFC 3339 / ISO 8601 UTC format).
+  Returns items created or modified on or after this timestamp.
+  Must use UTC timezone with 'Z' suffix.
+required: false
+schema:
+  type: string
+  format: date-time
+example: "2024-10-15T00:00:00Z"

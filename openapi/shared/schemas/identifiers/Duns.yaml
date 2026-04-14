@@ -1,0 +1,8 @@
+type: string
+description: Data Universal Numbering System (DUNS) - 9 digit business identifier
+pattern: '^\d{9}$'
+minLength: 9
+maxLength: 9
+examples:
+  - '123456789'
+  - '987654321'

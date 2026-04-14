@@ -1,0 +1,36 @@
+type: object
+description: |
+  Response containing item relations for a specific trade item.
+  Returns the trade item identification keys and a nested array of `ItemRelation` objects,
+  each defining a relationship to another trade item (e.g., accessories, spare parts, successors).
+  
+  Unlike the bulk endpoint `/trade-items/bulk/relations` which uses a flattened structure
+  optimized for ETL, this single-item endpoint returns relations in their natural
+  nested format for easier consumption.
+  
+  **ETIM xChange**: `ItemRelations[]`
+  **Path**: `Supplier[].Product[].TradeItem[].ItemRelations[]`
+required:
+  - data
+properties:
+  data:
+    $ref: ./TradeItemRelationsResponseData.yaml
+examples:
+  - data:
+      supplierIdGln: "1234567890123"
+      supplierItemNumber: "SKU-12345"
+      relations:
+        - relatedSupplierItemNumber: "SPART-001"
+          relatedManufacturerItemNumber: "MFG-SPART-100"
+          relatedItemGtins: ["4012345678918"]
+          relationType: SPAREPART
+          relatedItemQuantity: 2
+        - relatedSupplierItemNumber: "ACC-789"
+          relatedManufacturerItemNumber: null
+          relatedItemGtins: null
+          relationType: ACCESSORY
+          relatedItemQuantity: 1
+  - data:
+      supplierIdGln: "1234567890123"
+      supplierItemNumber: "SKU-12345"
+      relations: null

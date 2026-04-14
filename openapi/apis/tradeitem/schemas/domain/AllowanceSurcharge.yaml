@@ -1,0 +1,115 @@
+type: object
+description: |
+  Allowance or surcharge applied to trade item pricing, including fixed and percentage-based adjustments.
+  **ETIM xChange**: `AllowanceSurcharge`
+  **Path**: `Supplier[].Product[].TradeItem[].Pricing[].AllowanceSurcharge[]`
+required:
+  - allowanceSurchargeIndicator
+  - allowanceSurchargeType
+properties:
+  allowanceSurchargeIndicator:
+    type: string
+    description: |
+      Indicates whether this price adjustment is an allowance (discount) or a surcharge (additional charge).
+      **ETIM xChange**: `AllowanceSurchargeIndicator`
+      **Path**: `Supplier[].Product[].TradeItem[].Pricing[].AllowanceSurcharge[].AllowanceSurchargeIndicator`
+    enum:
+      - ALLOWANCE
+      - SURCHARGE
+    examples:
+      - ALLOWANCE
+      - SURCHARGE
+  allowanceSurchargeValidityDate:
+    type:
+      - string
+      - "null"
+    description: |
+      Date from which the allowance or surcharge becomes valid. ISO 8601 date format (YYYY-MM-DD).
+      **ETIM xChange**: `AllowanceSurchargeValidityDate`
+      **Path**: `Supplier[].Product[].TradeItem[].Pricing[].AllowanceSurcharge[].AllowanceSurchargeValidityDate`
+    format: date
+    examples:
+      - "2025-01-01"
+      - null
+  allowanceSurchargeType:
+    description: |
+      Code describing the reason for the allowance or surcharge. Uses shared enumeration aligned with ETIM codes.
+      **ETIM xChange**: `AllowanceSurchargeType`
+      **Path**: `Supplier[].Product[].TradeItem[].Pricing[].AllowanceSurcharge[].AllowanceSurchargeType`
+    $ref: ../../../../shared/schemas/common/AllowanceSurchargeTypes.yaml
+  allowanceSurchargeAmount:
+    type:
+      - number
+      - "null"
+    format: decimal
+    description: |
+      Fixed monetary amount of the allowance or surcharge (converted from ETIM string pattern to numeric form).
+      **ETIM xChange**: `AllowanceSurchargeAmount`
+      **Path**: `Supplier[].Product[].TradeItem[].Pricing[].AllowanceSurcharge[].AllowanceSurchargeAmount`
+    minimum: 0
+    multipleOf: 0.0001
+    maximum: 99999999999.9999
+    examples:
+      - 15.5
+      - 250.0
+      - null
+  allowanceSurchargeSequenceNumber:
+    type:
+      - integer
+      - "null"
+    description: |
+      Sequence number used to order multiple allowances or surcharges applied to the same price.
+      **ETIM xChange**: `AllowanceSurchargeSequenceNumber`
+      **Path**: `Supplier[].Product[].TradeItem[].Pricing[].AllowanceSurcharge[].AllowanceSurchargeSequenceNumber`
+    minimum: 1
+    examples:
+      - 1
+      - 3
+      - null
+  allowanceSurchargePercentage:
+    type:
+      - number
+      - "null"
+    format: decimal
+    description: |
+      Percentage rate of the allowance or surcharge (converted from ETIM string pattern to numeric form).
+      **ETIM xChange**: `AllowanceSurchargePercentage`
+      **Path**: `Supplier[].Product[].TradeItem[].Pricing[].AllowanceSurcharge[].AllowanceSurchargePercentage`
+    minimum: 0
+    multipleOf: 0.001
+    maximum: 999.999
+    examples:
+      - 5.5
+      - 12.75
+      - null
+  allowanceSurchargeMinimumQuantity:
+    type:
+      - number
+      - "null"
+    format: decimal
+    description: |
+      Minimum ordered quantity required for the allowance or surcharge to apply (converted from ETIM string pattern to numeric form).
+      **ETIM xChange**: `AllowanceSurchargeMinimumQuantity`
+      **Path**: `Supplier[].Product[].TradeItem[].Pricing[].AllowanceSurcharge[].AllowanceSurchargeMinimumQuantity`
+    minimum: 0
+    multipleOf: 0.0001
+    maximum: 999999999999.9999
+    examples:
+      - 10
+      - 1250.5
+      - null
+examples:
+  - allowanceSurchargeIndicator: ALLOWANCE
+    allowanceSurchargeValidityDate: "2025-01-01"
+    allowanceSurchargeType: AEQ
+    allowanceSurchargeAmount: null
+    allowanceSurchargeSequenceNumber: 1
+    allowanceSurchargePercentage: 5.5
+    allowanceSurchargeMinimumQuantity: 50
+  - allowanceSurchargeIndicator: SURCHARGE
+    allowanceSurchargeValidityDate: null
+    allowanceSurchargeType: DBD
+    allowanceSurchargeAmount: 25.0
+    allowanceSurchargeSequenceNumber: null
+    allowanceSurchargePercentage: null
+    allowanceSurchargeMinimumQuantity: null

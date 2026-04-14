@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Product Data OpenAPI | API Documentation</title>
+  <meta name="description" content="Interactive documentation, changelogs, and downloadable OpenAPI specifications for the Product Data OpenAPI suite.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=JetBrains+Mono:wght@400;500&family=Sora:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --blue-900: #0a1628;
+      --blue-800: #0f2440;
+      --blue-700: #143a64;
+      --blue-600: #1a5590;
+      --blue-500: #2176cc;
+      --blue-400: #4a9aea;
+      --blue-300: #8ec4f6;
+      --cyan-500: #00b4d8;
+      --cyan-400: #48cae4;
+      --cyan-100: #e0f7fa;
+      --amber-500: #f59e0b;
+      --amber-100: #fef3c7;
+      --green-500: #10b981;
+      --green-100: #d1fae5;
+      --red-500: #ef4444;
+      --gray-50: #f8fafc;
+      --gray-100: #f1f5f9;
+      --gray-200: #e2e8f0;
+      --gray-300: #cbd5e1;
+      --gray-400: #94a3b8;
+      --gray-500: #64748b;
+      --gray-600: #475569;
+      --gray-700: #334155;
+      --gray-800: #1e293b;
+      --gray-900: #0f172a;
+      --white: #ffffff;
+      --radius: 10px;
+      --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.06);
+      --shadow-md: 0 4px 12px rgba(15, 23, 42, 0.08);
+      --shadow-lg: 0 8px 30px rgba(15, 23, 42, 0.1);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'DM Sans', system-ui, sans-serif;
+      color: var(--gray-800);
+      line-height: 1.65;
+      background: var(--gray-50);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Nav ──────────────────────────────────── */
+    .nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(255,255,255,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--gray-200);
+    }
+    .nav-inner {
+      max-width: 1060px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0.65rem 1.5rem;
+    }
+    .nav-brand {
+      font-family: 'Sora', sans-serif; font-weight: 700; font-size: 0.95rem;
+      color: var(--blue-700); text-decoration: none;
+    }
+    .nav-links { display: flex; gap: 1.5rem; list-style: none; }
+    .nav-links a {
+      font-size: 0.82rem; font-weight: 500; color: var(--gray-600);
+      text-decoration: none; transition: color 0.15s;
+    }
+    .nav-links a:hover { color: var(--blue-500); }
+
+    /* ── Hero ─────────────────────────────────── */
+    .hero {
+      background: linear-gradient(135deg, var(--blue-900) 0%, var(--blue-800) 40%, var(--blue-700) 100%);
+      color: var(--white);
+      padding: 3.5rem 1.5rem 3rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 600px 300px at 80% 20%, rgba(0,180,216,0.12), transparent),
+        radial-gradient(ellipse 400px 400px at 20% 80%, rgba(33,118,204,0.1), transparent);
+      pointer-events: none;
+    }
+    .hero-inner {
+      max-width: 1060px; margin: 0 auto; position: relative;
+    }
+    .hero h1 {
+      font-family: 'Sora', sans-serif; font-size: 2rem; font-weight: 700;
+      letter-spacing: -0.02em; margin-bottom: 0.5rem;
+    }
+    .hero-sub {
+      font-size: 1.05rem; color: var(--blue-300); max-width: 600px;
+      line-height: 1.55; margin-bottom: 1.25rem;
+    }
+    .hero-badges { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 0.35rem;
+      font-size: 0.72rem; font-weight: 600;
+      padding: 0.25rem 0.65rem; border-radius: 20px;
+      background: rgba(255,255,255,0.12); color: var(--blue-300);
+      border: 1px solid rgba(255,255,255,0.15);
+    }
+    .hero-badge .dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--cyan-400); flex-shrink: 0;
+    }
+    .hero-badge.preview .dot { background: var(--amber-500); }
+
+    /* ── Sections ─────────────────────────────── */
+    .container { max-width: 1060px; margin: 0 auto; padding: 0 1.5rem; }
+    section { padding: 2.5rem 0; }
+    section + section { border-top: 1px solid var(--gray-200); }
+    .section-label {
+      font-family: 'Sora', sans-serif;
+      font-size: 0.68rem; font-weight: 600; letter-spacing: 0.08em;
+      text-transform: uppercase; color: var(--blue-500);
+      margin-bottom: 0.35rem;
+    }
+    .section-title {
+      font-family: 'Sora', sans-serif;
+      font-size: 1.35rem; font-weight: 700; color: var(--gray-900);
+      margin-bottom: 0.75rem;
+    }
+    .section-desc {
+      color: var(--gray-600); font-size: 0.92rem; max-width: 640px;
+      margin-bottom: 1.5rem;
+    }
+
+    /* ── About ────────────────────────────────── */
+    .about-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 0.75rem;
+    }
+    .about-item {
+      background: var(--white);
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius);
+      padding: 1rem 1.15rem;
+    }
+    .about-item strong {
+      display: block; font-size: 0.85rem; color: var(--gray-900);
+      margin-bottom: 0.2rem;
+    }
+    .about-item span {
+      font-size: 0.8rem; color: var(--gray-500); line-height: 1.5;
+    }
+
+    /* ── API Cards ────────────────────────────── */
+    .api-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(440px, 1fr)); gap: 1rem; }
+    .api-card {
+      background: var(--white);
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      box-shadow: var(--shadow-sm);
+      transition: box-shadow 0.2s, border-color 0.2s;
+    }
+    .api-card:hover { box-shadow: var(--shadow-md); border-color: var(--blue-300); }
+    .api-card-header { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.35rem; flex-wrap: wrap; }
+    .api-card h3 {
+      font-family: 'Sora', sans-serif; font-size: 1.1rem; font-weight: 700;
+      color: var(--gray-900);
+    }
+    .badge {
+      display: inline-block; font-size: 0.65rem; font-weight: 600;
+      padding: 0.15rem 0.55rem; border-radius: 20px;
+    }
+    .badge-stable { background: var(--green-100); color: #065f46; }
+    .badge-preview { background: var(--amber-100); color: #92400e; }
+    .badge-version { background: var(--cyan-100); color: #155e75; }
+    .api-card-desc { color: var(--gray-500); font-size: 0.85rem; margin-bottom: 1rem; }
+    .api-card-meta {
+      display: flex; gap: 1rem; flex-wrap: wrap;
+      font-size: 0.78rem; color: var(--gray-400);
+      margin-bottom: 1rem; align-items: center;
+    }
+    .api-card-meta span { display: inline-flex; align-items: center; gap: 0.3rem; }
+    .api-card-actions { display: flex; flex-direction: column; gap: 0.5rem; }
+    .api-card-actions-row { display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 0.3rem;
+      padding: 0.4rem 0.9rem;
+      border-radius: 7px; font-size: 0.82rem; font-weight: 500;
+      text-decoration: none; transition: all 0.15s; cursor: pointer;
+      border: none;
+    }
+    .btn-primary { background: var(--blue-500); color: var(--white); }
+    .btn-primary:hover { background: var(--blue-600); }
+    .btn-outline { border: 1px solid var(--gray-300); color: var(--gray-700); background: var(--white); }
+    .btn-outline:hover { border-color: var(--blue-400); color: var(--blue-600); }
+    .btn-ghost { color: var(--gray-500); background: none; padding: 0.4rem 0.5rem; }
+    .btn-ghost:hover { color: var(--blue-500); }
+    .version-select {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.8rem; padding: 0.35rem 0.5rem;
+      border: 1px solid var(--gray-300); border-radius: 7px;
+      background: var(--white); cursor: pointer; color: var(--gray-700);
+    }
+
+    /* ── Auth / Getting Started ───────────────── */
+    .auth-box {
+      background: var(--white);
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .auth-header {
+      padding: 0.85rem 1.25rem;
+      background: var(--gray-50);
+      border-bottom: 1px solid var(--gray-200);
+      font-size: 0.82rem; font-weight: 600; color: var(--gray-700);
+      display: flex; align-items: center; gap: 0.5rem;
+    }
+    .auth-body { padding: 1.25rem; }
+    .auth-body p { font-size: 0.85rem; color: var(--gray-600); margin-bottom: 0.75rem; }
+    .auth-body ol { font-size: 0.85rem; color: var(--gray-600); padding-left: 1.25rem; margin-bottom: 0.75rem; }
+    .auth-body li { margin-bottom: 0.35rem; }
+    .scope-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; margin-top: 0.75rem; }
+    .scope-table th {
+      text-align: left; font-weight: 600; color: var(--gray-700);
+      padding: 0.5rem 0.75rem; border-bottom: 2px solid var(--gray-200);
+      background: var(--gray-50);
+    }
+    .scope-table td {
+      padding: 0.45rem 0.75rem; border-bottom: 1px solid var(--gray-100);
+      color: var(--gray-600);
+    }
+    .scope-table code { font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; }
+    pre.code-block {
+      background: var(--gray-900); color: var(--blue-300);
+      border-radius: 8px; padding: 1rem 1.25rem;
+      font-family: 'JetBrains Mono', monospace; font-size: 0.75rem;
+      line-height: 1.7; overflow-x: auto; margin-top: 0.75rem;
+    }
+    pre.code-block .comment { color: var(--gray-500); }
+    pre.code-block .string { color: var(--cyan-400); }
+    pre.code-block .flag { color: var(--amber-500); }
+
+    /* ── Release History ──────────────────────── */
+    .release-timeline { list-style: none; position: relative; padding-left: 1.25rem; }
+    .release-timeline::before {
+      content: ''; position: absolute; left: 4px; top: 6px; bottom: 6px;
+      width: 2px; background: var(--gray-200); border-radius: 1px;
+    }
+    .release-item {
+      position: relative; padding: 0.5rem 0 0.5rem 1.25rem;
+    }
+    .release-item::before {
+      content: ''; position: absolute; left: -1.25rem; top: 0.75rem;
+      width: 10px; height: 10px; border-radius: 50%;
+      background: var(--blue-500); border: 2px solid var(--white);
+      box-shadow: 0 0 0 2px var(--blue-300);
+    }
+    .release-item.preview::before { background: var(--amber-500); box-shadow: 0 0 0 2px var(--amber-100); }
+    .release-item-header {
+      display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;
+    }
+    .release-item-header strong { font-size: 0.88rem; color: var(--gray-900); }
+    .release-item-header time { font-size: 0.78rem; color: var(--gray-400); }
+    .release-item-body { font-size: 0.8rem; color: var(--gray-500); margin-top: 0.15rem; }
+    .release-item-body a { color: var(--blue-500); text-decoration: none; }
+    .release-item-body a:hover { text-decoration: underline; }
+    .release-empty { font-size: 0.85rem; color: var(--gray-400); font-style: italic; }
+
+    /* ── Resources ────────────────────────────── */
+    .resource-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 0.75rem;
+    }
+    .resource-card {
+      display: flex; align-items: flex-start; gap: 0.75rem;
+      background: var(--white);
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius);
+      padding: 1rem 1.15rem;
+      text-decoration: none; color: inherit;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .resource-card:hover { border-color: var(--blue-400); box-shadow: var(--shadow-sm); }
+    .resource-icon {
+      flex-shrink: 0; width: 32px; height: 32px;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: 8px; font-size: 1rem;
+    }
+    .resource-icon.governance { background: var(--cyan-100); }
+    .resource-icon.implementer { background: var(--green-100); }
+    .resource-icon.source { background: var(--gray-100); }
+    .resource-icon.issues { background: var(--amber-100); }
+    .resource-card strong { font-size: 0.82rem; color: var(--gray-900); display: block; }
+    .resource-card span { font-size: 0.75rem; color: var(--gray-500); line-height: 1.4; }
+
+    /* ── Footer ───────────────────────────────── */
+    .footer {
+      border-top: 1px solid var(--gray-200);
+      padding: 1.5rem;
+      text-align: center;
+      font-size: 0.78rem; color: var(--gray-400);
+    }
+    .footer a { color: var(--blue-500); text-decoration: none; }
+    .footer a:hover { text-decoration: underline; }
+
+    /* ── Responsive ───────────────────────────── */
+    @media (max-width: 700px) {
+      .nav-links { display: none; }
+      .hero h1 { font-size: 1.5rem; }
+      .hero-sub { font-size: 0.92rem; }
+      .api-grid { grid-template-columns: 1fr; }
+      .about-grid { grid-template-columns: 1fr 1fr; }
+      .resource-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="#" class="nav-brand">Product Data OpenAPI</a>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#apis">APIs</a></li>
+      <li><a href="#architecture">Architecture</a></li>
+      <li><a href="#releases">Releases</a></li>
+      <li><a href="#resources">Resources</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- Hero -->
+<header class="hero">
+  <div class="hero-inner">
+    <h1>Product Data OpenAPI</h1>
+    <p class="hero-sub">REST API specifications based on the ETIM xChange datamodel — product data, trade items, and ETIM classifications, designed for programmatic consumption.</p>
+    <div class="hero-badges" id="hero-badges">
+      <span class="hero-badge"><span class="dot"></span>OpenAPI 3.1</span>
+    </div>
+  </div>
+</header>
+
+<!-- About -->
+<section id="about">
+  <div class="container">
+    <p class="section-label">Overview</p>
+    <h2 class="section-title">Why a REST API for ETIM xChange?</h2>
+    <p class="section-desc">The ETIM xChange V2.0 is a monolithic catalog file format for batch transfers. These OpenAPI specs transform it into focused REST APIs that unlock new capabilities.</p>
+    <div class="about-grid">
+      <div class="about-item">
+        <strong>Granular Access</strong>
+        <span>Query one product or trade item instead of downloading the entire catalog.</span>
+      </div>
+      <div class="about-item">
+        <strong>Incremental Sync</strong>
+        <span>Delta-only transfers via mutation date filtering — no more full exports.</span>
+      </div>
+      <div class="about-item">
+        <strong>Domain Decomposition</strong>
+        <span>Focused APIs (Product, Trade Item, Net Price, Stock) replace one monolithic tree.</span>
+      </div>
+      <div class="about-item">
+        <strong>SDK Generation</strong>
+        <span>Auto-generate typed clients in C#, Java, Python, and more from the OpenAPI spec.</span>
+      </div>
+      <div class="about-item">
+        <strong>Proper Data Types</strong>
+        <span>112 string-encoded numeric fields converted to real numbers with format hints.</span>
+      </div>
+      <div class="about-item">
+        <strong>Governed Evolution</strong>
+        <span>Semantic versioning, 24-month deprecation policy, CI-enforced compatibility.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- API Cards -->
+<section id="apis">
+  <div class="container">
+    <p class="section-label">API Reference</p>
+    <h2 class="section-title">Available APIs</h2>
+    <p class="section-desc">Interactive documentation powered by Redocly. Select a version or download the bundled OpenAPI YAML for code generation.</p>
+    <div class="api-grid">
+
+      <!-- Product API -->
+      <div class="api-card" id="card-product">
+        <div class="api-card-header">
+          <h3>Product API</h3>
+          <span id="badge-product"></span>
+        </div>
+        <p class="api-card-desc">Product information, specifications, ETIM classifications, and LCA environmental declarations.</p>
+        <div class="api-card-meta">
+          <span>Scope: <code>read:products</code></span>
+          <span id="meta-product-date"></span>
+        </div>
+        <div class="api-card-actions">
+          <div class="api-card-actions-row">
+            <select class="version-select" id="select-product" aria-label="Product API version">
+              <option value="latest">latest</option>
+            </select>
+            <a class="btn btn-primary" id="link-product-docs" href="product/latest/product.html">View Docs</a>
+            <a class="btn btn-outline" id="link-product-yaml" href="product/latest/product-api.yaml">↓&nbsp;YAML</a>
+            <a class="btn btn-ghost" id="link-product-changelog" href="https://github.com/2BABV/product-data-openapi/blob/main/openapi/apis/product/CHANGELOG.md">Changelog</a>
+            <a class="btn btn-ghost" href="models/product-tree.html">Domain Model</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Trade Item API -->
+      <div class="api-card" id="card-tradeitem">
+        <div class="api-card-header">
+          <h3>Trade Item API</h3>
+          <span id="badge-tradeitem"></span>
+        </div>
+        <p class="api-card-desc">Trade item details, descriptions, orderings, pricings, allowance/surcharges, relations, and logistics.</p>
+        <div class="api-card-meta">
+          <span>Scope: <code>read:tradeitems</code></span>
+          <span id="meta-tradeitem-date"></span>
+        </div>
+        <div class="api-card-actions">
+          <div class="api-card-actions-row">
+            <select class="version-select" id="select-tradeitem" aria-label="Trade Item API version">
+              <option value="latest">latest</option>
+            </select>
+            <a class="btn btn-primary" id="link-tradeitem-docs" href="tradeitem/latest/tradeitem.html">View Docs</a>
+            <a class="btn btn-outline" id="link-tradeitem-yaml" href="tradeitem/latest/tradeitem-api.yaml">↓&nbsp;YAML</a>
+            <a class="btn btn-ghost" id="link-tradeitem-changelog" href="https://github.com/2BABV/product-data-openapi/blob/main/openapi/apis/tradeitem/CHANGELOG.md">Changelog</a>
+            <a class="btn btn-ghost" href="models/tradeitem-tree.html">Domain Model</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- Getting Started -->
+<section id="architecture">
+  <div class="container">
+    <p class="section-label">Architecture</p>
+    <h2 class="section-title">Architectural Overview</h2>
+    <p class="section-desc">Any client can talk to any server — the OpenAPI specification is the shared contract, OAuth 2.0 and DSGO provide the trust layer.</p>
+
+    <img src="assets/architecture-overview.svg"
+         alt="Architecture diagram: client applications on the left (ERP, webshop, mobile app) send GET requests to server implementations on the right (2BA, DSGO node, other implementers), governed by the OpenAPI Specification above and secured by OAuth 2.0 / DSGO below."
+         style="max-width: 100%; height: auto; display: block; margin: 0 auto 1.5rem;">
+
+  </div>
+</section>
+
+<!-- Release History -->
+<section id="releases">
+  <div class="container">
+    <p class="section-label">Release History</p>
+    <h2 class="section-title">Recent Releases</h2>
+    <p class="section-desc">Each release includes a GitHub Release with downloadable assets, versioned documentation snapshot, and changelog entry.</p>
+    <ul class="release-timeline" id="release-timeline">
+      <li class="release-empty">Loading release history…</li>
+    </ul>
+  </div>
+</section>
+
+<!-- Resources -->
+<section id="resources">
+  <div class="container">
+    <p class="section-label">Resources</p>
+    <h2 class="section-title">Documentation &amp; Governance</h2>
+    <div class="resource-grid">
+      <a class="resource-card" href="https://github.com/2BABV/product-data-openapi/blob/main/GOVERNANCE.md">
+        <div class="resource-icon governance">📋</div>
+        <div>
+          <strong>Governance Model</strong>
+          <span>Versioning strategy, breaking change policy, 24-month deprecation, RFC process.</span>
+        </div>
+      </a>
+      <a class="resource-card" href="https://github.com/2BABV/product-data-openapi/blob/main/docs/implementer-guide.md">
+        <div class="resource-icon implementer">🔧</div>
+        <div>
+          <strong>Implementer Guide</strong>
+          <span>URL contract, server variables, path conventions for API implementers.</span>
+        </div>
+      </a>
+      <a class="resource-card" href="https://github.com/2BABV/product-data-openapi/blob/main/docs/releasing.md">
+        <div class="resource-icon governance">🚀</div>
+        <div>
+          <strong>Release Process</strong>
+          <span>How to tag, release, and publish a new API version.</span>
+        </div>
+      </a>
+      <a class="resource-card" href="https://github.com/2BABV/product-data-openapi">
+        <div class="resource-icon source">💻</div>
+        <div>
+          <strong>Source Repository</strong>
+          <span>OpenAPI source files, shared schemas, and CI configuration on GitHub.</span>
+        </div>
+      </a>
+      <a class="resource-card" href="https://github.com/2BABV/product-data-openapi/issues">
+        <div class="resource-icon issues">💬</div>
+        <div>
+          <strong>Issues &amp; Feedback</strong>
+          <span>Report bugs, request features, or ask questions via GitHub Issues.</span>
+        </div>
+      </a>
+      <a class="resource-card" href="https://github.com/2BABV/product-data-openapi/blob/main/docs/best-practices.md">
+        <div class="resource-icon implementer">📖</div>
+        <div>
+          <strong>Best Practices</strong>
+          <span>OpenAPI 3.1 conventions, naming rules, pagination, and schema patterns.</span>
+        </div>
+      </a>
+      <a class="resource-card" href="https://github.com/2BABV/product-data-openapi/blob/main/LICENSE">
+        <div class="resource-icon source">⚖️</div>
+        <div>
+          <strong>MIT License</strong>
+          <span>Open-source license terms for using, modifying, and distributing this project.</span>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <p>
+    Product Data OpenAPI · <a href="https://github.com/2BABV/product-data-openapi">GitHub</a> ·
+    Maintained by <a href="https://www.2ba.nl">2BA</a>
+  </p>
+</footer>
+
+<script>
+  const APIS = ['product', 'tradeitem'];
+  const DISPLAY = { product: 'Product', tradeitem: 'Trade Item' };
+  const REPO = 'https://github.com/2BABV/product-data-openapi';
+
+  function isPreview(v) { return v.includes('-'); }
+
+  function makeBadge(version) {
+    if (!version) return '';
+    const cls = isPreview(version) ? 'badge badge-preview' : 'badge badge-stable';
+    const label = isPreview(version) ? 'Preview' : 'Stable';
+    return '<span class="' + cls + '">' + label + '</span> ' +
+           '<span class="badge badge-version">v' + version + '</span>';
+  }
+
+  function updateLinks(api, version) {
+    const path = version === 'latest' ? api + '/latest' : api + '/v' + version;
+    document.getElementById('link-' + api + '-docs').href = path + '/' + api + '.html';
+    document.getElementById('link-' + api + '-yaml').href = path + '/' + api + '-api.yaml';
+  }
+
+  function populateSelector(api, versions) {
+    var sel = document.getElementById('select-' + api);
+    sel.innerHTML = '<option value="latest">latest</option>';
+    versions.forEach(function(v) {
+      var opt = document.createElement('option');
+      opt.value = v.version;
+      opt.textContent = 'v' + v.version + (v.prerelease ? ' (preview)' : '');
+      sel.appendChild(opt);
+    });
+    sel.addEventListener('change', function() { updateLinks(api, sel.value); });
+  }
+
+  function buildReleaseTimeline(data) {
+    var items = [];
+    APIS.forEach(function(api) {
+      var info = data && data[api];
+      if (!info || !info.versions) return;
+      info.versions.forEach(function(v) {
+        items.push({
+          api: api,
+          display: DISPLAY[api],
+          version: v.version,
+          date: v.date,
+          prerelease: v.prerelease
+        });
+      });
+    });
+    items.sort(function(a, b) { return b.date.localeCompare(a.date); });
+
+    var list = document.getElementById('release-timeline');
+    if (items.length === 0) {
+      list.innerHTML = '<li class="release-empty">No releases published yet.</li>';
+      return;
+    }
+    list.innerHTML = '';
+    items.forEach(function(r) {
+      var li = document.createElement('li');
+      li.className = 'release-item' + (r.prerelease ? ' preview' : '');
+      var tag = r.api + '/v' + r.version;
+      li.innerHTML =
+        '<div class="release-item-header">' +
+          '<strong>' + r.display + ' API v' + r.version + '</strong>' +
+          '<span class="badge ' + (r.prerelease ? 'badge-preview' : 'badge-stable') + '">' +
+            (r.prerelease ? 'Preview' : 'Stable') + '</span>' +
+          '<time>' + r.date + '</time>' +
+        '</div>' +
+        '<div class="release-item-body">' +
+          '<a href="' + REPO + '/releases/tag/' + tag + '">GitHub Release</a>' +
+          ' · <a href="' + r.api + '/v' + r.version + '/' + r.api + '.html">Docs</a>' +
+          ' · <a href="' + REPO + '/blob/main/openapi/apis/' + r.api + '/CHANGELOG.md">Changelog</a>' +
+        '</div>';
+      list.appendChild(li);
+    });
+  }
+
+  function updateHeroBadges(data) {
+    var container = document.getElementById('hero-badges');
+    APIS.forEach(function(api) {
+      var info = data && data[api];
+      var ver = info ? info.latest : null;
+      if (!ver) return;
+      var span = document.createElement('span');
+      span.className = 'hero-badge' + (isPreview(ver) ? ' preview' : '');
+      span.innerHTML = '<span class="dot"></span>' + DISPLAY[api] + ' v' + ver;
+      container.appendChild(span);
+    });
+  }
+
+  fetch('versions.json')
+    .then(function(r) { return r.ok ? r.json() : null; })
+    .catch(function() { return null; })
+    .then(function(data) {
+      APIS.forEach(function(api) {
+        var info = data && data[api];
+        var latestVer = info ? info.latest : null;
+        document.getElementById('badge-' + api).innerHTML = makeBadge(latestVer);
+        if (info && info.versions && info.versions.length > 0) {
+          var latest = info.versions[0];
+          document.getElementById('meta-' + api + '-date').textContent =
+            'Last release: ' + latest.date;
+          populateSelector(api, info.versions);
+        }
+        updateLinks(api, 'latest');
+      });
+      buildReleaseTimeline(data);
+      updateHeroBadges(data);
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,79 @@
+type: object
+description: |
+  Bulk response containing trade item pricing information with cursor-based pagination.
+  
+  **Flattened Structure**: Each row in the `data` array represents a single price entry
+  with embedded composite key (`supplierIdGln` + `supplierItemNumber`). This follows the
+  same pattern as `ProductEtimClassificationFeature` - 1 row per data point.
+  
+  A trade item with multiple price tiers (e.g., quantity breaks) will have multiple rows
+  with the same composite key but different pricing data.
+  
+  Use the `cursor` from `meta` to retrieve the next page of results.
+  
+  **ETIM xChange**: Response wrapper for `Pricing[]` data
+  **Path**: `Supplier[].Product[].TradeItem[].Pricing[]`
+required:
+  - data
+  - meta
+properties:
+  data:
+    type: array
+    description: Array of flattened trade item pricing entries (1 row per price)
+    items:
+      $ref: ../domain/TradeItemPricingSummary.yaml
+  meta:
+    $ref: ../../../../shared/schemas/common/CursorPaginationMetadata.yaml
+    description: Cursor-based pagination metadata
+
+examples:
+  - data:
+      # Single price entry
+      - supplierIdGln: "8712423012485"
+        supplierItemNumber: "SKU-LAMP-001"
+        pricingRef: "price-c62-1-20250101"
+        priceUnit: C62
+        priceQuantity: 1
+        currencyCode: EUR
+        priceOnRequest: false
+        grossListPrice: 12.99
+        netPrice: 9.99
+        recommendedRetailPrice: 15.99
+        vat: 21.0
+        priceValidityDate: "2025-01-01"
+        priceExpiryDate: "2025-12-31"
+      # Multiple price tiers for same item (quantity breaks)
+      - supplierIdGln: "8712423012485"
+        supplierItemNumber: "SKU-CABLE-002"
+        pricingRef: "price-mtr-1-20250101"
+        priceUnit: MTR
+        priceUnitFactor: 1.0
+        priceQuantity: 1
+        currencyCode: EUR
+        priceOnRequest: false
+        grossListPrice: 2.50
+        netPrice: 1.99
+        recommendedRetailPrice: 3.49
+        vat: 21.0
+        priceValidityDate: "2025-01-01"
+        priceExpiryDate: "2025-06-30"
+      - supplierIdGln: "8712423012485"
+        supplierItemNumber: "SKU-CABLE-002"
+        pricingRef: "price-mtr-100-20250101"
+        priceUnit: MTR
+        priceUnitFactor: 1.0
+        priceQuantity: 100
+        currencyCode: EUR
+        priceOnRequest: false
+        grossListPrice: 2.00
+        netPrice: 1.59
+        recommendedRetailPrice: 2.99
+        vat: 21.0
+        priceValidityDate: "2025-01-01"
+        priceExpiryDate: "2025-06-30"
+    meta:
+      cursor: "eyJzdXBwbGllcklkR2xuIjoiODcxMjQyMzAxMjQ4NSIsInN1cHBsaWVySXRlbU51bWJlciI6IlNLVS1DQUJMRS0wMDIiLCJwcmljZVF1YW50aXR5IjoxMDB9"
+      hasNext: true
+      hasPrev: false
+      limit: 100
+      estimatedTotal: 24850

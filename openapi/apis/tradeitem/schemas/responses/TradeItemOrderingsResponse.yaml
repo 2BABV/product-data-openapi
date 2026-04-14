@@ -1,0 +1,44 @@
+type: object
+description: |
+  Response containing trade item ordering information for a single trade item.
+  
+  The trade item key (`supplierIdGln` + `supplierItemNumber`) is at the root level,
+  with the `ordering` object containing all ordering fields.
+  
+  This structure aligns with other single-item subresource responses
+  (`/details`, `/descriptions`, `/pricings`).
+  
+  **ETIM xChange**: `Ordering`
+  **Path**: `Supplier[].Product[].TradeItem[].Ordering`
+required:
+  - data
+properties:
+  data:
+    $ref: ./TradeItemOrderingsResponseData.yaml
+examples:
+  - data:
+      supplierIdGln: "1234567890123"
+      supplierItemNumber: "SKU-12345"
+      ordering:
+        orderUnit: C62
+        minimumOrderQuantity: 1
+        orderStepSize: 1
+        standardOrderLeadTime: 5
+        useUnit: null
+        useUnitConversionFactor: null
+        singleUseUnitQuantity: null
+        alternativeUseUnit: null
+        alternativeUseUnitConversionFactor: null
+  - data:
+      supplierIdGln: "8712423012485"
+      supplierItemNumber: "SKU-CABLE-002"
+      ordering:
+        orderUnit: MTR
+        minimumOrderQuantity: 10
+        orderStepSize: 5
+        standardOrderLeadTime: 3
+        useUnit: MTR
+        useUnitConversionFactor: 1.0
+        singleUseUnitQuantity: 1.0
+        alternativeUseUnit: null
+        alternativeUseUnitConversionFactor: null

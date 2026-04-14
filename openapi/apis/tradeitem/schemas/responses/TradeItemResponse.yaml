@@ -1,0 +1,87 @@
+type: object
+description: |
+  Response containing a single trade item. No pagination metadata - returns exactly one trade item document.
+  Used for composite-key lookups via GET /trade-items/{supplierIdGln}/{supplierItemNumber}.
+required:
+  - data
+properties:
+  data:
+    $ref: ./TradeItemResponseData.yaml
+examples:
+  - data:
+      supplierIdGln: "1234567890123"
+      supplierItemNumber: "ART-12345"
+      supplierAltItemNumber: "ALT-12345"
+      manufacturerItemNumber: "MFG-98765"
+      manufacturerIdGln: "9876543210987"
+      itemGtins: ["4012345678901"]
+      buyerItemNumber: null
+      discountGroupId: "DG-001"
+      bonusGroupId: null
+      itemValidityDate: "2024-01-01"
+      itemObsolescenceDate: null
+      itemDetails:
+        itemStatus: ACTIVE
+        itemCondition: NEW
+        stockItem: true
+        shelfLifePeriod: null
+      ordering:
+        orderUnit: C62
+        minimumOrderQuantity: 1
+        orderStepSize: 1
+        standardOrderLeadTime: 5
+      pricings:
+        - pricingRef: "price-c62-1-20250101"
+          priceUnit: C62
+          priceQuantity: 1
+          currencyCode: EUR
+          priceOnRequest: false
+          netPrice: 100.0
+          grossListPrice: 130.0
+          recommendedRetailPrice: 150.0
+          vat: 21.0
+          priceValidityDate: "2025-01-01"
+          priceExpiryDate: "2025-12-31"
+          allowanceSurcharges:
+            - allowanceSurchargeIndicator: ALLOWANCE
+              allowanceSurchargeType: AEQ
+              allowanceSurchargeSequenceNumber: 1
+              allowanceSurchargePercentage: 10
+              allowanceSurchargeMinimumQuantity: 100
+      itemRelations: null
+      itemLogistics:
+        - baseItemNetLength: 25.5
+          baseItemNetWidth: 15.0
+          baseItemNetHeight: 10.0
+          netDimensionUnit: CMT
+          baseItemNetWeight: 500.0
+          netWeightUnit: GRM
+      itemAttachments: null
+      packagingUnits: null
+      itemCountrySpecificFields: null
+  - data:
+      supplierIdGln: "9876543210987"
+      supplierItemNumber: "SKU-MIN-001"
+      supplierAltItemNumber: null
+      manufacturerItemNumber: null
+      manufacturerIdGln: null
+      itemGtins: null
+      buyerItemNumber: null
+      discountGroupId: null
+      bonusGroupId: null
+      itemValidityDate: "2024-01-01"
+      itemObsolescenceDate: null
+      itemDetails:
+        itemStatus: ACTIVE
+        itemCondition: NEW
+        stockItem: true
+      ordering:
+        orderUnit: C62
+        minimumOrderQuantity: 1
+        orderStepSize: 1
+      pricings: null
+      itemRelations: null
+      itemLogistics: null
+      itemAttachments: null
+      packagingUnits: null
+      itemCountrySpecificFields: null

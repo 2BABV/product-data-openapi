@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 440" role="img" aria-labelledby="arch-title arch-desc">
+  <title id="arch-title">Architectural Overview</title>
+  <desc id="arch-desc">Diagram showing multiple client applications on the left communicating via GET requests with multiple server implementations on the right, governed by the OpenAPI Specification above and secured by OAuth 2.0 and DSGO below.</desc>
+
+  <defs>
+    <style>
+      text { font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; }
+      .band-bg  { fill: #f1f5f9; }
+      .band-border { fill: none; stroke: #e2e8f0; stroke-width: 1; }
+      .band-label { font-size: 15px; font-weight: 700; fill: #1e293b; }
+      .band-sub   { font-size: 11.5px; fill: #64748b; }
+      .client-box { fill: #ffffff; stroke: #4a9aea; stroke-width: 1.5; rx: 8; }
+      .server-box { fill: #ffffff; stroke: #00b4d8; stroke-width: 1.5; rx: 8; }
+      .box-title  { font-size: 13px; font-weight: 600; fill: #1e293b; }
+      .box-sub    { font-size: 10.5px; fill: #94a3b8; }
+      .arrow      { stroke: #cbd5e1; stroke-width: 1.5; fill: none; marker-end: url(#arrowhead); }
+      .arrow-label { font-size: 10px; font-weight: 600; fill: #2176cc; letter-spacing: 0.5px; }
+      .icon       { font-size: 18px; }
+    </style>
+    <marker id="arrowhead" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6" fill="none" stroke="#94a3b8" stroke-width="1.2" stroke-linejoin="round"/>
+    </marker>
+  </defs>
+
+  <!-- Top band: OpenAPI Specification -->
+  <rect x="0" y="0" width="820" height="64" class="band-bg"/>
+  <rect x="0" y="0" width="820" height="64" class="band-border"/>
+  <text x="410" y="30" text-anchor="middle" class="band-label">📐 OpenAPI Specification</text>
+  <text x="410" y="50" text-anchor="middle" class="band-sub">Shared contract between clients and servers</text>
+
+  <!-- Middle area: Clients and Servers -->
+
+  <!-- Client A -->
+  <rect x="50" y="96" width="180" height="68" class="client-box"/>
+  <text x="80" y="126" class="icon">🏢</text>
+  <text x="102" y="126" class="box-title">PIM System</text>
+  <text x="102" y="144" class="box-sub">Bulk sync, delta updates</text>
+
+  <!-- Client B -->
+  <rect x="50" y="192" width="180" height="68" class="client-box"/>
+  <text x="80" y="222" class="icon">🛒</text>
+  <text x="102" y="222" class="box-title">Webshop</text>
+  <text x="102" y="240" class="box-sub">Product details, pricing</text>
+
+  <!-- Client C -->
+  <rect x="50" y="288" width="180" height="68" class="client-box"/>
+  <text x="80" y="318" class="icon">📱</text>
+  <text x="102" y="318" class="box-title">Mobile App</text>
+  <text x="102" y="336" class="box-sub">Stock checks, lookups</text>
+
+  <!-- Server 1 -->
+  <rect x="590" y="96" width="180" height="68" class="server-box"/>
+  <text x="620" y="126" class="icon">🌐</text>
+  <text x="642" y="126" class="box-title">2BA</text>
+  <text x="642" y="144" class="box-sub">Datapool</text>
+
+  <!-- Server 2 -->
+  <rect x="590" y="192" width="180" height="68" class="server-box"/>
+  <text x="620" y="222" class="icon">🔗</text>
+  <text x="642" y="222" class="box-title">PIM System</text>
+  <text x="642" y="240" class="box-sub">Manufacturer/Supplier</text>
+
+  <!-- Server 3 -->
+  <rect x="590" y="288" width="180" height="68" class="server-box"/>
+  <text x="620" y="318" class="icon">⚙️</text>
+  <text x="642" y="318" class="box-title">Other Implementer</text>
+  <text x="642" y="336" class="box-sub">your-api.example.com</text>
+
+  <!-- Arrows: Client A → all servers -->
+  <line x1="230" y1="118" x2="590" y2="118" class="arrow"/>
+  <text x="398" y="112" text-anchor="middle" class="arrow-label">GET</text>
+
+  <line x1="230" y1="142" x2="590" y2="226" class="arrow"/>
+
+  <!-- Arrows: Client B → servers -->
+  <line x1="230" y1="226" x2="590" y2="226" class="arrow"/>
+  <text x="398" y="220" text-anchor="middle" class="arrow-label">GET</text>
+
+  <line x1="230" y1="238" x2="590" y2="322" class="arrow"/>
+
+  <!-- Arrows: Client C → servers -->
+  <line x1="230" y1="322" x2="590" y2="322" class="arrow"/>
+  <text x="398" y="316" text-anchor="middle" class="arrow-label">GET</text>
+
+  <line x1="230" y1="310" x2="590" y2="142" class="arrow"/>
+
+  <!-- Bottom band: OAuth 2.0 / DSGO -->
+  <rect x="0" y="380" width="820" height="60" class="band-bg"/>
+  <rect x="0" y="380" width="820" height="60" class="band-border"/>
+  <text x="410" y="408" text-anchor="middle" class="band-label">🔒 OAuth 2.0 / DSGO</text>
+  <text x="410" y="428" text-anchor="middle" class="band-sub">Authentication, authorization, and trust infrastructure</text>
+
+</svg>

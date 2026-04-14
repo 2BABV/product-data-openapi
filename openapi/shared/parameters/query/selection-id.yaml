@@ -1,0 +1,7 @@
+name: selectionId
+in: query
+description: Filter results by selection identifier. Used to retrieve a specific subset of items based on a predefined selection.
+required: false
+schema:
+  $ref: ../../schemas/identifiers/TechnicalId.yaml
+example: "SELECTION-2024-Q1"

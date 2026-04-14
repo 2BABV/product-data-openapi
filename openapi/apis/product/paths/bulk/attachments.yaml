@@ -1,0 +1,41 @@
+get:
+  operationId: getBulkProductAttachments
+  tags:
+    - Products bulk
+  summary: List product attachments
+  description: |
+    Retrieve product attachments in bulk with cursor-based pagination.
+    Returns a flattened structure where each row represents a single attachment file
+    with the product identifier (`manufacturerIdGln` + `manufacturerProductNumber`)
+    and attachment-level fields (`attachmentType`, `attachmentTypeSpecification`, `attachmentOrder`)
+    denormalized into each row.
+
+    A product with 2 attachment types, each with 2 files (e.g., different languages),
+    will result in 4 rows.
+
+    This flattened structure is optimized for:
+    - Predictable payload sizes per row
+    - Efficient cursor-based pagination
+    - ETL/data warehouse ingestion
+    - Streaming data processing
+  parameters:
+    - $ref: ../../../../shared/parameters/query/cursor.yaml
+    - $ref: ../../../../shared/parameters/query/limit.yaml
+    - $ref: ../../../../shared/parameters/query/selection-id.yaml
+    - $ref: ../../../../shared/parameters/query/manufacturer-id-gln-filter.yaml
+    - $ref: ../../../../shared/parameters/query/mutation-date-time.yaml
+  responses:
+    '200':
+      description: Successfully retrieved product attachments
+      content:
+        application/json:
+          schema:
+            $ref: ../../schemas/responses/BulkProductAttachmentsResponse.yaml
+    '400':
+      $ref: ../../../../shared/responses/400-bad-request.yaml
+    '401':
+      $ref: ../../../../shared/responses/401-unauthorized.yaml
+    '403':
+      $ref: ../../../../shared/responses/403-forbidden.yaml
+    '500':
+      $ref: ../../../../shared/responses/500-internal-server-error.yaml

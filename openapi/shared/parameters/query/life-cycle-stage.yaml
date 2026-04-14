@@ -1,0 +1,72 @@
+name: lifeCycleStage
+in: query
+description: |
+  Filter LCA declarations by life cycle stage(s) according to EN 15804.
+  Multiple stages can be specified to return declarations for those stages only.
+  If not specified, all stages are returned.
+  
+  Product stage (A):
+  - `A1`: Raw material supply
+  - `A2`: Transport to manufacturer
+  - `A3`: Manufacturing
+  - `A1-A3`: Combined product stage
+  - `A4`: Transport to building site
+  - `A5`: Installation into building
+  
+  Use stage (B):
+  - `B1`: Use/Application
+  - `B2`: Maintenance
+  - `B3`: Repair
+  - `B4`: Replacement
+  - `B5`: Refurbishment
+  - `B6`: Operational energy use
+  - `B7`: Operational water use
+  - `B1-B7`: Combined use stage
+  
+  End of life stage (C):
+  - `C1`: Deconstruction/demolition
+  - `C2`: Transport to waste processing
+  - `C3`: Waste processing
+  - `C4`: Disposal
+  - `C1-C4`: Combined end of life stage
+  
+  Beyond life cycle (D):
+  - `D`: Reuse, recovery, recycling potential
+required: false
+style: form
+explode: true
+schema:
+  type: array
+  items:
+    type: string
+    enum:
+      - "A1"
+      - "A2"
+      - "A3"
+      - "A1-A3"
+      - "A4"
+      - "A5"
+      - "B1"
+      - "B2"
+      - "B3"
+      - "B4"
+      - "B5"
+      - "B6"
+      - "B7"
+      - "B1-B7"
+      - "C1"
+      - "C2"
+      - "C3"
+      - "C4"
+      - "C1-C4"
+      - "D"
+examples:
+  productStage:
+    summary: Product stage only
+    value: ["A1-A3"]
+  multipleStages:
+    summary: Product and end-of-life stages
+    value: ["A1-A3", "C1-C4", "D"]
+  useStage:
+    summary: Operational energy use
+    value: ["B6"]

@@ -1,0 +1,51 @@
+type: object
+description: |
+  Bulk response containing item logistics details with cursor-based pagination.
+  
+  Each item in the `data` array represents a single logistics entry for a trade item,
+  with the trade item identifier embedded at top level. A trade item typically has 0 or 1
+  logistics entries.
+  
+  This flattened structure is optimized for ETL/data warehouse ingestion and
+  streaming data processing.
+required:
+  - data
+  - meta
+properties:
+  data:
+    type: array
+    description: Array of item logistics entries. Each row is one logistics entry per trade item.
+    items:
+      $ref: ../domain/ItemLogisticsSummary.yaml
+  meta:
+    $ref: ../../../../shared/schemas/common/CursorPaginationMetadata.yaml
+examples:
+  - data:
+      - supplierIdGln: "8712423012485"
+        supplierItemNumber: "SKU-LAMP-001"
+        baseItemNetLength: 96.0
+        baseItemNetWidth: 5.0
+        baseItemNetHeight: 56.0
+        baseItemNetDiameter: null
+        netDimensionUnit: CMT
+        baseItemNetWeight: 0.26
+        netWeightUnit: KGM
+        baseItemNetVolume: 68.0
+        netVolumeUnit: MMQ
+      - supplierIdGln: "1234567890123"
+        supplierItemNumber: "SKU-12345"
+        baseItemNetLength: 25.5
+        baseItemNetWidth: 15.0
+        baseItemNetHeight: 10.0
+        baseItemNetDiameter: null
+        netDimensionUnit: CMT
+        baseItemNetWeight: 500.0
+        netWeightUnit: GRM
+        baseItemNetVolume: null
+        netVolumeUnit: null
+    meta:
+      cursor: "eyJpZCI6MTIzfQ=="
+      hasNext: true
+      hasPrev: false
+      limit: 100
+      estimatedTotal: 12500

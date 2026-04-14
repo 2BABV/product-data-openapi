@@ -1,0 +1,158 @@
+type: object
+required:
+  - etimFeatureCode
+properties:
+  etimFeatureCode:
+    type: string
+    pattern: "^EF([0-9]{6}|I[0-9]{5}|[A-Z]{2}[0-9]{4})$"
+    description: |
+      ETIM standardized feature code identifying a specific product characteristic.
+      Format: EF followed by 6 digits, or EFI followed by 5 digits, or EF followed by 2 letters and 4 digits.
+      
+      **ETIM xChange**: `EtimFeatureCode`  
+      **Path**: `Supplier[].Product[].EtimClassification[].EtimFeatures[].EtimFeatureCode`
+    examples:
+      - "EF000123"
+      - "EFI00456"
+  
+  etimValueCode:
+    type: ["string", "null"]
+    pattern: "^EV[0-9]{6}$"
+    description: |
+      ETIM standardized value code for alphanumeric features (e.g., enumerations, selections).
+      Format: EV followed by 6 digits.
+      
+      **ETIM xChange**: `EtimValueCode`  
+      **Path**: `Supplier[].Product[].EtimClassification[].EtimFeatures[].EtimValueCode`
+    examples:
+      - "EV000789"
+      - null
+  
+  etimValueNumeric:
+    type: ["number", "null"]
+    format: decimal
+    multipleOf: 0.0001
+    minimum: -999999999999.9999
+    maximum: 999999999999.9999
+    description: |
+      Numeric value for the ETIM feature (supports up to 4 decimal places).
+      Converted from ETIM xChange string pattern to number type.
+      
+      **ETIM xChange**: `EtimValueNumeric` (string with pattern)  
+      **Path**: `Supplier[].Product[].EtimClassification[].EtimFeatures[].EtimValueNumeric`
+    examples:
+      - 230.0
+      - 50.5
+      - -10.25
+      - null
+  
+  etimValueRangeLower:
+    type: ["number", "null"]
+    format: decimal
+    multipleOf: 0.0001
+    minimum: -999999999999.9999
+    maximum: 999999999999.9999
+    description: |
+      Lower bound of a numeric range for the feature value.
+      Converted from ETIM xChange string pattern to number type.
+      
+      **ETIM xChange**: `EtimValueRangeLower` (string with pattern)  
+      **Path**: `Supplier[].Product[].EtimClassification[].EtimFeatures[].EtimValueRangeLower`
+    examples:
+      - 100.0
+      - 0.5
+      - null
+  
+  etimValueRangeUpper:
+    type: ["number", "null"]
+    format: decimal
+    multipleOf: 0.0001
+    minimum: -999999999999.9999
+    maximum: 999999999999.9999
+    description: |
+      Upper bound of a numeric range for the feature value.
+      Converted from ETIM xChange string pattern to number type.
+      
+      **ETIM xChange**: `EtimValueRangeUpper` (string with pattern)  
+      **Path**: `Supplier[].Product[].EtimClassification[].EtimFeatures[].EtimValueRangeUpper`
+    examples:
+      - 240.0
+      - 60.0
+      - null
+  
+  etimValueLogical:
+    type: ["boolean", "null"]
+    description: |
+      Boolean/logical value for yes/no type features.
+      
+      **ETIM xChange**: `EtimValueLogical`  
+      **Path**: `Supplier[].Product[].EtimClassification[].EtimFeatures[].EtimValueLogical`
+    examples:
+      - true
+      - false
+      - null
+  
+  etimValueDetails:
+    type: ["array", "null"]
+    items:
+      type: object
+      required:
+        - language
+        - etimValueDetails
+      properties:
+        language:
+          description: |
+            Language code for the value details.
+            Sourced from ETIM xChange `Language` at catalog level, denormalized into each record.
+          $ref: ../../../../shared/schemas/common/LanguageCode.yaml
+          examples:
+            - "en-GB"
+        etimValueDetails:
+          type: string
+          minLength: 1
+          maxLength: 255
+          description: Free-text details about the feature value
+          examples:
+            - "Special coating applied"
+    description: |
+      Multilingual free-text descriptions providing additional details about the feature value.
+      
+      **ETIM xChange**: `EtimValueDetails`  
+      **Path**: `Supplier[].Product[].EtimClassification[].EtimFeatures[].EtimValueDetails[]`
+    examples:
+      - - language: "en-GB"
+          etimValueDetails: "Certified for outdoor use"
+      - null
+  
+  reasonNoValue:
+    type: ["string", "null"]
+    enum:
+      - "MV"
+      - "NA"
+      - "UN"
+      - null
+    description: |
+      Reason code when no feature value is provided.
+      
+      - `MV`: Multiple values - feature has multiple applicable values
+      - `NA`: Not applicable - feature does not apply to this product
+      - `UN`: Unknown - value is currently unknown or unavailable
+      
+      **ETIM xChange**: `ReasonNoValue`  
+      **Path**: `Supplier[].Product[].EtimClassification[].EtimFeatures[].ReasonNoValue`
+    examples:
+      - "NA"
+      - null
+
+examples:
+  - etimFeatureCode: "EF000123"
+    etimValueCode: "EV000789"
+  - etimFeatureCode: "EF000456"
+    etimValueNumeric: 230.0
+  - etimFeatureCode: "EF000789"
+    etimValueRangeLower: 100.0
+    etimValueRangeUpper: 240.0
+  - etimFeatureCode: "EF001234"
+    etimValueLogical: true
+  - etimFeatureCode: "EF005678"
+    reasonNoValue: "NA"

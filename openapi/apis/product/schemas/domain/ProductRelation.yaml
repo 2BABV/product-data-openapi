@@ -1,0 +1,36 @@
+type: object
+required:
+  - relationType
+  - relatedProducts
+properties:
+  relationType:
+    $ref: ../enums/ProductRelationType.yaml
+    description: |
+      Type of relationship between the current product and related products.
+      
+      **ETIM xChange**: `RelationType`  
+      **Path**: `Supplier[].Product[].ProductRelations[].RelationType`
+  
+  relatedProducts:
+    type: array
+    minItems: 1
+    items:
+      $ref: ./RelatedProduct.yaml
+    description: |
+      Array of related products for this relationship type.
+      
+      **ETIM xChange**: `RelatedProducts`  
+      **Path**: `Supplier[].Product[].ProductRelations[].RelatedProducts[]`
+
+examples:
+  - relationType: "ACCESSORY"
+    relatedProducts:
+      - relatedManufacturerProductNumber: "LED-REMOTE-001"
+        relatedProductGtin: ["8718699673840"]
+        relatedProductQuantity: 1
+  - relationType: "SPAREPART"
+    relatedProducts:
+      - relatedManufacturerProductNumber: "SPARE-LENS-42"
+        relatedProductQuantity: 1
+      - relatedManufacturerProductNumber: "SPARE-SEAL-43"
+        relatedProductQuantity: 2

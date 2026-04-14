@@ -1,0 +1,29 @@
+type: object
+description: |
+  Product ETIM classification information for bulk retrieval.
+  Contains ETIM class codes, versions, and feature data.
+required:
+  - manufacturerIdGln
+  - manufacturerProductNumber
+properties:
+  manufacturerIdGln:
+    $ref: ../../../../shared/schemas/identifiers/Gln.yaml
+  manufacturerProductNumber:
+    type: string
+    minLength: 1
+    maxLength: 35
+  etimClassifications:
+    type: ["array", "null"]
+    items:
+      $ref: ./EtimClassification.yaml
+
+examples:
+  - manufacturerIdGln: "1234567890123"
+    manufacturerProductNumber: "929002376910"
+    etimClassifications:
+      - etimClassCode: "EC002745"
+        etimClassVersion: 1
+        etimReleaseVersion: "9.0"
+        etimFeatures:
+          - etimFeatureCode: "EF000123"
+            etimValueCode: "EV000789"

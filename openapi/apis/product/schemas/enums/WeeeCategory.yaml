@@ -1,0 +1,26 @@
+type: ["string", "null"]
+enum:
+  - "1"
+  - "2"
+  - "3"
+  - "4"
+  - "5"
+  - "6"
+  - null
+description: |
+  WEEE (Waste Electrical and Electronic Equipment) category for electronic products according to EU directive.
+  
+  Categories:
+  - `1`: Large household appliances
+  - `2`: Small household appliances
+  - `3`: IT and telecommunications equipment
+  - `4`: Consumer equipment (audio/video)
+  - `5`: Lighting equipment
+  - `6`: Electrical and electronic tools
+  
+  **ETIM xChange**: `WeeeCategory`  
+  **Path**: `Supplier[].Product[].Legislation.WeeeCategory`
+examples:
+  - "3"
+  - "5"
+  - null

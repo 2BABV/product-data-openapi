@@ -1,0 +1,58 @@
+type: object
+description: |
+  Bulk response containing trade item attachments with cursor-based pagination.
+
+  Each item in the `data` array represents a single attachment for a trade item.
+  A trade item with 3 attachments will result in 3 rows.
+
+  This flattened structure is optimized for ETL/data warehouse ingestion and
+  streaming data processing.
+required:
+  - data
+  - meta
+properties:
+  data:
+    type: array
+    description: Array of item attachments. Each row is one attachment per trade item.
+    items:
+      $ref: ../domain/ItemAttachmentSummary.yaml
+  meta:
+    $ref: ../../../../shared/schemas/common/CursorPaginationMetadata.yaml
+examples:
+  - data:
+      - supplierIdGln: "8712423012485"
+        supplierItemNumber: "SKU-LAMP-001"
+        attachmentType: "ATX001"
+        attachmentTypeSpecification: "MDX002"
+        attachmentLanguages: null
+        attachmentFilename: "product_image.jpg"
+        attachmentUri: "https://example.com/images/product.jpg"
+        attachmentDescription: "Front view product image"
+        attachmentIssueDate: "2024-01-15"
+        attachmentExpiryDate: null
+      - supplierIdGln: "8712423012485"
+        supplierItemNumber: "SKU-LAMP-001"
+        attachmentType: "ATX014"
+        attachmentTypeSpecification: "MDX005"
+        attachmentLanguages: ["en-GB"]
+        attachmentFilename: "datasheet-en.pdf"
+        attachmentUri: "https://cdn.supplier.com/datasheets/datasheet-en.pdf"
+        attachmentDescription: "Technical datasheet"
+        attachmentIssueDate: "2024-06-15"
+        attachmentExpiryDate: null
+      - supplierIdGln: "9876543210987"
+        supplierItemNumber: "ITEM-67890"
+        attachmentType: "ATX026"
+        attachmentTypeSpecification: null
+        attachmentLanguages: null
+        attachmentFilename: "ce-certificate.pdf"
+        attachmentUri: "https://cdn.supplier.com/certs/ce-certificate.pdf"
+        attachmentDescription: null
+        attachmentIssueDate: "2024-03-01"
+        attachmentExpiryDate: "2029-03-01"
+    meta:
+      cursor: "eyJpZCI6MTIzfQ=="
+      hasNext: true
+      hasPrev: false
+      limit: 100
+      estimatedTotal: 24500

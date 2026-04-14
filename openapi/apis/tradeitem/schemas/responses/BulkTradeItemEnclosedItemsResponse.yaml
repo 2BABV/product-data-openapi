@@ -1,0 +1,49 @@
+type: object
+description: |
+  Bulk response containing enclosed items with cursor-based pagination.
+
+  Each item in the `data` array represents a single enclosed item within a packaging unit.
+  A trade item with 2 packaging units, each containing 3 enclosed items, will result in 6 rows.
+
+  This flattened structure is optimized for ETL/data warehouse ingestion and
+  streaming data processing.
+required:
+  - data
+  - meta
+properties:
+  data:
+    type: array
+    description: Array of enclosed items. Each row is one enclosed item per packaging unit per trade item.
+    items:
+      $ref: ../domain/TradeItemEnclosedSummary.yaml
+  meta:
+    $ref: ../../../../shared/schemas/common/CursorPaginationMetadata.yaml
+examples:
+  - data:
+      - supplierIdGln: "1234567890123"
+        supplierItemNumber: "SKU-KIT-001"
+        packagingTypeCode: BX
+        enclosedSupplierItemNumber: "WIDGET-001"
+        enclosedManufacturerItemNumber: "MFG-WIDGET-001"
+        enclosedItemGtins: ["4012345678901"]
+        enclosedItemQuantity: 5
+      - supplierIdGln: "1234567890123"
+        supplierItemNumber: "SKU-KIT-001"
+        packagingTypeCode: BX
+        enclosedSupplierItemNumber: "SCREW-M8-50"
+        enclosedManufacturerItemNumber: null
+        enclosedItemGtins: null
+        enclosedItemQuantity: 100
+      - supplierIdGln: "9876543210987"
+        supplierItemNumber: "SKU-PALLET-002"
+        packagingTypeCode: PF
+        enclosedSupplierItemNumber: "WIDGET-001"
+        enclosedManufacturerItemNumber: "MFG-WIDGET-001"
+        enclosedItemGtins: ["4012345678901"]
+        enclosedItemQuantity: 50
+    meta:
+      cursor: "eyJpZCI6MTIzfQ=="
+      hasNext: true
+      hasPrev: false
+      limit: 100
+      estimatedTotal: 2340

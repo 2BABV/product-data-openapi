@@ -1,0 +1,192 @@
+type: object
+description: |
+  Pricing information with associated trade item identifiers for bulk pricing queries.
+  Combines trade item identification with pricing details in a flattened structure.
+  **ETIM xChange**: Combination of `TradeItem.ItemIdentification` and `TradeItem.Pricing[]`
+required:
+  - supplierIdGln
+  - supplierItemNumber
+  - pricingRef
+  - priceUnit
+  - priceQuantity
+  - currencyCode
+  - priceValidityDate
+properties:
+  # Trade item identification
+  supplierIdGln:
+    description: |
+      Global Location Number (GLN) of the supplier.
+      **ETIM xChange**: Inherited from `Supplier[].SupplierId.SupplierIdGln`
+    $ref: ../../../../shared/schemas/identifiers/Gln.yaml
+  
+  supplierItemNumber:
+    type: string
+    description: |
+      Supplier's unique item number.
+      **ETIM xChange**: `SupplierItemNumber`
+      **Path**: `Supplier[].Product[].TradeItem[].ItemIdentification.SupplierItemNumber`
+    minLength: 1
+    maxLength: 35
+    examples:
+      - "SKU-12345"
+      - "ITEM-ABC-789"
+  
+  pricingRef:
+    description: |
+      Server-generated opaque reference key that uniquely identifies this pricing entry
+      within the scope of a trade item (identified by `supplierIdGln` + `supplierItemNumber`).
+      
+      This is a technical identifier not present in the ETIM xChange domain model.
+      Use `pricingRef` to correlate pricing entries with their allowances/surcharges
+      from the `/allowance-surcharges` or `/trade-items/bulk/allowance-surcharges` endpoint.
+    $ref: ../../../../shared/schemas/identifiers/TechnicalId.yaml
+    examples:
+      - "price-c62-1-20250101"
+      - "f47ac10b-58cc-4372-a567-0e02b2c3d479"
+  
+  # Pricing fields (flattened from ItemPricing)
+  priceUnit:
+    description: |
+      Unit for which the price applies.
+      **ETIM xChange**: `PriceUnit`
+      **Path**: `Supplier[].Product[].TradeItem[].Pricing[].PriceUnit`
+    $ref: ../../../../shared/schemas/common/UnitCodes.yaml
+  
+  priceUnitFactor:
+    type: ["number", "null"]
+    format: decimal
+    description: |
+      Factor to convert price unit to order unit (converted from ETIM xChange string to number).
+      **ETIM xChange**: `PriceUnitFactor` (string with pattern)
+    minimum: 0
+    multipleOf: 0.0001
+    maximum: 99999999999.9999
+    examples:
+      - 1.0
+      - 100.0
+      - null
+  
+  priceQuantity:
+    type: number
+    format: decimal
+    description: |
+      Quantity for which the price applies (converted from ETIM xChange string to number).
+      **ETIM xChange**: `PriceQuantity` (string with pattern)
+    minimum: 0
+    multipleOf: 0.0001
+    maximum: 99999.9999
+    examples:
+      - 1
+      - 10
+      - 100
+  currencyCode:
+    description: |
+      Currency code for all monetary values in this pricing entry.
+      Sourced from ETIM xChange `CurrencyCode` at catalog level.
+    $ref: ../../../../shared/schemas/common/CurrencyCode.yaml
+    examples:
+      - EUR
+  
+  priceOnRequest:
+    type: ["boolean", "null"]
+    description: |
+      Indicates whether the price is available only on request.
+      **ETIM xChange**: `PriceOnRequest`
+    examples:
+      - false
+      - true
+      - null
+  
+  grossListPrice:
+    type: ["number", "null"]
+    format: decimal
+    description: |
+      Gross list price (before discounts) (converted from ETIM xChange string to number).
+      **ETIM xChange**: `GrossListPrice` (string with pattern)
+    minimum: 0
+    multipleOf: 0.0001
+    maximum: 99999999999.9999
+    examples:
+      - 130.0
+      - 1500.0
+      - null
+  
+  netPrice:
+    type: ["number", "null"]
+    format: decimal
+    description: |
+      Net price (after discounts, before tax) (converted from ETIM xChange string to number).
+      **ETIM xChange**: `NetPrice` (string with pattern)
+    minimum: 0
+    multipleOf: 0.0001
+    maximum: 99999999999.9999
+    examples:
+      - 100.0
+      - 1200.0
+      - null
+  
+  recommendedRetailPrice:
+    type: ["number", "null"]
+    format: decimal
+    description: |
+      Recommended retail price (MSRP) (converted from ETIM xChange string to number).
+      **ETIM xChange**: `RecommendedRetailPrice` (string with pattern)
+    minimum: 0
+    multipleOf: 0.0001
+    maximum: 99999999999.9999
+    examples:
+      - 150.0
+      - 1800.0
+      - null
+  
+  vat:
+    type: ["number", "null"]
+    format: decimal
+    description: |
+      VAT/tax percentage (converted from ETIM xChange string to number).
+      **ETIM xChange**: `Vat` (string with pattern)
+    minimum: 0
+    multipleOf: 0.01
+    maximum: 99.99
+    examples:
+      - 21.0
+      - 19.0
+      - null
+  
+  priceValidityDate:
+    type: string
+    format: date
+    description: |
+      Date from which the price is valid. ISO 8601 date format (YYYY-MM-DD).
+      Defaults to CatalogueValidityStart if not overridden at the pricing level.
+      
+      **ETIM xChange**: `PriceValidityDate`  
+      **Default from**: `CatalogueValidityStart`
+    examples:
+      - "2025-01-01"
+  
+  priceExpiryDate:
+    type: ["string", "null"]
+    format: date
+    description: |
+      Date when the price expires. ISO 8601 date format (YYYY-MM-DD).
+      **ETIM xChange**: `PriceExpiryDate`
+    examples:
+      - "2025-12-31"
+      - null
+
+examples:
+  - supplierIdGln: "4012345000016"
+    supplierItemNumber: "SKU-12345"
+    pricingRef: "price-c62-1-20250101"
+    priceUnit: C62
+    priceUnitFactor: null
+    priceQuantity: 1
+    currencyCode: EUR
+    priceOnRequest: false
+    grossListPrice: 130.0
+    netPrice: 100.0
+    recommendedRetailPrice: 150.0
+    vat: 21.0
+    priceValidityDate: "2025-01-01"
+    priceExpiryDate: "2025-12-31"

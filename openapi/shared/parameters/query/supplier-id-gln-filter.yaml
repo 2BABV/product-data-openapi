@@ -1,0 +1,10 @@
+name: supplierIdGln
+in: query
+description: Filter trade items by supplier's Global Location Number (GLN)
+required: false
+schema:
+  $ref: ../../schemas/identifiers/Gln.yaml
+examples:
+  supplierIdGlnExample:
+    value: '4012345000016'
+    summary: Example supplier ID GLN

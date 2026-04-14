@@ -1,0 +1,11 @@
+type: string
+description: >-
+  Generic technical identifier that can hold an integer, string, or GUID/UUID value.
+  Used for opaque system-generated identifiers such as selection IDs, internal references,
+  and other technical keys where the format is not prescribed.
+minLength: 1
+maxLength: 50
+examples:
+  - 'SELECTION-2024-Q1'
+  - '123456'
+  - 'f47ac10b-58cc-4372-a567-0e02b2c3d479'

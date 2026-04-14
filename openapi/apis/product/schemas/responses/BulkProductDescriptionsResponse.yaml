@@ -1,0 +1,42 @@
+type: object
+required:
+  - data
+  - meta
+properties:
+  data:
+    type: array
+    items:
+      $ref: ../domain/ProductDescriptionsSummary.yaml
+    description: |
+      Array of flattened product descriptions.
+      Each row represents a single language description with the product identifier.
+  meta:
+    $ref: ../../../../shared/schemas/common/CursorPaginationMetadata.yaml
+    description: Cursor-based pagination metadata
+
+examples:
+  - data:
+      - manufacturerIdGln: "1234567890123"
+        manufacturerProductNumber: "929002376910"
+        descriptionLanguage: "en-GB"
+        minimalProductDescription: "LED Smart Bulb E27"
+        uniqueMainProductDescription: "Philips Hue White and Color Ambiance E27 LED Smart Bulb"
+        fullProductDescription: "The Philips Hue White and Color Ambiance E27 LED Smart Bulb offers 16 million colors..."
+        productKeyword: ["smart lighting", "LED", "color"]
+        productPageUrl: "https://www.philips.com/products/hue-white-color-e27"
+      - manufacturerIdGln: "1234567890123"
+        manufacturerProductNumber: "929002376910"
+        descriptionLanguage: "de-DE"
+        minimalProductDescription: "LED Smart Lampe E27"
+        uniqueMainProductDescription: "Philips Hue White and Color Ambiance E27 LED Smart Lampe"
+      - manufacturerIdGln: "1234567890123"
+        manufacturerProductNumber: "929002376911"
+        descriptionLanguage: "en-GB"
+        minimalProductDescription: "LED Downlight 10W"
+        uniqueMainProductDescription: "Philips CoreLine Recessed LED Downlight 10W 4000K"
+    meta:
+      cursor: "eyJpZCI6MTIzfQ=="
+      hasNext: true
+      hasPrev: false
+      limit: 100
+      estimatedTotal: 4523

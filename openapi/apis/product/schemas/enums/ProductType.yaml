@@ -1,0 +1,22 @@
+type: ["string", "null"]
+enum:
+  - "PHYSICAL"
+  - "CONTRACT"
+  - "LICENCE"
+  - "SERVICE"
+  - null
+description: |
+  Type classification of the product.
+  
+  - `PHYSICAL`: Physical product (tangible item)
+  - `CONTRACT`: Service contract or agreement
+  - `LICENCE`: Software or usage license
+  - `SERVICE`: Service offering
+  
+  **ETIM xChange**: `ProductType`  
+  **Path**: `Supplier[].Product[].ProductDetails.ProductType`
+examples:
+  - "PHYSICAL"
+  - "SERVICE"
+  - "LICENCE"
+  - null

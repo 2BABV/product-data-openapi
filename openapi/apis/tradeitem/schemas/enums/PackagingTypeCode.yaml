@@ -1,0 +1,45 @@
+type: string
+description: |
+  Type of packaging for the trade item or packaging unit.
+  **ETIM xChange**: `PackagingTypeCode`
+  **Path**: `Supplier[].Product[].TradeItem[].PackagingUnit[].PackagingIdentification.PackagingTypeCode`
+enum:
+  - BE    # Bundle
+  - BG    # Bag
+  - BJ    # Bucket
+  - BO    # Bottle
+  - BR    # Bar
+  - BX    # Box
+  - C62   # Piece
+  - CA    # Can
+  - CL    # Coil
+  - CQ    # Cartridge
+  - CR    # Crate
+  - CS    # Case
+  - CT    # Carton
+  - CY    # Cylinder
+  - D99   # Undefined
+  - DR    # Drum
+  - EV    # Envelope
+  - KG    # Keg
+  - NE    # Nest
+  - PA    # Packet
+  - PF    # Pallet
+  - PK    # Package
+  - PL    # Pail
+  - PR    # Pair
+  - PU    # Tray/Pallet
+  - RG    # Ring
+  - RL    # Reel
+  - RO    # Roll
+  - SA    # Sack
+  - SET   # Set
+  - TN    # Tin
+  - TU    # Tube
+  - WR    # Wrapper
+  - Z2    # Sales Unit
+  - Z3    # Transport Unit
+examples:
+  - BX
+  - PA
+  - PF

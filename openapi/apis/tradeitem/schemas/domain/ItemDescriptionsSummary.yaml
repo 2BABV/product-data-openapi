@@ -1,0 +1,129 @@
+type: object
+description: |
+  Flattened trade item description for bulk retrieval.
+  Each row represents a single language description with the trade item identifier.
+  
+  This flattened structure is optimized for:
+  - Predictable payload sizes per row
+  - Efficient cursor-based pagination
+  - ETL/data warehouse ingestion
+  - Streaming data processing
+  - Language filtering at row level
+  
+  **Payload Optimization**: Optional properties with null values may be omitted from the response
+  to minimize payload size. Clients should treat missing properties as null/not applicable.
+  
+  **ETIM xChange**: `ItemDetails.ItemDescriptions`  
+  **Path**: `Supplier[].Product[].TradeItem[].ItemDetails.ItemDescriptions[]`
+required:
+  - supplierIdGln
+  - supplierItemNumber
+  - descriptionLanguage
+  - minimalItemDescription
+properties:
+  supplierIdGln:
+    $ref: ../../../../shared/schemas/identifiers/Gln.yaml
+    description: |
+      Global Location Number (GLN) identifying the supplier.
+      13-digit GS1 identifier. Part of the composite trade item identifier.
+    examples:
+      - "1234567890123"
+  supplierItemNumber:
+    type: string
+    minLength: 1
+    maxLength: 35
+    description: |
+      Supplier's unique item identifier.
+      Part of the composite trade item identifier.
+      
+      **ETIM xChange**: `SupplierItemNumber`  
+      **Path**: `Supplier[].Product[].TradeItem[].ItemIdentification.SupplierItemNumber`
+    examples:
+      - "SKU-12345"
+      - "ITEM-ABC-789"
+  descriptionLanguage:
+    description: |
+      Language code for the description in ISO 639-1 and ISO 3166-1 format (e.g., "en-GB", "de-DE").
+      Sourced from ETIM xChange `Language` at catalog level, denormalized into each description record.
+      
+      **ETIM xChange**: `DescriptionLanguage`  
+      **Path**: `Supplier[].Product[].TradeItem[].ItemDetails.ItemDescriptions[].DescriptionLanguage`
+    $ref: ../../../../shared/schemas/common/LanguageCode.yaml
+    examples:
+      - "en-GB"
+      - "de-DE"
+      - "nl-NL"
+  minimalItemDescription:
+    type: string
+    minLength: 1
+    maxLength: 80
+    description: |
+      Short item description (maximum 80 characters). Minimal required description for item identification.
+      
+      **ETIM xChange**: `MinimalItemDescription`  
+      **Path**: `Supplier[].Product[].TradeItem[].ItemDetails.ItemDescriptions[].MinimalItemDescription`
+    examples:
+      - "LED Lamp 10W E27"
+      - "Hammer 500g"
+  uniqueMainItemDescription:
+    type: ["string", "null"]
+    minLength: 1
+    maxLength: 255
+    description: |
+      Unique main item description (maximum 255 characters). 
+      A concise but comprehensive description that uniquely identifies the trade item.
+      
+      **ETIM xChange**: `UniqueMainItemDescription`  
+      **Path**: `Supplier[].Product[].TradeItem[].ItemDetails.ItemDescriptions[].UniqueMainItemDescription`
+    examples:
+      - "Professional LED lamp with E27 socket, 10W warm white"
+      - "Professional claw hammer with fiberglass handle, 500g head weight"
+  discountGroupDescription:
+    type: ["string", "null"]
+    minLength: 1
+    maxLength: 100
+    description: |
+      Human-readable description of the discount group in this language.
+      
+      **ETIM xChange**: `DiscountGroupDescription[].DiscountGroupDescription`  
+      **Path**: `Supplier[].Product[].TradeItem[].ItemIdentification.DiscountGroupDescription[].DiscountGroupDescription`
+    examples:
+      - "Standard tools discount group"
+      - null
+  bonusGroupDescription:
+    type: ["string", "null"]
+    minLength: 1
+    maxLength: 100
+    description: |
+      Human-readable description of the bonus group in this language.
+      
+      **ETIM xChange**: `BonusGroupDescription[].BonusGroupDescription`  
+      **Path**: `Supplier[].Product[].TradeItem[].ItemIdentification.BonusGroupDescription[].BonusGroupDescription`
+    examples:
+      - "Premium bonus tier"
+      - null
+
+examples:
+  # English description
+  - supplierIdGln: "1234567890123"
+    supplierItemNumber: "SKU-12345"
+    descriptionLanguage: "en-GB"
+    minimalItemDescription: "LED Lamp 10W E27"
+    uniqueMainItemDescription: "Professional LED lamp with E27 socket, 10W warm white"
+    discountGroupDescription: "Lighting products discount group"
+    bonusGroupDescription: null
+  
+  # German description for same item
+  - supplierIdGln: "1234567890123"
+    supplierItemNumber: "SKU-12345"
+    descriptionLanguage: "de-DE"
+    minimalItemDescription: "LED Lampe 10W E27"
+    uniqueMainItemDescription: "Professionelle LED-Lampe mit E27-Fassung, 10W warmweiß"
+    discountGroupDescription: "Beleuchtungsprodukte Rabattgruppe"
+    bonusGroupDescription: null
+  
+  # Minimal description only
+  - supplierIdGln: "9876543210987"
+    supplierItemNumber: "ITEM-67890"
+    descriptionLanguage: "en-GB"
+    minimalItemDescription: "Hammer 500g"

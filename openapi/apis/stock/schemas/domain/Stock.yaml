@@ -1,0 +1,28 @@
+type: object
+description: Stock availability and quantity information for a trade item.
+required:
+  - quantity
+  - available
+properties:
+  quantity:
+    type: number
+    format: decimal
+    minimum: 0
+    multipleOf: 0.0001
+    maximum: 999999999999.9999
+    description: The available stock quantity for the trade item.
+    examples:
+      - 150.50
+      - 0
+      - 2.5
+  available:
+    type: boolean
+    description: Indicates whether the item is currently available for order.
+    examples:
+      - true
+      - false
+examples:
+  - quantity: 150.50
+    available: true
+  - quantity: 0
+    available: false

@@ -1,0 +1,25 @@
+type: string
+description: |
+  Type of relationship between trade items.
+  **ETIM xChange**: `RelationType`
+  **Path**: `Supplier[].Product[].TradeItem[].ItemRelations[].RelationType`
+enum:
+  - ACCESSORY
+  - CONSISTS_OF
+  - CONSUMABLES
+  - CROSS-SELLING
+  - MAIN_PRODUCT
+  - MANDATORY
+  - PREDECESSOR
+  - REFURBISHED
+  - SELECT
+  - SIMILAR
+  - SPAREPART
+  - SUCCESSOR
+  - UPSELLING
+  - USED
+  - OTHER
+examples:
+  - SPAREPART
+  - ACCESSORY
+  - MANDATORY

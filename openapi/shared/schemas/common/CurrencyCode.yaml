@@ -1,0 +1,15 @@
+type: string
+description: ISO 4217 currency code
+enum:
+  - EUR
+  - USD
+  - GBP
+  - CHF
+  - SEK
+  - NOK
+  - DKK
+  - PLN
+  - CZK
+examples:
+  - EUR
+  - USD

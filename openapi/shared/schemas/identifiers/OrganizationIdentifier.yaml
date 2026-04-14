@@ -1,0 +1,7 @@
+oneOf:
+  - $ref: ./Gln.yaml
+  - $ref: ./Duns.yaml
+description: Organization identifier - can be either GLN or DUNS
+examples:
+  - '4012345000016'
+  - '123456789'

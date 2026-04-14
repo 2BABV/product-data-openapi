@@ -1,0 +1,98 @@
+get:
+  operationId: getTradeItemDetails
+  tags:
+    - TradeItems single
+  summary: Get trade item details
+  description: |
+    Retrieve item identification and details for a specific trade item.
+    
+    This endpoint returns comprehensive trade item information including:
+    - Alternative item numbers (supplier, manufacturer, buyer)
+    - Global Trade Item Numbers (GTINs)
+    - Discount and bonus group information
+    - Validity and obsolescence dates
+    - Item status and condition
+    
+    **Note**: Item descriptions are available via the separate `/descriptions` endpoint.
+    
+    The trade item key (`supplierIdGln` + `supplierItemNumber`) is at the root level,
+    with details nested inside. This structure aligns with other single-item subresource responses.
+
+    **Examples**: Example payloads show documented fields only. Clients must accept and ignore additional fields, including nested fields, when they are added in backward-compatible updates.
+    
+    **No pagination** - Returns exactly one trade item's details or 404 if not found.
+  parameters:
+    - $ref: ../../../shared/parameters/path/supplier-id-gln.yaml
+    - $ref: ../../../shared/parameters/path/supplier-item-number.yaml
+  responses:
+    '200':
+      description: Successfully retrieved trade item details
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/responses/TradeItemDetailsResponse.yaml
+          examples:
+            fullDetails:
+              summary: Complete trade item details
+              value:
+                data:
+                  supplierIdGln: "1234567890123"
+                  supplierItemNumber: "SKU-12345"
+                  details:
+                    supplierAltItemNumber: "ALT-12345"
+                    manufacturerItemNumber: "MFG-98765"
+                    manufacturerIdGln: "9876543210987"
+                    manufacturerProductNumber: "929002376910"
+                    itemGtins: ["4012345678901"]
+                    buyerItemNumber: "BUYER-XYZ-123"
+                    discountGroupId: "DG-001"
+                    bonusGroupId: "BG-002"
+                    itemValidityDate: "2024-01-01"
+                    itemObsolescenceDate: "2026-12-31"
+                    itemStatus: "ACTIVE"
+                    itemCondition: "NEW"
+                    stockItem: true
+                    shelfLifePeriod: 365
+            minimalDetails:
+              summary: Minimal trade item details
+              value:
+                data:
+                  supplierIdGln: "9876543210987"
+                  supplierItemNumber: "SKU-MIN-001"
+                  details:
+                    supplierAltItemNumber: null
+                    manufacturerItemNumber: null
+                    manufacturerIdGln: "1234567890123"
+                    manufacturerProductNumber: "PROD-BASIC-001"
+                    itemGtins: null
+                    buyerItemNumber: null
+                    discountGroupId: null
+                    bonusGroupId: null
+                    itemValidityDate: "2024-01-01"
+                    itemObsolescenceDate: null
+                    itemStatus: "ACTIVE"
+                    itemCondition: "NEW"
+                    stockItem: true
+                    shelfLifePeriod: null
+    '400':
+      $ref: ../../../shared/responses/400-bad-request.yaml
+    '401':
+      $ref: ../../../shared/responses/401-unauthorized.yaml
+    '403':
+      $ref: ../../../shared/responses/403-forbidden.yaml
+    '404':
+      description: Trade item not found
+      content:
+        application/json:
+          schema:
+            $ref: ../../../shared/schemas/common/ProblemDetails.yaml
+          examples:
+            notFound:
+              summary: Trade item not found
+              value:
+                type: about:blank
+                title: Not Found
+                status: 404
+                detail: "No trade item found with supplier GLN '1234567890123' and item number 'UNKNOWN-SKU'"
+    '500':
+      $ref: ../../../shared/responses/500-internal-server-error.yaml

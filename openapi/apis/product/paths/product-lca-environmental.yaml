@@ -1,0 +1,100 @@
+get:
+  operationId: getProductLcaEnvironmental
+  tags:
+    - Products single
+  summary: Get product LCA environmental
+  description: |
+    Retrieve Life Cycle Assessment (LCA) environmental data for a specific 
+    manufacturer product combination.
+    
+    This endpoint returns Environmental Product Declaration (EPD) information including:
+    - Declared unit (unit and quantity)
+    - Reference service lifetime
+    - Third-party verification status
+    - EPD operator and registration details
+    - Product Category Rules (PCR) references
+    - Life cycle declarations for different stages (A1-A3, B1-B7, C1-C4, D)
+    
+    The product key is at the root level, with LCA environmental data nested inside.
+    This structure aligns with other single-product subresource responses.
+
+    **Examples**: Example payloads show documented fields only. Clients must accept and ignore additional fields, including nested fields, when they are added in backward-compatible updates.
+    
+    **No pagination** - Returns exactly one product's LCA data or 404 if not found.
+    Returns `null` for `lcaEnvironmental` if the product exists but has no LCA data.
+  parameters:
+    - $ref: ../../../shared/parameters/path/manufacturer-id-gln.yaml
+    - $ref: ../../../shared/parameters/path/manufacturer-product-number.yaml
+  responses:
+    '200':
+      description: Successfully retrieved product LCA environmental data
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/responses/ProductLcaEnvironmentalResponse.yaml
+          examples:
+            fullLcaData:
+              summary: Complete LCA environmental data with EPD
+              value:
+                data:
+                  manufacturerIdGln: "1234567890123"
+                  manufacturerProductNumber: "929002376910"
+                  lcaEnvironmental:
+                    declaredUnitUnit: "PCE"
+                    declaredUnitQuantity: 1
+                    lcaReferenceLifetime: 25
+                    thirdPartyVerification: "externally"
+                    epdValidityStartDate: "2024-01-01"
+                    epdValidityExpiryDate: "2029-12-31"
+                    epdOperatorName: "The International EPD System"
+                    epdOperatorUri: "https://www.environdec.com"
+                    operatorEpdId: "S-P-12345"
+                    manufacturerEpdId: "MFR-EPD-LED-2024-001"
+                    productCategoryRulesDescription: "PCR 2019:14 Lighting equipment"
+                    productCategoryRulesUri: "https://www.environdec.com/pcr-library/pcr-2019-14"
+                    functionalUnitDescription:
+                      - language: "en-GB"
+                        functionalUnitDescription: "One LED bulb providing 806 lumens for 25,000 hours"
+                    lcaDeclaration:
+                      - lifeCycleStage: "A1-A3"
+                        lcaDeclarationIndicator: "MDE"
+                        declaredUnitGwpTotal: 15.75
+                        declaredUnitGwpFossil: 14.25
+                        declaredUnitGwpBiogenic: 1.2
+                        declaredUnitAp: 0.05
+                        declaredUnitAdpf: 185.5
+                      - lifeCycleStage: "C1-C4"
+                        lcaDeclarationIndicator: "AGG"
+                        declaredUnitGwpTotal: 2.5
+                      - lifeCycleStage: "D"
+                        lcaDeclarationIndicator: "MDE"
+                        declaredUnitGwpTotal: -5.2
+            noLcaData:
+              summary: Product without LCA data
+              value:
+                data:
+                  manufacturerIdGln: "1234567890123"
+                  manufacturerProductNumber: "LED-NO-EPD-001"
+                  lcaEnvironmental: null
+    '400':
+      $ref: ../../../shared/responses/400-bad-request.yaml
+    '401':
+      $ref: ../../../shared/responses/401-unauthorized.yaml
+    '403':
+      $ref: ../../../shared/responses/403-forbidden.yaml
+    '404':
+      description: Product not found
+      content:
+        application/json:
+          schema:
+            $ref: ../../../shared/schemas/common/ProblemDetails.yaml
+          examples:
+            notFound:
+              summary: Product not found
+              value:
+                type: about:blank
+                title: Not Found
+                status: 404
+                detail: "No product found with manufacturer GLN '1234567890123' and product number '929002376910'"
+    '500':
+      $ref: ../../../shared/responses/500-internal-server-error.yaml

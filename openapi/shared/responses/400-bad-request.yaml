@@ -1,0 +1,19 @@
+description: Bad request
+content:
+  application/problem+json:
+    schema:
+      $ref: ../schemas/common/ValidationProblemDetails.yaml
+    examples:
+      invalid-request:
+        summary: Invalid request example
+        value:
+          type: about:blank
+          title: Bad Request
+          status: 400
+          detail: One or more validation errors occurred
+          errors:
+            field1:
+              - Field1 is required.
+              - Field1 must be at least 3 characters.
+            field2:
+              - Field2 must be a valid email address.

@@ -1,0 +1,42 @@
+type: string
+enum:
+  - "ACCESSORY"
+  - "CONSISTS_OF"
+  - "CONSUMABLES"
+  - "CROSS-SELLING"
+  - "MAIN_PRODUCT"
+  - "MANDATORY"
+  - "PREDECESSOR"
+  - "REFURBISHED"
+  - "SELECT"
+  - "SIMILAR"
+  - "SPAREPART"
+  - "SUCCESSOR"
+  - "UPSELLING"
+  - "USED"
+  - "OTHER"
+description: |
+  Type of relationship between products.
+  
+  - `ACCESSORY`: Optional accessory product
+  - `CONSISTS_OF`: Component or part of a product bundle
+  - `CONSUMABLES`: Consumable items for the product
+  - `CROSS-SELLING`: Related product for cross-selling
+  - `MAIN_PRODUCT`: Main product in a relationship
+  - `MANDATORY`: Required accessory or component
+  - `PREDECESSOR`: Previous version of the product
+  - `REFURBISHED`: Refurbished version of the product
+  - `SELECT`: Selection or variant option
+  - `SIMILAR`: Similar alternative product
+  - `SPAREPART`: Replacement spare part
+  - `SUCCESSOR`: Next version of the product
+  - `UPSELLING`: Upgrade or premium option
+  - `USED`: Used version of the product
+  - `OTHER`: Other relationship type
+  
+  **ETIM xChange**: `RelationType`  
+  **Path**: `Supplier[].Product[].ProductRelations[].RelationType`
+examples:
+  - "ACCESSORY"
+  - "SPAREPART"
+  - "SUCCESSOR"

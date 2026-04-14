@@ -1,0 +1,52 @@
+get:
+  operationId: getStock
+  summary: Get stock
+  description: |
+    Retrieve stock availability and quantity information for a specific trade item
+    by supplier GLN and supplier item number.
+    
+    Returns exactly one stock record. No pagination, no cursor metadata.
+  tags:
+    - Stock
+  parameters:
+    - $ref: ../../../shared/parameters/path/supplier-id-gln.yaml
+    - $ref: ../../../shared/parameters/path/supplier-item-number.yaml
+  security:
+    - oauth2:
+        - read:stock
+  responses:
+    '200':
+      description: Stock information found and returned successfully
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/responses/StockResponse.yaml
+          examples:
+            inStock:
+              summary: Item in stock with available quantity
+              value:
+                data:
+                  quantity: 150.50
+                  available: true
+            outOfStock:
+              summary: Item out of stock
+              value:
+                data:
+                  quantity: 0
+                  available: false
+            lowStock:
+              summary: Item with low stock quantity
+              value:
+                data:
+                  quantity: 2.5
+                  available: true
+    '400':
+      $ref: ../../../shared/responses/400-bad-request.yaml
+    '401':
+      $ref: ../../../shared/responses/401-unauthorized.yaml
+    '403':
+      $ref: ../../../shared/responses/403-forbidden.yaml
+    '404':
+      $ref: ../../../shared/responses/404-not-found.yaml
+    '500':
+      $ref: ../../../shared/responses/500-internal-server-error.yaml

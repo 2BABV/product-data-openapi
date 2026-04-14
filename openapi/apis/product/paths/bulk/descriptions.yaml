@@ -1,0 +1,32 @@
+get:
+  operationId: getBulkProductDescriptions
+  tags:
+    - Products bulk
+  summary: List product descriptions
+  description: |
+    Retrieve product descriptions in bulk with cursor-based pagination.
+    Returns a flattened structure where each row represents a single language description
+    with the product identifier (manufacturerIdGln + manufacturerProductNumber).
+        A product with descriptions in 3 languages will result in 3 rows.
+  parameters:
+    - $ref: ../../../../shared/parameters/query/cursor.yaml
+    - $ref: ../../../../shared/parameters/query/limit.yaml
+    - $ref: ../../../../shared/parameters/query/selection-id.yaml
+    - $ref: ../../../../shared/parameters/query/manufacturer-id-gln-filter.yaml
+    - $ref: ../../../../shared/parameters/query/mutation-date-time.yaml
+    - $ref: ../../../../shared/parameters/query/language.yaml
+  responses:
+    '200':
+      description: Successfully retrieved product descriptions
+      content:
+        application/json:
+          schema:
+            $ref: ../../schemas/responses/BulkProductDescriptionsResponse.yaml
+    '400':
+      $ref: ../../../../shared/responses/400-bad-request.yaml
+    '401':
+      $ref: ../../../../shared/responses/401-unauthorized.yaml
+    '403':
+      $ref: ../../../../shared/responses/403-forbidden.yaml
+    '500':
+      $ref: ../../../../shared/responses/500-internal-server-error.yaml

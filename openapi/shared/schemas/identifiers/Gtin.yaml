@@ -1,0 +1,8 @@
+type: string
+description: Global Trade Item Number (GTIN) - Can be GTIN-8, GTIN-12, GTIN-13, or GTIN-14
+pattern: '^[0-9]{8,14}$'
+examples:
+  - "12345678"
+  - "012345678905"
+  - "4012345678901"
+  - "04012345678901"

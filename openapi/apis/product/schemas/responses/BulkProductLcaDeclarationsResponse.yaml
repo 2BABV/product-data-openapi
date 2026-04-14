@@ -1,0 +1,126 @@
+type: object
+description: |
+  Bulk response containing flattened product LCA declarations with cursor-based pagination.
+  
+  **Flattened Structure**: Each row represents a single life cycle declaration within a product's 
+  LCA environmental data. This structure is optimized for:
+  - Predictable payload sizes (each row has consistent structure)
+  - Efficient cursor-based pagination by declaration
+  - ETL/data warehouse ingestion
+  - Streaming data processing
+  - Filtering by life cycle stage
+  
+  **Payload Optimization**: Optional properties with null values are omitted from the response
+  to minimize payload size. Clients should treat missing properties as null/not applicable.
+  
+  **Parent Context**: Each row includes key parent fields from LcaEnvironmental
+  (`declaredUnitUnit`, `declaredUnitQuantity`, `lcaReferenceLifetime`, `thirdPartyVerification`,
+  `epdValidityStartDate`, `epdValidityExpiryDate`, `epdOperatorName`, `epdOperatorUri`,
+  `operatorEpdId`, `manufacturerEpdId`, `productCategoryRulesDescription`, `productCategoryRulesUri`,
+  `productSpecificRulesDescription`, `productSpecificRulesUri`)
+  to provide necessary context for interpreting the environmental indicators.
+  
+  **Data Reconstruction**: To reconstruct the hierarchical structure:
+  1. Group rows by `manufacturerIdGln` + `manufacturerProductNumber` for products
+  2. All rows for a product share the same parent context (declared unit, lifetime, verification, EPD metadata)
+  3. Each row represents a different life cycle stage (A1-A3, B1-B7, C1-C4, D)
+required:
+  - data
+  - meta
+properties:
+  data:
+    type: array
+    description: |
+      Array of flattened product LCA declarations.
+      Each item represents a single life cycle stage declaration for a product.
+      
+      Rows are ordered by:
+      1. `manufacturerIdGln` (ascending)
+      2. `manufacturerProductNumber` (ascending)
+      3. `lifeCycleStage` (ascending)
+    items:
+      $ref: ../domain/ProductLcaDeclarationSummary.yaml
+  meta:
+    $ref: ../../../../shared/schemas/common/CursorPaginationMetadata.yaml
+    description: |
+      Cursor-based pagination metadata.
+      
+      The cursor encodes the position based on the composite key:
+      `manufacturerIdGln` + `manufacturerProductNumber` + `lifeCycleStage`
+
+examples:
+  - data:
+      # Product 1, Production stage (A1-A3)
+      - manufacturerIdGln: "1234567890123"
+        manufacturerProductNumber: "929002376910"
+        declaredUnitUnit: "PCE"
+        declaredUnitQuantity: 1
+        lcaReferenceLifetime: 25
+        thirdPartyVerification: "externally"
+        epdValidityStartDate: "2024-01-01"
+        epdValidityExpiryDate: "2029-12-31"
+        epdOperatorName: "The International EPD System"
+        operatorEpdId: "S-P-12345"
+        productCategoryRulesDescription: "PCR 2019:14 Lighting equipment"
+        lifeCycleStage: "A1-A3"
+        lcaDeclarationIndicator: "MDE"
+        declaredUnitGwpTotal: 15.75
+        declaredUnitGwpFossil: 14.25
+        declaredUnitGwpBiogenic: 1.2
+        declaredUnitAp: 0.05
+        declaredUnitAdpf: 185.5
+      # Product 1, End-of-life stage (C1-C4)
+      - manufacturerIdGln: "1234567890123"
+        manufacturerProductNumber: "929002376910"
+        declaredUnitUnit: "PCE"
+        declaredUnitQuantity: 1
+        lcaReferenceLifetime: 25
+        thirdPartyVerification: "externally"
+        epdValidityStartDate: "2024-01-01"
+        epdValidityExpiryDate: "2029-12-31"
+        epdOperatorName: "The International EPD System"
+        epdOperatorUri: "https://www.environdec.com"
+        operatorEpdId: "S-P-12345"
+        manufacturerEpdId: "MFR-EPD-LED-2024-001"
+        productCategoryRulesDescription: "PCR 2019:14 Lighting equipment"
+        lifeCycleStage: "C1-C4"
+        lcaDeclarationIndicator: "AGG"
+        declaredUnitGwpTotal: 2.5
+        declaredUnitAdpf: 35.0
+      # Product 1, Module D (benefits)
+      - manufacturerIdGln: "1234567890123"
+        manufacturerProductNumber: "929002376910"
+        declaredUnitUnit: "PCE"
+        declaredUnitQuantity: 1
+        lcaReferenceLifetime: 25
+        thirdPartyVerification: "externally"
+        epdValidityStartDate: "2024-01-01"
+        epdValidityExpiryDate: "2029-12-31"
+        epdOperatorName: "The International EPD System"
+        epdOperatorUri: "https://www.environdec.com"
+        operatorEpdId: "S-P-12345"
+        manufacturerEpdId: "MFR-EPD-LED-2024-001"
+        productCategoryRulesDescription: "PCR 2019:14 Lighting equipment"
+        lifeCycleStage: "D"
+        lcaDeclarationIndicator: "MDE"
+        declaredUnitGwpTotal: -5.2
+        declaredUnitAdpf: -45.0
+      # Product 2, Production stage
+      - manufacturerIdGln: "9876543210987"
+        manufacturerProductNumber: "CABLE-CU-100M"
+        declaredUnitUnit: "KGM"
+        declaredUnitQuantity: 1
+        lcaReferenceLifetime: 50
+        thirdPartyVerification: "internally"
+        epdValidityStartDate: "2023-06-15"
+        lifeCycleStage: "A1-A3"
+        lcaDeclarationIndicator: "MND"
+        declaredUnitGwpTotal: 8.5
+        declaredUnitAdpe: 0.0015
+        declaredUnitAdpf: 120.0
+    meta:
+      cursor: "eyJtYW51ZmFjdHVyZXJJZEdsbkgiOiI5ODc2NTQzMjEwOTg3IiwibWFudWZhY3R1cmVyUHJvZHVjdE51bWJlciI6IkNBQkxFLUNVLTEwME0iLCJsaWZlQ3ljbGVTdGFnZSI6IkExLUEzIn0="
+      hasNext: true
+      hasPrev: false
+      limit: 1000
+      estimatedTotal: 12540

@@ -1,0 +1,52 @@
+type: object
+description: |
+  Single trade item identification keys with item attachment data.
+
+  **ETIM xChange**: `ItemAttachments[]`
+  **Path**: `Supplier[].Product[].TradeItem[].ItemAttachments[]`
+required:
+  - supplierIdGln
+  - supplierItemNumber
+properties:
+  supplierIdGln:
+    $ref: ../../../../shared/schemas/identifiers/Gln.yaml
+    description: Global Location Number (GLN) uniquely identifying the supplier
+    examples:
+      - "1234567890123"
+  supplierItemNumber:
+    type: string
+    minLength: 1
+    maxLength: 35
+    description: Supplier's unique item number
+    examples:
+      - "SKU-12345"
+  attachments:
+    type: ["array", "null"]
+    description: |
+      Array of item attachments (images, documents, certificates, etc.).
+      Returns null if no attachments are available.
+    items:
+      $ref: ../domain/ItemAttachment.yaml
+examples:
+  - supplierIdGln: "1234567890123"
+    supplierItemNumber: "SKU-12345"
+    attachments:
+      - attachmentType: "ATX001"
+        attachmentTypeSpecification: "MDX002"
+        attachmentLanguages: null
+        attachmentFilename: "product_image.jpg"
+        attachmentUri: "https://example.com/images/product.jpg"
+        attachmentDescription: "Front view product image"
+        attachmentIssueDate: "2024-01-15"
+        attachmentExpiryDate: null
+      - attachmentType: "ATX014"
+        attachmentTypeSpecification: "MDX005"
+        attachmentLanguages: ["en-GB"]
+        attachmentFilename: "datasheet-en.pdf"
+        attachmentUri: "https://cdn.supplier.com/datasheets/datasheet-en.pdf"
+        attachmentDescription: "Technical datasheet"
+        attachmentIssueDate: "2024-06-15"
+        attachmentExpiryDate: null
+  - supplierIdGln: "1234567890123"
+    supplierItemNumber: "SKU-12345"
+    attachments: null

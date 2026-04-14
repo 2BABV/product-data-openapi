@@ -1,0 +1,15 @@
+description: |
+  Decimal quantity value representing the number of items for which a price applies.
+  Supports up to 5 digits before the decimal and 4 digits after (max 99999.9999).
+  
+  In the ETIM xChange canonical model, quantity values are represented as strings with regex patterns.
+  This API uses `type: number` with `format: decimal` for filtering, sorting, and typed code generation.
+type: number
+format: decimal # hint for code generators (NSwag → C# decimal); ignored by tools that don't recognize it
+minimum: 0
+maximum: 99999.9999
+multipleOf: 0.0001
+examples:
+  - 12345.1234
+  - 1.0
+  - 100.5

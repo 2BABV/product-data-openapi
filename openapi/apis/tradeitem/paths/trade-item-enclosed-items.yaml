@@ -1,0 +1,90 @@
+get:
+  operationId: getTradeItemEnclosedItems
+  tags:
+    - TradeItems single
+  summary: Get trade item enclosed items
+  description: |
+    Retrieve enclosed items for a specific trade item.
+    
+    This endpoint returns all items enclosed within the trade item's packaging units.
+    Each enclosed item includes a `packagingTypeCode` to identify which packaging unit
+    contains it, enabling correlation with packaging data from the main trade item response.
+    
+    **No pagination** - Returns all enclosed items for the specified trade item.
+    
+    **ETIM xChange**: `TradeItemEnclosed[]`
+    **Path**: `Supplier[].Product[].TradeItem[].PackagingUnit[].TradeItemEnclosed[]`
+  parameters:
+    - $ref: ../../../shared/parameters/path/supplier-id-gln.yaml
+    - $ref: ../../../shared/parameters/path/supplier-item-number.yaml
+  responses:
+    '200':
+      description: Successfully retrieved trade item enclosed items
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/responses/TradeItemEnclosedItemsResponse.yaml
+          examples:
+            multipleEnclosedItems:
+              summary: Trade item with enclosed items across packaging units
+              value:
+                data:
+                  supplierIdGln: "1234567890123"
+                  supplierItemNumber: "SKU-12345"
+                  enclosedItems:
+                    - packagingTypeCode: BX
+                      enclosedSupplierItemNumber: "WIDGET-001"
+                      enclosedManufacturerItemNumber: "MFG-WIDGET-001"
+                      enclosedItemGtins: ["4012345678901"]
+                      enclosedItemQuantity: 5
+                    - packagingTypeCode: BX
+                      enclosedSupplierItemNumber: "SCREW-M8-50"
+                      enclosedManufacturerItemNumber: null
+                      enclosedItemGtins: null
+                      enclosedItemQuantity: 100
+                    - packagingTypeCode: PF
+                      enclosedSupplierItemNumber: "WIDGET-001"
+                      enclosedManufacturerItemNumber: "MFG-WIDGET-001"
+                      enclosedItemGtins: ["4012345678901"]
+                      enclosedItemQuantity: 50
+            singleEnclosedItem:
+              summary: Trade item with one enclosed item
+              value:
+                data:
+                  supplierIdGln: "8712423012485"
+                  supplierItemNumber: "SKU-KIT-001"
+                  enclosedItems:
+                    - packagingTypeCode: BX
+                      enclosedSupplierItemNumber: "251270"
+                      enclosedManufacturerItemNumber: null
+                      enclosedItemGtins: ["04015081027125"]
+                      enclosedItemQuantity: 1
+            noEnclosedItems:
+              summary: Trade item without enclosed items
+              value:
+                data:
+                  supplierIdGln: "1234567890123"
+                  supplierItemNumber: "SKU-12345"
+                  enclosedItems: null
+    '400':
+      $ref: ../../../shared/responses/400-bad-request.yaml
+    '401':
+      $ref: ../../../shared/responses/401-unauthorized.yaml
+    '403':
+      $ref: ../../../shared/responses/403-forbidden.yaml
+    '404':
+      description: Trade item not found
+      content:
+        application/json:
+          schema:
+            $ref: ../../../shared/schemas/common/ProblemDetails.yaml
+          examples:
+            notFound:
+              summary: Trade item not found
+              value:
+                type: about:blank
+                title: Not Found
+                status: 404
+                detail: "No trade item found with supplier GLN '1234567890123' and item number 'UNKNOWN-SKU'"
+    '500':
+      $ref: ../../../shared/responses/500-internal-server-error.yaml

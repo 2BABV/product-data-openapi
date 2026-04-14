@@ -1,0 +1,33 @@
+type: object
+description: |
+  Response containing trade item identification and details for a single trade item.
+  
+  The trade item key (`supplierIdGln` + `supplierItemNumber`) is at the root level,
+  with the `details` object containing all identification and details fields.
+  
+  This structure aligns with other single-item subresource responses
+  (`/orderings`, `/pricings`).
+required:
+  - data
+properties:
+  data:
+    $ref: ./TradeItemDetailsResponseData.yaml
+examples:
+  - data:
+      supplierIdGln: "1234567890123"
+      supplierItemNumber: "SKU-12345"
+      details:
+        supplierAltItemNumber: "ALT-12345"
+        manufacturerItemNumber: "MFG-98765"
+        manufacturerIdGln: "9876543210987"
+        manufacturerProductNumber: "929002376910"
+        itemGtins: ["4012345678901"]
+        buyerItemNumber: null
+        discountGroupId: "DG-001"
+        bonusGroupId: null
+        itemValidityDate: "2024-01-01"
+        itemObsolescenceDate: null
+        itemStatus: "ACTIVE"
+        itemCondition: "NEW"
+        stockItem: true
+        shelfLifePeriod: null

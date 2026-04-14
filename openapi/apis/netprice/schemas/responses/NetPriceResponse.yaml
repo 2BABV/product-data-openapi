@@ -1,0 +1,27 @@
+type: object
+description: Response containing the net price for a specific trade item. The price is the total price for the requested quantity in order unit. Any applicable volume discounts are included in this price.
+required:
+  - netPriceInOrderUnit
+  - currency
+  - quantity
+properties:
+  netPriceInOrderUnit:
+    allOf: 
+      - $ref: ../../../../shared/schemas/common/Price.yaml
+    description: The net price for the specified trade item in the order unit, including any applicable volume discounts. 
+  currency:
+    $ref: ../../../../shared/schemas/common/CurrencyCode.yaml
+    description: The currency code used for the price
+  quantity:
+    $ref: ../../../../shared/schemas/common/PriceQuantity.yaml
+    description: The quantity for which the net price is calculated
+examples:
+  - netPriceInOrderUnit: 12.50
+    currency: EUR
+    quantity: 1
+  - netPriceInOrderUnit: 1250.00
+    currency: EUR
+    quantity: 100
+  - netPriceInOrderUnit: 0.1234
+    currency: USD
+    quantity: 0.01  
