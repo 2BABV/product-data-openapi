@@ -172,7 +172,7 @@ properties:
 
   # Domain sub-schemas
   itemDetails:
-    $ref: ../domain/ItemDetails.yaml
+    $ref: ../domain/ItemDetail.yaml
     description: |
       Detailed information about the trade item including status and condition.
       Note: Item descriptions are available via `/{supplierIdGln}/{supplierItemNumber}/descriptions`.
@@ -215,7 +215,7 @@ properties:
       **ETIM xChange**: `ItemLogisticDetails[]`
       **Path**: `Supplier[].Product[].TradeItem[].ItemLogisticDetails[]`
     items:
-      $ref: ../domain/ItemLogistics.yaml
+      $ref: ../domain/ItemLogistic.yaml
     examples:
       - null
 

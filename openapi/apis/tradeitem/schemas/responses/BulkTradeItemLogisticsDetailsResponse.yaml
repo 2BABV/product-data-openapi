@@ -16,7 +16,7 @@ properties:
     type: array
     description: Array of item logistics entries. Each row is one logistics entry per trade item.
     items:
-      $ref: ../domain/ItemLogisticsSummary.yaml
+      $ref: ../domain/ItemLogisticSummary.yaml
   meta:
     $ref: ../../../../shared/schemas/common/CursorPaginationMetadata.yaml
 examples:

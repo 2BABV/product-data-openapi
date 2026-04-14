@@ -134,10 +134,10 @@ components:
       $ref: ./schemas/domain/ItemRelation.yaml
     ItemRelationSummary:
       $ref: ./schemas/domain/ItemRelationSummary.yaml
-    ItemLogistics:
-      $ref: ./schemas/domain/ItemLogistics.yaml
-    ItemLogisticsSummary:
-      $ref: ./schemas/domain/ItemLogisticsSummary.yaml
+    ItemLogistic:
+      $ref: ./schemas/domain/ItemLogistic.yaml
+    ItemLogisticSummary:
+      $ref: ./schemas/domain/ItemLogisticSummary.yaml
     ItemAttachment:
       $ref: ./schemas/domain/ItemAttachment.yaml
     ItemAttachmentSummary:

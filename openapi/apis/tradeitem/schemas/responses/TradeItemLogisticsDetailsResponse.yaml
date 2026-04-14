@@ -1,7 +1,7 @@
 type: object
 description: |
   Response containing item logistics details for a specific trade item.
-  Returns the trade item identification keys and a nested array of `ItemLogistics` objects,
+  Returns the trade item identification keys and a nested array of `ItemLogistic` objects,
   each defining base item dimensions, weight, and volume.
   
   Unlike the bulk endpoint `/trade-items/bulk/logistics-details` which uses a flattened structure

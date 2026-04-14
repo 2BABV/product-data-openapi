@@ -52,7 +52,7 @@ The bulk API consolidates ETIM xChange sections for efficient data retrieval:
 | `/bulk/trade-item-pricings` | `Pricing[]` (excl. allowances/surcharges) | `TradeItemPricingSummary` |
 | `/bulk/trade-item-allowance-surcharges` | `Pricing[].AllowanceSurcharge[]` | `AllowanceSurchargeSummary` |
 | `/bulk/trade-item-relations` | `ItemRelations[]` | `ItemRelationSummary` |
-| `/bulk/trade-item-logistics-details` | `ItemLogisticDetails[]` | `ItemLogisticsSummary` |
+| `/bulk/trade-item-logistics-details` | `ItemLogisticDetails[]` | `ItemLogisticSummary` |
 
 **Note**: There is no separate `/bulk/trade-items` or `/bulk/item-identifications` endpoint. The `/bulk/trade-item-details` endpoint provides all identification fields combined with item details.
 

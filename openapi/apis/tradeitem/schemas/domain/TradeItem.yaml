@@ -164,7 +164,7 @@ properties:
       Note: Item descriptions are available via `/{supplierIdGln}/{supplierItemNumber}/descriptions`.
       **ETIM xChange**: `ItemDetails`
       **Path**: `Supplier[].Product[].TradeItem[].ItemDetails`
-    $ref: ./ItemDetails.yaml
+    $ref: ./ItemDetail.yaml
   
   # Ordering (required object)
   ordering:
@@ -204,7 +204,7 @@ properties:
       **ETIM xChange**: `ItemLogisticDetails[]`
       **Path**: `Supplier[].Product[].TradeItem[].ItemLogisticDetails[]`
     items:
-      $ref: ./ItemLogistics.yaml
+      $ref: ./ItemLogistic.yaml
     examples:
       - null
   
