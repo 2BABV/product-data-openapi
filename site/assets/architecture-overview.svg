@@ -32,14 +32,14 @@
 
   <!-- Client A -->
   <rect x="50" y="96" width="180" height="68" class="client-box"/>
-  <text x="80" y="126" class="icon">🏢</text>
-  <text x="102" y="126" class="box-title">PIM System</text>
-  <text x="102" y="144" class="box-sub">Bulk sync, delta updates</text>
+  <text x="80" y="126" class="icon">🌐</text>
+  <text x="102" y="126" class="box-title">2BA</text>
+  <text x="102" y="144" class="box-sub">Datapool</text>
 
   <!-- Client B -->
   <rect x="50" y="192" width="180" height="68" class="client-box"/>
-  <text x="80" y="222" class="icon">🛒</text>
-  <text x="102" y="222" class="box-title">Webshop</text>
+  <text x="80" y="222" class="icon">🏢</text>
+  <text x="102" y="222" class="box-title">ERP System</text>
   <text x="102" y="240" class="box-sub">Product details, pricing</text>
 
   <!-- Client C -->
@@ -66,11 +66,11 @@
   <text x="642" y="318" class="box-title">Other Implementer</text>
   <text x="642" y="336" class="box-sub">your-api.example.com</text>
 
-  <!-- Arrows: Client A → all servers -->
-  <line x1="230" y1="118" x2="590" y2="118" class="arrow"/>
-  <text x="398" y="112" text-anchor="middle" class="arrow-label">GET</text>
+  <!-- Arrows: Client A → servers (skip 2BA → 2BA) -->
+  <line x1="230" y1="130" x2="590" y2="226" class="arrow"/>
+  <text x="398" y="168" text-anchor="middle" class="arrow-label">GET</text>
 
-  <line x1="230" y1="142" x2="590" y2="226" class="arrow"/>
+  <line x1="230" y1="142" x2="590" y2="310" class="arrow"/>
 
   <!-- Arrows: Client B → servers -->
   <line x1="230" y1="226" x2="590" y2="226" class="arrow"/>
