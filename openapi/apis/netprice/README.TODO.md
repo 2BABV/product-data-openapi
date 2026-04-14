@@ -64,34 +64,29 @@ graph TD
 ```mermaid
 classDiagram
     class NetPriceResponse {
-        +Price netPrice
+        Price netPriceInOrderUnit*
+        CurrencyCode currency*
+        PriceQuantity quantity*
     }
     
     class Price {
-        +number amount
-        +number minimum
-        +number maximum
-        +number multipleOf
-        +string format
+        number amount*
     }
     
     class PriceQuantity {
-        +number quantity
-        +number minimum
-        +number maximum
-        +number multipleOf
+        number quantity*
     }
     
     class CurrencyCode {
-        +string code
-        +string default
-        +string standard
+        string code*
     }
     
-    NetPriceResponse --> Price : contains
-    NetPriceResponse ..> PriceQuantity : calculated for
-    NetPriceResponse ..> CurrencyCode : expressed in
+    NetPriceResponse --> Price : netPriceInOrderUnit
+    NetPriceResponse --> CurrencyCode : currency
+    NetPriceResponse --> PriceQuantity : quantity
 ```
+
+> **Legend**: Properties marked with `*` are required.
 
 ### NetPrice Calculation Context
 

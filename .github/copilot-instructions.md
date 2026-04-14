@@ -79,6 +79,12 @@ When working with this repository:
    - Regenerate after ANY source spec change: `npx @redocly/cli bundle --config openapi/redocly.yaml {api}@v1 -o openapi/apis/{api}/generated/{api}-api.yaml`
    - Always commit regenerated bundles alongside the source changes that triggered them
 
+16. **Mermaid class diagram conventions**:
+   - Do **not** use UML visibility prefixes (`+`, `-`, `#`, `~`) — all API properties are public by definition
+   - Append `*` to property names that are **required** (e.g., `number amount*`)
+   - Leave optional properties unmarked (e.g., `string description`)
+   - Add a legend below the diagram: `> **Legend**: Properties marked with \`*\` are required.`
+
 ## Naming Convention Details
 
 ### Schema Components (PascalCase)
