@@ -172,7 +172,7 @@ properties:
 
   # Domain sub-schemas
   itemDetails:
-    $ref: ../domain/ItemDetail.yaml
+    $ref: ../domain/ItemDetails.yaml
     description: |
       Detailed information about the trade item including status and condition.
       Note: Item descriptions are available via `/{supplierIdGln}/{supplierItemNumber}/descriptions`.
