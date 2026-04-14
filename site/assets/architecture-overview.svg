@@ -72,7 +72,9 @@
 
   <line x1="230" y1="142" x2="590" y2="310" class="arrow"/>
 
-  <!-- Arrows: Client B → servers -->
+  <!-- Arrows: Client B (ERP) → servers -->
+  <line x1="230" y1="214" x2="590" y2="130" class="arrow"/>
+
   <line x1="230" y1="226" x2="590" y2="226" class="arrow"/>
   <text x="398" y="220" text-anchor="middle" class="arrow-label">GET</text>
 
