@@ -7,15 +7,12 @@ This API adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
-## [1.0.0-Preview1] - 2026-04-09
+## [1.0.0-Preview1] - 2026-04-15
 
 ### Added
 - Initial preview release of the Trade Item API
-- Single-item endpoints: `/trade-items/{gln}/{itemNumber}/details`, `/descriptions`, `/orderings`, `/pricings`, `/allowance-surcharges`, `/relations`, `/logistics-details`
-- Bulk endpoints: `/trade-items/bulk/details`, `/bulk/descriptions`, `/bulk/orderings`, `/bulk/pricings`, `/bulk/allowance-surcharges`, `/bulk/relations`, `/bulk/logistics-details`
+- Single-item endpoints
+- Bulk endpoints
 - Cursor-based pagination for all bulk endpoints
-- OAuth 2.0 Client Credentials security scheme (`read:tradeitems` scope)
+- OAuth 2.0 security
 - RFC 7807 Problem Details error responses
-- Implementer-agnostic server URL configuration (parameterized host + basePath)
-- Multilanguage description support (`discountGroupDescription`, `bonusGroupDescription`)
-- Item relations and logistics details schemas
