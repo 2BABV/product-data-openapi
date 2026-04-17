@@ -14,7 +14,7 @@ description: |
   - `itemCountrySpecificFields`: Country-specific extensibility fields
   
   This structure aligns with the subresource endpoints (`/details`, `/descriptions`,
-  `/orderings`, `/pricings`, `/relations`, `/logistics-details`, `/allowance-surcharges`,
+  `/orderings`, `/pricings`, `/relations`, `/logistics-details`,
   `/attachments`, `/enclosed-items`) which all include the composite key at the root level.
 required:
   - supplierIdGln
@@ -280,8 +280,7 @@ examples:
       alternativeUseUnit: null
       alternativeUseUnitConversionFactor: null
     pricings:
-      - pricingRef: "price-c62-1-20250101"
-        priceUnit: C62
+      - priceUnit: C62
         priceUnitFactor: null
         priceQuantity: 1
         currencyCode: EUR

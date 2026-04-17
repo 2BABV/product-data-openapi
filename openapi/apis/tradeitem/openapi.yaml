@@ -65,9 +65,6 @@ paths:
   /trade-items/{supplierIdGln}/{supplierItemNumber}/pricings:
     $ref: ./paths/trade-item-pricings.yaml
   
-  /trade-items/{supplierIdGln}/{supplierItemNumber}/allowance-surcharges:
-    $ref: ./paths/trade-item-allowance-surcharges.yaml
-  
   /trade-items/{supplierIdGln}/{supplierItemNumber}/relations:
     $ref: ./paths/trade-item-relations.yaml
   
@@ -92,8 +89,6 @@ paths:
     $ref: ./paths/bulk/orderings.yaml
   /trade-items/bulk/pricings:
     $ref: ./paths/bulk/pricings.yaml
-  /trade-items/bulk/allowance-surcharges:
-    $ref: ./paths/bulk/allowance-surcharges.yaml
   /trade-items/bulk/relations:
     $ref: ./paths/bulk/relations.yaml
   /trade-items/bulk/logistics-details:
@@ -108,9 +103,6 @@ components:
     # Shared components from other domains
     ProblemDetails:
       $ref: ../../shared/schemas/common/ProblemDetails.yaml
-    TechnicalId:
-      $ref: ../../shared/schemas/identifiers/TechnicalId.yaml
-    
     # Domain schemas
     TradeItemDetails:
       $ref: ./schemas/domain/TradeItemDetails.yaml
@@ -128,8 +120,6 @@ components:
       $ref: ./schemas/domain/TradeItemPricingsSummary.yaml
     AllowanceSurcharge:
       $ref: ./schemas/domain/AllowanceSurcharge.yaml
-    AllowanceSurchargeSummary:
-      $ref: ./schemas/domain/AllowanceSurchargeSummary.yaml
     ItemRelation:
       $ref: ./schemas/domain/ItemRelation.yaml
     ItemRelationSummary:
@@ -186,14 +176,6 @@ components:
       $ref: ./schemas/responses/TradeItemPricingsResponseData.yaml
     BulkTradeItemPricingsResponse:
       $ref: ./schemas/responses/BulkTradeItemPricingsResponse.yaml
-    BulkAllowanceSurchargesResponse:
-      $ref: ./schemas/responses/BulkAllowanceSurchargesResponse.yaml
-    TradeItemAllowanceSurchargesResponse:
-      $ref: ./schemas/responses/TradeItemAllowanceSurchargesResponse.yaml
-    TradeItemAllowanceSurchargesResponseData:
-      $ref: ./schemas/responses/TradeItemAllowanceSurchargesResponseData.yaml
-    TradeItemAllowanceSurchargeItem:
-      $ref: ./schemas/responses/TradeItemAllowanceSurchargeItem.yaml
     TradeItemRelationsResponse:
       $ref: ./schemas/responses/TradeItemRelationsResponse.yaml
     TradeItemRelationsResponseData:

@@ -1,17 +1,19 @@
 type: object
 description: |
-  Bulk response containing trade item pricing information with cursor-based pagination.
+  Bulk response containing trade item pricing and allowance/surcharge information
+  with cursor-based pagination.
   
-  **Flattened Structure**: Each row in the `data` array represents a single price entry
-  with embedded composite key (`supplierIdGln` + `supplierItemNumber`). This follows the
-  same pattern as `ProductEtimClassificationFeature` - 1 row per data point.
+  **Flattened Structure (LEFT JOIN)**: Each row in the `data` array represents a single
+  pricing × allowance/surcharge combination. Pricings without surcharges appear as one row
+  with all `allowanceSurcharge*` fields set to `null`. Pricings with N surcharges appear as
+  N rows with pricing fields repeated on each.
   
-  A trade item with multiple price tiers (e.g., quantity breaks) will have multiple rows
-  with the same composite key but different pricing data.
+  This follows the same denormalization pattern as `ProductEtimClassificationFeature` —
+  every row is the same shape, no nesting, no artificial keys.
   
   Use the `cursor` from `meta` to retrieve the next page of results.
   
-  **ETIM xChange**: Response wrapper for `Pricing[]` data
+  **ETIM xChange**: Response wrapper for `Pricing[]` × `AllowanceSurcharge[]` data
   **Path**: `Supplier[].Product[].TradeItem[].Pricing[]`
 required:
   - data
@@ -19,7 +21,7 @@ required:
 properties:
   data:
     type: array
-    description: Array of flattened trade item pricing entries (1 row per price)
+    description: Array of flattened pricing × allowance/surcharge entries (1 row per pricing-surcharge combination)
     items:
       $ref: ../domain/TradeItemPricingSummary.yaml
   meta:
@@ -28,10 +30,9 @@ properties:
 
 examples:
   - data:
-      # Single price entry
+      # Pricing with percentage-based allowance (row 1 of 2)
       - supplierIdGln: "8712423012485"
         supplierItemNumber: "SKU-LAMP-001"
-        pricingRef: "price-c62-1-20250101"
         priceUnit: C62
         priceQuantity: 1
         currencyCode: EUR
@@ -42,35 +43,40 @@ examples:
         vat: 21.0
         priceValidityDate: "2025-01-01"
         priceExpiryDate: "2025-12-31"
-      # Multiple price tiers for same item (quantity breaks)
+        allowanceSurchargeIndicator: ALLOWANCE
+        allowanceSurchargeType: AEQ
+        allowanceSurchargeSequenceNumber: 1
+        allowanceSurchargeValidityDate: "2025-01-01"
+        allowanceSurchargePercentage: 5.5
+        allowanceSurchargeMinimumQuantity: 50
+      # Same pricing with fixed-amount surcharge (row 2 of 2 — pricing fields repeated)
+      - supplierIdGln: "8712423012485"
+        supplierItemNumber: "SKU-LAMP-001"
+        priceUnit: C62
+        priceQuantity: 1
+        currencyCode: EUR
+        priceOnRequest: false
+        grossListPrice: 12.99
+        netPrice: 9.99
+        recommendedRetailPrice: 15.99
+        vat: 21.0
+        priceValidityDate: "2025-01-01"
+        priceExpiryDate: "2025-12-31"
+        allowanceSurchargeIndicator: SURCHARGE
+        allowanceSurchargeType: DBD
+        allowanceSurchargeSequenceNumber: 2
+        allowanceSurchargeAmount: 25.00
+      # Pricing without surcharges (all allowance/surcharge fields null)
       - supplierIdGln: "8712423012485"
         supplierItemNumber: "SKU-CABLE-002"
-        pricingRef: "price-mtr-1-20250101"
         priceUnit: MTR
         priceUnitFactor: 1.0
         priceQuantity: 1
         currencyCode: EUR
-        priceOnRequest: false
-        grossListPrice: 2.50
         netPrice: 1.99
-        recommendedRetailPrice: 3.49
-        vat: 21.0
         priceValidityDate: "2025-01-01"
-        priceExpiryDate: "2025-06-30"
-      - supplierIdGln: "8712423012485"
-        supplierItemNumber: "SKU-CABLE-002"
-        pricingRef: "price-mtr-100-20250101"
-        priceUnit: MTR
-        priceUnitFactor: 1.0
-        priceQuantity: 100
-        currencyCode: EUR
-        priceOnRequest: false
-        grossListPrice: 2.00
-        netPrice: 1.59
-        recommendedRetailPrice: 2.99
-        vat: 21.0
-        priceValidityDate: "2025-01-01"
-        priceExpiryDate: "2025-06-30"
+        allowanceSurchargeIndicator: null
+        allowanceSurchargeType: null
     meta:
       cursor: "eyJzdXBwbGllcklkR2xuIjoiODcxMjQyMzAxMjQ4NSIsInN1cHBsaWVySXRlbU51bWJlciI6IlNLVS1DQUJMRS0wMDIiLCJwcmljZVF1YW50aXR5IjoxMDB9"
       hasNext: true

@@ -1,28 +1,31 @@
 get:
   operationId: getBulkTradeItemPricings
-  summary: List trade item pricings
+  summary: List trade item pricings with allowances and surcharges
   description: |
-    Retrieve trade item pricing information in bulk with cursor-based pagination.
+    Retrieve trade item pricing information with allowances/surcharges in bulk, using cursor-based pagination.
     Returns pricing details including net prices, gross list prices, recommended retail prices,
-    VAT, price validity periods, and the catalog-level currency code.
+    VAT, price validity periods, currency code, and any associated allowances or surcharges.
     
-    **Allowances & Surcharges**: The `allowanceSurcharges` property is always `null` in this response.
-    Use the separate `/trade-items/bulk/allowance-surcharges` endpoint for flat retrieval.
+    **Flattened Structure (LEFT JOIN)**: Each row represents a single pricing × allowance/surcharge
+    combination with embedded composite key (`supplierIdGln` + `supplierItemNumber`).
     
-    **Flattened Structure**: Each row represents a single price entry with embedded composite key
-    (`supplierIdGln` + `supplierItemNumber`). This follows the same pattern as 
-    `/products/bulk/etim-classifications` - 1 row per data point.
+    - A pricing with N allowances/surcharges produces N rows (pricing fields repeated).
+    - A pricing without surcharges produces 1 row with all `allowanceSurcharge*` fields as `null`.
     
-    A trade item with multiple price tiers (e.g., quantity breaks, validity periods) will have
-    multiple rows with the same composite key but different pricing data.
+    This follows the same denormalization pattern as `/products/bulk/etim-classifications` — every
+    row is the same shape, no nesting, no artificial keys.
+    
+    **Required field relaxation**: `allowanceSurchargeIndicator` and `allowanceSurchargeType` are
+    required in the domain model but nullable here because rows for pricings without surcharges
+    carry `null` for all allowance/surcharge fields.
     
     This endpoint is optimized for:
-    - Predictable payload sizes per row
+    - Predictable payload sizes per row (uniform shape)
     - Efficient cursor-based pagination
-    - ETL/data warehouse ingestion
+    - ETL/data warehouse ingestion (single flat fact table)
     - Price synchronization scenarios
     
-    **ETIM xChange**: Bulk retrieval of `Pricing[]` data  
+    **ETIM xChange**: Bulk retrieval of `Pricing[]` × `AllowanceSurcharge[]` data  
     **Path**: `Supplier[].Product[].TradeItem[].Pricing[]`
   tags:
     - TradeItems bulk
@@ -34,19 +37,18 @@ get:
     - $ref: ../../../../shared/parameters/query/supplier-id-gln-filter.yaml
   responses:
     '200':
-      description: Successfully retrieved trade item pricing entries (1 row per price)
+      description: Successfully retrieved pricing × allowance/surcharge entries (1 row per combination)
       content:
         application/json:
           schema:
             $ref: ../../schemas/responses/BulkTradeItemPricingsResponse.yaml
           examples:
             success:
-              summary: Successful bulk retrieval (flattened - 1 row per price entry)
+              summary: Successful bulk retrieval (flattened LEFT JOIN — pricing + surcharges merged)
               value:
                 data:
                   - supplierIdGln: "8712423012485"
                     supplierItemNumber: "SKU-LAMP-001"
-                    pricingRef: "price-c62-1-20250101"
                     priceUnit: "C62"
                     priceQuantity: 1
                     currencyCode: "EUR"
@@ -57,22 +59,21 @@ get:
                     vat: 21.0
                     priceValidityDate: "2025-01-01"
                     priceExpiryDate: "2025-12-31"
+                    allowanceSurchargeIndicator: "ALLOWANCE"
+                    allowanceSurchargeType: "AEQ"
+                    allowanceSurchargeSequenceNumber: 1
+                    allowanceSurchargeValidityDate: "2025-01-01"
+                    allowanceSurchargePercentage: 5.5
+                    allowanceSurchargeMinimumQuantity: 50
                   - supplierIdGln: "8712423012485"
                     supplierItemNumber: "SKU-CABLE-002"
-                    pricingRef: "price-mtr-1-20250101"
                     priceUnit: "MTR"
                     priceQuantity: 1
                     currencyCode: "EUR"
                     netPrice: 1.99
                     priceValidityDate: "2025-01-01"
-                  - supplierIdGln: "8712423012485"
-                    supplierItemNumber: "SKU-CABLE-002"
-                    pricingRef: "price-mtr-100-20250101"
-                    priceUnit: "MTR"
-                    priceQuantity: 100
-                    currencyCode: "EUR"
-                    netPrice: 1.59
-                    priceValidityDate: "2025-01-01"
+                    allowanceSurchargeIndicator: null
+                    allowanceSurchargeType: null
                 meta:
                   cursor: "eyJzdXBwbGllcklkR2xuIjoiODcxMjQyMzAxMjQ4NSIsInByaWNlUXVhbnRpdHkiOjEwMH0="
                   hasNext: true

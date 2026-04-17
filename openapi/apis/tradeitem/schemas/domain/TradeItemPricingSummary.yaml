@@ -1,30 +1,37 @@
 type: object
 description: |
-  Flattened trade item pricing for bulk retrieval.
-  Each row represents a single price entry with the trade item identifier, following the 
-  same pattern as `ProductEtimClassificationFeature` (1 row = 1 data point).
+  Flattened trade item pricing with allowances/surcharges for bulk retrieval.
+  Each row represents a single pricing × allowance/surcharge combination (LEFT JOIN),
+  following the same denormalization pattern as `ProductEtimClassificationFeature`.
+  
+  **LEFT JOIN semantics**: A pricing entry with N allowances/surcharges produces N rows
+  (pricing fields repeated on each). A pricing entry without surcharges produces 1 row
+  with all `allowanceSurcharge*` fields set to `null`.
+  
+  **Required field relaxation**: In the domain model (`AllowanceSurcharge`),
+  `allowanceSurchargeIndicator` and `allowanceSurchargeType` are required fields.
+  In this flattened bulk schema they are **nullable** because rows representing
+  pricings without surcharges carry `null` for all allowance/surcharge fields.
+  When `allowanceSurchargeIndicator` is non-null, `allowanceSurchargeType` is also
+  guaranteed to be non-null.
   
   This flattened structure is optimized for:
-  - Predictable payload sizes per row
+  - Predictable payload sizes per row (uniform shape)
   - Efficient cursor-based pagination
-  - ETL/data warehouse ingestion
+  - ETL/data warehouse ingestion (single flat fact table)
   - Streaming data processing
   
   A trade item may have multiple pricing entries (e.g., quantity tiers, validity periods),
   resulting in multiple rows with the same composite key but different pricing data.
   
-  **Allowances & Surcharges**: Available via separate `/trade-items/bulk/allowance-surcharges` endpoint.
-  Join using `pricingRef` to correlate pricing entries with their allowances/surcharges.
-  
   **Payload Optimization**: Optional properties with null values may be omitted from the response
   to minimize payload size. Clients should treat missing properties as null/not applicable.
   
-  **ETIM xChange**: `Pricing`
-  **Path**: `Supplier[].Product[].TradeItem[].Pricing[]`
+  **ETIM xChange**: `Pricing` + `AllowanceSurcharge`
+  **Path**: `Supplier[].Product[].TradeItem[].Pricing[]` × `Pricing[].AllowanceSurcharge[]`
 required:
   - supplierIdGln
   - supplierItemNumber
-  - pricingRef
   - priceUnit
   - priceQuantity
   - currencyCode
@@ -59,19 +66,6 @@ properties:
     examples:
       - "SKU-12345"
       - "ITEM-ABC-789"
-  
-  pricingRef:
-    description: |
-      Server-generated opaque reference key that uniquely identifies this pricing entry
-      within the scope of a trade item (identified by `supplierIdGln` + `supplierItemNumber`).
-      
-      This is a technical identifier not present in the ETIM xChange domain model.
-      Use `pricingRef` to correlate pricing entries with their allowances/surcharges
-      from the `/trade-items/bulk/allowance-surcharges` endpoint.
-    $ref: ../../../../shared/schemas/identifiers/TechnicalId.yaml
-    examples:
-      - "price-c62-1-20250101"
-      - "f47ac10b-58cc-4372-a567-0e02b2c3d479"
   
   # =========================================================================
   # PRICING FIELDS (flattened from TradeItem.Pricing[])
@@ -223,11 +217,138 @@ properties:
     examples:
       - "2025-12-31"
 
+  # =========================================================================
+  # ALLOWANCE/SURCHARGE FIELDS (flattened from Pricing[].AllowanceSurcharge[])
+  #
+  # These fields are all null when the pricing entry has no surcharges.
+  # When allowanceSurchargeIndicator is non-null, allowanceSurchargeType is
+  # also guaranteed to be non-null.
+  #
+  # In the domain model (AllowanceSurcharge), allowanceSurchargeIndicator and
+  # allowanceSurchargeType are required. Here they are nullable because this
+  # flat schema includes rows for pricings without surcharges (LEFT JOIN).
+  # =========================================================================
+  
+  allowanceSurchargeIndicator:
+    type: ["string", "null"]
+    description: |
+      Indicates whether this price adjustment is an allowance (discount) or a surcharge (additional charge).
+      `null` when this row represents a pricing entry without surcharges.
+      
+      **Required field relaxation**: This field is required in the domain model `AllowanceSurcharge`
+      but nullable here because the flat LEFT JOIN includes rows for pricings without surcharges.
+      
+      **ETIM xChange**: `AllowanceSurchargeIndicator`
+      **Path**: `Supplier[].Product[].TradeItem[].Pricing[].AllowanceSurcharge[].AllowanceSurchargeIndicator`
+    enum:
+      - ALLOWANCE
+      - SURCHARGE
+      - null
+    examples:
+      - ALLOWANCE
+      - SURCHARGE
+      - null
+  
+  allowanceSurchargeType:
+    description: |
+      Code describing the reason for the allowance or surcharge.
+      `null` when this row represents a pricing entry without surcharges.
+      
+      **Required field relaxation**: This field is required in the domain model `AllowanceSurcharge`
+      but nullable here because the flat LEFT JOIN includes rows for pricings without surcharges.
+      
+      **ETIM xChange**: `AllowanceSurchargeType`
+      **Path**: `Supplier[].Product[].TradeItem[].Pricing[].AllowanceSurcharge[].AllowanceSurchargeType`
+    anyOf:
+      - $ref: ../../../../shared/schemas/common/AllowanceSurchargeTypes.yaml
+      - type: "null"
+    examples:
+      - AEQ
+      - DBD
+      - null
+  
+  allowanceSurchargeSequenceNumber:
+    type: ["integer", "null"]
+    description: |
+      Sequence number used to order multiple allowances or surcharges applied to the same price.
+      `null` when this row represents a pricing entry without surcharges.
+      
+      **ETIM xChange**: `AllowanceSurchargeSequenceNumber`
+      **Path**: `Supplier[].Product[].TradeItem[].Pricing[].AllowanceSurcharge[].AllowanceSurchargeSequenceNumber`
+    minimum: 1
+    examples:
+      - 1
+      - 2
+      - null
+  
+  allowanceSurchargeValidityDate:
+    type: ["string", "null"]
+    format: date
+    description: |
+      Date from which the allowance or surcharge becomes valid. ISO 8601 date format (YYYY-MM-DD).
+      `null` when this row represents a pricing entry without surcharges or when not specified.
+      
+      **ETIM xChange**: `AllowanceSurchargeValidityDate`
+      **Path**: `Supplier[].Product[].TradeItem[].Pricing[].AllowanceSurcharge[].AllowanceSurchargeValidityDate`
+    examples:
+      - "2025-01-01"
+      - null
+  
+  allowanceSurchargeAmount:
+    type: ["number", "null"]
+    format: decimal
+    description: |
+      Fixed monetary amount of the allowance or surcharge.
+      `null` when this row represents a pricing entry without surcharges or when not specified.
+      
+      **ETIM xChange**: `AllowanceSurchargeAmount`
+      **Path**: `Supplier[].Product[].TradeItem[].Pricing[].AllowanceSurcharge[].AllowanceSurchargeAmount`
+    minimum: 0
+    multipleOf: 0.0001
+    maximum: 99999999999.9999
+    examples:
+      - 15.50
+      - 250.00
+      - null
+  
+  allowanceSurchargePercentage:
+    type: ["number", "null"]
+    format: decimal
+    description: |
+      Percentage rate of the allowance or surcharge.
+      `null` when this row represents a pricing entry without surcharges or when not specified.
+      
+      **ETIM xChange**: `AllowanceSurchargePercentage`
+      **Path**: `Supplier[].Product[].TradeItem[].Pricing[].AllowanceSurcharge[].AllowanceSurchargePercentage`
+    minimum: 0
+    multipleOf: 0.001
+    maximum: 999.999
+    examples:
+      - 5.5
+      - 12.75
+      - null
+  
+  allowanceSurchargeMinimumQuantity:
+    type: ["number", "null"]
+    format: decimal
+    description: |
+      Minimum ordered quantity required for the allowance or surcharge to apply.
+      `null` when this row represents a pricing entry without surcharges or when not specified.
+      
+      **ETIM xChange**: `AllowanceSurchargeMinimumQuantity`
+      **Path**: `Supplier[].Product[].TradeItem[].Pricing[].AllowanceSurcharge[].AllowanceSurchargeMinimumQuantity`
+    minimum: 0
+    multipleOf: 0.0001
+    maximum: 999999999999.9999
+    examples:
+      - 10
+      - 50
+      - null
+
 examples:
-  # Standard pricing - single quantity
+  # Pricing with percentage-based allowance (row 1 of 2 for this pricing)
   - supplierIdGln: "8712423012485"
     supplierItemNumber: "SKU-LAMP-001"
-    pricingRef: "price-c62-1-20250101"
     priceUnit: C62
     priceQuantity: 1
     currencyCode: EUR
@@ -238,11 +359,38 @@ examples:
     vat: 21.0
     priceValidityDate: "2025-01-01"
     priceExpiryDate: "2025-12-31"
+    allowanceSurchargeIndicator: ALLOWANCE
+    allowanceSurchargeType: AEQ
+    allowanceSurchargeSequenceNumber: 1
+    allowanceSurchargeValidityDate: "2025-01-01"
+    allowanceSurchargeAmount: null
+    allowanceSurchargePercentage: 5.5
+    allowanceSurchargeMinimumQuantity: 50
   
-  # Quantity tier pricing - same item, different quantity
+  # Same pricing with fixed-amount surcharge (row 2 of 2 — pricing fields repeated)
+  - supplierIdGln: "8712423012485"
+    supplierItemNumber: "SKU-LAMP-001"
+    priceUnit: C62
+    priceQuantity: 1
+    currencyCode: EUR
+    priceOnRequest: false
+    grossListPrice: 12.99
+    netPrice: 9.99
+    recommendedRetailPrice: 15.99
+    vat: 21.0
+    priceValidityDate: "2025-01-01"
+    priceExpiryDate: "2025-12-31"
+    allowanceSurchargeIndicator: SURCHARGE
+    allowanceSurchargeType: DBD
+    allowanceSurchargeSequenceNumber: 2
+    allowanceSurchargeValidityDate: null
+    allowanceSurchargeAmount: 25.00
+    allowanceSurchargePercentage: null
+    allowanceSurchargeMinimumQuantity: null
+  
+  # Pricing without surcharges (all allowance/surcharge fields null)
   - supplierIdGln: "8712423012485"
     supplierItemNumber: "SKU-CABLE-002"
-    pricingRef: "price-mtr-1-20250101"
     priceUnit: MTR
     priceUnitFactor: 1.0
     priceQuantity: 1
@@ -254,19 +402,10 @@ examples:
     vat: 21.0
     priceValidityDate: "2025-01-01"
     priceExpiryDate: "2025-06-30"
-  
-  # Quantity tier pricing - bulk discount
-  - supplierIdGln: "8712423012485"
-    supplierItemNumber: "SKU-CABLE-002"
-    pricingRef: "price-mtr-100-20250101"
-    priceUnit: MTR
-    priceUnitFactor: 1.0
-    priceQuantity: 100
-    currencyCode: EUR
-    priceOnRequest: false
-    grossListPrice: 2.00
-    netPrice: 1.59
-    recommendedRetailPrice: 2.99
-    vat: 21.0
-    priceValidityDate: "2025-01-01"
-    priceExpiryDate: "2025-06-30"
+    allowanceSurchargeIndicator: null
+    allowanceSurchargeType: null
+    allowanceSurchargeSequenceNumber: null
+    allowanceSurchargeValidityDate: null
+    allowanceSurchargeAmount: null
+    allowanceSurchargePercentage: null
+    allowanceSurchargeMinimumQuantity: null

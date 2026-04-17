@@ -31,8 +31,7 @@ examples:
         orderStepSize: 1
         standardOrderLeadTime: 5
       pricings:
-        - pricingRef: "price-c62-1-20250101"
-          priceUnit: C62
+        - priceUnit: C62
           priceQuantity: 1
           currencyCode: EUR
           priceOnRequest: false

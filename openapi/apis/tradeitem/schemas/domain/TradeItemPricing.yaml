@@ -3,31 +3,18 @@ description: |
   Pricing information for a trade item including prices, price unit, and validity dates.
   Extracted from ETIM xChange `TradeItem.Pricing[]` structure.
   
-  **Allowances & Surcharges**: Included as nested array in the complete `TradeItemResponse`.
-  Always `null` in subresource (`/pricings`) and bulk (`/trade-items/bulk/pricings`) responses —
-  use the separate `/allowance-surcharges` or `/trade-items/bulk/allowance-surcharges` endpoints for flat retrieval.
+  **Allowances & Surcharges**: Included as nested array within each pricing entry.
+  Each item in the `allowanceSurcharges` array follows the `AllowanceSurcharge` domain schema
+  where `allowanceSurchargeIndicator` and `allowanceSurchargeType` are required.
   
   **ETIM xChange**: `Pricing`
   **Path**: `Supplier[].Product[].TradeItem[].Pricing[]`
 required:
-  - pricingRef
   - priceUnit
   - priceQuantity
   - currencyCode
   - priceValidityDate
 properties:
-  pricingRef:
-    description: |
-      Server-generated opaque reference key that uniquely identifies this pricing entry
-      within the scope of a trade item (identified by `supplierIdGln` + `supplierItemNumber`).
-      
-      This is a technical identifier not present in the ETIM xChange domain model.
-      Use `pricingRef` to correlate pricing entries with their allowances/surcharges
-      from the `/allowance-surcharges` endpoint.
-    $ref: ../../../../shared/schemas/identifiers/TechnicalId.yaml
-    examples:
-      - "price-c62-1-20250101"
-      - "f47ac10b-58cc-4372-a567-0e02b2c3d479"
   priceUnit:
     description: |
       Unit for which the price applies (e.g., pieces, boxes, meters).
@@ -174,10 +161,7 @@ properties:
     type: ["array", "null"]
     description: |
       Allowances and surcharges applied to this pricing entry.
-      
-      **Populated** in the complete `TradeItemResponse` (nested inside each pricing entry).
-      **Always `null`** in subresource (`/pricings`) and bulk (`/trade-items/bulk/pricings`) responses.
-      For flat retrieval, use the dedicated `/allowance-surcharges` or `/trade-items/bulk/allowance-surcharges` endpoints.
+      Returns `null` when no allowances or surcharges are defined for this pricing.
       
       **ETIM xChange**: `AllowanceSurcharge[]`
       **Path**: `Supplier[].Product[].TradeItem[].Pricing[].AllowanceSurcharge[]`
@@ -192,8 +176,7 @@ properties:
       - null
 
 examples:
-  - pricingRef: "price-c62-1-20250101"
-    priceUnit: C62
+  - priceUnit: C62
     priceUnitFactor: null
     priceQuantity: 1
     currencyCode: EUR
@@ -210,8 +193,7 @@ examples:
         allowanceSurchargeSequenceNumber: 1
         allowanceSurchargePercentage: 10
         allowanceSurchargeMinimumQuantity: 100
-  - pricingRef: "price-mtr-1-20250101"
-    priceUnit: MTR
+  - priceUnit: MTR
     priceUnitFactor: 1.0
     priceQuantity: 1
     currencyCode: EUR
