@@ -18,9 +18,11 @@ Before making changes, read and follow these references:
 - [Repository instructions](../copilot-instructions.md)
 - [OpenAPI best practices](../../docs/best-practices.md)
 - [Envelope pattern](../../docs/envelope-pattern.md)
+- [ETIM xChange context](../../resources/etim-xchange/.instructions.md)
+- [Field mapping registry](../../resources/etim-xchange/etim-field-mapping-registry.md)
 - [Trade item generator example](../../openapi/apis/tradeitem/etim-tradeitem-openapi-generation-prompt.md)
 
-Then inspect the target API and at least one existing API implementation in `openapi/apis/` to reuse established patterns instead of inventing new ones.
+Then inspect the target API's `.instructions.md` and at least one existing API implementation in `openapi/apis/` to reuse established patterns instead of inventing new ones.
 
 Apply these rules unless the user explicitly overrides them:
 
@@ -81,11 +83,15 @@ When designing endpoints and files:
 Expected working method:
 
 1. Infer the requested resource design from the user arguments and ETIM source section.
-2. Inspect adjacent APIs to find the closest implementation pattern.
-3. Create or update only the files needed for the requested resource or aspect.
-4. Reuse shared components instead of duplicating schemas or parameters.
-5. Regenerate the bundled `generated/{api}-api.yaml` file after source spec changes.
-6. Validate the result and fix any spec or reference errors introduced by the change.
+2. Read the target API's `.instructions.md` for current mapping status and design decisions.
+3. Check the [field mapping registry](../../resources/etim-xchange/etim-field-mapping-registry.md) to see what's already mapped.
+4. Inspect adjacent APIs to find the closest implementation pattern.
+5. Create or update only the files needed for the requested resource or aspect.
+6. Reuse shared components instead of duplicating schemas or parameters.
+7. Regenerate the bundled `generated/{api}-api.yaml` file after source spec changes.
+8. Update the field mapping registry with new/changed mappings.
+9. Update the target API's `.instructions.md` if the mapping status or endpoint inventory changed.
+10. Validate the result and fix any spec or reference errors introduced by the change.
 
 Expected deliverables when the user asks for full implementation:
 - updated `openapi.yaml`

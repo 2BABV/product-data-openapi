@@ -4,7 +4,7 @@
 Generate a comprehensive OpenAPI 3.1 specification for the **TradeItem** part of the ETIM xChange V2.0 schema, creating bulk services with cursor-based pagination and minimal nesting.
 
 ## Context Files
-- **Source Schema**: `resources/etim-xchange/ETIM xChange_Schema_V2-0_beta_2025-10-13.json` (TradeItem section starting at line 1690)
+- **Source Schema**: `resources/etim-xchange/ETIM xChange_Schema_V2.0-2025-11-27.json` (TradeItem section)
 - **Project Standards**: `.github/copilot-instructions.md`
 - **Best Practices**: `docs/best-practices.md`
 - **Envelope Pattern**: `docs/envelope-pattern.md`
