@@ -14,27 +14,19 @@ import yaml from 'js-yaml';
 const APIS = [
   {
     name: 'Product',
-    specPath: 'openapi/apis/product/generated/product-api.yaml',
-    // Domain schemas to include (exclude Response envelopes/pagination/shared)
+    specPath: 'openapi/apis/product/generated/product-domain-api.yaml',
+    // Exclude shared identifier/utility schemas (no properties to diagram)
     domainFilter: name =>
-      !name.endsWith('Response') &&
-      !name.startsWith('Bulk') &&
-      !['ProblemDetails', 'ValidationProblemDetails', 'TechnicalId',
-        'CursorPaginationMetadata', 'Gln', 'Gtin', 'LanguageCode'].includes(name),
-    // Single root: the full product as returned by GET /products/{gln}/{mpn}
-    root: 'ProductResponseData',
+      !['Gln', 'Gtin', 'LanguageCode'].includes(name),
+    root: 'Product',
     rootLabel: 'Product',
   },
   {
     name: 'TradeItem',
-    specPath: 'openapi/apis/tradeitem/generated/tradeitem-api.yaml',
+    specPath: 'openapi/apis/tradeitem/generated/tradeitem-domain-api.yaml',
     domainFilter: name =>
-      !name.endsWith('Response') &&
-      !name.startsWith('Bulk') &&
-      !['ProblemDetails', 'ValidationProblemDetails', 'TechnicalId',
-        'CursorPaginationMetadata', 'Gln', 'Gtin', 'LanguageCode'].includes(name),
-    // Single root: the full trade item as returned by GET /trade-items/{gln}/{itemNumber}
-    root: 'TradeItemResponseData',
+      !['Gln', 'Gtin', 'LanguageCode'].includes(name),
+    root: 'TradeItem',
     rootLabel: 'Trade Item',
   },
 ];

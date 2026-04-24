@@ -1,0 +1,45 @@
+openapi: 3.1.0
+info:
+  title: Product Domain
+  version: 1.0.0
+  description: |
+    Domain model documentation for products.
+  contact:
+    name: Product API Support
+    email: support@product.2ba.nl
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+
+servers:
+  - url: https://{host}{basePath}/v1
+    description: Product Data OpenAPI - Product Domain API v1
+    variables:
+      host:
+        default: api.example.com
+        description: >-
+          Implementer-specific API hostname.
+          Examples: rest.2ba.nl, selectprerelease.artikelbeheer.nl,
+          acceptation-service-api-dsgo.etimix.com
+      basePath:
+        default: ''
+        description: >-
+          Optional path prefix (e.g. /api). Leave empty if the API
+          is served directly under the domain root.
+
+paths:
+  /products/product:
+    get:
+      operationId: getProductSchema
+      summary: Product Schema
+      description: This endpoint exists solely for documentation purposes to display the Product schema.
+      tags:
+        - Schema Documentation
+      security: []
+      responses:
+        '200':
+          description: Product Schema
+          content:
+            application/json:
+              schema:
+                $ref: schemas/domain/Product.yaml
