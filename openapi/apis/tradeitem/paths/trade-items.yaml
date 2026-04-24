@@ -25,18 +25,19 @@ get:
                 data:
                   supplierIdGln: "1234567890123"
                   supplierItemNumber: "ART-12345"
-                  supplierAltItemNumber: "ALT-12345"
-                  manufacturerItemNumber: "MFG-98765"
-                  manufacturerIdGln: "9876543210987"
-                  itemGtins: ["4012345678901"]
-                  buyerItemNumber: "BUYER-XYZ-123"
-                  discountGroupId: "DG-001"
-                  bonusGroupId: "BG-002"
-                  itemValidityDate: "2024-01-01"
-                  itemObsolescenceDate: "2026-12-31"
                   itemDetails:
-                    itemStatus: ACTIVE
-                    itemCondition: NEW
+                    supplierAltItemNumber: "ALT-12345"
+                    manufacturerItemNumber: "MFG-98765"
+                    manufacturerIdGln: "9876543210987"
+                    manufacturerProductNumber: "929002376910"
+                    itemGtins: ["4012345678901"]
+                    buyerItemNumber: "BUYER-XYZ-123"
+                    discountGroupId: "DG-001"
+                    bonusGroupId: "BG-002"
+                    itemValidityDate: "2024-01-01"
+                    itemObsolescenceDate: "2026-12-31"
+                    itemStatus: "ACTIVE"
+                    itemCondition: "NEW"
                     stockItem: true
                     shelfLifePeriod: 365
                   ordering:
@@ -96,19 +97,21 @@ get:
                 data:
                   supplierIdGln: "9876543210987"
                   supplierItemNumber: "SKU-MIN-001"
-                  supplierAltItemNumber: null
-                  manufacturerItemNumber: null
-                  manufacturerIdGln: null
-                  itemGtins: null
-                  buyerItemNumber: null
-                  discountGroupId: null
-                  bonusGroupId: null
-                  itemValidityDate: null
-                  itemObsolescenceDate: null
                   itemDetails:
-                    itemStatus: ACTIVE
-                    itemCondition: NEW
+                    supplierAltItemNumber: null
+                    manufacturerItemNumber: null
+                    manufacturerIdGln: null
+                    manufacturerProductNumber: null
+                    itemGtins: null
+                    buyerItemNumber: null
+                    discountGroupId: null
+                    bonusGroupId: null
+                    itemValidityDate: "2024-01-01"
+                    itemObsolescenceDate: null
+                    itemStatus: "ACTIVE"
+                    itemCondition: "NEW"
                     stockItem: true
+                    shelfLifePeriod: null
                   ordering:
                     orderUnit: C62
                     minimumOrderQuantity: 1

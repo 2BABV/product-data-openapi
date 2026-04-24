@@ -190,15 +190,27 @@ npx @redocly/cli bundle --config openapi/redocly.yaml tradeitem@v1 -o openapi/ap
 
 ### Generate Documentation
 ```powershell
-# Generate HTML documentation for specific API
-npx redocly build-docs product@v1 -o dist/docs/product.html
-npx redocly build-docs tradeitem@v1 -o dist/docs/tradeitem.html
-npx redocly build-docs tradeitem-domain@v1 -o dist/docs/tradeitem-domain.html
-npx redocly build-docs netprice@v1 -o dist/docs/netprice.html
-npx redocly build-docs stock@v1 -o dist/docs/stock.html
+# Generate HTML documentation for all APIs
+npm run build:docs
 
-# Preview documentation locally
-npx redocly preview-docs product@v1
+# Generate HTML documentation for a specific API
+npm run build:product
+npm run build:tradeitem
+npm run build:tradeitem-domain
+npm run build:netprice
+npm run build:stock
+```
+
+### Preview Documentation Locally
+
+> **Note:** `redocly preview-docs` was removed in Redocly CLI v2.x. Use the `preview:*` npm scripts instead, which build the HTML and open it in the default browser.
+
+```powershell
+npm run preview:product
+npm run preview:tradeitem
+npm run preview:tradeitem-domain
+npm run preview:netprice
+npm run preview:stock
 ```
 
 ---

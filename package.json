@@ -7,11 +7,19 @@
     "bundle": "npm run bundle:product && npm run bundle:tradeitem",
     "build:product": "redocly build-docs --config openapi/redocly.yaml product@v1 -o openapi/apis/product/generated/product.html",
     "build:tradeitem": "redocly build-docs --config openapi/redocly.yaml tradeitem@v1 -o openapi/apis/tradeitem/generated/tradeitem.html",
-    "build:docs": "npm run build:product && npm run build:tradeitem",
-    "build:models": "node scripts/generate-model-docs.mjs"
+    "build:tradeitem-domain": "redocly build-docs --config openapi/redocly.yaml tradeitem-domain@v1 -o openapi/apis/tradeitem/generated/tradeitem-domain.html",
+    "build:netprice": "redocly build-docs --config openapi/redocly.yaml netprice@v1 -o openapi/apis/netprice/generated/netprice.html",
+    "build:stock": "redocly build-docs --config openapi/redocly.yaml stock@v1 -o openapi/apis/stock/generated/stock.html",
+    "build:docs": "npm run build:product && npm run build:tradeitem && npm run build:tradeitem-domain && npm run build:netprice && npm run build:stock",
+    "build:models": "node scripts/generate-model-docs.mjs",
+    "preview:product": "npm run build:product && start openapi/apis/product/generated/product.html",
+    "preview:tradeitem": "npm run build:tradeitem && start openapi/apis/tradeitem/generated/tradeitem.html",
+    "preview:tradeitem-domain": "npm run build:tradeitem-domain && start openapi/apis/tradeitem/generated/tradeitem-domain.html",
+    "preview:netprice": "npm run build:netprice && start openapi/apis/netprice/generated/netprice.html",
+    "preview:stock": "npm run build:stock && start openapi/apis/stock/generated/stock.html"
   },
   "devDependencies": {
-    "@redocly/cli": "^2.15.1",
+    "@redocly/cli": "^2.29.2",
     "js-yaml": "^4.1.1"
   }
 }

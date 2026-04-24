@@ -3,7 +3,7 @@ info:
   title: TradeItem Domain
   version: 1.0.0
   description: |
-    API for managing trade items, supplier information, and GTIN data.
+    Domain model documentation for trade items.
   contact:
     name: TradeItem API Support
     email: support@tradeitem.2ba.nl
@@ -28,21 +28,6 @@ servers:
           is served directly under the domain root.
 
 paths:
-  /trade-items/supplier:
-    get: 
-      operationId: getSupplierSchema
-      summary: Supplier Schema
-      description: This endpoint exists solely for documentation purposes to display the Supplier schema.
-      tags:
-        - Schema Documentation
-      security: []
-      responses:
-        '200':
-          description: Supplier Schema
-          content:
-            application/json:
-              schema:
-                $ref: schemas/domain/Supplier.yaml
   /trade-items/tradeitem:
     get: 
       operationId: getTradeItemSchema
