@@ -1,10 +1,10 @@
 get:
-  operationId: getBulkTradeItemLogisticsDetails
+  operationId: getBulkTradeItemLogisticDetails
   tags:
     - TradeItems bulk
-  summary: List trade item logistics details
+  summary: List trade item logistic details
   description: |
-    Retrieve trade item logistics details in bulk with cursor-based pagination.
+    Retrieve trade item logistic details in bulk with cursor-based pagination.
     Returns a flattened structure where each row represents a single logistics entry
     with the trade item identifier (`supplierIdGln` + `supplierItemNumber`).
     
@@ -24,11 +24,11 @@ get:
     - $ref: ../../../../shared/parameters/query/mutation-date-time.yaml
   responses:
     '200':
-      description: Successfully retrieved trade item logistics details
+      description: Successfully retrieved trade item logistic details
       content:
         application/json:
           schema:
-            $ref: ../../schemas/responses/BulkTradeItemLogisticsDetailsResponse.yaml
+            $ref: ../../schemas/responses/BulkTradeItemLogisticDetailsResponse.yaml
           examples:
             multipleItems:
               summary: Multiple trade item logistics entries

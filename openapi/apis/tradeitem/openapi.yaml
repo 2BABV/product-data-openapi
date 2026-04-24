@@ -59,8 +59,8 @@ paths:
   /trade-items/{supplierIdGln}/{supplierItemNumber}/descriptions:
     $ref: ./paths/trade-item-descriptions.yaml
   
-  /trade-items/{supplierIdGln}/{supplierItemNumber}/orderings:
-    $ref: ./paths/trade-item-orderings.yaml
+  /trade-items/{supplierIdGln}/{supplierItemNumber}/ordering:
+    $ref: ./paths/trade-item-ordering.yaml
   
   /trade-items/{supplierIdGln}/{supplierItemNumber}/pricings:
     $ref: ./paths/trade-item-pricings.yaml
@@ -68,8 +68,8 @@ paths:
   /trade-items/{supplierIdGln}/{supplierItemNumber}/relations:
     $ref: ./paths/trade-item-relations.yaml
   
-  /trade-items/{supplierIdGln}/{supplierItemNumber}/logistics-details:
-    $ref: ./paths/trade-item-logistics-details.yaml
+  /trade-items/{supplierIdGln}/{supplierItemNumber}/logistic-details:
+    $ref: ./paths/trade-item-logistic-details.yaml
   
   /trade-items/{supplierIdGln}/{supplierItemNumber}/attachments:
     $ref: ./paths/trade-item-attachments.yaml
@@ -85,14 +85,14 @@ paths:
     $ref: ./paths/bulk/details.yaml
   /trade-items/bulk/descriptions:
     $ref: ./paths/bulk/descriptions.yaml
-  /trade-items/bulk/orderings:
-    $ref: ./paths/bulk/orderings.yaml
+  /trade-items/bulk/ordering:
+    $ref: ./paths/bulk/ordering.yaml
   /trade-items/bulk/pricings:
     $ref: ./paths/bulk/pricings.yaml
   /trade-items/bulk/relations:
     $ref: ./paths/bulk/relations.yaml
-  /trade-items/bulk/logistics-details:
-    $ref: ./paths/bulk/logistics-details.yaml
+  /trade-items/bulk/logistic-details:
+    $ref: ./paths/bulk/logistic-details.yaml
   /trade-items/bulk/attachments:
     $ref: ./paths/bulk/attachments.yaml
   /trade-items/bulk/enclosed-items:
@@ -112,8 +112,8 @@ components:
       $ref: ./schemas/domain/ItemDescriptionsSummary.yaml
     TradeItemOrdering:
       $ref: ./schemas/domain/TradeItemOrdering.yaml
-    TradeItemOrderingsSummary:
-      $ref: ./schemas/domain/TradeItemOrderingsSummary.yaml
+    TradeItemOrderingSummary:
+      $ref: ./schemas/domain/TradeItemOrderingSummary.yaml
     TradeItemPricing:
       $ref: ./schemas/domain/TradeItemPricing.yaml
     TradeItemPricingsSummary:
@@ -164,12 +164,12 @@ components:
       $ref: ./schemas/responses/BulkTradeItemDetailsResponse.yaml
     BulkTradeItemDescriptionsResponse:
       $ref: ./schemas/responses/BulkTradeItemDescriptionsResponse.yaml
-    TradeItemOrderingsResponse:
-      $ref: ./schemas/responses/TradeItemOrderingsResponse.yaml
-    TradeItemOrderingsResponseData:
-      $ref: ./schemas/responses/TradeItemOrderingsResponseData.yaml
-    BulkTradeItemOrderingsResponse:
-      $ref: ./schemas/responses/BulkTradeItemOrderingsResponse.yaml
+    TradeItemOrderingResponse:
+      $ref: ./schemas/responses/TradeItemOrderingResponse.yaml
+    TradeItemOrderingResponseData:
+      $ref: ./schemas/responses/TradeItemOrderingResponseData.yaml
+    BulkTradeItemOrderingResponse:
+      $ref: ./schemas/responses/BulkTradeItemOrderingResponse.yaml
     TradeItemPricingsResponse:
       $ref: ./schemas/responses/TradeItemPricingsResponse.yaml
     TradeItemPricingsResponseData:
@@ -182,12 +182,12 @@ components:
       $ref: ./schemas/responses/TradeItemRelationsResponseData.yaml
     BulkTradeItemRelationsResponse:
       $ref: ./schemas/responses/BulkTradeItemRelationsResponse.yaml
-    TradeItemLogisticsDetailsResponse:
-      $ref: ./schemas/responses/TradeItemLogisticsDetailsResponse.yaml
-    TradeItemLogisticsDetailsResponseData:
-      $ref: ./schemas/responses/TradeItemLogisticsDetailsResponseData.yaml
-    BulkTradeItemLogisticsDetailsResponse:
-      $ref: ./schemas/responses/BulkTradeItemLogisticsDetailsResponse.yaml
+    TradeItemLogisticDetailsResponse:
+      $ref: ./schemas/responses/TradeItemLogisticDetailsResponse.yaml
+    TradeItemLogisticDetailsResponseData:
+      $ref: ./schemas/responses/TradeItemLogisticDetailsResponseData.yaml
+    BulkTradeItemLogisticDetailsResponse:
+      $ref: ./schemas/responses/BulkTradeItemLogisticDetailsResponse.yaml
     TradeItemAttachmentsResponse:
       $ref: ./schemas/responses/TradeItemAttachmentsResponse.yaml
     TradeItemAttachmentsResponseData:

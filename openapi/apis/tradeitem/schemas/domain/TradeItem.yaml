@@ -8,7 +8,7 @@ description: |
 required:
   - supplierIdGln
   - supplierItemNumber
-  - itemDetails
+  - details
   - ordering
 properties:
   # Core identifiers (required)
@@ -32,7 +32,7 @@ properties:
       - "SKU-ABC-789"
   
   # Combined ItemIdentification + ItemDetails
-  itemDetails:
+  details:
     description: |
       Trade item identification and operational details, combining fields from
       ETIM xChange `ItemIdentification` and `ItemDetails` sections (excluding descriptions).
@@ -59,7 +59,7 @@ properties:
     examples:
       - null
   
-  itemRelations:
+  relations:
     type: ["array", "null"]
     description: |
       Array of relationships to other trade items (accessories, spare parts, etc.).
@@ -70,7 +70,7 @@ properties:
     examples:
       - null
   
-  itemLogistics:
+  logisticDetails:
     type: ["array", "null"]
     description: |
       Array of logistic details including dimensions and weights.
@@ -81,7 +81,7 @@ properties:
     examples:
       - null
   
-  itemAttachments:
+  attachments:
     type: ["array", "null"]
     description: |
       Array of attachments (images, documents, certificates, etc.).
@@ -106,7 +106,7 @@ properties:
 examples:
   - supplierIdGln: "1234567890123"
     supplierItemNumber: "ART-12345"
-    itemDetails:
+    details:
       supplierAltItemNumber: "ALT-12345"
       manufacturerItemNumber: "MFG-98765"
       manufacturerIdGln: "9876543210987"
@@ -154,8 +154,8 @@ examples:
             allowanceSurchargeSequenceNumber: 2
             allowanceSurchargeAmount: 25.0
             allowanceSurchargeMinimumQuantity: null
-    itemRelations: null
-    itemLogistics:
+    relations: null
+    logisticDetails:
       - baseItemNetLength: 25.5
         baseItemNetWidth: 15.0
         baseItemNetHeight: 10.0
@@ -165,5 +165,5 @@ examples:
         netWeightUnit: GRM
         baseItemNetVolume: null
         netVolumeUnit: null
-    itemAttachments: null
+    attachments: null
     packagingUnits: null

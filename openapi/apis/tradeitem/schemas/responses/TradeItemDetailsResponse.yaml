@@ -6,7 +6,7 @@ description: |
   with the `details` object containing all identification and details fields.
   
   This structure aligns with other single-item subresource responses
-  (`/orderings`, `/pricings`).
+  (`/ordering`, `/pricings`).
 required:
   - data
 properties:

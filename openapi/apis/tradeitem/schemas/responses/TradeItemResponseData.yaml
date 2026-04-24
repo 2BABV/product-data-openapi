@@ -4,21 +4,21 @@ description: |
   
   The trade item key (`supplierIdGln` + `supplierItemNumber`) is at the root level,
   with nested objects for each component:
-  - `itemDetails`: Identification and operational details (from ItemIdentification + ItemDetails)
+  - `details`: Identification and operational details (from ItemIdentification + ItemDetails)
   - `ordering`: Order unit, minimum order quantity, step size, lead time
   - `pricings`: Array of pricing conditions with allowance/surcharges
-  - `itemRelations`: Accessories, spare parts, and other related items
-  - `itemLogistics`: Dimensions, weights, and volumes
-  - `itemAttachments`: Images, documents, and certificates
+  - `relations`: Accessories, spare parts, and other related items
+  - `logisticDetails`: Dimensions, weights, and volumes
+  - `attachments`: Images, documents, and certificates
   - `packagingUnits`: Packaging level information
   
   This structure aligns with the subresource endpoints(`/details`, `/descriptions`,
-  `/orderings`, `/pricings`, `/relations`, `/logistics-details`,
+  `/ordering`, `/pricings`, `/relations`, `/logistic-details`,
   `/attachments`, `/enclosed-items`) which all include the composite key at the root level.
 required:
   - supplierIdGln
   - supplierItemNumber
-  - itemDetails
+  - details
   - ordering
 properties:
   # Composite key
@@ -44,7 +44,7 @@ properties:
       - "SKU-ABC-789"
 
   # Combined ItemIdentification + ItemDetails
-  itemDetails:
+  details:
     $ref: ../domain/TradeItemDetails.yaml
     description: |
       Trade item identification and operational details, combining fields from
@@ -69,7 +69,7 @@ properties:
     examples:
       - null
 
-  itemRelations:
+  relations:
     type: ["array", "null"]
     description: |
       Array of relationships to other trade items (accessories, spare parts, etc.).
@@ -80,7 +80,7 @@ properties:
     examples:
       - null
 
-  itemLogistics:
+  logisticDetails:
     type: ["array", "null"]
     description: |
       Array of logistic details including dimensions and weights.
@@ -91,7 +91,7 @@ properties:
     examples:
       - null
 
-  itemAttachments:
+  attachments:
     type: ["array", "null"]
     description: |
       Array of attachments (images, documents, certificates, etc.).
@@ -116,7 +116,7 @@ properties:
 examples:
   - supplierIdGln: "1234567890123"
     supplierItemNumber: "ART-12345"
-    itemDetails:
+    details:
       supplierAltItemNumber: "ALT-12345"
       manufacturerItemNumber: "MFG-98765"
       manufacturerIdGln: "9876543210987"
@@ -164,8 +164,8 @@ examples:
             allowanceSurchargeSequenceNumber: 2
             allowanceSurchargeAmount: 25.0
             allowanceSurchargeMinimumQuantity: null
-    itemRelations: null
-    itemLogistics:
+    relations: null
+    logisticDetails:
       - baseItemNetLength: 25.5
         baseItemNetWidth: 15.0
         baseItemNetHeight: 10.0
@@ -175,5 +175,5 @@ examples:
         netWeightUnit: GRM
         baseItemNetVolume: null
         netVolumeUnit: null
-    itemAttachments: null
+    attachments: null
     packagingUnits: null

@@ -14,7 +14,7 @@ required:
   - data
 properties:
   data:
-    $ref: ./TradeItemOrderingsResponseData.yaml
+    $ref: ./TradeItemOrderingResponseData.yaml
 examples:
   - data:
       supplierIdGln: "1234567890123"

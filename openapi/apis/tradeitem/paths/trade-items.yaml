@@ -25,7 +25,7 @@ get:
                 data:
                   supplierIdGln: "1234567890123"
                   supplierItemNumber: "ART-12345"
-                  itemDetails:
+                  details:
                     supplierAltItemNumber: "ALT-12345"
                     manufacturerItemNumber: "MFG-98765"
                     manufacturerIdGln: "9876543210987"
@@ -58,13 +58,13 @@ get:
                       vat: 21.0
                       priceValidityDate: "2025-01-01"
                       priceExpiryDate: "2025-12-31"
-                  itemRelations:
+                  relations:
                     - relatedSupplierItemNumber: "ART-12346"
                       relatedManufacturerItemNumber: "MFG-98766"
                       relatedItemGtins: ["4012345678902"]
                       relationType: ACCESSORY
                       relatedItemQuantity: 2
-                  itemLogistics:
+                  logisticDetails:
                     - baseItemNetLength: 25.5
                       baseItemNetWidth: 15.0
                       baseItemNetHeight: 10.0
@@ -74,7 +74,7 @@ get:
                       netWeightUnit: GRM
                       baseItemNetVolume: 3.825
                       netVolumeUnit: LTR
-                  itemAttachments:
+                  attachments:
                     - attachmentType: ATX001
                       attachmentUri: "https://example.com/images/hammer-main.jpg"
                       attachmentDescription: "Product main image"
@@ -96,7 +96,7 @@ get:
                 data:
                   supplierIdGln: "9876543210987"
                   supplierItemNumber: "SKU-MIN-001"
-                  itemDetails:
+                  details:
                     supplierAltItemNumber: null
                     manufacturerItemNumber: null
                     manufacturerIdGln: null
@@ -116,9 +116,9 @@ get:
                     minimumOrderQuantity: 1
                     orderStepSize: 1
                   pricings: null
-                  itemRelations: null
-                  itemLogistics: null
-                  itemAttachments: null
+                  relations: null
+                  logisticDetails: null
+                  attachments: null
                   packagingUnits: null
     '404':
       description: Trade item not found for the given composite key

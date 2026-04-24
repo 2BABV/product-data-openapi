@@ -11,7 +11,7 @@ examples:
   - data:
       supplierIdGln: "1234567890123"
       supplierItemNumber: "ART-12345"
-      itemDetails:
+      details:
         supplierAltItemNumber: "ALT-12345"
         manufacturerItemNumber: "MFG-98765"
         manufacturerIdGln: "9876543210987"
@@ -48,20 +48,20 @@ examples:
               allowanceSurchargeSequenceNumber: 1
               allowanceSurchargePercentage: 10
               allowanceSurchargeMinimumQuantity: 100
-      itemRelations: null
-      itemLogistics:
+      relations: null
+      logisticDetails:
         - baseItemNetLength: 25.5
           baseItemNetWidth: 15.0
           baseItemNetHeight: 10.0
           netDimensionUnit: CMT
           baseItemNetWeight: 500.0
           netWeightUnit: GRM
-      itemAttachments: null
+      attachments: null
       packagingUnits: null
   - data:
       supplierIdGln: "9876543210987"
       supplierItemNumber: "SKU-MIN-001"
-      itemDetails:
+      details:
         supplierAltItemNumber: null
         manufacturerItemNumber: null
         manufacturerIdGln: null
@@ -81,7 +81,7 @@ examples:
         minimumOrderQuantity: 1
         orderStepSize: 1
       pricings: null
-      itemRelations: null
-      itemLogistics: null
-      itemAttachments: null
+      relations: null
+      logisticDetails: null
+      attachments: null
       packagingUnits: null

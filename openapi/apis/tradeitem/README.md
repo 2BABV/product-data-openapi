@@ -48,11 +48,11 @@ The bulk API consolidates ETIM xChange sections for efficient data retrieval:
 |----------|----------------------|--------|
 | `/bulk/trade-item-details` | `ItemIdentification` + `ItemDetails` (excl. descriptions) | `TradeItemDetailsSummary` |
 | `/bulk/trade-item-descriptions` | `ItemDetails.ItemDescriptions[]` | `ItemDescriptionsSummary` |
-| `/bulk/trade-item-orderings` | `Ordering` | `TradeItemOrderingsSummary` |
+| `/bulk/trade-item-ordering` | `Ordering` | `TradeItemOrderingSummary` |
 | `/bulk/trade-item-pricings` | `Pricing[]` (excl. allowances/surcharges) | `TradeItemPricingSummary` |
 | `/bulk/trade-item-allowance-surcharges` | `Pricing[].AllowanceSurcharge[]` | `AllowanceSurchargeSummary` |
 | `/bulk/trade-item-relations` | `ItemRelations[]` | `ItemRelationSummary` |
-| `/bulk/trade-item-logistics-details` | `ItemLogisticDetails[]` | `ItemLogisticSummary` |
+| `/bulk/trade-item-logistic-details` | `ItemLogisticDetails[]` | `ItemLogisticSummary` |
 
 **Note**: There is no separate `/bulk/trade-items` or `/bulk/item-identifications` endpoint. The `/bulk/trade-item-details` endpoint provides all identification fields combined with item details.
 
@@ -63,11 +63,11 @@ The bulk API consolidates ETIM xChange sections for efficient data retrieval:
 | `/{supplierIdGln}/{supplierItemNumber}` | Core trade item info | `TradeItemResponse` |
 | `/{supplierIdGln}/{supplierItemNumber}/details` | Item details | `TradeItemDetailsResponse` |
 | `/{supplierIdGln}/{supplierItemNumber}/descriptions` | Multilingual descriptions | `TradeItemDescriptionsResponse` |
-| `/{supplierIdGln}/{supplierItemNumber}/orderings` | Ordering conditions | `TradeItemOrderingsResponse` |
+| `/{supplierIdGln}/{supplierItemNumber}/ordering` | Ordering conditions | `TradeItemOrderingResponse` |
 | `/{supplierIdGln}/{supplierItemNumber}/pricings` | Pricing information | `TradeItemPricingsResponse` |
 | `/{supplierIdGln}/{supplierItemNumber}/allowance-surcharges` | Allowances/surcharges | `TradeItemAllowanceSurchargesResponse` |
 | `/{supplierIdGln}/{supplierItemNumber}/relations` | Item relations | `TradeItemRelationsResponse` |
-| `/{supplierIdGln}/{supplierItemNumber}/logistics-details` | Item logistics details | `TradeItemLogisticsDetailsResponse` |
+| `/{supplierIdGln}/{supplierItemNumber}/logistic-details` | Item logistic details | `TradeItemLogisticDetailsResponse` |
 
 ### Bulk Flattening Strategy
 
@@ -76,12 +76,12 @@ The bulk API consolidates ETIM xChange sections for efficient data retrieval:
 | Endpoint | Rows per Item | Flattening Pattern |
 |----------|---------------|-------------------|
 | `/bulk/trade-item-details` | 1 | Fully flat (all fields inline) |
-| `/bulk/trade-item-orderings` | 1 | Fully flat (all fields inline) |
+| `/bulk/trade-item-ordering` | 1 | Fully flat (all fields inline) |
 | `/bulk/trade-item-descriptions` | n (per language) | Flat per language row |
 | `/bulk/trade-item-pricings` | n (per price tier) | **Flat per price entry** |
 | `/bulk/trade-item-allowance-surcharges` | n (per surcharge) | **Flat per surcharge entry** |
 | `/bulk/trade-item-relations` | n (per relation) | **Flat per relation entry** |
-| `/bulk/trade-item-logistics-details` | 1 (typically) | Fully flat (all fields inline) |
+| `/bulk/trade-item-logistic-details` | 1 (typically) | Fully flat (all fields inline) |
 
 **Pricing Flattening** (consistent with Product API's `ProductEtimClassificationFeature` pattern):
 - Each row = 1 price entry with embedded trade item key (`supplierIdGln` + `supplierItemNumber`) and server-generated `pricingRef`
@@ -123,4 +123,4 @@ The bulk API consolidates ETIM xChange sections for efficient data retrieval:
 
 ### Not Planned
 
-**Full TradeItem Composite Endpoint** - The `/bulk/trade-item-details` consolidation means we don't need a separate endpoint returning everything. Clients can join details/orderings/pricings as needed.
+**Full TradeItem Composite Endpoint** - The `/bulk/trade-item-details` consolidation means we don't need a separate endpoint returning everything. Clients can join details/ordering/pricings as needed.
