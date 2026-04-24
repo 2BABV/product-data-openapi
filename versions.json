@@ -1,7 +1,12 @@
 {
   "product": {
-    "latest": "1.0.0-Preview1",
+    "latest": "1.0.0-Preview2",
     "versions": [
+      {
+        "version": "1.0.0-Preview2",
+        "date": "2026-04-24",
+        "prerelease": true
+      },
       {
         "version": "1.0.0-Preview1",
         "date": "2026-04-15",
