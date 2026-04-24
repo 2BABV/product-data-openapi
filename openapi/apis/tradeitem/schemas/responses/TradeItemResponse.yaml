@@ -58,7 +58,6 @@ examples:
           netWeightUnit: GRM
       itemAttachments: null
       packagingUnits: null
-      itemCountrySpecificFields: null
   - data:
       supplierIdGln: "9876543210987"
       supplierItemNumber: "SKU-MIN-001"
@@ -86,4 +85,3 @@ examples:
       itemLogistics: null
       itemAttachments: null
       packagingUnits: null
-      itemCountrySpecificFields: null

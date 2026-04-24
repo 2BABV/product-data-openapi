@@ -102,17 +102,6 @@ properties:
       $ref: ./PackagingUnit.yaml
     examples:
       - null
-  
-  itemCountrySpecificFields:
-    type: ["array", "null"]
-    description: |
-      Array of country-specific custom fields for extensibility.
-      **ETIM xChange**: `ItemCountrySpecificFields[]`
-      **Path**: `Supplier[].Product[].TradeItem[].ItemCountrySpecificFields[]`
-    items:
-      $ref: ./ItemCountrySpecificField.yaml
-    examples:
-      - null
 
 examples:
   - supplierIdGln: "1234567890123"
@@ -178,4 +167,3 @@ examples:
         netVolumeUnit: null
     itemAttachments: null
     packagingUnits: null
-    itemCountrySpecificFields: null

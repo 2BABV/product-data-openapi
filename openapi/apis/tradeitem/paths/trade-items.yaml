@@ -90,7 +90,6 @@ get:
                       grossDimensionUnit: CMT
                       grossWeight: 5500.0
                       grossWeightUnit: GRM
-                  itemCountrySpecificFields: null
             minimalTradeItem:
               summary: Minimal trade item with only required fields
               value:
@@ -121,7 +120,6 @@ get:
                   itemLogistics: null
                   itemAttachments: null
                   packagingUnits: null
-                  itemCountrySpecificFields: null
     '404':
       description: Trade item not found for the given composite key
       content:

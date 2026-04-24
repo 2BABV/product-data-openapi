@@ -11,9 +11,8 @@ description: |
   - `itemLogistics`: Dimensions, weights, and volumes
   - `itemAttachments`: Images, documents, and certificates
   - `packagingUnits`: Packaging level information
-  - `itemCountrySpecificFields`: Country-specific extensibility fields
   
-  This structure aligns with the subresource endpoints (`/details`, `/descriptions`,
+  This structure aligns with the subresource endpoints(`/details`, `/descriptions`,
   `/orderings`, `/pricings`, `/relations`, `/logistics-details`,
   `/attachments`, `/enclosed-items`) which all include the composite key at the root level.
 required:
@@ -114,17 +113,6 @@ properties:
     examples:
       - null
 
-  itemCountrySpecificFields:
-    type: ["array", "null"]
-    description: |
-      Array of country-specific custom fields for extensibility.
-      **ETIM xChange**: `ItemCountrySpecificFields[]`
-      **Path**: `Supplier[].Product[].TradeItem[].ItemCountrySpecificFields[]`
-    items:
-      $ref: ../domain/ItemCountrySpecificField.yaml
-    examples:
-      - null
-
 examples:
   - supplierIdGln: "1234567890123"
     supplierItemNumber: "ART-12345"
@@ -189,4 +177,3 @@ examples:
         netVolumeUnit: null
     itemAttachments: null
     packagingUnits: null
-    itemCountrySpecificFields: null

@@ -115,10 +115,6 @@ The bulk API consolidates ETIM xChange sections for efficient data retrieval:
 - Single-item endpoints: nested array (like other multilingual fields)
 - Bulk endpoint: flattened to primary language string
 
-**Country-Specific Fields**
-- `ItemCountrySpecificFields[]` with typed values
-- Decision needed: simplified model vs full type support (same as Product API)
-
 ### Low Priority
 
 **Legislation Fields** (if applicable at trade item level)
