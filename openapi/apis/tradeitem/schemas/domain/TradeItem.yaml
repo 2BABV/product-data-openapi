@@ -39,6 +39,19 @@ properties:
       Note: Item descriptions are available via `/{supplierIdGln}/{supplierItemNumber}/descriptions`.
     $ref: ./TradeItemDetails.yaml
   
+  # Item descriptions (multilingual)
+  descriptions:
+    type: ["array", "null"]
+    description: |
+      Array of multilingual item descriptions. Each item contains descriptions
+      in a specific language.
+      **ETIM xChange**: `ItemDescriptions[]`
+      **Path**: `Supplier[].Product[].TradeItem[].ItemDetails.ItemDescriptions[]`
+    items:
+      $ref: ./ItemDescription.yaml
+    examples:
+      - null
+  
   # Ordering (required object)
   ordering:
     description: |

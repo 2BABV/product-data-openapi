@@ -26,6 +26,13 @@ examples:
         itemCondition: "NEW"
         stockItem: true
         shelfLifePeriod: null
+      descriptions:
+        - descriptionLanguage: en-GB
+          minimalItemDescription: "Socket outlet double"
+          uniqueMainItemDescription: "Socket outlet double, flush-mounted, with child protection"
+        - descriptionLanguage: nl-NL
+          minimalItemDescription: "Wandcontactdoos dubbel"
+          uniqueMainItemDescription: "Wandcontactdoos dubbel, inbouw, met kinderbeveiliging"
       ordering:
         orderUnit: C62
         minimumOrderQuantity: 1
@@ -76,6 +83,7 @@ examples:
         itemCondition: "NEW"
         stockItem: true
         shelfLifePeriod: null
+      descriptions: null
       ordering:
         orderUnit: C62
         minimumOrderQuantity: 1

@@ -49,7 +49,17 @@ properties:
     description: |
       Trade item identification and operational details, combining fields from
       ETIM xChange `ItemIdentification` and `ItemDetails` sections (excluding descriptions).
-      Note: Item descriptions are available via `/{supplierIdGln}/{supplierItemNumber}/descriptions`.
+      Note: Item descriptions are also available via `/{supplierIdGln}/{supplierItemNumber}/descriptions`.
+
+  descriptions:
+    type: ["array", "null"]
+    description: |
+      Array of multilingual item descriptions. Each item contains descriptions
+      in a specific language.
+      **ETIM xChange**: `ItemDescriptions[]`
+      **Path**: `Supplier[].Product[].TradeItem[].ItemDetails.ItemDescriptions[]`
+    items:
+      $ref: ../domain/ItemDescription.yaml
 
   ordering:
     $ref: ../domain/TradeItemOrdering.yaml
@@ -131,6 +141,13 @@ examples:
       itemCondition: "NEW"
       stockItem: true
       shelfLifePeriod: null
+    descriptions:
+      - descriptionLanguage: en-GB
+        minimalItemDescription: "Socket outlet double"
+        uniqueMainItemDescription: "Socket outlet double, flush-mounted, with child protection"
+      - descriptionLanguage: nl-NL
+        minimalItemDescription: "Wandcontactdoos dubbel"
+        uniqueMainItemDescription: "Wandcontactdoos dubbel, inbouw, met kinderbeveiliging"
     ordering:
       orderUnit: C62
       minimumOrderQuantity: 1
