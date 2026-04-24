@@ -64,8 +64,8 @@ examples:
       details:
         supplierAltItemNumber: null
         manufacturerItemNumber: null
-        manufacturerIdGln: null
-        manufacturerProductNumber: null
+        manufacturerIdGln: "9876543210987"
+        manufacturerProductNumber: "PROD-MIN-001"
         itemGtins: null
         buyerItemNumber: null
         discountGroupId: null

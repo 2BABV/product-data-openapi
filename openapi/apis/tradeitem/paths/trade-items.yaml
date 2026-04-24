@@ -51,6 +51,7 @@ get:
                     - priceUnit: C62
                       priceUnitFactor: 1
                       priceQuantity: 1
+                      currencyCode: EUR
                       priceOnRequest: false
                       netPrice: 100.0
                       grossListPrice: 130.0
@@ -99,8 +100,8 @@ get:
                   details:
                     supplierAltItemNumber: null
                     manufacturerItemNumber: null
-                    manufacturerIdGln: null
-                    manufacturerProductNumber: null
+                    manufacturerIdGln: "9876543210987"
+                    manufacturerProductNumber: "PROD-MIN-001"
                     itemGtins: null
                     buyerItemNumber: null
                     discountGroupId: null
