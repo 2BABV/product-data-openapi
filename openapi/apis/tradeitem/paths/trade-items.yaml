@@ -2,8 +2,37 @@ get:
   operationId: getTradeItem
   summary: Get trade item
   description: |
-    Retrieve the full trade item payload for a single supplier item combination.
-    Returns exactly one trade item document. No pagination, no cursor metadata.
+    Retrieve the complete trade item information for a specific supplier item combination.
+    
+    This endpoint returns a single trade item identified by the composite key of
+    `supplierIdGln` and `supplierItemNumber`. The trade item key is at the root level,
+    with nested objects for each component:
+    
+    - **details**: Identification and operational details (GTINs, status, condition, validity dates)
+    - **descriptions**: Multilingual item descriptions (nested array)
+    - **ordering**: Order unit, minimum order quantity, step size, lead time
+    - **pricings**: Pricing conditions with allowance/surcharges (nested array)
+    - **relations**: Accessories, spare parts, and other related items (nested array)
+    - **logisticDetails**: Dimensions, weights, and volumes (nested array)
+    - **attachments**: Images, documents, and certificates (nested array)
+    - **packagingUnits**: Packaging level information (nested array, aggregate root only)
+    
+    **Subresources**: Most components are also available as dedicated subresources:
+    - `/details` - Trade item identification and operational details
+    - `/descriptions` - Multilingual descriptions with language filtering
+    - `/ordering` - Order unit configuration and lead time
+    - `/pricings` - Pricing conditions with allowance/surcharges
+    - `/relations` - Accessories, spare parts, and related items
+    - `/logistic-details` - Dimensions, weights, and volumes
+    - `/attachments` - Images, documents, and certificates
+    - `/enclosed-items` - Denormalized from packaging units (no corresponding aggregate root property)
+    
+    **Examples**: Example payloads show documented fields only. Clients must accept and ignore additional fields, including nested fields, when they are added in backward-compatible updates.
+    
+    **No pagination** - Returns exactly one trade item document or 404 if not found.
+    
+    **Composite Key**: The combination of supplier GLN and item number uniquely
+    identifies a trade item in the system.
     
     **ETIM xChange Path**: `Supplier[].Product[].TradeItem[]`
   tags:
@@ -129,6 +158,12 @@ get:
                   logisticDetails: null
                   attachments: null
                   packagingUnits: null
+    '400':
+      $ref: ../../../shared/responses/400-bad-request.yaml
+    '401':
+      $ref: ../../../shared/responses/401-unauthorized.yaml
+    '403':
+      $ref: ../../../shared/responses/403-forbidden.yaml
     '404':
       description: Trade item not found for the given composite key
       content:
@@ -143,11 +178,5 @@ get:
                 title: Not Found
                 status: 404
                 detail: "No trade item found for supplier GLN '1234567890123' and item number 'UNKNOWN-SKU'"
-    '400':
-      $ref: ../../../shared/responses/400-bad-request.yaml
-    '401':
-      $ref: ../../../shared/responses/401-unauthorized.yaml
-    '403':
-      $ref: ../../../shared/responses/403-forbidden.yaml
     '500':
       $ref: ../../../shared/responses/500-internal-server-error.yaml

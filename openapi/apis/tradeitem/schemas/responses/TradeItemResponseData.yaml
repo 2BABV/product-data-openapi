@@ -5,16 +5,19 @@ description: |
   The trade item key (`supplierIdGln` + `supplierItemNumber`) is at the root level,
   with nested objects for each component:
   - `details`: Identification and operational details (from ItemIdentification + ItemDetails)
+  - `descriptions`: Array of multilingual item descriptions
   - `ordering`: Order unit, minimum order quantity, step size, lead time
   - `pricings`: Array of pricing conditions with allowance/surcharges
   - `relations`: Accessories, spare parts, and other related items
   - `logisticDetails`: Dimensions, weights, and volumes
   - `attachments`: Images, documents, and certificates
-  - `packagingUnits`: Packaging level information
+  - `packagingUnits`: Packaging level information (aggregate root only — no dedicated sub-resource)
   
-  This structure aligns with the subresource endpoints(`/details`, `/descriptions`,
-  `/ordering`, `/pricings`, `/relations`, `/logistic-details`,
-  `/attachments`, `/enclosed-items`) which all include the composite key at the root level.
+  Each component is also available via a dedicated subresource endpoint:
+  `/details`, `/descriptions`, `/ordering`, `/pricings`, `/relations`,
+  `/logistic-details`, `/attachments`.
+  The `/enclosed-items` subresource is denormalized from packaging units and has
+  no corresponding top-level property in this response.
 required:
   - supplierIdGln
   - supplierItemNumber

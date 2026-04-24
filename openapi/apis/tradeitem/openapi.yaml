@@ -111,6 +111,8 @@ components:
       $ref: ./schemas/domain/TradeItemDetails.yaml
     TradeItemDetailsSummary:
       $ref: ./schemas/domain/TradeItemDetailsSummary.yaml
+    ItemDescription:
+      $ref: ./schemas/domain/ItemDescription.yaml
     ItemDescriptionsSummary:
       $ref: ./schemas/domain/ItemDescriptionsSummary.yaml
     TradeItemOrdering:
@@ -139,6 +141,8 @@ components:
       $ref: ./schemas/domain/TradeItemEnclosed.yaml
     TradeItemEnclosedSummary:
       $ref: ./schemas/domain/TradeItemEnclosedSummary.yaml
+    PackagingUnit:
+      $ref: ./schemas/domain/PackagingUnit.yaml
     AttachmentType:
       $ref: ./schemas/enums/AttachmentType.yaml
     AttachmentTypeSpecification:
@@ -251,7 +255,6 @@ components:
           tokenUrl: https://auth.example.com/connect/token
           scopes:
             read:tradeitems: Grants read access to trade items
-            write:tradeitems: Grants write access to trade items
 
 security:
   - oauth2:
