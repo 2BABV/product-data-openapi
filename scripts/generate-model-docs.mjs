@@ -1,9 +1,18 @@
 #!/usr/bin/env node
 /**
- * Generate domain model documentation from bundled OpenAPI specs.
- * Produces:
- *   1. Interactive HTML treeview (details/summary)
- *   2. Mermaid class diagram
+ * Generate domain model documentation from bundled OpenAPI domain specs.
+ *
+ * Reads from openapi-domain.yaml bundles (NOT REST API bundles) because domain
+ * specs provide cleaner root schemas (Product/TradeItem) without response
+ * envelope wrappers (ProductResponseData/TradeItemResponseData).
+ *
+ * Workflow:
+ *   1. Bundle domain specs:  npm run bundle
+ *   2. Generate diagrams:    npm run build:models
+ *
+ * Produces (in _test-site/):
+ *   1. Interactive HTML treeview  ({api}-tree.html)
+ *   2. Mermaid class diagram      ({api}-diagram.html)
  *
  * Usage: node scripts/generate-model-docs.mjs
  */

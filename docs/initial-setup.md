@@ -17,7 +17,7 @@
 This document describes the initial OpenAPI structure created for the Product Data OpenAPI project. The structure supports multiple API domains (etim, product, tradeitem, netprice) with shared components and Redocly integration.
 
 **Created on:** October 2, 2025  
-**Last updated:** December 2, 2025
+**Last updated:** April 24, 2026
 
 ---
 
@@ -29,27 +29,26 @@ openapi/
 ├── apis/
 │   ├── product/
 │   │   ├── openapi.yaml                  # Root spec for Product API
-│   │   ├── openapi-bulk.yaml             # Bulk operations spec
-│   │   ├── generated/                    # Git-tracked bundled specs (regenerate after changes)
+│   │   ├── openapi-domain.yaml           # Domain model spec (for diagrams)
+│   │   ├── generated/                    # Bundled specs (gitignored for domain bundles)
 │   │   ├── README.md                     # API documentation
 │   │   ├── paths/                        # API endpoint definitions
 │   │   └── schemas/
-│   │       ├── domain/                   # Domain models
+│   │       ├── domain/                   # Domain models (source of truth)
 │   │       ├── enums/                    # Domain-specific enumerations
 │   │       ├── requests/                 # Request DTOs
-│   │       └── responses/                # Response DTOs
+│   │       └── responses/                # Response DTOs ($ref domain models)
 │   │
 │   ├── tradeitem/
 │   │   ├── openapi.yaml                  # Root spec for Trade Item API
-│   │   ├── openapi-bulk.yaml             # Bulk operations spec
-│   │   ├── openapi-domain.yaml           # Domain models spec
+│   │   ├── openapi-domain.yaml           # Domain model spec (for diagrams)
 │   │   ├── README.md                     # API documentation
 │   │   ├── paths/                        # API endpoint definitions
 │   │   └── schemas/
-│   │       ├── domain/                   # Domain models
+│   │       ├── domain/                   # Domain models (source of truth)
 │   │       ├── enums/                    # Domain-specific enumerations
 │   │       ├── requests/                 # Request DTOs
-│   │       └── responses/                # Response DTOs
+│   │       └── responses/                # Response DTOs ($ref domain models)
 │   │
 │   ├── netprice/
 │   │   ├── openapi.yaml                  # Root spec for Net Price API
@@ -158,12 +157,16 @@ npm install -D @redocly/cli
 
 ### Validate APIs
 ```powershell
-# Lint all APIs
-npx redocly lint
+# Lint all APIs (REST + domain specs)
+npm run lint:all
+
+# Lint only REST APIs (product + tradeitem)
+npm run lint
 
 # Lint specific API
 npx redocly lint product@v1
 npx redocly lint tradeitem@v1
+npx redocly lint product-domain@v1
 npx redocly lint tradeitem-domain@v1
 npx redocly lint netprice@v1
 npx redocly lint stock@v1
@@ -171,22 +174,24 @@ npx redocly lint stock@v1
 
 ### Bundle API Specifications
 
-**Distribution bundles** (for external sharing — output to `dist/`, gitignored):
+**All bundles** (convenience script):
 ```powershell
-npx redocly bundle product@v1 -o dist/product-api.yaml
-npx redocly bundle tradeitem@v1 -o dist/tradeitem-api.yaml
-npx redocly bundle tradeitem-domain@v1 -o dist/tradeitem-domain-api.yaml
-npx redocly bundle netprice@v1 -o dist/netprice-api.yaml
-npx redocly bundle stock@v1 -o dist/stock-api.yaml
+npm run bundle
 ```
 
-**Generated bundles** (git-tracked, for tooling consumption — output to `generated/`):
+**Individual REST API bundles** (for external sharing):
 ```powershell
-npx @redocly/cli bundle --config openapi/redocly.yaml product@v1 -o openapi/apis/product/generated/product-api.yaml
-npx @redocly/cli bundle --config openapi/redocly.yaml tradeitem@v1 -o openapi/apis/tradeitem/generated/tradeitem-api.yaml
+npm run bundle:product
+npm run bundle:tradeitem
 ```
 
-> **When to regenerate:** Regenerate the `generated/*.yaml` bundle for an API after ANY change to that API's source specs (openapi.yaml, paths, schemas, or shared files it references). Always commit regenerated bundles alongside the source changes.
+**Individual domain bundles** (for diagram generation):
+```powershell
+npm run bundle:product-domain
+npm run bundle:tradeitem-domain
+```
+
+> **When to regenerate:** Regenerate the bundle for an API after ANY change to that API's source specs (openapi.yaml, paths, schemas, or shared files it references). Always commit regenerated bundles alongside the source changes. Domain bundles must be regenerated before running `npm run build:models`.
 
 ### Generate Documentation
 ```powershell
@@ -196,9 +201,14 @@ npm run build:docs
 # Generate HTML documentation for a specific API
 npm run build:product
 npm run build:tradeitem
+npm run build:product-domain
 npm run build:tradeitem-domain
 npm run build:netprice
 npm run build:stock
+
+# Generate domain model diagrams (Mermaid class diagrams + interactive treeview)
+# Requires domain bundles to exist — run `npm run bundle` first
+npm run build:models
 ```
 
 ### Preview Documentation Locally
@@ -208,6 +218,7 @@ npm run build:stock
 ```powershell
 npm run preview:product
 npm run preview:tradeitem
+npm run preview:product-domain
 npm run preview:tradeitem-domain
 npm run preview:netprice
 npm run preview:stock

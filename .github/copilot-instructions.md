@@ -86,6 +86,19 @@ When working with this repository:
    - Leave optional properties unmarked (e.g., `string description`)
    - Add a legend below the diagram: `> **Legend**: Properties marked with \`✱\` are required.`
 
+17. **Domain model specifications** (`openapi-domain.yaml`):
+   - Product and TradeItem APIs each have a separate `openapi-domain.yaml` for domain model documentation
+   - Contains a single dummy GET endpoint referencing the aggregate root domain schema (`Product.yaml` / `TradeItem.yaml`)
+   - Registered in `redocly.yaml` as `{api}-domain@v1` (e.g., `product-domain@v1`, `tradeitem-domain@v1`)
+   - Used by `scripts/generate-model-docs.mjs` to generate Mermaid class diagrams and interactive treeview HTML
+   - Must be bundled (`npm run bundle`) before running `npm run build:models`
+   - Domain specs are documentation-only — the REST API specs (`openapi.yaml`) remain the source of truth for actual API contracts
+
+18. **Domain vs Response schema relationship**:
+   - Domain schemas (`/schemas/domain/`) are the SOURCE definitions for business entities
+   - Response schemas (`/schemas/responses/`) `$ref` into domain schemas — they are NOT duplicates
+   - Domain schemas define the entity structure; response schemas add the API envelope (`data`, `meta`) and composite keys
+
 ## Naming Convention Details
 
 ### Schema Components (PascalCase)
