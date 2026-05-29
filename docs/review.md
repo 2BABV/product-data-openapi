@@ -2,6 +2,8 @@
 
 Gap analysis of ETIM xChange V2.0 schema against Product and Trade Item APIs.
 
+**See also**: [ETIM xChange → OpenAPI Field Mapping Registry](../resources/etim-xchange/etim-field-mapping-registry.md) — tracks every ETIM field's mapping status.
+
 **Total findings: 60**
 
 ## Summary

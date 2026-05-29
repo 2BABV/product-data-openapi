@@ -15,6 +15,63 @@
 
 ---
 
+## Coverage Overview
+
+```mermaid
+graph TB
+    subgraph prodapi ["Product API · 135/190 fields · 71 pct"]
+        P[Product] --> PID["ProductIdentification\n14/21 ✅"]
+        P --> PD["ProductDetails\n7/7 ✅"]
+        P --> PDesc["ProductDescriptions\n10/10 ✅"]
+        P --> PR["ProductRelations\n6/6 ✅"]
+        P --> LEG["Legislation\n17/41 ⚠️"]
+        P --> LCA["LcaEnvironmental\n41/41 ✅"]
+        P --> PA["ProductAttachments\n13/13 ✅"]
+        P --> EC["EtimClassification\n16/30 ✅"]
+        P --> OC["OtherClassifications\n0/8 ⛔"]
+        P --> PCSF["CountrySpecificFields\n11/12 ⚠️"]
+        P --> PCSE["CountrySpecificExtensions\n⛔"]
+    end
+
+    subgraph tiapi ["TradeItem API · 116/151 fields · 77 pct"]
+        TI[TradeItem] --> TID["ItemIdentification\n15/15 ✅"]
+        TI --> TD["ItemDetails\n5/5 ✅"]
+        TI --> TDesc["ItemDescriptions\n4/4 ✅"]
+        TI --> ORD["Ordering\n10/10 ✅"]
+        TI --> PRI["Pricing\n11/11 ✅"]
+        PRI --> AS["AllowanceSurcharge\n8/11 ⚠️"]
+        TI --> IR["ItemRelations\n6/6 ✅"]
+        TI --> ILD["ItemLogisticDetails\n10/10 ✅"]
+        TI --> IA["ItemAttachments\n11/12 ⚠️"]
+        TI --> PKG["PackagingUnit"]
+        PKG --> PKID["PackagingIdentification\n10/13 ⚠️"]
+        PKG --> PKLD["PackagingLogisticDetails\n8/14 ⚠️"]
+        PKLD --> PKMAT["PackagingMaterial\n0/16 🔲"]
+        PKG --> TIE["TradeItemEnclosed\n5/5 ✅"]
+        TI --> ICSF["ItemCountrySpecificFields\n13/18 ✅"]
+        TI --> ICSE["ItemCountrySpecificExtensions\n⛔"]
+    end
+
+    classDef done fill:#4caf50,stroke:#388e3c,color:#fff
+    classDef partial fill:#ff9800,stroke:#f57c00,color:#fff
+    classDef todo fill:#f44336,stroke:#d32f2f,color:#fff
+    classDef excluded fill:#9e9e9e,stroke:#757575,color:#fff
+    classDef root fill:#1565c0,stroke:#0d47a1,color:#fff
+
+    class P,TI root
+    class PD,PDesc,PR,LCA,PA,EC done
+    class PID,LEG,PCSF partial
+    class OC,PCSE,ICSE excluded
+    class TID,TD,TDesc,ORD,PRI,IR,ILD,TIE,ICSF done
+    class AS,IA,PKID,PKLD partial
+    class PKMAT todo
+    class PKG root
+```
+
+> **Legend**: 🟢 Green = all in-scope fields mapped · 🟡 Orange = some fields partial or todo · 🔴 Red = not yet mapped · ⚪ Gray = intentionally excluded. Fractions show mapped+partial / total ETIM fields per branch.
+
+---
+
 ## Product API Mappings
 
 ### ProductIdentification
