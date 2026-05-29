@@ -17,7 +17,7 @@ properties:
     type: array
     description: Array of trade item ordering summaries with embedded keys
     items:
-      $ref: ../domain/TradeItemOrderingsSummary.yaml
+      $ref: ../domain/TradeItemOrderingSummary.yaml
   meta:
     $ref: ../../../../shared/schemas/common/CursorPaginationMetadata.yaml
     description: Cursor-based pagination metadata

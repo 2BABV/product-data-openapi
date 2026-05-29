@@ -10,7 +10,7 @@ description: |
   allowances and surcharges as a nested array.
   
   This structure aligns with other single-item subresource responses
-  (`/details`, `/descriptions`, `/orderings`).
+  (`/details`, `/descriptions`, `/ordering`).
   
   **ETIM xChange**: `Pricing[]`
   **Path**: `Supplier[].Product[].TradeItem[].Pricing[]`

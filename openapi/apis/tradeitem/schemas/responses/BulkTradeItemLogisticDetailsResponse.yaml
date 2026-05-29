@@ -1,6 +1,6 @@
 type: object
 description: |
-  Bulk response containing item logistics details with cursor-based pagination.
+  Bulk response containing logistic details with cursor-based pagination.
   
   Each item in the `data` array represents a single logistics entry for a trade item,
   with the trade item identifier embedded at top level. A trade item typically has 0 or 1

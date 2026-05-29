@@ -1,15 +1,15 @@
 get:
-  operationId: getTradeItemLogisticsDetails
+  operationId: getTradeItemLogisticDetails
   tags:
     - TradeItems single
-  summary: Get trade item logistics details
+  summary: Get trade item logistic details
   description: |
-    Retrieve item logistics details for a specific trade item.
+    Retrieve logistic details for a specific trade item.
     
     This endpoint returns base item logistic measurements including net dimensions
     (length, width, height, diameter), weight, and volume with their respective units.
     
-    **Nested structure**: Unlike the bulk endpoint `/trade-items/bulk/logistics-details` which uses
+    **Nested structure**: Unlike the bulk endpoint `/trade-items/bulk/logistic-details` which uses
     a flattened structure optimized for ETL, this single-item endpoint returns logistics
     in their natural nested format for easier consumption.
     
@@ -22,19 +22,19 @@ get:
     - $ref: ../../../shared/parameters/path/supplier-item-number.yaml
   responses:
     '200':
-      description: Successfully retrieved trade item logistics details
+      description: Successfully retrieved trade item logistic details
       content:
         application/json:
           schema:
-            $ref: ../schemas/responses/TradeItemLogisticsDetailsResponse.yaml
+            $ref: ../schemas/responses/TradeItemLogisticDetailsResponse.yaml
           examples:
             withLogistics:
-              summary: Trade item with logistics details
+              summary: Trade item with logistic details
               value:
                 data:
                   supplierIdGln: "8712423012485"
                   supplierItemNumber: "SKU-LAMP-001"
-                  itemLogistics:
+                  logisticDetails:
                     - baseItemNetLength: 96.0
                       baseItemNetWidth: 5.0
                       baseItemNetHeight: 56.0
@@ -50,7 +50,7 @@ get:
                 data:
                   supplierIdGln: "1234567890123"
                   supplierItemNumber: "SKU-12345"
-                  itemLogistics:
+                  logisticDetails:
                     - baseItemNetLength: null
                       baseItemNetWidth: null
                       baseItemNetHeight: null
@@ -61,12 +61,12 @@ get:
                       baseItemNetVolume: null
                       netVolumeUnit: null
             noLogistics:
-              summary: Trade item without logistics details
+              summary: Trade item without logistic details
               value:
                 data:
                   supplierIdGln: "1234567890123"
                   supplierItemNumber: "SKU-12345"
-                  itemLogistics: null
+                  logisticDetails: null
     '400':
       $ref: ../../../shared/responses/400-bad-request.yaml
     '401':

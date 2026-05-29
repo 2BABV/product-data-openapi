@@ -95,6 +95,8 @@ get:
                     - descriptionLanguage: "en-GB"
                       minimalProductDescription: "LED Lamp"
                   etimClassifications: null
+                  lcaEnvironmental: null
+                  attachments: null
     '400':
       $ref: ../../../shared/responses/400-bad-request.yaml
     '401':

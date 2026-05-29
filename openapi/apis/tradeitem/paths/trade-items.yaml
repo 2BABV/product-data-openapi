@@ -2,8 +2,37 @@ get:
   operationId: getTradeItem
   summary: Get trade item
   description: |
-    Retrieve the full trade item payload for a single supplier item combination.
-    Returns exactly one trade item document. No pagination, no cursor metadata.
+    Retrieve the complete trade item information for a specific supplier item combination.
+    
+    This endpoint returns a single trade item identified by the composite key of
+    `supplierIdGln` and `supplierItemNumber`. The trade item key is at the root level,
+    with nested objects for each component:
+    
+    - **details**: Identification and operational details (GTINs, status, condition, validity dates)
+    - **descriptions**: Multilingual item descriptions (nested array)
+    - **ordering**: Order unit, minimum order quantity, step size, lead time
+    - **pricings**: Pricing conditions with allowance/surcharges (nested array)
+    - **relations**: Accessories, spare parts, and other related items (nested array)
+    - **logisticDetails**: Dimensions, weights, and volumes (nested array)
+    - **attachments**: Images, documents, and certificates (nested array)
+    - **packagingUnits**: Packaging level information (nested array, aggregate root only)
+    
+    **Subresources**: Most components are also available as dedicated subresources:
+    - `/details` - Trade item identification and operational details
+    - `/descriptions` - Multilingual descriptions with language filtering
+    - `/ordering` - Order unit configuration and lead time
+    - `/pricings` - Pricing conditions with allowance/surcharges
+    - `/relations` - Accessories, spare parts, and related items
+    - `/logistic-details` - Dimensions, weights, and volumes
+    - `/attachments` - Images, documents, and certificates
+    - `/enclosed-items` - Denormalized from packaging units (no corresponding aggregate root property)
+    
+    **Examples**: Example payloads show documented fields only. Clients must accept and ignore additional fields, including nested fields, when they are added in backward-compatible updates.
+    
+    **No pagination** - Returns exactly one trade item document or 404 if not found.
+    
+    **Composite Key**: The combination of supplier GLN and item number uniquely
+    identifies a trade item in the system.
     
     **ETIM xChange Path**: `Supplier[].Product[].TradeItem[]`
   tags:
@@ -25,20 +54,28 @@ get:
                 data:
                   supplierIdGln: "1234567890123"
                   supplierItemNumber: "ART-12345"
-                  supplierAltItemNumber: "ALT-12345"
-                  manufacturerItemNumber: "MFG-98765"
-                  manufacturerIdGln: "9876543210987"
-                  itemGtins: ["4012345678901"]
-                  buyerItemNumber: "BUYER-XYZ-123"
-                  discountGroupId: "DG-001"
-                  bonusGroupId: "BG-002"
-                  itemValidityDate: "2024-01-01"
-                  itemObsolescenceDate: "2026-12-31"
-                  itemDetails:
-                    itemStatus: ACTIVE
-                    itemCondition: NEW
+                  details:
+                    supplierAltItemNumber: "ALT-12345"
+                    manufacturerItemNumber: "MFG-98765"
+                    manufacturerIdGln: "9876543210987"
+                    manufacturerProductNumber: "929002376910"
+                    itemGtins: ["4012345678901"]
+                    buyerItemNumber: "BUYER-XYZ-123"
+                    discountGroupId: "DG-001"
+                    bonusGroupId: "BG-002"
+                    itemValidityDate: "2024-01-01"
+                    itemObsolescenceDate: "2026-12-31"
+                    itemStatus: "ACTIVE"
+                    itemCondition: "NEW"
                     stockItem: true
                     shelfLifePeriod: 365
+                  descriptions:
+                    - descriptionLanguage: en-GB
+                      minimalItemDescription: "Socket outlet double"
+                      uniqueMainItemDescription: "Socket outlet double, flush-mounted, with child protection"
+                    - descriptionLanguage: nl-NL
+                      minimalItemDescription: "Wandcontactdoos dubbel"
+                      uniqueMainItemDescription: "Wandcontactdoos dubbel, inbouw, met kinderbeveiliging"
                   ordering:
                     orderUnit: C62
                     minimumOrderQuantity: 1
@@ -50,6 +87,7 @@ get:
                     - priceUnit: C62
                       priceUnitFactor: 1
                       priceQuantity: 1
+                      currencyCode: EUR
                       priceOnRequest: false
                       netPrice: 100.0
                       grossListPrice: 130.0
@@ -57,13 +95,13 @@ get:
                       vat: 21.0
                       priceValidityDate: "2025-01-01"
                       priceExpiryDate: "2025-12-31"
-                  itemRelations:
+                  relations:
                     - relatedSupplierItemNumber: "ART-12346"
                       relatedManufacturerItemNumber: "MFG-98766"
                       relatedItemGtins: ["4012345678902"]
                       relationType: ACCESSORY
                       relatedItemQuantity: 2
-                  itemLogistics:
+                  logisticDetails:
                     - baseItemNetLength: 25.5
                       baseItemNetWidth: 15.0
                       baseItemNetHeight: 10.0
@@ -73,7 +111,7 @@ get:
                       netWeightUnit: GRM
                       baseItemNetVolume: 3.825
                       netVolumeUnit: LTR
-                  itemAttachments:
+                  attachments:
                     - attachmentType: ATX001
                       attachmentUri: "https://example.com/images/hammer-main.jpg"
                       attachmentDescription: "Product main image"
@@ -89,36 +127,43 @@ get:
                       grossDimensionUnit: CMT
                       grossWeight: 5500.0
                       grossWeightUnit: GRM
-                  itemCountrySpecificFields: null
             minimalTradeItem:
               summary: Minimal trade item with only required fields
               value:
                 data:
                   supplierIdGln: "9876543210987"
                   supplierItemNumber: "SKU-MIN-001"
-                  supplierAltItemNumber: null
-                  manufacturerItemNumber: null
-                  manufacturerIdGln: null
-                  itemGtins: null
-                  buyerItemNumber: null
-                  discountGroupId: null
-                  bonusGroupId: null
-                  itemValidityDate: null
-                  itemObsolescenceDate: null
-                  itemDetails:
-                    itemStatus: ACTIVE
-                    itemCondition: NEW
+                  details:
+                    supplierAltItemNumber: null
+                    manufacturerItemNumber: null
+                    manufacturerIdGln: "9876543210987"
+                    manufacturerProductNumber: "PROD-MIN-001"
+                    itemGtins: null
+                    buyerItemNumber: null
+                    discountGroupId: null
+                    bonusGroupId: null
+                    itemValidityDate: "2024-01-01"
+                    itemObsolescenceDate: null
+                    itemStatus: "ACTIVE"
+                    itemCondition: "NEW"
                     stockItem: true
+                    shelfLifePeriod: null
+                  descriptions: null
                   ordering:
                     orderUnit: C62
                     minimumOrderQuantity: 1
                     orderStepSize: 1
                   pricings: null
-                  itemRelations: null
-                  itemLogistics: null
-                  itemAttachments: null
+                  relations: null
+                  logisticDetails: null
+                  attachments: null
                   packagingUnits: null
-                  itemCountrySpecificFields: null
+    '400':
+      $ref: ../../../shared/responses/400-bad-request.yaml
+    '401':
+      $ref: ../../../shared/responses/401-unauthorized.yaml
+    '403':
+      $ref: ../../../shared/responses/403-forbidden.yaml
     '404':
       description: Trade item not found for the given composite key
       content:
@@ -133,11 +178,5 @@ get:
                 title: Not Found
                 status: 404
                 detail: "No trade item found for supplier GLN '1234567890123' and item number 'UNKNOWN-SKU'"
-    '400':
-      $ref: ../../../shared/responses/400-bad-request.yaml
-    '401':
-      $ref: ../../../shared/responses/401-unauthorized.yaml
-    '403':
-      $ref: ../../../shared/responses/403-forbidden.yaml
     '500':
       $ref: ../../../shared/responses/500-internal-server-error.yaml

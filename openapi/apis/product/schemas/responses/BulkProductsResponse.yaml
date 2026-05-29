@@ -16,15 +16,23 @@ examples:
   - data:
       - manufacturerIdGln: "1234567890123"
         manufacturerProductNumber: "929002376910"
-        productGtins: ["8718699673826"]
-        brandName: "Hue"
-        productStatus: "ACTIVE"
-        productType: "PHYSICAL"
-        warrantyConsumer: 24
-        productDescriptions:
+        details:
+          productGtins: ["8718699673826"]
+          brandName: "Hue"
+          productValidityDate: "2024-03-01"
+          productStatus: "ACTIVE"
+          productType: "PHYSICAL"
+          warrantyConsumer: 24
+        descriptions:
           - descriptionLanguage: "en-GB"
             minimalProductDescription: "LED Smart Bulb E27"
             uniqueMainProductDescription: "Philips Hue White and Color Ambiance E27 LED Smart Bulb"
+        etimClassifications:
+          - etimClassCode: "EC002745"
+            etimClassVersion: 1
+            etimReleaseVersion: "9.0"
+        lcaEnvironmental: null
+        attachments: null
     meta:
       cursor: "eyJpZCI6MTIzfQ=="
       hasNext: true

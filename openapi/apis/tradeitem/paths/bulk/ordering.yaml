@@ -1,6 +1,6 @@
 get:
-  operationId: getBulkTradeItemOrderings
-  summary: List trade item orderings
+  operationId: getBulkTradeItemOrdering
+  summary: List trade item ordering
   description: |
     Retrieve trade item ordering information in bulk with cursor-based pagination.
     Returns ordering details including order units, minimum/maximum quantities, order step sizes,
@@ -28,7 +28,7 @@ get:
       content:
         application/json:
           schema:
-            $ref: ../../schemas/responses/BulkTradeItemOrderingsResponse.yaml
+            $ref: ../../schemas/responses/BulkTradeItemOrderingResponse.yaml
           examples:
             success:
               summary: Successful bulk retrieval

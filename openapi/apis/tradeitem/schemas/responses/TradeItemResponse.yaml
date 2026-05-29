@@ -11,20 +11,28 @@ examples:
   - data:
       supplierIdGln: "1234567890123"
       supplierItemNumber: "ART-12345"
-      supplierAltItemNumber: "ALT-12345"
-      manufacturerItemNumber: "MFG-98765"
-      manufacturerIdGln: "9876543210987"
-      itemGtins: ["4012345678901"]
-      buyerItemNumber: null
-      discountGroupId: "DG-001"
-      bonusGroupId: null
-      itemValidityDate: "2024-01-01"
-      itemObsolescenceDate: null
-      itemDetails:
-        itemStatus: ACTIVE
-        itemCondition: NEW
+      details:
+        supplierAltItemNumber: "ALT-12345"
+        manufacturerItemNumber: "MFG-98765"
+        manufacturerIdGln: "9876543210987"
+        manufacturerProductNumber: "929002376910"
+        itemGtins: ["4012345678901"]
+        buyerItemNumber: null
+        discountGroupId: "DG-001"
+        bonusGroupId: null
+        itemValidityDate: "2024-01-01"
+        itemObsolescenceDate: null
+        itemStatus: "ACTIVE"
+        itemCondition: "NEW"
         stockItem: true
         shelfLifePeriod: null
+      descriptions:
+        - descriptionLanguage: en-GB
+          minimalItemDescription: "Socket outlet double"
+          uniqueMainItemDescription: "Socket outlet double, flush-mounted, with child protection"
+        - descriptionLanguage: nl-NL
+          minimalItemDescription: "Wandcontactdoos dubbel"
+          uniqueMainItemDescription: "Wandcontactdoos dubbel, inbouw, met kinderbeveiliging"
       ordering:
         orderUnit: C62
         minimumOrderQuantity: 1
@@ -47,40 +55,41 @@ examples:
               allowanceSurchargeSequenceNumber: 1
               allowanceSurchargePercentage: 10
               allowanceSurchargeMinimumQuantity: 100
-      itemRelations: null
-      itemLogistics:
+      relations: null
+      logisticDetails:
         - baseItemNetLength: 25.5
           baseItemNetWidth: 15.0
           baseItemNetHeight: 10.0
           netDimensionUnit: CMT
           baseItemNetWeight: 500.0
           netWeightUnit: GRM
-      itemAttachments: null
+      attachments: null
       packagingUnits: null
-      itemCountrySpecificFields: null
   - data:
       supplierIdGln: "9876543210987"
       supplierItemNumber: "SKU-MIN-001"
-      supplierAltItemNumber: null
-      manufacturerItemNumber: null
-      manufacturerIdGln: null
-      itemGtins: null
-      buyerItemNumber: null
-      discountGroupId: null
-      bonusGroupId: null
-      itemValidityDate: "2024-01-01"
-      itemObsolescenceDate: null
-      itemDetails:
-        itemStatus: ACTIVE
-        itemCondition: NEW
+      details:
+        supplierAltItemNumber: null
+        manufacturerItemNumber: null
+        manufacturerIdGln: "9876543210987"
+        manufacturerProductNumber: "PROD-MIN-001"
+        itemGtins: null
+        buyerItemNumber: null
+        discountGroupId: null
+        bonusGroupId: null
+        itemValidityDate: "2024-01-01"
+        itemObsolescenceDate: null
+        itemStatus: "ACTIVE"
+        itemCondition: "NEW"
         stockItem: true
+        shelfLifePeriod: null
+      descriptions: null
       ordering:
         orderUnit: C62
         minimumOrderQuantity: 1
         orderStepSize: 1
       pricings: null
-      itemRelations: null
-      itemLogistics: null
-      itemAttachments: null
+      relations: null
+      logisticDetails: null
+      attachments: null
       packagingUnits: null
-      itemCountrySpecificFields: null

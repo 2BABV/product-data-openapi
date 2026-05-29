@@ -1,8 +1,8 @@
 get:
-  operationId: getTradeItemOrderings
+  operationId: getTradeItemOrdering
   tags:
     - TradeItems single
-  summary: Get trade item orderings
+  summary: Get trade item ordering
   description: |
     Retrieve ordering information for a specific trade item.
     
@@ -28,7 +28,7 @@ get:
       content:
         application/json:
           schema:
-            $ref: ../schemas/responses/TradeItemOrderingsResponse.yaml
+            $ref: ../schemas/responses/TradeItemOrderingResponse.yaml
           examples:
             basicOrdering:
               summary: Basic ordering configuration

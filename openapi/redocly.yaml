@@ -11,6 +11,12 @@ apis:
       no-unused-components: error
       no-invalid-media-type-examples: error
   
+  product-domain@v1:
+    root: ./apis/product/openapi-domain.yaml
+    rules:
+      no-unused-components: error
+      no-invalid-media-type-examples: error
+
   tradeitem-domain@v1:
     root: ./apis/tradeitem/openapi-domain.yaml
     rules:

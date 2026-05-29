@@ -65,7 +65,7 @@ Scope naming follows the pattern `read:{resource}`:
 | API | Scope |
 |-----|-------|
 | Product API | `read:products` |
-| Trade Item API | `read:tradeitems`, `write:tradeitems` |
+| Trade Item API | `read:tradeitems` |
 | Net Price API | `read:netprices` |
 | Stock API | `read:stock` |
 

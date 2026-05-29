@@ -1,9 +1,18 @@
 #!/usr/bin/env node
 /**
- * Generate domain model documentation from bundled OpenAPI specs.
- * Produces:
- *   1. Interactive HTML treeview (details/summary)
- *   2. Mermaid class diagram
+ * Generate domain model documentation from bundled OpenAPI domain specs.
+ *
+ * Reads from openapi-domain.yaml bundles (NOT REST API bundles) because domain
+ * specs provide cleaner root schemas (Product/TradeItem) without response
+ * envelope wrappers (ProductResponseData/TradeItemResponseData).
+ *
+ * Workflow:
+ *   1. Bundle domain specs:  npm run bundle
+ *   2. Generate diagrams:    npm run build:models
+ *
+ * Produces (in _test-site/):
+ *   1. Interactive HTML treeview  ({api}-tree.html)
+ *   2. Mermaid class diagram      ({api}-diagram.html)
  *
  * Usage: node scripts/generate-model-docs.mjs
  */
@@ -14,27 +23,19 @@ import yaml from 'js-yaml';
 const APIS = [
   {
     name: 'Product',
-    specPath: 'openapi/apis/product/generated/product-api.yaml',
-    // Domain schemas to include (exclude Response envelopes/pagination/shared)
+    specPath: 'openapi/apis/product/generated/product-domain-api.yaml',
+    // Exclude shared identifier/utility schemas (no properties to diagram)
     domainFilter: name =>
-      !name.endsWith('Response') &&
-      !name.startsWith('Bulk') &&
-      !['ProblemDetails', 'ValidationProblemDetails', 'TechnicalId',
-        'CursorPaginationMetadata', 'Gln', 'Gtin', 'LanguageCode'].includes(name),
-    // Single root: the full product as returned by GET /products/{gln}/{mpn}
-    root: 'ProductResponseData',
+      !['Gln', 'Gtin', 'LanguageCode'].includes(name),
+    root: 'Product',
     rootLabel: 'Product',
   },
   {
     name: 'TradeItem',
-    specPath: 'openapi/apis/tradeitem/generated/tradeitem-api.yaml',
+    specPath: 'openapi/apis/tradeitem/generated/tradeitem-domain-api.yaml',
     domainFilter: name =>
-      !name.endsWith('Response') &&
-      !name.startsWith('Bulk') &&
-      !['ProblemDetails', 'ValidationProblemDetails', 'TechnicalId',
-        'CursorPaginationMetadata', 'Gln', 'Gtin', 'LanguageCode'].includes(name),
-    // Single root: the full trade item as returned by GET /trade-items/{gln}/{itemNumber}
-    root: 'TradeItemResponseData',
+      !['Gln', 'Gtin', 'LanguageCode'].includes(name),
+    root: 'TradeItem',
     rootLabel: 'Trade Item',
   },
 ];
