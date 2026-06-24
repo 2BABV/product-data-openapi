@@ -1,0 +1,214 @@
+type: object
+description: |
+  Flattened packaging identification for bulk retrieval.
+  Each row represents a single packaging unit per trade item,
+  with the trade item identifier (`supplierIdGln` + `supplierItemNumber`)
+  embedded at top level.
+
+  A trade item with 3 packaging units (e.g., piece, box, pallet)
+  will result in 3 rows.
+
+  This flattened structure is optimized for:
+  - Predictable payload sizes per row
+  - Efficient cursor-based pagination
+  - ETL/data warehouse ingestion
+  - Streaming data processing
+
+  **ETIM xChange**: `PackagingIdentification`
+  **Path**: `Supplier[].Product[].TradeItem[].PackagingUnit[].PackagingIdentification`
+required:
+  - supplierIdGln
+  - supplierItemNumber
+  - packagingTypeCode
+properties:
+  # =========================================================================
+  # TRADE ITEM KEY FIELDS
+  # =========================================================================
+
+  supplierIdGln:
+    $ref: ../../../../shared/schemas/identifiers/Gln.yaml
+    description: |
+      Global Location Number (GLN) identifying the supplier.
+      13-digit GS1 identifier. Part of the composite trade item identifier.
+    examples:
+      - "0095969000000"
+      - "8712423012485"
+
+  supplierItemNumber:
+    type: string
+    minLength: 1
+    maxLength: 35
+    description: |
+      Supplier's unique item identifier.
+      Part of the composite trade item identifier.
+
+      **ETIM xChange**: `SupplierItemNumber`
+      **Path**: `Supplier[].Product[].TradeItem[].ItemIdentification.SupplierItemNumber`
+    examples:
+      - "100062"
+      - "114519"
+
+  # =========================================================================
+  # PACKAGING IDENTIFICATION FIELDS
+  # =========================================================================
+
+  supplierPackagingNumber:
+    type: ["string", "null"]
+    description: |
+      Supplier's packaging number for this packaging unit.
+
+      **ETIM xChange**: `SupplierPackagingNumber`
+      **Path**: `Supplier[].Product[].TradeItem[].PackagingUnit[].PackagingIdentification.SupplierPackagingNumber`
+    minLength: 1
+    maxLength: 35
+    examples:
+      - "100062"
+      - null
+
+  manufacturerPackagingNumber:
+    type: ["string", "null"]
+    description: |
+      Manufacturer's packaging number for this packaging unit.
+
+      **ETIM xChange**: `ManufacturerPackagingNumber`
+      **Path**: `Supplier[].Product[].TradeItem[].PackagingUnit[].PackagingIdentification.ManufacturerPackagingNumber`
+    minLength: 1
+    maxLength: 35
+    examples:
+      - "100062"
+      - null
+
+  packagingGtins:
+    type: ["array", "null"]
+    description: |
+      Array of GTINs for this packaging unit.
+
+      **ETIM xChange**: `PackagingGtin[]`
+      **Path**: `Supplier[].Product[].TradeItem[].PackagingUnit[].PackagingIdentification.PackagingGtin[]`
+    uniqueItems: true
+    items:
+      $ref: ../../../../shared/schemas/identifiers/Gtin.yaml
+    examples:
+      - ["00095969042437"]
+      - null
+
+  packagingTypeCode:
+    description: |
+      Type of packaging (box, pallet, piece, etc.).
+
+      **ETIM xChange**: `PackagingTypeCode`
+      **Path**: `Supplier[].Product[].TradeItem[].PackagingUnit[].PackagingIdentification.PackagingTypeCode`
+    $ref: ../enums/PackagingTypeCode.yaml
+    examples:
+      - CT   # Carton
+      - BX   # Box
+      - PF   # Pallet
+
+  packagingUnitName:
+    type: ["string", "null"]
+    description: |
+      Human-readable name of the packaging unit. Flattened from multilingual array.
+
+      **ETIM xChange**: `PackagingUnitName[].PackagingUnitName`
+      **Path**: `Supplier[].Product[].TradeItem[].PackagingUnit[].PackagingIdentification.PackagingUnitName[].PackagingUnitName`
+    minLength: 1
+    maxLength: 20
+    examples:
+      - "Box"
+      - "Pallet"
+      - null
+
+  packagingQuantity:
+    type: ["number", "null"]
+    format: decimal
+    description: |
+      Quantity of base items in this packaging unit (converted from ETIM xChange string to number).
+
+      **ETIM xChange**: `PackagingQuantity` (string with pattern)
+      **Path**: `Supplier[].Product[].TradeItem[].PackagingUnit[].PackagingIdentification.PackagingQuantity`
+    minimum: 0
+    multipleOf: 0.0001
+    maximum: 999999999999.9999
+    examples:
+      - 1
+      - 10
+      - 100
+      - null
+
+  tradeItemPrimaryPackaging:
+    type: ["boolean", "null"]
+    description: |
+      Indicates whether this is the primary/consumer packaging.
+
+      **ETIM xChange**: `TradeItemPrimaryPackaging`
+      **Path**: `Supplier[].Product[].TradeItem[].PackagingUnit[].PackagingIdentification.TradeItemPrimaryPackaging`
+    examples:
+      - true
+      - false
+      - null
+
+  packagingGs1Code128:
+    type: ["string", "null"]
+    description: |
+      GS1-128 barcode for the packaging unit.
+
+      **ETIM xChange**: `PackagingGs1Code128`
+      **Path**: `Supplier[].Product[].TradeItem[].PackagingUnit[].PackagingIdentification.PackagingGs1Code128`
+    minLength: 1
+    maxLength: 48
+    examples:
+      - "01040123456789011710123456"
+      - null
+
+  packagingBreak:
+    type: ["boolean", "null"]
+    description: |
+      Indicates whether the packaging can be broken (split into smaller units for sale).
+
+      **ETIM xChange**: `PackagingBreak`
+      **Path**: `Supplier[].Product[].TradeItem[].PackagingUnit[].PackagingIdentification.PackagingBreak`
+    examples:
+      - true
+      - false
+      - null
+
+  numberOfPackagingParts:
+    type: ["integer", "null"]
+    description: |
+      Number of physical packaging parts that make up this packaging unit
+      (e.g., a box with a separate lid = 2 parts).
+
+      **ETIM xChange**: `NumberOfPackagingParts`
+      **Path**: `Supplier[].Product[].TradeItem[].PackagingUnit[].PackagingIdentification.NumberOfPackagingParts`
+    minimum: 1
+    examples:
+      - 1
+      - 2
+      - null
+
+examples:
+  - supplierIdGln: "0095969000000"
+    supplierItemNumber: "100062"
+    supplierPackagingNumber: "100062"
+    manufacturerPackagingNumber: "100062"
+    packagingGtins: ["00095969042437"]
+    packagingTypeCode: CT
+    packagingUnitName: null
+    packagingQuantity: 1
+    tradeItemPrimaryPackaging: true
+    packagingGs1Code128: null
+    packagingBreak: null
+    numberOfPackagingParts: null
+
+  - supplierIdGln: "0095969000000"
+    supplierItemNumber: "114519"
+    supplierPackagingNumber: "114519"
+    manufacturerPackagingNumber: "114519"
+    packagingGtins: ["00095969040549"]
+    packagingTypeCode: CT
+    packagingUnitName: null
+    packagingQuantity: 1
+    tradeItemPrimaryPackaging: true
+    packagingGs1Code128: null
+    packagingBreak: null
+    numberOfPackagingParts: null

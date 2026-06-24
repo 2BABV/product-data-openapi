@@ -100,6 +100,10 @@ paths:
     $ref: ./paths/bulk/attachments.yaml
   /trade-items/bulk/enclosed-items:
     $ref: ./paths/bulk/enclosed-items.yaml
+  /trade-items/bulk/packaging-identification:
+    $ref: ./paths/bulk/packaging-identification.yaml
+  /trade-items/bulk/packaging-logistic-details:
+    $ref: ./paths/bulk/packaging-logistic-details.yaml
     
 components:
   schemas:
@@ -143,6 +147,10 @@ components:
       $ref: ./schemas/domain/TradeItemEnclosedSummary.yaml
     PackagingUnit:
       $ref: ./schemas/domain/PackagingUnit.yaml
+    PackagingIdentificationSummary:
+      $ref: ./schemas/domain/PackagingIdentificationSummary.yaml
+    PackagingLogisticDetailsSummary:
+      $ref: ./schemas/domain/PackagingLogisticDetailsSummary.yaml
     AttachmentType:
       $ref: ./schemas/enums/AttachmentType.yaml
     AttachmentTypeSpecification:
@@ -209,6 +217,10 @@ components:
       $ref: ./schemas/responses/TradeItemEnclosedItem.yaml
     BulkTradeItemEnclosedItemsResponse:
       $ref: ./schemas/responses/BulkTradeItemEnclosedItemsResponse.yaml
+    BulkTradeItemPackagingIdentificationResponse:
+      $ref: ./schemas/responses/BulkTradeItemPackagingIdentificationResponse.yaml
+    BulkTradeItemPackagingLogisticDetailsResponse:
+      $ref: ./schemas/responses/BulkTradeItemPackagingLogisticDetailsResponse.yaml
 
   parameters:
     SupplierIdGln:

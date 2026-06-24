@@ -1,0 +1,85 @@
+get:
+  operationId: getBulkTradeItemPackagingLogisticDetails
+  tags:
+    - TradeItems bulk
+  summary: List trade item packaging logistic details
+  description: |
+    Retrieve trade item packaging logistic details in bulk with cursor-based pagination.
+    Returns a flattened structure where each row represents a single packaging logistic detail entry
+    per packaging unit per trade item, with the trade item identifier (`supplierIdGln` + `supplierItemNumber`)
+    and parent packaging context (`packagingTypeCode`, `supplierPackagingNumber`).
+
+    A trade item with 2 packaging units, each having 2 logistic detail parts (multi-part packaging),
+    will result in 4 rows.
+
+    This flattened structure is optimized for:
+    - Predictable payload sizes per row
+    - Efficient cursor-based pagination
+    - ETL/data warehouse ingestion
+    - Streaming data processing
+  parameters:
+    - $ref: ../../../../shared/parameters/query/cursor.yaml
+    - $ref: ../../../../shared/parameters/query/limit.yaml
+    - $ref: ../../../../shared/parameters/query/selection-id.yaml
+    - $ref: ../../../../shared/parameters/query/supplier-id-gln-filter.yaml
+    - $ref: ../../../../shared/parameters/query/mutation-date-time.yaml
+  responses:
+    '200':
+      description: Successfully retrieved trade item packaging logistic details
+      content:
+        application/json:
+          schema:
+            $ref: ../../schemas/responses/BulkTradeItemPackagingLogisticDetailsResponse.yaml
+          examples:
+            multipleItems:
+              summary: Multiple packaging logistic details across trade items
+              value:
+                data:
+                  - supplierIdGln: "0095969000000"
+                    supplierItemNumber: "100062"
+                    packagingTypeCode: CT
+                    supplierPackagingNumber: "100062"
+                    supplierPackagingPartNumber: null
+                    manufacturerPackagingPartNumber: null
+                    packagingPartGtins: ["00095969042437"]
+                    packagingTypeLength: 0.400
+                    packagingTypeWidth: 0.25
+                    packagingTypeHeight: 0.200
+                    packagingTypeDiameter: null
+                    packagingTypeDimensionUnit: MTR
+                    packagingTypeWeight: 0.560
+                    packagingTypeWeightUnit: KGM
+                    serialNumberOnPackaging: null
+                    stackingFactor: null
+                    packagingTippable: null
+                  - supplierIdGln: "0095969000000"
+                    supplierItemNumber: "114519"
+                    packagingTypeCode: CT
+                    supplierPackagingNumber: "114519"
+                    supplierPackagingPartNumber: null
+                    manufacturerPackagingPartNumber: null
+                    packagingPartGtins: ["00095969040549"]
+                    packagingTypeLength: 0.246
+                    packagingTypeWidth: 0.125
+                    packagingTypeHeight: 0.066
+                    packagingTypeDiameter: null
+                    packagingTypeDimensionUnit: MTR
+                    packagingTypeWeight: 0.460
+                    packagingTypeWeightUnit: KGM
+                    serialNumberOnPackaging: null
+                    stackingFactor: null
+                    packagingTippable: null
+                meta:
+                  cursor: "eyJpZCI6MTIzfQ=="
+                  hasNext: true
+                  hasPrev: false
+                  limit: 100
+                  estimatedTotal: 5200
+    '400':
+      $ref: ../../../../shared/responses/400-bad-request.yaml
+    '401':
+      $ref: ../../../../shared/responses/401-unauthorized.yaml
+    '403':
+      $ref: ../../../../shared/responses/403-forbidden.yaml
+    '500':
+      $ref: ../../../../shared/responses/500-internal-server-error.yaml

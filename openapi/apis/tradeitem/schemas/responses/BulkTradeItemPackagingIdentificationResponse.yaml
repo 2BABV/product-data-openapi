@@ -1,0 +1,52 @@
+type: object
+description: |
+  Bulk response containing packaging identification data with cursor-based pagination.
+
+  Each item in the `data` array represents a single packaging unit per trade item.
+  A trade item with 3 packaging units will result in 3 rows.
+
+  This flattened structure is optimized for ETL/data warehouse ingestion and
+  streaming data processing.
+required:
+  - data
+  - meta
+properties:
+  data:
+    type: array
+    description: Array of packaging identification entries. Each row is one packaging unit per trade item.
+    items:
+      $ref: ../domain/PackagingIdentificationSummary.yaml
+  meta:
+    $ref: ../../../../shared/schemas/common/CursorPaginationMetadata.yaml
+examples:
+  - data:
+      - supplierIdGln: "0095969000000"
+        supplierItemNumber: "100062"
+        supplierPackagingNumber: "100062"
+        manufacturerPackagingNumber: "100062"
+        packagingGtins: ["00095969042437"]
+        packagingTypeCode: CT
+        packagingUnitName: null
+        packagingQuantity: 1
+        tradeItemPrimaryPackaging: true
+        packagingGs1Code128: null
+        packagingBreak: null
+        numberOfPackagingParts: null
+      - supplierIdGln: "0095969000000"
+        supplierItemNumber: "114519"
+        supplierPackagingNumber: "114519"
+        manufacturerPackagingNumber: "114519"
+        packagingGtins: ["00095969040549"]
+        packagingTypeCode: CT
+        packagingUnitName: null
+        packagingQuantity: 1
+        tradeItemPrimaryPackaging: true
+        packagingGs1Code128: null
+        packagingBreak: null
+        numberOfPackagingParts: null
+    meta:
+      cursor: "eyJpZCI6MTIzfQ=="
+      hasNext: true
+      hasPrev: false
+      limit: 100
+      estimatedTotal: 5200

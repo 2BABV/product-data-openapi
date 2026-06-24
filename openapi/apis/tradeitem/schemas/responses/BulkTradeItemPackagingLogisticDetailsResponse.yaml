@@ -1,0 +1,63 @@
+type: object
+description: |
+  Bulk response containing packaging logistic details with cursor-based pagination.
+
+  Each item in the `data` array represents a single packaging logistic detail entry
+  per packaging unit per trade item. A trade item with 2 packaging units, each having
+  2 logistic detail parts, will result in 4 rows.
+
+  This flattened structure is optimized for ETL/data warehouse ingestion and
+  streaming data processing.
+required:
+  - data
+  - meta
+properties:
+  data:
+    type: array
+    description: Array of packaging logistic detail entries. Each row is one logistic detail per packaging unit per trade item.
+    items:
+      $ref: ../domain/PackagingLogisticDetailsSummary.yaml
+  meta:
+    $ref: ../../../../shared/schemas/common/CursorPaginationMetadata.yaml
+examples:
+  - data:
+      - supplierIdGln: "0095969000000"
+        supplierItemNumber: "100062"
+        packagingTypeCode: CT
+        supplierPackagingNumber: "100062"
+        supplierPackagingPartNumber: null
+        manufacturerPackagingPartNumber: null
+        packagingPartGtins: ["00095969042437"]
+        packagingTypeLength: 0.400
+        packagingTypeWidth: 0.25
+        packagingTypeHeight: 0.200
+        packagingTypeDiameter: null
+        packagingTypeDimensionUnit: MTR
+        packagingTypeWeight: 0.560
+        packagingTypeWeightUnit: KGM
+        serialNumberOnPackaging: null
+        stackingFactor: null
+        packagingTippable: null
+      - supplierIdGln: "0095969000000"
+        supplierItemNumber: "114519"
+        packagingTypeCode: CT
+        supplierPackagingNumber: "114519"
+        supplierPackagingPartNumber: null
+        manufacturerPackagingPartNumber: null
+        packagingPartGtins: ["00095969040549"]
+        packagingTypeLength: 0.246
+        packagingTypeWidth: 0.125
+        packagingTypeHeight: 0.066
+        packagingTypeDiameter: null
+        packagingTypeDimensionUnit: MTR
+        packagingTypeWeight: 0.460
+        packagingTypeWeightUnit: KGM
+        serialNumberOnPackaging: null
+        stackingFactor: null
+        packagingTippable: null
+    meta:
+      cursor: "eyJpZCI6MTIzfQ=="
+      hasNext: true
+      hasPrev: false
+      limit: 100
+      estimatedTotal: 5200

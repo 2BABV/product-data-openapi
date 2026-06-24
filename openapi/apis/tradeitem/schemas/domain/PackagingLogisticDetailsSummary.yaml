@@ -1,0 +1,345 @@
+type: object
+description: |
+  Flattened packaging logistic details for bulk retrieval.
+  Each row represents a single packaging logistic detail entry per packaging unit per trade item,
+  with the trade item identifier (`supplierIdGln` + `supplierItemNumber`)
+  and parent packaging context (`packagingTypeCode`, `supplierPackagingNumber`) embedded at top level.
+
+  A trade item with 2 packaging units, each having 2 logistic detail entries (multi-part packaging),
+  will result in 4 rows.
+
+  This flattened structure is optimized for:
+  - Predictable payload sizes per row
+  - Efficient cursor-based pagination
+  - ETL/data warehouse ingestion
+  - Streaming data processing
+
+  **ETIM xChange**: `PackagingLogisticDetails[]`
+  **Path**: `Supplier[].Product[].TradeItem[].PackagingUnit[].PackagingLogisticDetails[]`
+required:
+  - supplierIdGln
+  - supplierItemNumber
+  - packagingTypeCode
+properties:
+  # =========================================================================
+  # TRADE ITEM KEY FIELDS
+  # =========================================================================
+
+  supplierIdGln:
+    $ref: ../../../../shared/schemas/identifiers/Gln.yaml
+    description: |
+      Global Location Number (GLN) identifying the supplier.
+      13-digit GS1 identifier. Part of the composite trade item identifier.
+    examples:
+      - "0095969000000"
+      - "8712423012485"
+
+  supplierItemNumber:
+    type: string
+    minLength: 1
+    maxLength: 35
+    description: |
+      Supplier's unique item identifier.
+      Part of the composite trade item identifier.
+
+      **ETIM xChange**: `SupplierItemNumber`
+      **Path**: `Supplier[].Product[].TradeItem[].ItemIdentification.SupplierItemNumber`
+    examples:
+      - "100062"
+      - "114519"
+
+  # =========================================================================
+  # PARENT PACKAGING CONTEXT
+  # =========================================================================
+
+  packagingTypeCode:
+    description: |
+      Type of packaging unit that contains this logistic detail entry.
+      Denormalized from the parent `PackagingUnit.PackagingIdentification` for context and joining.
+
+      **ETIM xChange**: `PackagingTypeCode`
+      **Path**: `Supplier[].Product[].TradeItem[].PackagingUnit[].PackagingIdentification.PackagingTypeCode`
+    $ref: ../enums/PackagingTypeCode.yaml
+    examples:
+      - CT   # Carton
+      - BX   # Box
+      - PF   # Pallet
+
+  supplierPackagingNumber:
+    type: ["string", "null"]
+    description: |
+      Supplier's packaging number for the parent packaging unit.
+      Denormalized from `PackagingIdentification` to enable joins with the
+      packaging-identification bulk endpoint.
+
+      **ETIM xChange**: `SupplierPackagingNumber`
+      **Path**: `Supplier[].Product[].TradeItem[].PackagingUnit[].PackagingIdentification.SupplierPackagingNumber`
+    minLength: 1
+    maxLength: 35
+    examples:
+      - "100062"
+      - null
+
+  # =========================================================================
+  # PACKAGING LOGISTIC DETAIL FIELDS
+  # =========================================================================
+
+  supplierPackagingPartNumber:
+    type: ["string", "null"]
+    description: |
+      Supplier's part number for this specific packaging part within the packaging unit.
+      Used when a packaging unit consists of multiple physical parts.
+
+      **ETIM xChange**: `SupplierPackagingPartNumber`
+      **Path**: `Supplier[].Product[].TradeItem[].PackagingUnit[].PackagingLogisticDetails[].SupplierPackagingPartNumber`
+    minLength: 1
+    maxLength: 35
+    examples:
+      - "PKG-PART-001"
+      - null
+
+  manufacturerPackagingPartNumber:
+    type: ["string", "null"]
+    description: |
+      Manufacturer's part number for this specific packaging part within the packaging unit.
+      Used when a packaging unit consists of multiple physical parts.
+
+      **ETIM xChange**: `ManufacturerPackagingPartNumber`
+      **Path**: `Supplier[].Product[].TradeItem[].PackagingUnit[].PackagingLogisticDetails[].ManufacturerPackagingPartNumber`
+    minLength: 1
+    maxLength: 35
+    examples:
+      - "MFG-PKG-PART-001"
+      - null
+
+  packagingPartGtins:
+    type: ["array", "null"]
+    description: |
+      Array of GTINs for this specific packaging part.
+      Distinct from the parent packaging unit's `PackagingGtin[]` — this identifies
+      the physical packaging part itself.
+
+      **ETIM xChange**: `PackagingPartGtin[]`
+      **Path**: `Supplier[].Product[].TradeItem[].PackagingUnit[].PackagingLogisticDetails[].PackagingPartGtin[]`
+    uniqueItems: true
+    items:
+      $ref: ../../../../shared/schemas/identifiers/Gtin.yaml
+    examples:
+      - ["00095969042437"]
+      - null
+
+  packagingTypeLength:
+    type: ["number", "null"]
+    format: decimal
+    description: |
+      Length of the packaging part in the specified dimension unit.
+      Converted from ETIM xChange patterned string to number.
+
+      Corresponds to `grossLength` in `PackagingUnit.yaml` domain model.
+
+      **ETIM xChange**: `PackagingTypeLength` (string with pattern)
+      **Path**: `Supplier[].Product[].TradeItem[].PackagingUnit[].PackagingLogisticDetails[].PackagingTypeLength`
+    minimum: 0
+    multipleOf: 0.0001
+    maximum: 999999999999.9999
+    examples:
+      - 0.400
+      - 0.246
+      - null
+
+  packagingTypeWidth:
+    type: ["number", "null"]
+    format: decimal
+    description: |
+      Width of the packaging part in the specified dimension unit.
+      Converted from ETIM xChange patterned string to number.
+
+      Corresponds to `grossWidth` in `PackagingUnit.yaml` domain model.
+
+      **ETIM xChange**: `PackagingTypeWidth` (string with pattern)
+      **Path**: `Supplier[].Product[].TradeItem[].PackagingUnit[].PackagingLogisticDetails[].PackagingTypeWidth`
+    minimum: 0
+    multipleOf: 0.0001
+    maximum: 999999999999.9999
+    examples:
+      - 0.25
+      - 0.125
+      - null
+
+  packagingTypeHeight:
+    type: ["number", "null"]
+    format: decimal
+    description: |
+      Height of the packaging part in the specified dimension unit.
+      Converted from ETIM xChange patterned string to number.
+
+      Corresponds to `grossHeight` in `PackagingUnit.yaml` domain model.
+
+      **ETIM xChange**: `PackagingTypeHeight` (string with pattern)
+      **Path**: `Supplier[].Product[].TradeItem[].PackagingUnit[].PackagingLogisticDetails[].PackagingTypeHeight`
+    minimum: 0
+    multipleOf: 0.0001
+    maximum: 999999999999.9999
+    examples:
+      - 0.200
+      - 0.066
+      - null
+
+  packagingTypeDiameter:
+    type: ["number", "null"]
+    format: decimal
+    description: |
+      Diameter of the packaging part in the specified dimension unit (for cylindrical packaging).
+      Converted from ETIM xChange patterned string to number.
+
+      Corresponds to `grossDiameter` in `PackagingUnit.yaml` domain model.
+
+      **ETIM xChange**: `PackagingTypeDiameter` (string with pattern)
+      **Path**: `Supplier[].Product[].TradeItem[].PackagingUnit[].PackagingLogisticDetails[].PackagingTypeDiameter`
+    minimum: 0
+    multipleOf: 0.0001
+    maximum: 999999999999.9999
+    examples:
+      - 15.0
+      - null
+
+  packagingTypeDimensionUnit:
+    type: ["string", "null"]
+    description: |
+      Unit of measurement for packaging part dimensions (CMT=centimeter, MTR=meter, etc.).
+
+      Corresponds to `grossDimensionUnit` in `PackagingUnit.yaml` domain model.
+
+      **ETIM xChange**: `PackagingTypeDimensionUnit`
+      **Path**: `Supplier[].Product[].TradeItem[].PackagingUnit[].PackagingLogisticDetails[].PackagingTypeDimensionUnit`
+    enum:
+      - CMT  # Centimeter
+      - DMT  # Decimeter
+      - KMT  # Kilometer
+      - MMT  # Millimeter
+      - MTR  # Meter
+      - FOT  # Foot
+      - INH  # Inch
+      - SMI  # Mile (statute mile)
+      - YRD  # Yard
+      - null
+    examples:
+      - MTR
+      - CMT
+      - null
+
+  packagingTypeWeight:
+    type: ["number", "null"]
+    format: decimal
+    description: |
+      Weight of the packaging part in the specified weight unit.
+      Converted from ETIM xChange patterned string to number.
+
+      Corresponds to `grossWeight` in `PackagingUnit.yaml` domain model.
+
+      **ETIM xChange**: `PackagingTypeWeight` (string with pattern)
+      **Path**: `Supplier[].Product[].TradeItem[].PackagingUnit[].PackagingLogisticDetails[].PackagingTypeWeight`
+    minimum: 0
+    multipleOf: 0.0001
+    maximum: 999999999999.9999
+    examples:
+      - 0.560
+      - 0.460
+      - null
+
+  packagingTypeWeightUnit:
+    type: ["string", "null"]
+    description: |
+      Unit of measurement for packaging part weight (GRM=gram, KGM=kilogram, etc.).
+
+      Corresponds to `grossWeightUnit` in `PackagingUnit.yaml` domain model.
+
+      **ETIM xChange**: `PackagingTypeWeightUnit`
+      **Path**: `Supplier[].Product[].TradeItem[].PackagingUnit[].PackagingLogisticDetails[].PackagingTypeWeightUnit`
+    enum:
+      - GRM  # Gram
+      - KGM  # Kilogram
+      - MGM  # Milligram
+      - TNE  # Metric ton
+      - LTN  # Long ton (UK)
+      - LBR  # Pound
+      - ONZ  # Ounce
+      - null
+    examples:
+      - KGM
+      - GRM
+      - null
+
+  serialNumberOnPackaging:
+    type: ["boolean", "null"]
+    description: |
+      Indicates whether a serial number is printed on this packaging part.
+
+      **ETIM xChange**: `SerialNumberOnPackaging`
+      **Path**: `Supplier[].Product[].TradeItem[].PackagingUnit[].PackagingLogisticDetails[].SerialNumberOnPackaging`
+    examples:
+      - true
+      - false
+      - null
+
+  stackingFactor:
+    type: ["integer", "null"]
+    description: |
+      Maximum number of identical packaging units that can be stacked on top of each other.
+
+      **ETIM xChange**: `StackingFactor`
+      **Path**: `Supplier[].Product[].TradeItem[].PackagingUnit[].PackagingLogisticDetails[].StackingFactor`
+    minimum: 1
+    examples:
+      - 2
+      - 3
+      - null
+
+  packagingTippable:
+    type: ["boolean", "null"]
+    description: |
+      Indicates whether the packaging can be tipped (laid on its side) during transport or storage.
+
+      **ETIM xChange**: `PackagingTippable`
+      **Path**: `Supplier[].Product[].TradeItem[].PackagingUnit[].PackagingLogisticDetails[].PackagingTippable`
+    examples:
+      - true
+      - false
+      - null
+
+examples:
+  - supplierIdGln: "0095969000000"
+    supplierItemNumber: "100062"
+    packagingTypeCode: CT
+    supplierPackagingNumber: "100062"
+    supplierPackagingPartNumber: null
+    manufacturerPackagingPartNumber: null
+    packagingPartGtins: ["00095969042437"]
+    packagingTypeLength: 0.400
+    packagingTypeWidth: 0.25
+    packagingTypeHeight: 0.200
+    packagingTypeDiameter: null
+    packagingTypeDimensionUnit: MTR
+    packagingTypeWeight: 0.560
+    packagingTypeWeightUnit: KGM
+    serialNumberOnPackaging: null
+    stackingFactor: null
+    packagingTippable: null
+
+  - supplierIdGln: "0095969000000"
+    supplierItemNumber: "114519"
+    packagingTypeCode: CT
+    supplierPackagingNumber: "114519"
+    supplierPackagingPartNumber: null
+    manufacturerPackagingPartNumber: null
+    packagingPartGtins: ["00095969040549"]
+    packagingTypeLength: 0.246
+    packagingTypeWidth: 0.125
+    packagingTypeHeight: 0.066
+    packagingTypeDiameter: null
+    packagingTypeDimensionUnit: MTR
+    packagingTypeWeight: 0.460
+    packagingTypeWeightUnit: KGM
+    serialNumberOnPackaging: null
+    stackingFactor: null
+    packagingTippable: null

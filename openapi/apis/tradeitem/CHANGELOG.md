@@ -7,6 +7,16 @@ This API adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+- Bulk packaging identification endpoint: `GET /trade-items/bulk/packaging-identification`
+  - Flat `PackagingIdentificationSummary` schema with all packaging identification fields
+  - New fields: `packagingBreak`, `numberOfPackagingParts`
+- Bulk packaging logistic details endpoint: `GET /trade-items/bulk/packaging-logistic-details`
+  - Flat `PackagingLogisticDetailsSummary` schema with per-part logistic detail fields
+  - Parent packaging context: `packagingTypeCode`, `supplierPackagingNumber`
+  - New fields: `supplierPackagingPartNumber`, `manufacturerPackagingPartNumber`, `packagingPartGtins`, `serialNumberOnPackaging`, `stackingFactor`, `packagingTippable`
+  - Uses ETIM-aligned field names (`packagingTypeLength`, etc.) for bulk summary
+
 ## [1.0.0-Preview2] - 2026-04-24
 
 ### Changed

@@ -44,8 +44,8 @@ graph TB
         TI --> ILD["ItemLogisticDetails\n10/10 ✅"]
         TI --> IA["ItemAttachments\n11/12 ⚠️"]
         TI --> PKG["PackagingUnit"]
-        PKG --> PKID["PackagingIdentification\n10/13 ⚠️"]
-        PKG --> PKLD["PackagingLogisticDetails\n8/14 ⚠️"]
+        PKG --> PKID["PackagingIdentification\n12/13 ⚠️"]
+        PKG --> PKLD["PackagingLogisticDetails\n14/14 ✅"]
         PKLD --> PKMAT["PackagingMaterial\n0/16 🔲"]
         PKG --> TIE["TradeItemEnclosed\n5/5 ✅"]
         TI --> ICSF["ItemCountrySpecificFields\n13/18 ✅"]
@@ -481,27 +481,27 @@ graph TB
 | PackagingQuantity | ...PackagingIdentification.PackagingQuantity | ✅ Mapped | PackagingUnit.yaml | packagingQuantity | Converted to number; format: decimal |
 | TradeItemPrimaryPackaging | ...PackagingIdentification.TradeItemPrimaryPackaging | ✅ Mapped | PackagingUnit.yaml | tradeItemPrimaryPackaging | Boolean, nullable |
 | PackagingGs1Code128 | ...PackagingIdentification.PackagingGs1Code128 | ✅ Mapped | PackagingUnit.yaml | packagingGs1Code128 | String max 48, nullable |
-| PackagingBreak | ...PackagingIdentification.PackagingBreak | 🔲 Todo | — | — | Boolean — packaging can be broken |
-| NumberOfPackagingParts | ...PackagingIdentification.NumberOfPackagingParts | 🔲 Todo | — | — | Integer — number of parts in packaging |
+| PackagingBreak | ...PackagingIdentification.PackagingBreak | ✅ Mapped | PackagingIdentificationSummary.yaml | packagingBreak | Boolean, nullable — packaging can be broken |
+| NumberOfPackagingParts | ...PackagingIdentification.NumberOfPackagingParts | ✅ Mapped | PackagingIdentificationSummary.yaml | numberOfPackagingParts | Integer ≥ 1, nullable |
 
 ### PackagingUnit → PackagingLogisticDetails
 
 | ETIM Field | ETIM Path | Status | OpenAPI Schema | OpenAPI Property | Notes |
 |---|---|---|---|---|---|
-| PackagingLogisticDetails[] | ...PackagingUnit[].PackagingLogisticDetails[] | ⚠️ Partial | PackagingUnit.yaml | (flattened) | ETIM array flattened into PackagingUnit; multi-part packaging loses part-level detail |
-| SupplierPackagingPartNumber | ...PackagingLogisticDetails[].SupplierPackagingPartNumber | 🔲 Todo | — | — | Multi-part packaging identifier |
-| ManufacturerPackagingPartNumber | ...PackagingLogisticDetails[].ManufacturerPackagingPartNumber | 🔲 Todo | — | — | Multi-part packaging identifier |
-| PackagingPartGtin[] | ...PackagingLogisticDetails[].PackagingPartGtin[] | 🔲 Todo | — | — | GTINs for packaging parts |
-| PackagingTypeLength | ...PackagingLogisticDetails[].PackagingTypeLength | ✅ Mapped | PackagingUnit.yaml | grossLength | Renamed from PackagingTypeLength to grossLength |
-| PackagingTypeWidth | ...PackagingLogisticDetails[].PackagingTypeWidth | ✅ Mapped | PackagingUnit.yaml | grossWidth | Renamed from PackagingTypeWidth to grossWidth |
-| PackagingTypeHeight | ...PackagingLogisticDetails[].PackagingTypeHeight | ✅ Mapped | PackagingUnit.yaml | grossHeight | Renamed from PackagingTypeHeight to grossHeight |
-| PackagingTypeDiameter | ...PackagingLogisticDetails[].PackagingTypeDiameter | ✅ Mapped | PackagingUnit.yaml | grossDiameter | Renamed from PackagingTypeDiameter to grossDiameter |
-| PackagingTypeDimensionUnit | ...PackagingLogisticDetails[].PackagingTypeDimensionUnit | ✅ Mapped | PackagingUnit.yaml | grossDimensionUnit | Renamed from PackagingTypeDimensionUnit |
-| PackagingTypeWeight | ...PackagingLogisticDetails[].PackagingTypeWeight | ✅ Mapped | PackagingUnit.yaml | grossWeight | Renamed from PackagingTypeWeight to grossWeight |
-| PackagingTypeWeightUnit | ...PackagingLogisticDetails[].PackagingTypeWeightUnit | ✅ Mapped | PackagingUnit.yaml | grossWeightUnit | Renamed from PackagingTypeWeightUnit |
-| SerialNumberOnPackaging | ...PackagingLogisticDetails[].SerialNumberOnPackaging | 🔲 Todo | — | — | Boolean |
-| StackingFactor | ...PackagingLogisticDetails[].StackingFactor | 🔲 Todo | — | — | Integer ≥ 1 |
-| PackagingTippable | ...PackagingLogisticDetails[].PackagingTippable | 🔲 Todo | — | — | Boolean |
+| PackagingLogisticDetails[] | ...PackagingUnit[].PackagingLogisticDetails[] | ✅ Mapped | PackagingLogisticDetailsSummary.yaml | (flat bulk rows) | Each array entry becomes a row in bulk endpoint |
+| SupplierPackagingPartNumber | ...PackagingLogisticDetails[].SupplierPackagingPartNumber | ✅ Mapped | PackagingLogisticDetailsSummary.yaml | supplierPackagingPartNumber | Multi-part packaging identifier, nullable |
+| ManufacturerPackagingPartNumber | ...PackagingLogisticDetails[].ManufacturerPackagingPartNumber | ✅ Mapped | PackagingLogisticDetailsSummary.yaml | manufacturerPackagingPartNumber | Multi-part packaging identifier, nullable |
+| PackagingPartGtin[] | ...PackagingLogisticDetails[].PackagingPartGtin[] | ✅ Mapped | PackagingLogisticDetailsSummary.yaml | packagingPartGtins | Array of GTINs for packaging parts, nullable |
+| PackagingTypeLength | ...PackagingLogisticDetails[].PackagingTypeLength | ✅ Mapped | PackagingUnit.yaml, PackagingLogisticDetailsSummary.yaml | grossLength / packagingTypeLength | ETIM name in bulk summary; renamed in domain model |
+| PackagingTypeWidth | ...PackagingLogisticDetails[].PackagingTypeWidth | ✅ Mapped | PackagingUnit.yaml, PackagingLogisticDetailsSummary.yaml | grossWidth / packagingTypeWidth | ETIM name in bulk summary; renamed in domain model |
+| PackagingTypeHeight | ...PackagingLogisticDetails[].PackagingTypeHeight | ✅ Mapped | PackagingUnit.yaml, PackagingLogisticDetailsSummary.yaml | grossHeight / packagingTypeHeight | ETIM name in bulk summary; renamed in domain model |
+| PackagingTypeDiameter | ...PackagingLogisticDetails[].PackagingTypeDiameter | ✅ Mapped | PackagingUnit.yaml, PackagingLogisticDetailsSummary.yaml | grossDiameter / packagingTypeDiameter | ETIM name in bulk summary; renamed in domain model |
+| PackagingTypeDimensionUnit | ...PackagingLogisticDetails[].PackagingTypeDimensionUnit | ✅ Mapped | PackagingUnit.yaml, PackagingLogisticDetailsSummary.yaml | grossDimensionUnit / packagingTypeDimensionUnit | ETIM name in bulk summary; renamed in domain model |
+| PackagingTypeWeight | ...PackagingLogisticDetails[].PackagingTypeWeight | ✅ Mapped | PackagingUnit.yaml, PackagingLogisticDetailsSummary.yaml | grossWeight / packagingTypeWeight | ETIM name in bulk summary; renamed in domain model |
+| PackagingTypeWeightUnit | ...PackagingLogisticDetails[].PackagingTypeWeightUnit | ✅ Mapped | PackagingUnit.yaml, PackagingLogisticDetailsSummary.yaml | grossWeightUnit / packagingTypeWeightUnit | ETIM name in bulk summary; renamed in domain model |
+| SerialNumberOnPackaging | ...PackagingLogisticDetails[].SerialNumberOnPackaging | ✅ Mapped | PackagingLogisticDetailsSummary.yaml | serialNumberOnPackaging | Boolean, nullable |
+| StackingFactor | ...PackagingLogisticDetails[].StackingFactor | ✅ Mapped | PackagingLogisticDetailsSummary.yaml | stackingFactor | Integer ≥ 1, nullable |
+| PackagingTippable | ...PackagingLogisticDetails[].PackagingTippable | ✅ Mapped | PackagingLogisticDetailsSummary.yaml | packagingTippable | Boolean, nullable |
 
 ### PackagingUnit → PackagingLogisticDetails → PackagingMaterial
 
@@ -593,8 +593,8 @@ graph TB
 | TradeItem — ItemRelations | 6 | 6 | 0 | 0 | 0 |
 | TradeItem — ItemLogisticDetails | 10 | 10 | 0 | 0 | 0 |
 | TradeItem — ItemAttachments | 12 | 8 | 3 | 0 | 1 |
-| TradeItem — PackagingIdentification | 13 | 10 | 0 | 2 | 1 |
-| TradeItem — PackagingLogisticDetails | 14 | 7 | 1 | 6 | 0 |
+| TradeItem — PackagingIdentification | 13 | 12 | 0 | 0 | 1 |
+| TradeItem — PackagingLogisticDetails | 14 | 14 | 0 | 0 | 0 |
 | TradeItem — PackagingMaterial | 16 | 0 | 0 | 16 | 0 |
 | TradeItem — TradeItemEnclosed | 5 | 5 | 0 | 0 | 0 |
 | TradeItem — ItemCountrySpecificFields | 18 | 13 | 0 | 0 | 5 |

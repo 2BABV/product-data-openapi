@@ -1,0 +1,74 @@
+get:
+  operationId: getBulkTradeItemPackagingIdentification
+  tags:
+    - TradeItems bulk
+  summary: List trade item packaging identification
+  description: |
+    Retrieve trade item packaging identification data in bulk with cursor-based pagination.
+    Returns a flattened structure where each row represents a single packaging unit
+    per trade item, with the trade item identifier (`supplierIdGln` + `supplierItemNumber`).
+
+    A trade item with 3 packaging units (e.g., piece, box, pallet)
+    will result in 3 rows.
+
+    This flattened structure is optimized for:
+    - Predictable payload sizes per row
+    - Efficient cursor-based pagination
+    - ETL/data warehouse ingestion
+    - Streaming data processing
+  parameters:
+    - $ref: ../../../../shared/parameters/query/cursor.yaml
+    - $ref: ../../../../shared/parameters/query/limit.yaml
+    - $ref: ../../../../shared/parameters/query/selection-id.yaml
+    - $ref: ../../../../shared/parameters/query/supplier-id-gln-filter.yaml
+    - $ref: ../../../../shared/parameters/query/mutation-date-time.yaml
+  responses:
+    '200':
+      description: Successfully retrieved trade item packaging identification
+      content:
+        application/json:
+          schema:
+            $ref: ../../schemas/responses/BulkTradeItemPackagingIdentificationResponse.yaml
+          examples:
+            multipleItems:
+              summary: Multiple packaging units across trade items
+              value:
+                data:
+                  - supplierIdGln: "0095969000000"
+                    supplierItemNumber: "100062"
+                    supplierPackagingNumber: "100062"
+                    manufacturerPackagingNumber: "100062"
+                    packagingGtins: ["00095969042437"]
+                    packagingTypeCode: CT
+                    packagingUnitName: null
+                    packagingQuantity: 1
+                    tradeItemPrimaryPackaging: true
+                    packagingGs1Code128: null
+                    packagingBreak: null
+                    numberOfPackagingParts: null
+                  - supplierIdGln: "0095969000000"
+                    supplierItemNumber: "114519"
+                    supplierPackagingNumber: "114519"
+                    manufacturerPackagingNumber: "114519"
+                    packagingGtins: ["00095969040549"]
+                    packagingTypeCode: CT
+                    packagingUnitName: null
+                    packagingQuantity: 1
+                    tradeItemPrimaryPackaging: true
+                    packagingGs1Code128: null
+                    packagingBreak: null
+                    numberOfPackagingParts: null
+                meta:
+                  cursor: "eyJpZCI6MTIzfQ=="
+                  hasNext: true
+                  hasPrev: false
+                  limit: 100
+                  estimatedTotal: 5200
+    '400':
+      $ref: ../../../../shared/responses/400-bad-request.yaml
+    '401':
+      $ref: ../../../../shared/responses/401-unauthorized.yaml
+    '403':
+      $ref: ../../../../shared/responses/403-forbidden.yaml
+    '500':
+      $ref: ../../../../shared/responses/500-internal-server-error.yaml
