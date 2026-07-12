@@ -10,13 +10,14 @@
 1. [Core Standards & Type System](#core-standards--type-system)
 2. [Naming Conventions](#naming-conventions)
 3. [Architecture Patterns](#architecture-patterns)
-4. [Schema Flattening Strategy](#schema-flattening-strategy)
-5. [Bulk Service Design](#bulk-service-design)
-6. [Documentation Requirements](#documentation-requirements)
-7. [Shared Component Reuse](#shared-component-reuse)
-8. [Validation & Error Handling](#validation--error-handling)
-9. [Security & Authentication](#security--authentication)
-10. [Server URL Pattern](#server-url-pattern)
+4. [Response Conventions](#response-conventions)
+5. [Schema Flattening Strategy](#schema-flattening-strategy)
+6. [Bulk Service Design](#bulk-service-design)
+7. [Documentation Requirements](#documentation-requirements)
+8. [Shared Component Reuse](#shared-component-reuse)
+9. [Validation & Error Handling](#validation--error-handling)
+10. [Security & Authentication](#security--authentication)
+11. [Server URL Pattern](#server-url-pattern)
 
 ---
 
@@ -128,11 +129,11 @@ factorCustomsCommodityCode:
   type: ["number", "null"]
   minimum: 0
 
-# Nullable array
-productGtins:
-  type: ["array", "null"]
+# Response-level array (never null — empty = [])
+descriptions:
+  type: array
   items:
-    type: string
+    $ref: ./ProductDescription.yaml
 
 # Nullable reference - use anyOf pattern
 legislation:
@@ -145,7 +146,8 @@ legislation:
 - Use `type: ["string", "null"]` for optional string fields
 - Use `type: ["number", "null"]` for optional numeric fields
 - Use `type: ["boolean", "null"]` for optional boolean fields
-- Use `type: ["array", "null"]` for optional arrays
+- Use `type: array` for collection properties in sub-resource schemas — arrays are always required and never null (see [Response Conventions](#response-conventions))
+- **Exception**: Aggregate root schemas (`ProductResponseData`, `TradeItemResponseData`) use `type: ["array", "null"]` for partial inclusion support (see [Aggregate Root Collections](#aggregate-root-collections-support-partial-inclusion))
 - When referencing another schema, wrap with `anyOf` and add `{ "type": "null" }` branch
 - Do NOT add field to `required` array if it can be null/omitted
 - Always include `null` in examples when field is nullable
@@ -344,6 +346,10 @@ GET /trade-items/{supplierIdGln}/{supplierItemNumber}
 - Path parameters are required
 - 404 error when entity not found
 
+**Important**: Only root resource endpoints (`/products/{gln}/{num}`, `/trade-items/{gln}/{num}`) return 404.
+Sub-resource endpoints (e.g., `/details`, `/descriptions`, `/attachments`) return 200 with empty collections
+when no data is available — they never return 404. See [Response Conventions](#response-conventions).
+
 #### Bulk Endpoints
 
 Pattern: `/{resource}/bulk/{aspect}`
@@ -465,6 +471,129 @@ examples:
 
 ---
 
+## Response Conventions
+
+### Root Endpoints Signal Entity Existence; Sub-Resources Do Not
+
+Single-item root endpoints (`GET /products/{gln}/{num}`, `GET /trade-items/{gln}/{num}`) return `404 ProblemDetails` when the addressed root entity does not exist.
+
+Sub-resource endpoints (`/descriptions`, `/attachments`, `/pricings`, etc.) **never** return `404`. They return `200` with an empty collection (`[]`) when no sub-resource records are available — regardless of whether the parent entity exists.
+
+Clients that need to verify parent entity existence must call the root endpoint.
+
+**Rationale**: Simplifies client logic by eliminating 404 handling on sub-resource endpoints. Clients consuming data distribution APIs typically sync all available data rather than checking individual entity existence.
+
+```yaml
+# Sub-resource: product exists but has no attachments
+# Response: 200 OK
+data:
+  manufacturerIdGln: "1234567890123"
+  manufacturerProductNumber: "929002376910"
+  attachments: []
+
+# Sub-resource: product does NOT exist
+# Response: 200 OK (same shape — sub-resources do not signal parent existence)
+data:
+  manufacturerIdGln: "9999999999999"
+  manufacturerProductNumber: "UNKNOWN"
+  attachments: []
+```
+
+### Collections Are Always Present Arrays
+
+Collection-valued response members use `type: array` and are always `required`. Empty collections are represented as `[]`, never `null`.
+
+This applies to:
+- Sub-resource list properties (`descriptions`, `attachments`, `pricings`, `relations`, etc.)
+- Bulk endpoint `data` arrays
+- Nested arrays within domain schemas
+
+**Code generation target**: `required List<T>` with default `[]` (e.g., C# `public required ICollection<T> Items { get; init; } = [];`)
+
+```yaml
+# ✅ CORRECT — required array, never null (sub-resource response schemas)
+descriptions:
+  type: array
+  items:
+    $ref: ./ProductDescription.yaml
+
+# ❌ INCORRECT — nullable array in sub-resource schema
+descriptions:
+  type: ["array", "null"]
+  items:
+    $ref: ./ProductDescription.yaml
+```
+
+**Note**: The previous convention of using `null` for "no data available" and `[]` for "filter matched nothing" is eliminated for sub-resource schemas. Both cases return `[]`.
+
+### Aggregate Root Collections Support Partial Inclusion
+
+The aggregate root response schemas (`ProductResponseData.yaml` and `TradeItemResponseData.yaml`) are an **exception** to the "never null" rule. Their collection properties use `type: ["array", "null"]` (required + nullable) to support partial inclusion:
+
+| Value | Meaning |
+|-------|---------|
+| `[...]` | Requested, has data |
+| `[]` | Requested, but empty (no data exists) |
+| `null` | Not included in this response (not requested) |
+
+This enables clients to request only the sub-resources they need from the aggregate root endpoint, without paying for unused data. Non-requested collections are returned as `null` to distinguish from empty (`[]`).
+
+**Code generation target**: `required ICollection<T>?` (nullable collection, e.g., C# `public required ICollection<T>? Items { get; init; }`)
+
+```yaml
+# ✅ CORRECT — aggregate root only: required + nullable
+required:
+  - descriptions
+  - pricings
+properties:
+  descriptions:
+    type: ["array", "null"]
+    items:
+      $ref: ./ItemDescription.yaml
+  pricings:
+    type: ["array", "null"]
+    items:
+      $ref: ./TradeItemPricing.yaml
+```
+
+> **Scope**: This pattern applies **only** to `ProductResponseData` and `TradeItemResponseData`. All other response schemas (sub-resource, bulk) use non-nullable `type: array`.
+
+### Singular Optional Objects Are Present and Nullable
+
+Singular object-valued response members that may be unavailable MUST be present with value `null`. They MUST NOT be omitted.
+
+- The property is listed in `required`
+- The type uses `anyOf` with a `$ref` and `type: "null"`
+- Code generation target: `T?` (nullable reference type)
+
+```yaml
+# ✅ CORRECT — required, nullable object
+required:
+  - ordering
+properties:
+  ordering:
+    anyOf:
+      - $ref: ./TradeItemOrdering.yaml
+      - type: "null"
+
+# ❌ INCORRECT — optional property (may be omitted)
+properties:
+  ordering:
+    $ref: ./TradeItemOrdering.yaml
+```
+
+### Errors Use RFC 9457 ProblemDetails with Stable Types
+
+All non-2xx responses use RFC 9457 Problem Details format with media type `application/problem+json`.
+
+Client control flow rules:
+- **Branch on**: `type` URI, `status` code, and documented extension members
+- **Never branch on**: `detail` or `title` strings (these are human-readable, not machine-stable)
+
+Validation errors use ProblemDetails with `status: 400` and a structured `errors` extension member for field-level validation failures.
+
+---
+
 ## Schema Flattening Strategy
 
 ### Minimize Nesting
@@ -525,7 +654,7 @@ properties:
     items:
       $ref: ./ProductDescription.yaml
   etimClassifications:
-    type: ["array", "null"]
+    type: array
     items:
       $ref: ./EtimClassification.yaml
 ```
@@ -936,7 +1065,7 @@ $ref: ../../../../shared/schemas/common/CursorPaginationMetadata.yaml
 
 #### Error Responses
 ```yaml
-# RFC 7807 Problem Details
+# RFC 9457 Problem Details
 $ref: ../../../../shared/schemas/common/ProblemDetails.yaml
 $ref: ../../../../shared/schemas/common/ValidationProblemDetails.yaml
 ```
@@ -1094,23 +1223,24 @@ brandName:
 #### Array Constraints
 
 ```yaml
+# Response-level array (never null — empty = [])
+descriptions:
+  type: array
+  items:
+    $ref: ./ProductDescription.yaml
+
+# Domain-level array (nullable — null = not available)
 productGtins:
   type: ["array", "null"]
   uniqueItems: true
   items:
     type: string
     pattern: "^[0-9]{8,14}$"
-
-productDescriptions:
-  type: array
-  minItems: 1
-  items:
-    $ref: ./ProductDescription.yaml
 ```
 
-### Error Handling (RFC 7807)
+### Error Handling (RFC 9457)
 
-All error responses follow RFC 7807 Problem Details format:
+All error responses follow RFC 9457 Problem Details format and use media type `application/problem+json`.
 
 #### ProblemDetails Schema
 
@@ -1159,6 +1289,13 @@ properties:
       - null
 ```
 
+> **Client guidance**: Clients MUST use `type` and `status` for control flow decisions.
+> The `detail` and `title` fields are human-readable and MUST NOT be used for programmatic
+> branching or exception-message matching. When the error has no extra semantics beyond
+> the HTTP status code, `type` is set to `about:blank` per RFC 9457 §4.2.1.
+>
+> **Note**: RFC 9457 supersedes RFC 7807. The format is identical; only the standard reference has changed.
+
 #### Standard Error Responses
 
 ```yaml
@@ -1166,7 +1303,7 @@ properties:
 description: |
   The request was invalid or cannot be served. The exact error is explained in the response body.
 content:
-  application/json:
+  application/problem+json:
     schema:
       $ref: ../../../../shared/schemas/common/ProblemDetails.yaml
     example:
@@ -1188,7 +1325,7 @@ description: |
 description: |
   The requested resource could not be found.
 content:
-  application/json:
+  application/problem+json:
     schema:
       $ref: ../../../../shared/schemas/common/ProblemDetails.yaml
     example:
@@ -1202,7 +1339,7 @@ content:
 description: |
   An unexpected error occurred on the server.
 content:
-  application/json:
+  application/problem+json:
     schema:
       $ref: ../../../../shared/schemas/common/ProblemDetails.yaml
     example:
@@ -1292,7 +1429,7 @@ https://{implementer-domain}[/optional-prefix]/v1/{resource}/{path-params}
 **Design decisions:**
 
 - **Resource in path, not server URL**: The resource name (e.g., `/products`, `/trade-items`) is part of the OpenAPI path, not the server URL. This makes the full URL contract visible in the spec and allows multiple implementers with different server URLs.
-- **`ProblemDetails` uses `about:blank`**: Per RFC 7807, when the error has no extra semantics beyond the HTTP status code, `type` is set to `about:blank` and `title` matches the HTTP status phrase. The `instance` field is omitted from examples.
+- **`ProblemDetails` uses `about:blank`**: Per RFC 9457, when the error has no extra semantics beyond the HTTP status code, `type` is set to `about:blank` and `title` matches the HTTP status phrase. The `instance` field is omitted from examples.
 
 ---
 
@@ -1305,6 +1442,7 @@ These design decisions establish a consistent, standards-compliant OpenAPI 3.1 s
 3. **Efficiency**: Flattened schemas with cursor-based pagination for bulk operations
 4. **Traceability**: Complete documentation mapping back to ETIM xChange source
 5. **Reusability**: Extensive use of shared components and parameters
-6. **Standards Compliance**: OpenAPI 3.1, JSON Schema 2020-12, RFC 7807, ISO standards
+6. **Standards Compliance**: OpenAPI 3.1, JSON Schema 2020-12, RFC 9457, ISO standards
+7. **Response Conventions**: Consistent rules for 404 usage, collection nullability, and error handling
 
 These patterns ensure the API is developer-friendly, performant, and maintainable while accurately representing the rich ETIM xChange product data model.

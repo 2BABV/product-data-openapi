@@ -40,4 +40,4 @@ examples:
   - data:
       manufacturerIdGln: "1234567890123"
       manufacturerProductNumber: "929002376910"
-      attachments: null
+      attachments: []

@@ -8,9 +8,10 @@ description: |
   - `descriptions`: Array of multilingual descriptions (nested, not flattened)
   - `etimClassifications`: Array of ETIM classifications with embedded features (nested)
   - `lcaEnvironmental`: Life Cycle Assessment and Environmental Product Declaration (EPD) data
+  - `attachments`: Product documents, images, videos, and other attachments (nested)
   
   This structure aligns with the subresource endpoints (`/details`, 
-  `/descriptions`, `/etim-classifications`, `/lca-environmental`) which all include the key at the root level.
+  `/descriptions`, `/etim-classifications`, `/lca-environmental`, `/attachments`) which all include the key at the root level.
 required:
   - data
 properties:
@@ -69,3 +70,4 @@ examples:
           - lifeCycleStage: "C1-C4"
             lcaDeclarationIndicator: "AGG"
             declaredUnitGwpTotal: 2.5
+      attachments: []

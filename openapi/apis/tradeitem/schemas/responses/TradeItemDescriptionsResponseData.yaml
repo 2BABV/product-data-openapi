@@ -4,6 +4,7 @@ description: |
 required:
   - supplierIdGln
   - supplierItemNumber
+  - descriptions
 properties:
   supplierIdGln:
     $ref: ../../../../shared/schemas/identifiers/Gln.yaml
@@ -18,10 +19,10 @@ properties:
     examples:
       - "SKU-12345"
   descriptions:
-    type: ["array", "null"]
+    type: array
     description: |
       Array of trade item descriptions. Each item contains descriptions in a specific language.
-      Returns null if no descriptions are available, or an empty array if filtering
+      Returns an empty array if no descriptions are available or if filtering
       by language yields no matches.
     items:
       $ref: ../domain/ItemDescription.yaml
@@ -41,4 +42,4 @@ examples:
         bonusGroupDescription: null
   - supplierIdGln: "1234567890123"
     supplierItemNumber: "SKU-12345"
-    descriptions: null
+    descriptions: []

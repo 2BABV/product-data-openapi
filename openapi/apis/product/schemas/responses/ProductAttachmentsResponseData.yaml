@@ -6,6 +6,7 @@ description: |
 required:
   - manufacturerIdGln
   - manufacturerProductNumber
+  - attachments
 properties:
   manufacturerIdGln:
     $ref: ../../../../shared/schemas/identifiers/Gln.yaml
@@ -20,11 +21,11 @@ properties:
     examples:
       - "929002376910"
   attachments:
-    type: ["array", "null"]
+    type: array
     description: |
       Array of product attachments. Each item contains an attachment type with
       one or more attachment detail records (e.g., same datasheet in different languages).
-      Returns null if no attachments are available.
+      Returns an empty array if no attachments are available.
     items:
       $ref: ../domain/ProductAttachment.yaml
 examples:
@@ -54,4 +55,4 @@ examples:
             attachmentIssueDate: "2024-06-15"
   - manufacturerIdGln: "1234567890123"
     manufacturerProductNumber: "929002376910"
-    attachments: null
+    attachments: []

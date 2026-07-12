@@ -35,6 +35,9 @@ When working with this repository:
 
 2. **OpenAPI 3.1 / JSON Schema 2020-12 Requirements**:
    - Use `type: ["string", "null"]` for nullable fields (NOT `nullable: true`)
+   - Use `type: array` (required, never nullable) for collection properties in sub-resource response schemas — empty collections use `[]`, never `null`
+   - **Exception**: Aggregate root response schemas (`ProductResponseData`, `TradeItemResponseData`) use `type: ["array", "null"]` for collection properties to support partial inclusion (`null` = not included in this response, `[]` = included but empty)
+   - Use `anyOf: [$ref, type: "null"]` for optional singular objects — property is required but value may be `null`
    - Use `anyOf`, `oneOf`, `allOf` for composition (avoid deprecated patterns)
   - Allow `additionalProperties` throughout the object model, including nested models, to preserve backward compatibility when optional fields are added
    - Use `examples` array (plural) in schemas, not `example` (singular, deprecated)
@@ -50,7 +53,7 @@ When working with this repository:
 7. **Include comprehensive examples** - Every schema should have realistic examples
 8. **Document business context** - Add descriptions explaining purpose and constraints
 9. **Support flexible identifiers** - Use `anyOf`/`oneOf` patterns for GLN/DUNS/alternative IDs
-10. **Maintain consistent error responses** - Use RFC 7807 Problem Details format
+10. **Maintain consistent error responses** - Use RFC 9457 Problem Details format (`application/problem+json`). Clients branch on `type` and `status`, never on `detail` or `title` strings. No exception-message matching.
 
 11. **Security scheme convention**:
    - All APIs use **OAuth 2.0 Client Credentials** (`clientCredentials` flow)
@@ -99,6 +102,17 @@ When working with this repository:
    - Response schemas (`/schemas/responses/`) `$ref` into domain schemas — they are NOT duplicates
    - Domain schemas define the entity structure; response schemas add the API envelope (`data`, `meta`) and composite keys
 
+19. **Response conventions (404, nullability, errors)**:
+   - **404 only from root endpoints**: `GET /products/{gln}/{num}` and `GET /trade-items/{gln}/{num}` return 404 when the entity doesn't exist. Sub-resource endpoints (`/descriptions`, `/attachments`, `/pricings`, etc.) **never** return 404 — they return 200 with an empty collection. Sub-resource 200 does not confirm parent entity existence.
+   - **Sub-resource collections always `[]`**: In sub-resource response schemas, array properties use `type: array` (required), never `type: ["array", "null"]`. Empty = `[]`, never `null`. Code-gen: `required List<T>` with default `[]`.
+   - **Aggregate root collections support partial inclusion**: In `ProductResponseData` and `TradeItemResponseData`, collection properties use `type: ["array", "null"]` (required + nullable) to support three-state semantics:
+     - `[...]` — requested, has data
+     - `[]` — requested, but empty (no data exists)
+     - `null` — not included in this response (not requested)
+     Code-gen: `required ICollection<T>?` (nullable collection).
+   - **Objects `null` when absent**: Singular optional objects are required but nullable (`anyOf: [$ref, type: "null"]`). Always present, value is `null` when unavailable. Code-gen: `T?`.
+   - **Errors RFC 9457 ProblemDetails**: All errors use Problem Details with `application/problem+json`. Branch on `type`/`status`, never on `detail`/`title`. Validation errors include `errors` extension member.
+
 ## Naming Convention Details
 
 ### Schema Components (PascalCase)
@@ -129,6 +143,31 @@ propertyName:
 propertyName:
   type: string
   nullable: true
+
+# ✅ Sub-resource arrays — required, never nullable (empty = [])
+descriptions:
+  type: array
+  items:
+    $ref: '#/components/schemas/ProductDescription'
+
+# ✅ Aggregate root arrays — required, nullable (null = not included)
+# Only in ProductResponseData.yaml and TradeItemResponseData.yaml
+descriptions:
+  type: ["array", "null"]
+  items:
+    $ref: '#/components/schemas/ProductDescription'
+
+# ❌ INCORRECT — Do NOT use nullable arrays in sub-resource schemas
+descriptions:
+  type: ["array", "null"]
+  items:
+    $ref: '#/components/schemas/ProductDescription'
+
+# ✅ Optional objects — required + nullable
+ordering:
+  anyOf:
+    - $ref: '#/components/schemas/TradeItemOrdering'
+    - type: "null"
 ```
 
 ### Examples (OpenAPI 3.1+)

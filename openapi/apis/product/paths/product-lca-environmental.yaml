@@ -20,7 +20,7 @@ get:
 
     **Examples**: Example payloads show documented fields only. Clients must accept and ignore additional fields, including nested fields, when they are added in backward-compatible updates.
     
-    **No pagination** - Returns exactly one product's LCA data or 404 if not found.
+    **No pagination** - Returns exactly one product's LCA data.
     Returns `null` for `lcaEnvironmental` if the product exists but has no LCA data.
   parameters:
     - $ref: ../../../shared/parameters/path/manufacturer-id-gln.yaml
@@ -82,19 +82,5 @@ get:
       $ref: ../../../shared/responses/401-unauthorized.yaml
     '403':
       $ref: ../../../shared/responses/403-forbidden.yaml
-    '404':
-      description: Product not found
-      content:
-        application/json:
-          schema:
-            $ref: ../../../shared/schemas/common/ProblemDetails.yaml
-          examples:
-            notFound:
-              summary: Product not found
-              value:
-                type: about:blank
-                title: Not Found
-                status: 404
-                detail: "No product found with manufacturer GLN '1234567890123' and product number '929002376910'"
     '500':
       $ref: ../../../shared/responses/500-internal-server-error.yaml
