@@ -1,0 +1,3669 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "ETIM API",
+    "description": "ETIM International webservices. \n\t\t\t\t - [Licensing info](https://www.etim-international.com/classification/license-info/)\n\t\t\t\t - [Extra documentation and testclient](https://bitbucket.org/3xt/etimapi-rest-client/src/master/)\n\t\t\t\t",
+    "contact": {
+      "name": "ETIM International",
+      "email": "info@etim-international.com"
+    },
+    "version": "2.0"
+  },
+  "paths": {
+    "/api/v2/Class/Search": {
+      "post": {
+        "tags": [
+          "Class"
+        ],
+        "summary": "Get a list of all classes that meet the input filters.",
+        "requestBody": {
+          "description": "Object of type Etim.Lib.Elastic.Models.Core.EntitySearchInput.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EntitySearchInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "500": {
+            "description": "Unexpected error."
+          },
+          "200": {
+            "description": "Object with total found and list of EtimClasses Etim.Lib.Elastic.Models.Core.ClassSearchOutput returned.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClassSearchOutput"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClassSearchOutput"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClassSearchOutput"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error, missing/invalid input.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not authorized."
+          }
+        }
+      }
+    },
+    "/api/v2/Class/DetailsManyByCode": {
+      "post": {
+        "tags": [
+          "Class"
+        ],
+        "summary": "Get all class versions by class code .",
+        "requestBody": {
+          "description": "Objects of type Etim.Lib.Elastic.Models.Core.EntityDetailsInput.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EntityDetailsInput"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EntityDetailsInput"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/EntityDetailsInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "500": {
+            "description": "Internal Server Error"
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EtimClass"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EtimClass"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EtimClass"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/Class/DetailsMany": {
+      "post": {
+        "tags": [
+          "Class"
+        ],
+        "summary": "Get multiple classes by class code and version.",
+        "requestBody": {
+          "description": "Objects of type Etim.Lib.Elastic.Models.Core.ClassListInput.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClassListInput"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClassListInput"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClassListInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "500": {
+            "description": "Internal Server Error"
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EtimClass"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EtimClass"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EtimClass"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/Class/Details": {
+      "post": {
+        "tags": [
+          "Class"
+        ],
+        "summary": "Get a specific class by class code and version.",
+        "requestBody": {
+          "description": "Object of type Etim.Lib.Elastic.Models.Core.ClassDetailsInput.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClassDetailsInput"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClassDetailsInput"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClassDetailsInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "500": {
+            "description": "Internal Server Error"
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/EtimClass"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EtimClass"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EtimClass"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/Class/DetailsForRelease": {
+      "post": {
+        "tags": [
+          "Class"
+        ],
+        "summary": "Get a specific class by class code and release.",
+        "requestBody": {
+          "description": "Object of type Etim.Lib.Elastic.Models.Core.ClassDetailsReleaseInput.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClassDetailsReleaseInput"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClassDetailsReleaseInput"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClassDetailsReleaseInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "500": {
+            "description": "Internal Server Error"
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/EtimClass"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EtimClass"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EtimClass"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/Class/DetailsDiff": {
+      "post": {
+        "tags": [
+          "Class"
+        ],
+        "summary": "Get a specific class by class code and version, and show changes with previous version.",
+        "requestBody": {
+          "description": "Object of type Etim.Lib.Elastic.Models.Core.ClassDetailsInput.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClassDetailsInput"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClassDetailsInput"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClassDetailsInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "500": {
+            "description": "Internal Server Error"
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/EtimClass"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EtimClass"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EtimClass"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/Feature/Search": {
+      "post": {
+        "tags": [
+          "Feature"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FeatureSearchInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/Feature/Details": {
+      "post": {
+        "tags": [
+          "Feature"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EntityDetailsInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/FeatureGroup/Search": {
+      "post": {
+        "tags": [
+          "FeatureGroup"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EntitySearchInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/FeatureGroup/Details": {
+      "post": {
+        "tags": [
+          "FeatureGroup"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EntityDetailsInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/Group/Search": {
+      "post": {
+        "tags": [
+          "Group"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EntitySearchInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/Group/Details": {
+      "post": {
+        "tags": [
+          "Group"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EntityDetailsInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/Misc/Languages": {
+      "get": {
+        "tags": [
+          "Misc"
+        ],
+        "summary": "Get a list of languages.",
+        "description": "This service returns a list of all languages.",
+        "responses": {
+          "500": {
+            "description": "Unexpected error."
+          },
+          "200": {
+            "description": "List of languages returned.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Language"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Language"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Language"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not authorized."
+          }
+        }
+      }
+    },
+    "/api/v2/Misc/LanguagesAllowed": {
+      "get": {
+        "tags": [
+          "Misc"
+        ],
+        "summary": "Get a list of languages.",
+        "description": "This service returns a list of all allowed languages.",
+        "responses": {
+          "500": {
+            "description": "Unexpected error."
+          },
+          "200": {
+            "description": "List of languages returned.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Language"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Language"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Language"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not authorized."
+          }
+        }
+      }
+    },
+    "/api/v2/Misc/Releases": {
+      "get": {
+        "tags": [
+          "Misc"
+        ],
+        "summary": "Get a list of ETIM releases.",
+        "description": "This service returns a list of all ETIM releases.",
+        "responses": {
+          "500": {
+            "description": "Unexpected error."
+          },
+          "200": {
+            "description": "List of releases returned.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Release"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Release"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Release"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not authorized."
+          }
+        }
+      }
+    },
+    "/api/v2/ModellingClass/Search": {
+      "post": {
+        "tags": [
+          "ModellingClass"
+        ],
+        "summary": "Get a list of all classes that meet the input filters.",
+        "requestBody": {
+          "description": "Object of type Etim.Lib.Elastic.Models.Modelling.ModellingSearchInput.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ModellingSearchInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "500": {
+            "description": "Unexpected error."
+          },
+          "200": {
+            "description": "Object with total found and list of ModellingClasses Etim.Lib.Elastic.Models.Modelling.ModellingClassSearchOutput returned.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ModellingClassSearchOutput"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ModellingClassSearchOutput"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ModellingClassSearchOutput"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error, missing/invalid input.",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not authorized."
+          }
+        }
+      }
+    },
+    "/api/v2/ModellingClass/DetailsManyByCode": {
+      "post": {
+        "tags": [
+          "ModellingClass"
+        ],
+        "summary": "Get all class versions by class code .",
+        "requestBody": {
+          "description": "Objects of type Etim.Lib.Elastic.Models.Modelling.ModellingDetailsInput.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ModellingDetailsInput"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ModellingDetailsInput"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ModellingDetailsInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "500": {
+            "description": "Internal Server Error"
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ModellingClass"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ModellingClass"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ModellingClass"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/ModellingClass/DetailsMany": {
+      "post": {
+        "tags": [
+          "ModellingClass"
+        ],
+        "summary": "Get multiple classes by class code and version.",
+        "requestBody": {
+          "description": "Objects of type Etim.Lib.Elastic.Models.Modelling.ModellingClassListInput.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ModellingClassListInput"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ModellingClassListInput"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ModellingClassListInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "500": {
+            "description": "Internal Server Error"
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ModellingClass"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ModellingClass"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ModellingClass"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/ModellingClass/Details": {
+      "post": {
+        "tags": [
+          "ModellingClass"
+        ],
+        "summary": "Get a specific class by class code and version.",
+        "requestBody": {
+          "description": "Object of type Etim.Lib.Elastic.Models.Modelling.ModellingClassDetailsInput.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ModellingClassDetailsInput"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ModellingClassDetailsInput"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ModellingClassDetailsInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "500": {
+            "description": "Internal Server Error"
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ModellingClass"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ModellingClass"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ModellingClass"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/ModellingGroup/Search": {
+      "post": {
+        "tags": [
+          "ModellingGroup"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ModellingSearchInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/ModellingGroup/Details": {
+      "post": {
+        "tags": [
+          "ModellingGroup"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ModellingDetailsInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/Rfcs": {
+      "post": {
+        "tags": [
+          "Rfcs"
+        ],
+        "summary": "Creates a new ETIM class RFC (for new class or existing class modification)",
+        "description": "Requires Idempotency-Key header (UUID) to prevent duplicate RFC creation on retry.\r\n\r\nError Handling (per RFC 9110):\r\n- 400 BadRequest: Malformed request (missing required fields, invalid format) → Returns ValidationProblemDetails\r\n- 422 UnprocessableEntity: Valid format but business rules violated (invalid codes, data integrity issues) → Returns ProblemDetails\r\n- 500 Internal Server Error: Unexpected server errors (database timeout, system failures) → Returns ProblemDetails",
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "description": "Idempotency key to prevent duplicate RFC creation on retry. Must be a unique UUID for each distinct request.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "example": "f9e8d7c6-b5a4-4321-9876-543210fedcba"
+          }
+        ],
+        "requestBody": {
+          "description": "The RFC request (use ExistingClassId for modifying existing class, or ClassName for new class)",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateRfcRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateRfcRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateRfcRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/RfcResult"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RfcResult"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RfcResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationProblemDetails"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Content",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/Unit/Search": {
+      "post": {
+        "tags": [
+          "Unit"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EntitySearchInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/Unit/Details": {
+      "post": {
+        "tags": [
+          "Unit"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EntityDetailsInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/Value/Search": {
+      "post": {
+        "tags": [
+          "Value"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EntitySearchInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v2/Value/Details": {
+      "post": {
+        "tags": [
+          "Value"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EntityDetailsInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ApiEtimClass": {
+        "required": [
+          "description",
+          "groupCode"
+        ],
+        "type": "object",
+        "properties": {
+          "code": {
+            "pattern": "^EC[0-9]{6}$",
+            "type": "string",
+            "nullable": true
+          },
+          "version": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "revision": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "description": {
+            "maxLength": 80,
+            "minLength": 0,
+            "type": "string"
+          },
+          "groupCode": {
+            "maxLength": 8,
+            "minLength": 8,
+            "type": "string"
+          },
+          "deleted": {
+            "type": "boolean"
+          },
+          "sectors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ApiEtimSectorEnum"
+            },
+            "nullable": true
+          },
+          "synonyms": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "features": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ApiEtimClassFeature"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ApiEtimClassFeature": {
+        "required": [
+          "code"
+        ],
+        "type": "object",
+        "properties": {
+          "code": {
+            "minLength": 1,
+            "pattern": "^EF([0-9]{6}|I[0-9]{5}|[A-Z]{2}[0-9]{4})$",
+            "type": "string"
+          },
+          "isLocal": {
+            "type": "boolean",
+            "readOnly": true
+          },
+          "orderNumber": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "unitCode": {
+            "pattern": "^EU[0-9]{6}$",
+            "type": "string",
+            "nullable": true
+          },
+          "unitImperialCode": {
+            "pattern": "^EU[0-9]{6}$",
+            "type": "string",
+            "nullable": true
+          },
+          "values": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ApiEtimClassFeatureValue"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ApiEtimClassFeatureValue": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "pattern": "^EV[0-9]{6}$",
+            "type": "string",
+            "nullable": true
+          },
+          "orderNumber": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ApiEtimSectorEnum": {
+        "enum": [
+          "E",
+          "W",
+          "M",
+          "B",
+          "T"
+        ],
+        "type": "string"
+      },
+      "Changecode": {
+        "enum": [
+          "Unchanged",
+          "Changed",
+          "New",
+          "Deleted"
+        ],
+        "type": "string"
+      },
+      "ClassCodeVersion": {
+        "required": [
+          "code",
+          "version"
+        ],
+        "type": "object",
+        "properties": {
+          "code": {
+            "minLength": 1,
+            "type": "string",
+            "description": "Class code, eg: \"EC000001\", \"EC000003\""
+          },
+          "version": {
+            "type": "integer",
+            "description": "Class version, eg: 4",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ClassDetailsInput": {
+        "required": [
+          "code",
+          "languagecode"
+        ],
+        "type": "object",
+        "properties": {
+          "include": {
+            "$ref": "#/components/schemas/IncludeModel"
+          },
+          "languagecode": {
+            "minLength": 1,
+            "type": "string",
+            "description": "Language code, eg: \"EN\", \"nl-NL\", \"de-DE\""
+          },
+          "code": {
+            "minLength": 1,
+            "type": "string",
+            "description": "Entity code, eg: \"EC000001\", \"EF00001\", \"EG000001\", \"EV000001\", \"EU000001\""
+          },
+          "version": {
+            "type": "integer",
+            "description": "Class version, eg: 4",
+            "format": "int32",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ClassDetailsReleaseInput": {
+        "required": [
+          "code",
+          "languagecode",
+          "release"
+        ],
+        "type": "object",
+        "properties": {
+          "include": {
+            "$ref": "#/components/schemas/IncludeModel"
+          },
+          "languagecode": {
+            "minLength": 1,
+            "type": "string",
+            "description": "Language code, eg: \"EN\", \"nl-NL\", \"de-DE\""
+          },
+          "code": {
+            "minLength": 1,
+            "type": "string",
+            "description": "Entity code, eg: \"EC000001\", \"EF00001\", \"EG000001\", \"EV000001\", \"EU000001\""
+          },
+          "release": {
+            "minLength": 1,
+            "type": "string",
+            "description": "Class release, eg: \"DYNAMIC\", \"ETIM-10.0\", \"ETIM-9.0\", \"ETIM-8.0\", \"ETIM-7.0\", \"ETIM-6.0\", \"ETIM-5.0\", \"ETIM-4.0\""
+          }
+        },
+        "additionalProperties": false
+      },
+      "ClassListInput": {
+        "required": [
+          "classes",
+          "languagecode"
+        ],
+        "type": "object",
+        "properties": {
+          "include": {
+            "$ref": "#/components/schemas/IncludeModel"
+          },
+          "languagecode": {
+            "minLength": 1,
+            "type": "string",
+            "description": "Language code, eg: \"EN\", \"nl-NL\", \"de-DE\""
+          },
+          "classes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ClassCodeVersion"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "ClassSearchOutput": {
+        "type": "object",
+        "properties": {
+          "total": {
+            "type": "integer",
+            "description": "Total records found",
+            "format": "int64"
+          },
+          "pageSize": {
+            "type": "integer",
+            "description": "Effective page size used for this query. May be lower than the requested Size\r\nwhen heavy nested fields (e.g. Features) are included.\r\nClients should use this value (not the requested Size) to calculate the next From offset.",
+            "format": "int32"
+          },
+          "classes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EtimClass"
+            },
+            "description": "List of classes matching the input filters",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "CreateRfcRequest": {
+        "required": [
+          "classDetails",
+          "rfcTitle",
+          "rfcType"
+        ],
+        "type": "object",
+        "properties": {
+          "rfcTitle": {
+            "maxLength": 100,
+            "minLength": 0,
+            "type": "string"
+          },
+          "rfcDescription": {
+            "type": "string",
+            "nullable": true
+          },
+          "rfcType": {
+            "$ref": "#/components/schemas/RfcTypeEnum"
+          },
+          "classDetails": {
+            "$ref": "#/components/schemas/ApiEtimClass"
+          }
+        },
+        "additionalProperties": false
+      },
+      "EntityDetailsInput": {
+        "required": [
+          "code",
+          "languagecode"
+        ],
+        "type": "object",
+        "properties": {
+          "include": {
+            "$ref": "#/components/schemas/IncludeModel"
+          },
+          "languagecode": {
+            "minLength": 1,
+            "type": "string",
+            "description": "Language code, eg: \"EN\", \"nl-NL\", \"de-DE\""
+          },
+          "code": {
+            "minLength": 1,
+            "type": "string",
+            "description": "Entity code, eg: \"EC000001\", \"EF00001\", \"EG000001\", \"EV000001\", \"EU000001\""
+          }
+        },
+        "additionalProperties": false
+      },
+      "EntitySearchInput": {
+        "required": [
+          "from",
+          "languagecode",
+          "size"
+        ],
+        "type": "object",
+        "properties": {
+          "from": {
+            "maximum": 29000,
+            "minimum": 0,
+            "type": "integer",
+            "description": "Startposition for paging.\r\nFrom must be less than or equal to 29000. From + size must be less than or equal to 30000",
+            "format": "int32",
+            "example": 0
+          },
+          "size": {
+            "maximum": 1000,
+            "minimum": 0,
+            "type": "integer",
+            "description": "Total records per page\r\nSize must be less than or equal to 1000. From + size must be less than or equal to 30000",
+            "format": "int32",
+            "example": 10
+          },
+          "languagecode": {
+            "minLength": 1,
+            "type": "string",
+            "description": "Language of the output description fields. \r\nLanguage of the input SearchString if used",
+            "example": "nl-NL"
+          },
+          "searchString": {
+            "type": "string",
+            "description": "Search with a specific text in description or synonym",
+            "nullable": true,
+            "example": "test"
+          },
+          "deprecated": {
+            "type": "boolean",
+            "description": "Some entities (features, values and units) can be deprecated. This means they may not be used anymore in future.\r\nIf not set, return both deprecated and not deprecated entities\r\nIf Deprecated = true, return only deprecated entities\r\nIf Deprecated = false, return only entities that are not deprecated\r\nOnly applicable for features, values and units",
+            "nullable": true,
+            "example": false
+          },
+          "modelling": {
+            "type": "boolean",
+            "description": "Deprecated!! For modelling classes, use the ModellingClass service\r\nThe class service only returns product classes",
+            "nullable": true
+          },
+          "include": {
+            "$ref": "#/components/schemas/IncludeModel"
+          },
+          "filters": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FilterModel"
+            },
+            "description": "Use filters to filter the results",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "EtimClass": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Class code, eg: \"EC000001\"",
+            "nullable": true
+          },
+          "version": {
+            "type": "integer",
+            "description": "Class version, eg: 4",
+            "format": "int32"
+          },
+          "status": {
+            "type": "integer",
+            "description": "Class status\r\n2 - Under construction\r\n3 - Ready for publication\r\n5 - Published\r\n9 - Deleted",
+            "format": "int32"
+          },
+          "mutationDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "revision": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "revisionDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "modelling": {
+            "type": "boolean",
+            "description": "Indicates if this is a modelling class"
+          },
+          "dimensionalDrawingSvgUrl": {
+            "type": "string",
+            "description": "Dimensional Drawing Svg for modelling classes",
+            "nullable": true
+          },
+          "descriptionEn": {
+            "type": "string",
+            "description": "Class description ETIM English",
+            "nullable": true,
+            "readOnly": true
+          },
+          "description": {
+            "type": "string",
+            "description": "Class description in the requested language",
+            "nullable": true,
+            "readOnly": true
+          },
+          "synonyms": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Class synonyms in the requested language",
+            "nullable": true,
+            "readOnly": true
+          },
+          "group": {
+            "$ref": "#/components/schemas/EtimGroup"
+          },
+          "features": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EtimClassFeature"
+            },
+            "description": "ETIM Features",
+            "nullable": true
+          },
+          "linkedModellingClasses": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EtimClassMinimal"
+            },
+            "description": "Linked modelling classes",
+            "nullable": true
+          },
+          "linkedRegularClasses": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EtimClassMinimal"
+            },
+            "description": "Linked regular classes",
+            "nullable": true
+          },
+          "releases": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "ETIM Releases, \"DYNAMIC\", \"ETIM-10.0\", \"ETIM-9.0\", \"ETIM-8.0\", \"ETIM-7.0\", \"ETIM-6.0\", \"ETIM-5.0\", \"ETIM-4.0\"",
+            "nullable": true
+          },
+          "translations": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EtimClassTranslation"
+            },
+            "description": "Translation",
+            "nullable": true
+          },
+          "changeCode": {
+            "$ref": "#/components/schemas/Changecode"
+          },
+          "referenceProducts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EtimReferenceProduct"
+            },
+            "description": "Reference products",
+            "nullable": true
+          },
+          "sectors": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Sectors, \"E\", \"B\", \"M\", \"T\", \"W\"",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "EtimClassFeature": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Feature code, eg: \"EF000001\"",
+            "nullable": true
+          },
+          "type": {
+            "type": "string",
+            "description": "Featuretype\r\nAlphanummeric\r\nNumeric\r\nRange\r\nLogical",
+            "nullable": true
+          },
+          "deprecated": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "local": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "description": "Feature description in the requested language",
+            "nullable": true,
+            "readOnly": true
+          },
+          "descriptionEn": {
+            "type": "string",
+            "description": "Feature description ETIM English",
+            "nullable": true,
+            "readOnly": true
+          },
+          "featureGroup": {
+            "$ref": "#/components/schemas/EtimFeatureGroup"
+          },
+          "translations": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EtimTranslation"
+            },
+            "description": "Feature translations for all entitled languages",
+            "nullable": true
+          },
+          "orderNumber": {
+            "type": "integer",
+            "description": "Feature order number within this class, eg: 2",
+            "format": "int32"
+          },
+          "unit": {
+            "$ref": "#/components/schemas/EtimUnit"
+          },
+          "unitImperial": {
+            "$ref": "#/components/schemas/EtimUnit"
+          },
+          "unitVariableAxis": {
+            "$ref": "#/components/schemas/EtimUnit"
+          },
+          "unitVariableAxisImperial": {
+            "$ref": "#/components/schemas/EtimUnit"
+          },
+          "values": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EtimClassFeatureValue"
+            },
+            "nullable": true
+          },
+          "portcode": {
+            "type": "integer",
+            "description": "Only applicable in Modelling Class",
+            "format": "int32"
+          },
+          "changeCode": {
+            "$ref": "#/components/schemas/Changecode"
+          },
+          "dimensionalDrawingCode": {
+            "type": "string",
+            "description": "Only applicable in Modelling Class",
+            "nullable": true
+          },
+          "featureGroupCode": {
+            "type": "string",
+            "description": "To prevent to much redundancy, for a feature within the class, the FeatureGroupCode is provided, instead of the complete featuregroup.\r\nFor descriptions and translations of the featuregroup, use the FeatureGroup service.",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "EtimClassFeatureValue": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Value code, eg: \"EV000001\"",
+            "nullable": true
+          },
+          "deprecated": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "description": "Value description for requested language",
+            "nullable": true,
+            "readOnly": true
+          },
+          "descriptionEn": {
+            "type": "string",
+            "description": "Value description ETIM English",
+            "nullable": true,
+            "readOnly": true
+          },
+          "translations": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EtimTranslation"
+            },
+            "description": "Value translations for all entitled languages",
+            "nullable": true
+          },
+          "orderNumber": {
+            "type": "integer",
+            "description": "Value order number within the class feature, eg: 2",
+            "format": "int32"
+          },
+          "changeCode": {
+            "$ref": "#/components/schemas/Changecode"
+          }
+        },
+        "additionalProperties": false
+      },
+      "EtimClassMinimal": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Class code, eg: \"EC000001\"",
+            "nullable": true
+          },
+          "version": {
+            "type": "integer",
+            "description": "Class version, eg: 4",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "EtimClassTranslation": {
+        "type": "object",
+        "properties": {
+          "languagecode": {
+            "type": "string",
+            "description": "Language code, eg: \"EN\", \"nl-NL\", \"de-DE\"",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "description": "Description in the requested language",
+            "nullable": true
+          },
+          "synonyms": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "List of synonyms",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "EtimFeatureGroup": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Feature Group code, eg: \"EFG00001\"",
+            "nullable": true
+          },
+          "descriptionEn": {
+            "type": "string",
+            "description": "Feature Group description ETIM English",
+            "nullable": true,
+            "readOnly": true
+          },
+          "description": {
+            "type": "string",
+            "description": "Feature Group description for the requested language",
+            "nullable": true,
+            "readOnly": true
+          },
+          "translations": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EtimTranslation"
+            },
+            "description": "Feature Group translations for all languages the client is entitled to.",
+            "nullable": true
+          },
+          "releases": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "ETIM Releases, \"DYNAMIC\", \"ETIM-10.0\", \"ETIM-9.0\", \"ETIM-8.0\", \"ETIM-7.0\", \"ETIM-6.0\", \"ETIM-5.0\", \"ETIM-4.0\"",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "EtimGroup": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Group code, eg: \"EG000001\"",
+            "nullable": true
+          },
+          "descriptionEn": {
+            "type": "string",
+            "description": "Group description ETIM English",
+            "nullable": true,
+            "readOnly": true
+          },
+          "description": {
+            "type": "string",
+            "description": "Group description for the requested language",
+            "nullable": true,
+            "readOnly": true
+          },
+          "translations": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EtimTranslation"
+            },
+            "description": "Group translations for all languages the client is entitled to.",
+            "nullable": true
+          },
+          "releases": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "ETIM Releases, \"DYNAMIC\", \"ETIM-10.0\", \"ETIM-9.0\", \"ETIM-8.0\", \"ETIM-7.0\", \"ETIM-6.0\", \"ETIM-5.0\", \"ETIM-4.0\"",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "EtimReferenceProduct": {
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "hasImage": {
+            "type": "boolean",
+            "description": "This reference product has image available"
+          },
+          "id": {
+            "type": "string",
+            "description": "Id can be used to retrieve Image if HasImage is true.",
+            "nullable": true
+          },
+          "gln": {
+            "type": "string",
+            "description": "Global location number",
+            "nullable": true
+          },
+          "articleNumber": {
+            "type": "string",
+            "description": "Article number",
+            "nullable": true
+          },
+          "manufacturer": {
+            "type": "string",
+            "description": "Manufacturer",
+            "nullable": true
+          },
+          "gtin": {
+            "type": "string",
+            "description": "Global Trade Item Number",
+            "nullable": true
+          },
+          "url": {
+            "type": "string",
+            "description": "Link to reference product",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "EtimTranslation": {
+        "type": "object",
+        "properties": {
+          "languagecode": {
+            "type": "string",
+            "description": "Language code, eg: \"EN\", \"nl-NL\", \"de-DE\"",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "description": "Description in the requested language",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "EtimUnit": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Unit code.async eg: \"EU000001\"",
+            "nullable": true
+          },
+          "deprecated": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "description": "Unit description in the requested language",
+            "nullable": true,
+            "readOnly": true
+          },
+          "descriptionEn": {
+            "type": "string",
+            "description": "Value description ETIM English",
+            "nullable": true,
+            "readOnly": true
+          },
+          "abbreviation": {
+            "type": "string",
+            "description": "Unit abbreviation in the requested language",
+            "nullable": true,
+            "readOnly": true
+          },
+          "abbreviationEn": {
+            "type": "string",
+            "description": "Feature description ETIM English",
+            "nullable": true,
+            "readOnly": true
+          },
+          "translations": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EtimUnitTranslation"
+            },
+            "description": "Unit translations for all languages the client is entitled to.",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "EtimUnitTranslation": {
+        "type": "object",
+        "properties": {
+          "languagecode": {
+            "type": "string",
+            "description": "Language code, eg: \"EN\", \"nl-NL\", \"de-DE\"",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "description": "Description in the requested language",
+            "nullable": true
+          },
+          "abbreviation": {
+            "type": "string",
+            "description": "Abbreviation in the requested language",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "FeatureSearchInput": {
+        "required": [
+          "from",
+          "languagecode",
+          "size"
+        ],
+        "type": "object",
+        "properties": {
+          "from": {
+            "maximum": 29000,
+            "minimum": 0,
+            "type": "integer",
+            "description": "Startposition for paging.\r\nFrom must be less than or equal to 29000. From + size must be less than or equal to 30000",
+            "format": "int32",
+            "example": 0
+          },
+          "size": {
+            "maximum": 1000,
+            "minimum": 0,
+            "type": "integer",
+            "description": "Total records per page\r\nSize must be less than or equal to 1000. From + size must be less than or equal to 30000",
+            "format": "int32",
+            "example": 10
+          },
+          "languagecode": {
+            "minLength": 1,
+            "type": "string",
+            "description": "Language of the output description fields. \r\nLanguage of the input SearchString if used",
+            "example": "nl-NL"
+          },
+          "searchString": {
+            "type": "string",
+            "description": "Search with a specific text in description or synonym",
+            "nullable": true,
+            "example": "test"
+          },
+          "deprecated": {
+            "type": "boolean",
+            "description": "Some entities (features, values and units) can be deprecated. This means they may not be used anymore in future.\r\nIf not set, return both deprecated and not deprecated entities\r\nIf Deprecated = true, return only deprecated entities\r\nIf Deprecated = false, return only entities that are not deprecated\r\nOnly applicable for features, values and units",
+            "nullable": true,
+            "example": false
+          },
+          "modelling": {
+            "type": "boolean",
+            "description": "Deprecated!! For modelling classes, use the ModellingClass service\r\nThe class service only returns product classes",
+            "nullable": true
+          },
+          "include": {
+            "$ref": "#/components/schemas/IncludeModel"
+          },
+          "filters": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FilterModel"
+            },
+            "description": "Use filters to filter the results",
+            "nullable": true
+          },
+          "local": {
+            "type": "boolean",
+            "description": "Local standard feature.\r\nIf not set, return both local standard and non local standard features\r\nIf Local = true, return only local standard features\r\nIf Local = false, return only non local standard features\r\nOnly applicable for features",
+            "nullable": true
+          },
+          "localStandardCountry": {
+            "maxLength": 2,
+            "minLength": 0,
+            "type": "string",
+            "description": "Local standard feature for Country.\r\nOnly applicable when Local = true",
+            "nullable": true,
+            "example": "DE"
+          }
+        },
+        "additionalProperties": false
+      },
+      "FilterModel": {
+        "required": [
+          "values"
+        ],
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Filter code, eg: \"Release\", \"Group\", \"Class\", \"Feature\", \"Value\"",
+            "nullable": true
+          },
+          "values": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "List of filter values for the specified filter code, eg:\r\n\r\nRelease values: \"DYNAMIC\", ..., \"ETIM-4.0\" --> Only applicable to classes and groups\r\n\r\nGroup values: \"EG000001\", \"EG000002\" etc. --> Only applicable to classes and groups\r\n\r\nClass values: \"EC000001\", \"EC000003\" etc. --> Only applicable to classes\r\n\r\nFeature values: \"EF000001\", \"EF000003\" etc. --> Only applicable to classes and features\r\n\r\nValue values: \"EV000001\", \"EV000003\" etc. --> Only applicable to classes and values"
+          }
+        },
+        "additionalProperties": false
+      },
+      "IncludeModel": {
+        "type": "object",
+        "properties": {
+          "descriptions": {
+            "type": "boolean",
+            "description": "Set to true to include these fields for the specified languagecode:\r\n\r\n- description field (Class, Group, Feature, Value, Unit)\r\n\r\n- synonyms field (Class)\r\n\r\n- abbreviation field (Unit)",
+            "example": true
+          },
+          "translations": {
+            "type": "boolean",
+            "description": "Set to true to include the translations field for all languages the client is entitled to\r\n\r\nYou can find the translations field in Class, Group, Feature, Value and Unit",
+            "example": true
+          },
+          "fields": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Specify which fields should be included in the result. Possible values:\r\n\r\n- Group (within Class)\r\n\r\n- Features (within Class)\r\n\r\n- Releases (within Class)\r\n\r\n- FeatureGroup (within Feature)",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Language": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Language code, eg: \"EN\", \"nl-NL\", \"nl-BE\"",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "description": "Language description, eg: \"Dutch\", \"ETIM English\", \"Belgian Flemish\"",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "MinimalClassModel": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Class code, eg: \"EC000001\"",
+            "nullable": true
+          },
+          "version": {
+            "type": "integer",
+            "description": "Class version, eg: 4",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ModellingChangecode": {
+        "enum": [
+          "Unchanged",
+          "Changed",
+          "New",
+          "Deleted"
+        ],
+        "type": "string"
+      },
+      "ModellingClass": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Class code, eg: \"MC000001\"",
+            "nullable": true,
+            "example": " MC000001 "
+          },
+          "version": {
+            "type": "integer",
+            "description": "Class version, eg: 4",
+            "format": "int32",
+            "example": 4
+          },
+          "status": {
+            "type": "integer",
+            "description": "Class status\r\n2 - Under construction\r\n3 - Ready for publication\r\n5 - Published\r\n9 - Deleted",
+            "format": "int32",
+            "example": 2
+          },
+          "mutationDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "revision": {
+            "type": "integer",
+            "format": "int32",
+            "example": 3
+          },
+          "revisionDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "modelling": {
+            "type": "boolean",
+            "description": "Indicates if this is a modelling class"
+          },
+          "dimensionalDrawingSvgUrl": {
+            "type": "string",
+            "description": "Dimensional Drawing Svg for modelling classes",
+            "nullable": true
+          },
+          "descriptionEn": {
+            "type": "string",
+            "description": "Class description ETIM English",
+            "nullable": true,
+            "readOnly": true
+          },
+          "description": {
+            "type": "string",
+            "description": "Class description in the requested language",
+            "nullable": true,
+            "readOnly": true
+          },
+          "synonyms": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Class synonyms in the requested language",
+            "nullable": true,
+            "readOnly": true
+          },
+          "group": {
+            "$ref": "#/components/schemas/ModellingGroup"
+          },
+          "features": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ModellingClassFeature"
+            },
+            "description": "Features",
+            "nullable": true
+          },
+          "ports": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ModellingPort"
+            },
+            "description": "Ports",
+            "nullable": true
+          },
+          "productClasses": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MinimalClassModel"
+            },
+            "description": "Linked ProductClasses classes",
+            "nullable": true
+          },
+          "translations": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ModellingClassTranslation"
+            },
+            "description": "Translation",
+            "nullable": true
+          },
+          "changeCode": {
+            "$ref": "#/components/schemas/ModellingChangecode"
+          },
+          "referenceProducts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ModellingReferenceProduct"
+            },
+            "description": "Reference products",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ModellingClassCodeVersion": {
+        "required": [
+          "code",
+          "version"
+        ],
+        "type": "object",
+        "properties": {
+          "code": {
+            "minLength": 1,
+            "type": "string",
+            "description": "Class code, eg: \"MC000001\", \"MC000003\""
+          },
+          "version": {
+            "type": "integer",
+            "description": "Class version, eg: 4",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ModellingClassDetailsInput": {
+        "required": [
+          "code",
+          "languagecode"
+        ],
+        "type": "object",
+        "properties": {
+          "include": {
+            "$ref": "#/components/schemas/ModellingIncludeModel"
+          },
+          "languagecode": {
+            "minLength": 1,
+            "type": "string",
+            "description": "Language code, eg: \"EN\", \"nl-NL\", \"de-DE\""
+          },
+          "code": {
+            "minLength": 1,
+            "type": "string",
+            "description": "Entity code, eg: \"MC000001\", \"MF00001\", \"MG000001\", \"EV000001\", \"EU000001\""
+          },
+          "version": {
+            "type": "integer",
+            "description": "Class version, eg: 4",
+            "format": "int32",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ModellingClassFeature": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Feature code, eg: \"EF000001\"",
+            "nullable": true
+          },
+          "type": {
+            "type": "string",
+            "description": "Featuretype\r\nAlphanummeric\r\nNumeric\r\nRange\r\nLogical",
+            "nullable": true
+          },
+          "deprecated": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "description": "Feature description in the requested language",
+            "nullable": true,
+            "readOnly": true
+          },
+          "descriptionEn": {
+            "type": "string",
+            "description": "Feature description ETIM English",
+            "nullable": true,
+            "readOnly": true
+          },
+          "translations": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ModellingTranslation"
+            },
+            "description": "Feature translations for all entitled languages",
+            "nullable": true
+          },
+          "orderNumber": {
+            "type": "integer",
+            "description": "Feature order number within this class, eg: 2",
+            "format": "int32"
+          },
+          "unit": {
+            "$ref": "#/components/schemas/ModellingUnit"
+          },
+          "unitImperial": {
+            "$ref": "#/components/schemas/ModellingUnit"
+          },
+          "unitVariableAxis": {
+            "$ref": "#/components/schemas/ModellingUnit"
+          },
+          "unitVariableAxisImperial": {
+            "$ref": "#/components/schemas/ModellingUnit"
+          },
+          "values": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ModellingClassFeatureValue"
+            },
+            "nullable": true
+          },
+          "changeCode": {
+            "$ref": "#/components/schemas/ModellingChangecode"
+          },
+          "dimensionalDrawingCode": {
+            "type": "string",
+            "description": "Only applicable in Modelling Class",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ModellingClassFeatureValue": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Value code, eg: \"EV000001\"",
+            "nullable": true
+          },
+          "deprecated": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "description": "Value description for requested language",
+            "nullable": true,
+            "readOnly": true
+          },
+          "descriptionEn": {
+            "type": "string",
+            "description": "Value description ETIM English",
+            "nullable": true,
+            "readOnly": true
+          },
+          "translations": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ModellingTranslation"
+            },
+            "description": "Value translations for all entitled languages",
+            "nullable": true
+          },
+          "orderNumber": {
+            "type": "integer",
+            "description": "Value order number within the class feature, eg: 2",
+            "format": "int32"
+          },
+          "changeCode": {
+            "$ref": "#/components/schemas/ModellingChangecode"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ModellingClassListInput": {
+        "required": [
+          "classes",
+          "languagecode"
+        ],
+        "type": "object",
+        "properties": {
+          "include": {
+            "$ref": "#/components/schemas/ModellingIncludeModel"
+          },
+          "languagecode": {
+            "minLength": 1,
+            "type": "string",
+            "description": "Language code, eg: \"EN\", \"nl-NL\", \"de-DE\""
+          },
+          "classes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ModellingClassCodeVersion"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "ModellingClassSearchOutput": {
+        "type": "object",
+        "properties": {
+          "total": {
+            "type": "integer",
+            "description": "Total records found",
+            "format": "int64",
+            "example": 10
+          },
+          "classes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ModellingClass"
+            },
+            "description": "List of classes matching the input filters",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ModellingClassTranslation": {
+        "type": "object",
+        "properties": {
+          "languagecode": {
+            "type": "string",
+            "description": "Language code, eg: \"EN\", \"nl-NL\", \"de-DE\"",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "description": "Description in the requested language",
+            "nullable": true
+          },
+          "synonyms": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "List of synonyms",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ModellingDetailsInput": {
+        "required": [
+          "code",
+          "languagecode"
+        ],
+        "type": "object",
+        "properties": {
+          "include": {
+            "$ref": "#/components/schemas/ModellingIncludeModel"
+          },
+          "languagecode": {
+            "minLength": 1,
+            "type": "string",
+            "description": "Language code, eg: \"EN\", \"nl-NL\", \"de-DE\""
+          },
+          "code": {
+            "minLength": 1,
+            "type": "string",
+            "description": "Entity code, eg: \"MC000001\", \"MF00001\", \"MG000001\", \"EV000001\", \"EU000001\""
+          }
+        },
+        "additionalProperties": false
+      },
+      "ModellingFilterModel": {
+        "required": [
+          "values"
+        ],
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Filter code, eg: \"Group\", \"Class\", \"ProductClass\", \"Feature\", \"Value\"",
+            "nullable": true
+          },
+          "values": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "List of filter values for the specified filter code, eg:\r\n\t/// \r\nGroup values: \"MG000001\", \"MG000002\" etc. --> Only applicable to classes and groups\r\n\r\nClass values: \"MC000001\", \"CT000003\" etc. --> Only applicable to classes\r\n\r\nProductClass values: \"EC003024\", \"EC011392\" etc. --> Only applicable to classes\r\n            \r\nFeature values: \"EF000001\", \"EF000003\" etc. --> Only applicable to classes and features\r\n\r\nValue values: \"EV000001\", \"EV000003\" etc. --> Only applicable to classes and values"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ModellingGroup": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Group code, eg: \"EG000001\"",
+            "nullable": true
+          },
+          "descriptionEn": {
+            "type": "string",
+            "description": "Group description ETIM English",
+            "nullable": true,
+            "readOnly": true
+          },
+          "description": {
+            "type": "string",
+            "description": "Group description for the requested language",
+            "nullable": true,
+            "readOnly": true
+          },
+          "translations": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ModellingTranslation"
+            },
+            "description": "Group translations for all languages the client is entitled to.",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ModellingIncludeModel": {
+        "type": "object",
+        "properties": {
+          "descriptions": {
+            "type": "boolean",
+            "description": "Set to true to include these fields for the specified languagecode:\r\n\r\n- description field (Class, Group, Feature, Value, Unit)\r\n\r\n- synonyms field (Class)\r\n\r\n- abbreviation field (Unit)"
+          },
+          "translations": {
+            "type": "boolean",
+            "description": "Set to true to include the translations field for all languages the client is entitled to\r\n\r\nYou can find the translations field in Class, Group, Feature, Value and Unit"
+          },
+          "fields": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Specify which Class fields should be included in the result. Possible values:\r\n\r\n- Group\r\n- Features\r\n- Ports\r\n- Ports.Features\r\n- ConnectionTypes\r\n- ProductClasses",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ModellingPort": {
+        "type": "object",
+        "properties": {
+          "portcode": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "connectionTypes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MinimalClassModel"
+            },
+            "description": "ConnectionTypes classes",
+            "nullable": true
+          },
+          "features": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ModellingClassFeature"
+            },
+            "description": "Features",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ModellingReferenceProduct": {
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "hasImage": {
+            "type": "boolean",
+            "description": "This reference product has image available"
+          },
+          "id": {
+            "type": "string",
+            "description": "Id can be used to retrieve Image if HasImage is true.",
+            "nullable": true
+          },
+          "gln": {
+            "type": "string",
+            "description": "Global location number",
+            "nullable": true
+          },
+          "articleNumber": {
+            "type": "string",
+            "description": "Article number",
+            "nullable": true
+          },
+          "manufacturer": {
+            "type": "string",
+            "description": "Manufacturer",
+            "nullable": true
+          },
+          "gtin": {
+            "type": "string",
+            "description": "Global Trade Item Number",
+            "nullable": true
+          },
+          "url": {
+            "type": "string",
+            "description": "Link to reference product",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ModellingSearchInput": {
+        "required": [
+          "from",
+          "languagecode",
+          "size"
+        ],
+        "type": "object",
+        "properties": {
+          "from": {
+            "maximum": 29000,
+            "minimum": 0,
+            "type": "integer",
+            "description": "Startposition for paging.\r\nFrom must be less than or equal to 29000. From + size must be less than or equal to 30000",
+            "format": "int32",
+            "example": 0
+          },
+          "size": {
+            "maximum": 1000,
+            "minimum": 0,
+            "type": "integer",
+            "description": "Total records per page\r\nSize must be less than or equal to 1000. From + size must be less than or equal to 30000",
+            "format": "int32",
+            "example": 0
+          },
+          "languagecode": {
+            "minLength": 1,
+            "type": "string",
+            "description": "Language of the output description fields. \r\nLanguage of the input SearchString if used",
+            "example": " nl-NL "
+          },
+          "searchString": {
+            "type": "string",
+            "description": "Search with a specific text in description or synonym",
+            "nullable": true,
+            "example": " test "
+          },
+          "deprecated": {
+            "type": "boolean",
+            "description": "Some entities (features, values and units) can be deprecated. This means they may not be used anymore in future.\r\nIf not set, return both deprecated and not deprecated entities\r\nIf Deprecated = true, return only deprecated entities\r\nIf Deprecated = false, return only entities that are not deprecated\r\nOnly applicable for features, values and units",
+            "nullable": true,
+            "example": false
+          },
+          "isLatestReleased": {
+            "type": "boolean",
+            "description": "If not set, return all versions for a class\r\nIf IsLatestReleased = true, return only latest released version for a class\r\nIf IsLatestReleased = false, return only all but latest released classes\r\nOnly applicable for classes",
+            "nullable": true,
+            "example": true
+          },
+          "isLatest": {
+            "type": "boolean",
+            "description": "If not set, return all versions for a class\r\nIf IsLatest = true, return only latest version for a class\r\nIf IsLatest = false, return only all but latest version classes\r\nOnly applicable for classes",
+            "nullable": true,
+            "example": true
+          },
+          "include": {
+            "$ref": "#/components/schemas/ModellingIncludeModel"
+          },
+          "filters": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ModellingFilterModel"
+            },
+            "description": "Use filters to filter the results",
+            "nullable": true
+          },
+          "dateFrom": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "dateTo": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ModellingTranslation": {
+        "type": "object",
+        "properties": {
+          "languagecode": {
+            "type": "string",
+            "description": "Language code, eg: \"EN\", \"nl-NL\", \"de-DE\"",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "description": "Description in the requested language",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ModellingUnit": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Unit code.async eg: \"EU000001\"",
+            "nullable": true
+          },
+          "deprecated": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "description": "Unit description in the requested language",
+            "nullable": true,
+            "readOnly": true
+          },
+          "descriptionEn": {
+            "type": "string",
+            "description": "Unit description ETIM English",
+            "nullable": true,
+            "readOnly": true
+          },
+          "abbreviation": {
+            "type": "string",
+            "description": "Unit abbreviation in the requested language",
+            "nullable": true,
+            "readOnly": true
+          },
+          "abbreviationEn": {
+            "type": "string",
+            "description": "Unit abbreviation ETIM English",
+            "nullable": true,
+            "readOnly": true
+          },
+          "translations": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ModellingUnitTranslation"
+            },
+            "description": "Unit translations for all languages the client is entitled to.",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ModellingUnitTranslation": {
+        "type": "object",
+        "properties": {
+          "languagecode": {
+            "type": "string",
+            "description": "Language code, eg: \"EN\", \"nl-NL\", \"de-DE\"",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "description": "Description in the requested language",
+            "nullable": true
+          },
+          "abbreviation": {
+            "type": "string",
+            "description": "Abbreviation in the requested language",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ProblemDetails": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "detail": {
+            "type": "string",
+            "nullable": true
+          },
+          "instance": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": { }
+      },
+      "Release": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Release id, eg: 2",
+            "format": "int32"
+          },
+          "description": {
+            "type": "string",
+            "description": "Release description, eg: \"ETIM-7.0\", \"DYNAMIC\"",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "RfcResult": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "classId": {
+            "type": "string",
+            "nullable": true
+          },
+          "classVersion": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "rfcId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "errors": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "validationErrors": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "nullable": true
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "Result of class creation operation"
+      },
+      "RfcTypeEnum": {
+        "enum": [
+          "NewClass",
+          "DeleteClass",
+          "AddDeleteSynonyms",
+          "ChangeClassname",
+          "ReworkClass",
+          "Old",
+          "AddValues",
+          "AddFeaturesValues",
+          "ChangeGroupRelation",
+          "ChangeIncorrectUnit",
+          "Maintenance",
+          "ChangeAddSectorRelation",
+          "AddLocalFeaturesValues"
+        ],
+        "type": "string"
+      },
+      "ValidationProblemDetails": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "nullable": true
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "detail": {
+            "type": "string",
+            "nullable": true
+          },
+          "instance": {
+            "type": "string",
+            "nullable": true
+          },
+          "errors": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": { }
+      }
+    }
+  }
+}
