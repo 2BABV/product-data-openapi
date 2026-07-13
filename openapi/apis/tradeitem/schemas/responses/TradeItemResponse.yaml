@@ -55,7 +55,7 @@ examples:
               allowanceSurchargeSequenceNumber: 1
               allowanceSurchargePercentage: 10
               allowanceSurchargeMinimumQuantity: 100
-      relations: null
+      relations: []
       logisticDetails:
         - baseItemNetLength: 25.5
           baseItemNetWidth: 15.0
@@ -63,8 +63,8 @@ examples:
           netDimensionUnit: CMT
           baseItemNetWeight: 500.0
           netWeightUnit: GRM
-      attachments: null
-      packagingUnits: null
+      attachments: []
+      packagingUnits: []
   - data:
       supplierIdGln: "9876543210987"
       supplierItemNumber: "SKU-MIN-001"

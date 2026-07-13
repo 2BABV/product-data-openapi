@@ -17,6 +17,9 @@ required:
   - manufacturerIdGln
   - manufacturerProductNumber
   - details
+  - descriptions
+  - etimClassifications
+  - attachments
 properties:
   manufacturerIdGln:
     $ref: ../../../../shared/schemas/identifiers/Gln.yaml
@@ -39,15 +42,20 @@ properties:
     type: ["array", "null"]
     description: |
       Array of multilingual product descriptions. Each item contains descriptions
-      in a specific language. Returns null if no descriptions are available.
+      in a specific language.
+      - `[...]` — descriptions available
+      - `[]` — no descriptions exist for this product
+      - `null` — descriptions were not included in this response
     items:
       $ref: ../domain/ProductDescription.yaml
   etimClassifications:
     type: ["array", "null"]
     description: |
       Array of ETIM classifications for this product with embedded features.
-      Returns null if the product has no ETIM classifications.
       Multiple classifications can exist across different ETIM releases.
+      - `[...]` — classifications available
+      - `[]` — no ETIM classifications exist for this product
+      - `null` — classifications were not included in this response
     items:
       $ref: ../domain/EtimClassification.yaml
   lcaEnvironmental:
@@ -65,7 +73,9 @@ properties:
     description: |
       Array of product attachments including images, documents, certificates, and other files.
       Each item groups attachment details by type and order.
-      Returns null if the product has no attachments.
+      - `[...]` — attachments available
+      - `[]` — no attachments exist for this product
+      - `null` — attachments were not included in this response
       
       **ETIM xChange**: `ProductAttachments`  
       **Path**: `Supplier[].Product[].ProductAttachments[]`

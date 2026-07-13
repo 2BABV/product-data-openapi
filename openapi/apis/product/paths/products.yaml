@@ -104,18 +104,6 @@ get:
     '403':
       $ref: ../../../shared/responses/403-forbidden.yaml
     '404':
-      description: Product not found
-      content:
-        application/json:
-          schema:
-            $ref: ../../../shared/schemas/common/ProblemDetails.yaml
-          examples:
-            notFound:
-              summary: Product not found
-              value:
-                type: about:blank
-                title: Not Found
-                status: 404
-                detail: "No product found with manufacturer GLN '1234567890123' and product number '929002376910'"
+      $ref: ../../../shared/responses/404-not-found.yaml
     '500':
       $ref: ../../../shared/responses/500-internal-server-error.yaml

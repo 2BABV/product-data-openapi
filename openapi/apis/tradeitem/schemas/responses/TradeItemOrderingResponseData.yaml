@@ -26,10 +26,14 @@ properties:
     examples:
       - "SKU-12345"
   ordering:
-    $ref: ../domain/TradeItemOrdering.yaml
+    anyOf:
+      - $ref: ../domain/TradeItemOrdering.yaml
+      - type: "null"
     description: |
       Trade item ordering details including order unit, minimum quantities,
       order step size, lead time, and unit conversions.
+      Null if the trade item was not found. Sub-resource endpoints never return 404;
+      null signals the parent entity does not exist.
 examples:
   - supplierIdGln: "1234567890123"
     supplierItemNumber: "SKU-12345"
@@ -55,3 +59,6 @@ examples:
       singleUseUnitQuantity: 1.0
       alternativeUseUnit: null
       alternativeUseUnitConversionFactor: null
+  - supplierIdGln: "1234567890123"
+    supplierItemNumber: "NONEXISTENT-999"
+    ordering: null

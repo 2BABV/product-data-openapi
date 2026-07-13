@@ -4,6 +4,7 @@ description: |
 required:
   - manufacturerIdGln
   - manufacturerProductNumber
+  - lcaEnvironmental
 properties:
   manufacturerIdGln:
     $ref: ../../../../shared/schemas/identifiers/Gln.yaml

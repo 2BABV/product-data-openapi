@@ -92,7 +92,9 @@ Authorization: Bearer eyJhbGciOiJSUzI1NiIs...
 
 ## Error Responses
 
-All APIs return errors using the [RFC 7807 Problem Details](https://datatracker.ietf.org/doc/html/rfc7807) format with content type `application/problem+json`.
+All APIs return errors using the [RFC 9457 Problem Details](https://datatracker.ietf.org/doc/html/rfc9457) format with content type `application/problem+json`.
+
+> **Note**: RFC 9457 supersedes RFC 7807. The format is identical; only the standard reference has changed.
 
 When the error has no extra semantics beyond the HTTP status code, the `type` field is set to `about:blank` and `title` matches the standard HTTP status phrase:
 
@@ -104,6 +106,56 @@ When the error has no extra semantics beyond the HTTP status code, the `type` fi
   "detail": "No product found with manufacturer GLN '1234567890123' and product number 'XYZ'"
 }
 ```
+
+**Client guidance**: Use `type` and `status` for control flow decisions. The `detail` and `title` fields are human-readable descriptions and must not be used for programmatic branching or exception-message matching.
+
+## Sub-Resource Response Behavior
+
+Root resource endpoints return `404` when the entity does not exist:
+
+```http
+GET /v1/products/9999999999999/UNKNOWN HTTP/1.1
+→ 404 Not Found (ProblemDetails)
+```
+
+Sub-resource endpoints **never** return `404`. They always return `200` with the collection property set to an empty array:
+
+```http
+GET /v1/products/9999999999999/UNKNOWN/descriptions HTTP/1.1
+→ 200 OK
+```
+
+```json
+{
+  "data": {
+    "manufacturerIdGln": "9999999999999",
+    "manufacturerProductNumber": "UNKNOWN",
+    "descriptions": []
+  }
+}
+```
+
+This applies regardless of whether the parent product or trade item exists. A `200` response from a sub-resource endpoint does **not** confirm parent entity existence. Clients that need to verify existence must call the root endpoint.
+
+### Nullability Rules
+
+| Type | Context | When absent | Example |
+|------|---------|-------------|---------|
+| Collections (arrays) | Sub-resource endpoints | Empty array `[]` | `"descriptions": []` |
+| Collections (arrays) | Aggregate root endpoint | `null` if not included, `[]` if included but empty | `"pricings": null` |
+| Singular objects | All endpoints | `null` | `"ordering": null` |
+
+Sub-resource endpoints always return their specific collection as `[]` when empty — never `null`.
+
+Aggregate root endpoints (`/products/{gln}/{num}` and `/trade-items/{gln}/{num}`) support partial inclusion. Collections that were not requested are returned as `null`, while requested but empty collections are `[]`:
+
+| Value | Meaning |
+|-------|---------|
+| `[...]` | Requested, has data |
+| `[]` | Requested, but empty (no data exists) |
+| `null` | Not included in this response (not requested) |
+
+Singular optional objects are always present but may be `null`.
 
 ## Pagination
 
