@@ -12,6 +12,7 @@ This API adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - **Response convention: root 404 uses shared response** — The root endpoint `404` now uses the shared `application/problem+json` response (was inline `application/json`).
 - **Response convention: sub-resource arrays non-nullable** — Array properties in sub-resource response schemas (`ProductDescriptionsResponseData`, `ProductAttachmentsResponseData`, `ProductEtimClassificationsResponseData`) changed from `type: ["array", "null"]` to `type: array`. Empty = `[]`, never `null`.
 - **Response convention: aggregate root arrays support partial inclusion** — Array properties in `ProductResponseData` use three-state semantics: `[...]` = has data, `[]` = included but empty, `null` = not included in this response. Schema uses `type: ["array", "null"]` (required + nullable).
+- **Response convention: sub-resource singular objects nullable** — `details` in `ProductDetailsResponseData` and `lcaEnvironmental` in `ProductLcaEnvironmentalResponseData` are now required and nullable (`anyOf: [$ref, type: "null"]`). When the parent product does not exist, these endpoints return `200` with `null` instead of `404`. Aligns with array sub-resources (which return `[]`) and the "required but nullable" convention.
 
 ## [1.0.0-Preview2] - 2026-04-24
 
