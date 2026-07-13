@@ -5,6 +5,7 @@ description: |
 required:
   - manufacturerIdGln
   - manufacturerProductNumber
+  - details
 properties:
   manufacturerIdGln:
     $ref: ../../../../shared/schemas/identifiers/Gln.yaml
@@ -19,10 +20,14 @@ properties:
     examples:
       - "929002376910"
   details:
-    $ref: ../domain/ProductDetails.yaml
+    anyOf:
+      - $ref: ../domain/ProductDetails.yaml
+      - type: "null"
     description: |
       Core product information including identifiers,
       brand, dates, customs data, status, warranties, and product groups.
+      Null if the product was not found. Sub-resource endpoints never return 404;
+      null signals the parent entity does not exist.
 examples:
   - manufacturerIdGln: "1234567890123"
     manufacturerProductNumber: "929002376910"
@@ -42,3 +47,6 @@ examples:
       relatedManufacturerProductGroup:
         - "Smart Lighting"
         - "LED Bulbs"
+  - manufacturerIdGln: "1234567890123"
+    manufacturerProductNumber: "NONEXISTENT-999"
+    details: null

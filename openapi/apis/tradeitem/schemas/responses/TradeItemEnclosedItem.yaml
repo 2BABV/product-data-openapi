@@ -12,6 +12,7 @@ description: |
 required:
   - packagingTypeCode
   - enclosedSupplierItemNumber
+  - enclosedItemGtins
   - enclosedItemQuantity
 properties:
   packagingTypeCode:
@@ -49,7 +50,7 @@ properties:
       - "MFG-WIDGET-001"
       - null
   enclosedItemGtins:
-    type: ["array", "null"]
+    type: array
     description: |
       Array of GTINs for the enclosed trade item.
       **ETIM xChange**: `ItemGtin[]`
@@ -59,7 +60,7 @@ properties:
       $ref: ../../../../shared/schemas/identifiers/Gtin.yaml
     examples:
       - ["4012345678901"]
-      - null
+      - []
   enclosedItemQuantity:
     type: integer
     description: |
@@ -80,5 +81,5 @@ examples:
   - packagingTypeCode: PF
     enclosedSupplierItemNumber: "SCREW-M8-50"
     enclosedManufacturerItemNumber: null
-    enclosedItemGtins: null
+    enclosedItemGtins: []
     enclosedItemQuantity: 100

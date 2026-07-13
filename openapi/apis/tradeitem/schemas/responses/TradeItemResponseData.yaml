@@ -22,7 +22,13 @@ required:
   - supplierIdGln
   - supplierItemNumber
   - details
+  - descriptions
   - ordering
+  - pricings
+  - relations
+  - logisticDetails
+  - attachments
+  - packagingUnits
 properties:
   # Composite key
   supplierIdGln:
@@ -59,6 +65,10 @@ properties:
     description: |
       Array of multilingual item descriptions. Each item contains descriptions
       in a specific language.
+      - `[...]` — descriptions available
+      - `[]` — no descriptions exist for this trade item
+      - `null` — descriptions were not included in this response
+
       **ETIM xChange**: `ItemDescriptions[]`
       **Path**: `Supplier[].Product[].TradeItem[].ItemDetails.ItemDescriptions[]`
     items:
@@ -75,56 +85,66 @@ properties:
     type: ["array", "null"]
     description: |
       Array of pricing information for different conditions or customer groups.
+      - `[...]` — pricing data available
+      - `[]` — no pricing data exists for this trade item
+      - `null` — pricings were not included in this response
+
       **ETIM xChange**: `Pricing[]`
       **Path**: `Supplier[].Product[].TradeItem[].Pricing[]`
     items:
       $ref: ../domain/TradeItemPricing.yaml
-    examples:
-      - null
 
   relations:
     type: ["array", "null"]
     description: |
       Array of relationships to other trade items (accessories, spare parts, etc.).
+      - `[...]` — relations available
+      - `[]` — no relations exist for this trade item
+      - `null` — relations were not included in this response
+
       **ETIM xChange**: `ItemRelations[]`
       **Path**: `Supplier[].Product[].TradeItem[].ItemRelations[]`
     items:
       $ref: ../domain/ItemRelation.yaml
-    examples:
-      - null
 
   logisticDetails:
     type: ["array", "null"]
     description: |
       Array of logistic details including dimensions and weights.
+      - `[...]` — logistic details available
+      - `[]` — no logistic details exist for this trade item
+      - `null` — logistic details were not included in this response
+
       **ETIM xChange**: `ItemLogisticDetails[]`
       **Path**: `Supplier[].Product[].TradeItem[].ItemLogisticDetails[]`
     items:
       $ref: ../domain/ItemLogistic.yaml
-    examples:
-      - null
 
   attachments:
     type: ["array", "null"]
     description: |
       Array of attachments (images, documents, certificates, etc.).
+      - `[...]` — attachments available
+      - `[]` — no attachments exist for this trade item
+      - `null` — attachments were not included in this response
+
       **ETIM xChange**: `ItemAttachments[]`
       **Path**: `Supplier[].Product[].TradeItem[].ItemAttachments[]`
     items:
       $ref: ../domain/ItemAttachment.yaml
-    examples:
-      - null
 
   packagingUnits:
     type: ["array", "null"]
     description: |
       Array of packaging unit information for different packaging levels.
+      - `[...]` — packaging units available
+      - `[]` — no packaging units exist for this trade item
+      - `null` — packaging units were not included in this response
+
       **ETIM xChange**: `PackagingUnit[]`
       **Path**: `Supplier[].Product[].TradeItem[].PackagingUnit[]`
     items:
       $ref: ../domain/PackagingUnit.yaml
-    examples:
-      - null
 
 examples:
   - supplierIdGln: "1234567890123"
@@ -184,7 +204,7 @@ examples:
             allowanceSurchargeSequenceNumber: 2
             allowanceSurchargeAmount: 25.0
             allowanceSurchargeMinimumQuantity: null
-    relations: null
+    relations: []
     logisticDetails:
       - baseItemNetLength: 25.5
         baseItemNetWidth: 15.0
@@ -195,5 +215,5 @@ examples:
         netWeightUnit: GRM
         baseItemNetVolume: null
         netVolumeUnit: null
-    attachments: null
-    packagingUnits: null
+    attachments: []
+    packagingUnits: []

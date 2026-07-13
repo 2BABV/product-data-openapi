@@ -15,7 +15,7 @@ get:
     The trade item key (`supplierIdGln` + `supplierItemNumber`) is at the root level,
     with ordering details nested inside. This structure aligns with other single-item subresource responses.
     
-    **No pagination** - Returns exactly one trade item's ordering information or 404 if not found.
+    **No pagination** - Returns exactly one trade item's ordering information.
     
     **ETIM xChange**: `Ordering`
     **Path**: `Supplier[].Product[].TradeItem[].Ordering`
@@ -84,19 +84,5 @@ get:
       $ref: ../../../shared/responses/401-unauthorized.yaml
     '403':
       $ref: ../../../shared/responses/403-forbidden.yaml
-    '404':
-      description: Trade item not found
-      content:
-        application/json:
-          schema:
-            $ref: ../../../shared/schemas/common/ProblemDetails.yaml
-          examples:
-            notFound:
-              summary: Trade item not found
-              value:
-                type: about:blank
-                title: Not Found
-                status: 404
-                detail: "No trade item found with supplier GLN '1234567890123' and item number 'UNKNOWN-SKU'"
     '500':
       $ref: ../../../shared/responses/500-internal-server-error.yaml

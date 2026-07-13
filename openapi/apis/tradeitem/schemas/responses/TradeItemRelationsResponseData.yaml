@@ -7,6 +7,7 @@ description: |
 required:
   - supplierIdGln
   - supplierItemNumber
+  - relations
 properties:
   supplierIdGln:
     $ref: ../../../../shared/schemas/identifiers/Gln.yaml
@@ -21,11 +22,11 @@ properties:
     examples:
       - "SKU-12345"
   relations:
-    type: ["array", "null"]
+    type: array
     description: |
       Array of item relations. Each item defines a relationship to another trade item
       (e.g., accessories, spare parts, successors).
-      Returns null if no relations are available.
+      Returns an empty array if no relations are available.
     items:
       $ref: ../domain/ItemRelation.yaml
 examples:
@@ -44,4 +45,4 @@ examples:
         relatedItemQuantity: 1
   - supplierIdGln: "1234567890123"
     supplierItemNumber: "SKU-12345"
-    relations: null
+    relations: []

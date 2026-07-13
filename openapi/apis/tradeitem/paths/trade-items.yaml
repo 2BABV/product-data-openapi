@@ -165,18 +165,6 @@ get:
     '403':
       $ref: ../../../shared/responses/403-forbidden.yaml
     '404':
-      description: Trade item not found for the given composite key
-      content:
-        application/json:
-          schema:
-            $ref: ../../../shared/schemas/common/ProblemDetails.yaml
-          examples:
-            notFound:
-              summary: Trade item not found
-              value:
-                type: about:blank
-                title: Not Found
-                status: 404
-                detail: "No trade item found for supplier GLN '1234567890123' and item number 'UNKNOWN-SKU'"
+      $ref: ../../../shared/responses/404-not-found.yaml
     '500':
       $ref: ../../../shared/responses/500-internal-server-error.yaml

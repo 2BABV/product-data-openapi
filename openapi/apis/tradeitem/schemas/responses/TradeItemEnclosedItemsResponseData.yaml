@@ -10,6 +10,7 @@ description: |
 required:
   - supplierIdGln
   - supplierItemNumber
+  - enclosedItems
 properties:
   supplierIdGln:
     $ref: ../../../../shared/schemas/identifiers/Gln.yaml
@@ -24,12 +25,12 @@ properties:
     examples:
       - "SKU-12345"
   enclosedItems:
-    type: ["array", "null"]
+    type: array
     description: |
       Array of enclosed items across all packaging units.
       Each item includes a `packagingTypeCode` to identify which packaging unit
       contains the enclosed trade item.
-      Returns null if no enclosed items are available.
+      Returns an empty array if no enclosed items are available.
     items:
       $ref: ./TradeItemEnclosedItem.yaml
 examples:
@@ -44,7 +45,7 @@ examples:
       - packagingTypeCode: BX
         enclosedSupplierItemNumber: "SCREW-M8-50"
         enclosedManufacturerItemNumber: null
-        enclosedItemGtins: null
+        enclosedItemGtins: []
         enclosedItemQuantity: 100
       - packagingTypeCode: PF
         enclosedSupplierItemNumber: "WIDGET-001"
@@ -53,4 +54,4 @@ examples:
         enclosedItemQuantity: 50
   - supplierIdGln: "1234567890123"
     supplierItemNumber: "SKU-12345"
-    enclosedItems: null
+    enclosedItems: []

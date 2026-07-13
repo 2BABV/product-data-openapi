@@ -14,15 +14,20 @@
   - [Extensible Object Models](#extensible-object-models)
    - [Type Validation](#type-validation)
    - [Composition Patterns](#composition-patterns)
-3. [Pagination Strategies](#pagination-strategies)
+3. [Response Conventions](#response-conventions)
+   - [404 Only From Root Endpoints](#404-only-from-root-endpoints)
+   - [Collections Always Present](#collections-always-present)
+   - [Optional Objects Are Nullable](#optional-objects-are-nullable)
+   - [Error Responses (RFC 9457)](#error-responses-rfc-9457)
+4. [Pagination Strategies](#pagination-strategies)
    - [Cursor-Based Pagination (Recommended)](#cursor-based-pagination-recommended)
    - [Why Cursor > Offset Pagination](#why-cursor--offset-pagination)
    - [Implementation Pattern](#implementation-pattern)
-4. [Enums](#enums)
+5. [Enums](#enums)
    - [When to Use Separate Enum Files](#when-to-use-separate-enum-files)
    - [When to Keep Enums Inline](#when-to-keep-enums-inline)
    - [Benefits](#benefits)
-5. [DTO and Domain Objects in OpenAPI REST Services](#dto-and-domain-objects-in-openapi-rest-services)
+6. [DTO and Domain Objects in OpenAPI REST Services](#dto-and-domain-objects-in-openapi-rest-services)
    - [Domain Objects (Entities/Models)](#domain-objects-entitiesmodels)
    - [DTOs (Data Transfer Objects)](#dtos-data-transfer-objects)
    - [Key Benefits](#key-benefits)
@@ -113,6 +118,37 @@ propertyName:
   type: string
   nullable: true
 ```
+
+For response shapes, distinguish collections from singular objects:
+
+```yaml
+# ✅ Sub-resource arrays are NEVER nullable — always required, empty = []
+descriptions:
+  type: array
+  items:
+    $ref: '#/components/schemas/ProductDescription'
+
+# ✅ Aggregate root arrays support partial inclusion — null = not included
+# Only in ProductResponseData.yaml and TradeItemResponseData.yaml
+descriptions:
+  type: ["array", "null"]
+  items:
+    $ref: '#/components/schemas/ProductDescription'
+
+# ❌ INCORRECT — Do NOT use nullable arrays in sub-resource response schemas
+descriptions:
+  type: ["array", "null"]
+  items:
+    $ref: '#/components/schemas/ProductDescription'
+
+# ✅ Optional objects use anyOf with null (required but nullable)
+ordering:
+  anyOf:
+    - $ref: '#/components/schemas/TradeItemOrdering'
+    - type: "null"
+```
+
+See [Response Conventions](#response-conventions) below for the full rules on collections vs objects.
 
 ### Examples in Schemas vs Parameters
 
@@ -244,6 +280,73 @@ ProductResponse:
         data:
           $ref: '#/components/schemas/Product'
 ```
+
+## Response Conventions
+
+### 404 Only From Root Endpoints
+
+Single-item root endpoints return `404 ProblemDetails` when the entity does not exist:
+- `GET /products/{gln}/{num}` → 404 if product not found
+- `GET /trade-items/{gln}/{num}` → 404 if trade item not found
+
+Sub-resource endpoints **never** return 404. They return `200` with an empty collection:
+- `GET /products/{gln}/{num}/descriptions` → 200 with `descriptions: []`
+- `GET /trade-items/{gln}/{num}/pricings` → 200 with `pricings: []`
+
+Sub-resource responses do not signal parent entity existence. Clients must call the root endpoint to verify.
+
+### Collections Always Present
+
+Collection-valued response members are always `required` with `type: array`. Empty collections use `[]`, never `null`.
+
+```yaml
+# ✅ CORRECT
+descriptions:
+  type: array
+  items:
+    $ref: '#/components/schemas/ProductDescription'
+# required: [descriptions]
+# Empty result: descriptions: []
+
+# ❌ INCORRECT
+descriptions:
+  type: ["array", "null"]
+  items:
+    $ref: '#/components/schemas/ProductDescription'
+# No-data result: descriptions: null
+```
+
+Code generation target: `required List<T>` with default `[]`.
+
+### Optional Objects Are Nullable
+
+Singular optional objects are always present in the response, set to `null` when unavailable:
+
+```yaml
+# ✅ CORRECT — required + nullable
+required:
+  - ordering
+properties:
+  ordering:
+    anyOf:
+      - $ref: '#/components/schemas/TradeItemOrdering'
+      - type: "null"
+# Absent result: ordering: null
+
+# ❌ INCORRECT — optional (may be omitted entirely)
+properties:
+  ordering:
+    $ref: '#/components/schemas/TradeItemOrdering'
+```
+
+Code generation target: `T?` (nullable reference type).
+
+### Error Responses (RFC 9457)
+
+All errors use RFC 9457 Problem Details (`application/problem+json`):
+- Branch on `type` and `status` for control flow
+- Never branch on `detail` or `title` (human-readable, not stable)
+- Validation errors include `errors` extension member for field-level details
 
 ## Pagination Strategies
 
