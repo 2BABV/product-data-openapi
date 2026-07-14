@@ -1,11 +1,10 @@
-type: ["string", "null"]
+type: string
 enum:
   - "PRE-LAUNCH"
   - "ACTIVE"
   - "ON HOLD"
   - "PLANNED WITHDRAWAL"
   - "OBSOLETE"
-  - null
 description: |
   Current product lifecycle status.
   
@@ -21,4 +20,3 @@ examples:
   - "ACTIVE"
   - "PRE-LAUNCH"
   - "OBSOLETE"
-  - null

@@ -1,4 +1,4 @@
-type: ["string", "null"]
+type: string
 enum:
   - "1"
   - "2"
@@ -6,7 +6,6 @@ enum:
   - "4"
   - "5"
   - "6"
-  - null
 description: |
   WEEE (Waste Electrical and Electronic Equipment) category for electronic products according to EU directive.
   
@@ -23,4 +22,3 @@ description: |
 examples:
   - "3"
   - "5"
-  - null
