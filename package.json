@@ -7,6 +7,7 @@
     "bundle:product-domain": "redocly bundle --config openapi/redocly.yaml product-domain@v1 -o openapi/apis/product/generated/product-domain-api.yaml",
     "bundle:tradeitem-domain": "redocly bundle --config openapi/redocly.yaml tradeitem-domain@v1 -o openapi/apis/tradeitem/generated/tradeitem-domain-api.yaml",
     "bundle": "npm run bundle:product && npm run bundle:tradeitem && npm run bundle:product-domain && npm run bundle:tradeitem-domain",
+    "bundle:nswag": "node scripts/generate-nswag-spec.mjs",
     "build:product": "redocly build-docs --config openapi/redocly.yaml product@v1 -o openapi/apis/product/generated/product.html",
     "build:tradeitem": "redocly build-docs --config openapi/redocly.yaml tradeitem@v1 -o openapi/apis/tradeitem/generated/tradeitem.html",
     "build:tradeitem-domain": "redocly build-docs --config openapi/redocly.yaml tradeitem-domain@v1 -o openapi/apis/tradeitem/generated/tradeitem-domain.html",

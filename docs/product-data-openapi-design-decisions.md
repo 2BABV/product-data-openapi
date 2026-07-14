@@ -152,6 +152,44 @@ legislation:
 - Do NOT add field to `required` array if it can be null/omitted
 - Always include `null` in examples when field is nullable
 
+#### Nullable Enum `$ref` Convention
+
+**Standard**: Enum schema files MUST define only valid domain values (`type: string`) and MUST NOT include `null` in their type or enum values. Nullability is always expressed at the **usage site** via `anyOf`.
+
+This keeps enum schemas reusable in both nullable and non-nullable contexts.
+
+```yaml
+# ✅ CORRECT — Enum schema file (e.g., enums/ItemStatus.yaml)
+type: string
+enum:
+  - PRE-LAUNCH
+  - ACTIVE
+  - ON HOLD
+  - PLANNED WITHDRAWAL
+  - OBSOLETE
+
+# ✅ CORRECT — Nullable usage site
+itemStatus:
+  anyOf:
+    - $ref: ../enums/ItemStatus.yaml
+    - type: "null"
+
+# ✅ CORRECT — Non-nullable usage site (required enum)
+orderUnit:
+  $ref: ../../../../shared/schemas/common/UnitCodes.yaml
+
+# ❌ INCORRECT — Do NOT put null in the enum schema file
+type: ["string", "null"]
+enum:
+  - PRE-LAUNCH
+  - ACTIVE
+  - null
+```
+
+**Rationale**: Enum schemas represent the domain's valid value set. Nullability is a contract concern of the usage site, not the enum definition. This allows the same enum (e.g., `UnitCodes`) to be used as required (`orderUnit`) and nullable (`useUnit`) without duplication.
+
+> **⚠️ NSwag Known Limitation**: NSwag (as of v14.x) does not correctly generate nullable enum types from `anyOf: [$ref, type: "null"]`. It may produce `string` instead of `EnumType?`. This is a known OpenAPI 3.1 support gap in NSwag. Workaround options are documented below — see [NSwag Nullable Enum Workaround](#nswag-nullable-enum-workaround).
+
 #### 3. String Boolean Enums
 
 **ETIM xChange Issue**: Some fields use string enums for boolean-like values (e.g., `"true"`, `"false"`, `"exempt"`).
@@ -1430,6 +1468,62 @@ https://{implementer-domain}[/optional-prefix]/v1/{resource}/{path-params}
 
 - **Resource in path, not server URL**: The resource name (e.g., `/products`, `/trade-items`) is part of the OpenAPI path, not the server URL. This makes the full URL contract visible in the spec and allows multiple implementers with different server URLs.
 - **`ProblemDetails` uses `about:blank`**: Per RFC 9457, when the error has no extra semantics beyond the HTTP status code, `type` is set to `about:blank` and `title` matches the HTTP status phrase. The `instance` field is omitted from examples.
+
+---
+
+## NSwag Nullable Enum Workaround
+
+### The Problem
+
+NSwag (as of v14.x) does not correctly interpret OpenAPI 3.1's `anyOf: [$ref, type: "null"]` pattern for enum schemas. Instead of generating:
+
+```csharp
+[JsonPropertyName("itemCondition")]
+[JsonConverter(typeof(JsonStringEnumConverter<ItemCondition>))]
+public ItemCondition? ItemCondition { get; set; }
+```
+
+It may generate a plain `string` property or an incorrect union type.
+
+### Root Cause
+
+NSwag's OpenAPI 3.1 support is incomplete. It doesn't recognize `anyOf` (or `oneOf`) wrapping a `$ref` to an enum as the standard nullable enum pattern. This is a known limitation that is expected to be resolved in a future NSwag release.
+
+### Affected Properties
+
+All nullable enum properties using the `anyOf: [$ref, type: "null"]` pattern:
+
+| Schema | Properties |
+|--------|-----------|
+| `TradeItemDetails` / `TradeItemDetailsSummary` | `itemStatus`, `itemCondition` |
+| `TradeItemOrdering` / `TradeItemOrderingSummary` | `useUnit`, `alternativeUseUnit` |
+| `TradeItemPricingSummary` | `allowanceSurchargeType` |
+| `ProductDetails` / `ProductDetailsSummary` | `productStatus`, `productType` |
+| `Legislation` | `weeeCategory` |
+
+### Recommended Workaround
+
+Use the NSwag-compatible bundled spec which inlines nullable enum `anyOf` patterns into `type: ["string", "null"]` with `null` in the enum values — the format NSwag understands.
+
+```bash
+# Generate NSwag-compatible specs (after running npm run bundle)
+npm run bundle:nswag
+```
+
+This produces:
+- `openapi/apis/product/generated/product-api-nswag.yaml`
+- `openapi/apis/tradeitem/generated/tradeitem-api-nswag.yaml`
+
+The transform only affects `anyOf` patterns referencing string enum schemas. Nullable object references (`anyOf: [$ref object, type: "null"]`) are left unchanged because NSwag handles those correctly.
+
+Point NSwag at the `*-nswag.yaml` files instead of the canonical `*-api.yaml` files.
+
+### Why Not `allOf` + `nullable: true`?
+
+The suggestion to use `allOf: [$ref] + nullable: true` comes from the OpenAPI 3.0 era. In OpenAPI 3.1:
+- `nullable: true` is **deprecated** (replaced by `type: ["...", "null"]`)
+- `allOf: [$ref enum, type: "null"]` is logically contradictory (nothing can be both a string and null simultaneously)
+- It only "works" because NSwag doesn't validate JSON Schema semantics — it's an accidental hack that will break when NSwag improves its 3.1 support
 
 ---
 

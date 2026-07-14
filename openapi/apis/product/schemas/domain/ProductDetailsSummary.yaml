@@ -135,10 +135,14 @@ properties:
   # =========================================================================
   
   productStatus:
-    $ref: ../enums/ProductStatus.yaml
+    anyOf:
+      - $ref: ../enums/ProductStatus.yaml
+      - type: "null"
   
   productType:
-    $ref: ../enums/ProductType.yaml
+    anyOf:
+      - $ref: ../enums/ProductType.yaml
+      - type: "null"
   
   customisableProduct:
     type: ["boolean", "null"]
