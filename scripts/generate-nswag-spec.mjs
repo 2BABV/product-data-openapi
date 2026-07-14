@@ -96,7 +96,42 @@ function transformAnyOfNullableEnum(node, doc) {
 }
 
 /**
- * Recursively walk the document and transform all nullable enum anyOf patterns.
+ * Transform anyOf nullable object/non-enum refs to oneOf.
+ *
+ * NSwag checks oneOf for nullability but ignores anyOf.
+ * This rewrites:
+ *   anyOf: [$ref, type: "null"]
+ * to:
+ *   oneOf: [$ref, type: "null"]
+ *
+ * Only applies when the $ref does NOT resolve to a string enum
+ * (those are handled by transformAnyOfNullableEnum above).
+ */
+function transformAnyOfToOneOf(node, doc) {
+  if (!node?.anyOf || !Array.isArray(node.anyOf) || node.anyOf.length !== 2) {
+    return false;
+  }
+
+  const refEntry = node.anyOf.find((item) => item.$ref);
+  const nullEntry = node.anyOf.find(
+    (item) => item.type === 'null' || item.type === "'null'"
+  );
+
+  if (!refEntry || !nullEntry) return false;
+
+  const resolved = resolveRef(doc, refEntry.$ref);
+  // Skip string enums (handled by the other transform)
+  if (isStringEnum(resolved)) return false;
+
+  // Rewrite anyOf → oneOf
+  node.oneOf = node.anyOf;
+  delete node.anyOf;
+
+  return true;
+}
+
+/**
+ * Recursively walk the document and transform all nullable patterns.
  */
 function walkAndTransform(node, doc, stats) {
   if (node === null || node === undefined || typeof node !== 'object') return;
@@ -108,9 +143,11 @@ function walkAndTransform(node, doc, stats) {
     return;
   }
 
-  // Try to transform this node
+  // Try to transform this node (enum inlining takes priority)
   if (transformAnyOfNullableEnum(node, doc)) {
     stats.transformed++;
+  } else if (transformAnyOfToOneOf(node, doc)) {
+    stats.anyOfToOneOf++;
   }
 
   // Recurse into all properties
@@ -123,7 +160,7 @@ function walkAndTransform(node, doc, stats) {
 for (const spec of SPECS) {
   const content = readFileSync(spec.input, 'utf8');
   const doc = yaml.load(content);
-  const stats = { transformed: 0 };
+  const stats = { transformed: 0, anyOfToOneOf: 0 };
 
   walkAndTransform(doc, doc, stats);
 
@@ -136,6 +173,6 @@ for (const spec of SPECS) {
 
   writeFileSync(spec.output, output, 'utf8');
   console.log(
-    `✅ ${spec.output} — ${stats.transformed} nullable enum(s) inlined`
+    `✅ ${spec.output} — ${stats.transformed} nullable enum(s) inlined, ${stats.anyOfToOneOf} anyOf→oneOf`
   );
 }
