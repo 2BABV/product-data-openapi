@@ -1503,9 +1503,20 @@ All nullable enum properties using the `anyOf: [$ref, type: "null"]` pattern:
 
 ### Recommended Workaround
 
-Use the **NSwag-compatible bundled spec** (`*-nswag.yaml`) which transforms nullable enum `anyOf` patterns into inline nullable enums that NSwag understands. See the `scripts/` directory for the transformation tool.
+Use the NSwag-compatible bundled spec which inlines nullable enum `anyOf` patterns into `type: ["string", "null"]` with `null` in the enum values — the format NSwag understands.
 
-If a bundled NSwag spec is not yet available, NSwag consumers can apply a targeted transformation to the bundled spec before code generation. **Do NOT use a blanket `anyOf` → `allOf` text replacement** — this is semantically invalid JSON Schema and will break nullable object references.
+```bash
+# Generate NSwag-compatible specs (after running npm run bundle)
+npm run bundle:nswag
+```
+
+This produces:
+- `openapi/apis/product/generated/product-api-nswag.yaml`
+- `openapi/apis/tradeitem/generated/tradeitem-api-nswag.yaml`
+
+The transform only affects `anyOf` patterns referencing string enum schemas. Nullable object references (`anyOf: [$ref object, type: "null"]`) are left unchanged because NSwag handles those correctly.
+
+Point NSwag at the `*-nswag.yaml` files instead of the canonical `*-api.yaml` files.
 
 ### Why Not `allOf` + `nullable: true`?
 
