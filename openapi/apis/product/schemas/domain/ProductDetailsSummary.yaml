@@ -47,6 +47,9 @@ properties:
     description: |
       Global Trade Item Numbers (GTINs) for the product.
       Can include GTIN-8, GTIN-12, GTIN-13, or GTIN-14.
+    examples:
+      - ["8718699673826", "8719514123456"]
+      - null
   
   unbrandedProduct:
     type: ["boolean", "null"]
@@ -123,6 +126,9 @@ properties:
       pattern: "^[A-Z]{2}$"
     description: |
       ISO 3166-1 alpha-2 country codes for country of origin.
+    examples:
+      - ["NL", "DE"]
+      - null
   
   # =========================================================================
   # PRODUCT DETAILS
@@ -182,6 +188,9 @@ properties:
       
       **ETIM xChange**: `RelatedManufacturerProductGroup`  
       **Path**: `Supplier[].Product[].ProductDetails.RelatedManufacturerProductGroup[]`
+    examples:
+      - ["Smart Lighting", "LED Bulbs"]
+      - null
 
 examples:
   - manufacturerIdGln: "1234567890123"

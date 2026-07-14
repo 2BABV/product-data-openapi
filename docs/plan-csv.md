@@ -6,7 +6,7 @@ Add `text/csv` as an alternative response format alongside `application/json` fo
 
 ## Current State
 
-- **11 active bulk endpoints** across 2 APIs (4 product, 7 trade-item)
+- **14 active bulk endpoints** across 2 APIs (4 product, 10 trade-item)
 - All respond exclusively with `application/json`
 - All use the `data[]` + `meta` envelope pattern with cursor-based pagination
 - Data schemas are **already flattened** (1 row per data point) — designed for ETL
@@ -209,7 +209,7 @@ manufacturerIdGln,manufacturerProductNumber,productStatus,...
 
 ### Decision 3: Array Field Handling
 
-**The core challenge.** 5 of 11 bulk schemas have array properties. CSV is inherently flat.
+**The core challenge.** 9 of 14 bulk schemas have array properties. CSV is inherently flat.
 
 **Affected endpoints and their array fields:**
 
@@ -220,14 +220,18 @@ manufacturerIdGln,manufacturerProductNumber,productStatus,...
 | `/bulk/product-etim-classification-features` | `etimValueDetails[]` | objects (`{language, etimValueDetails}`) |
 | `/bulk/trade-item-details` | `itemGtins[]` | string values |
 | `/bulk/trade-item-relations` | `relatedItemGtins[]` | string values |
+| `/bulk/trade-item-attachments` | `attachmentLanguages[]` | string values |
+| `/bulk/trade-item-packaging-identification` | `packagingGtins[]` | string values |
+| `/bulk/trade-item-packaging-logistic-details` | `packagingPartGtins[]` | string values |
+| `/bulk/trade-item-packaging-enclosed-items` | `enclosedItemGtins[]` | string values |
 
-**6 endpoints have NO arrays** (trivially CSV-compatible):
+**5 endpoints have NO arrays** (trivially CSV-compatible):
 - `/bulk/product-lca-declarations` ✅
 - `/bulk/trade-item-descriptions` ✅
 - `/bulk/trade-item-orderings` ✅
 - `/bulk/trade-item-pricings` ✅ (already flat: 1 row per price entry)
 - `/bulk/trade-item-allowance-surcharges` ✅
-- `/bulk/trade-item-logistics-details` ✅
+- `/bulk/trade-item-logistic-details` ✅
 
 **Options for array fields:**
 
@@ -242,7 +246,7 @@ manufacturerIdGln,manufacturerProductNumber,productStatus,...
 
 For the `etimValueDetails[]` object array (language+description pairs): use **semicolon-delimited** key-value pairs: `en-GB:LED Bulb;nl-NL:LED Lamp`. The colon and semicolon are unambiguous given the `languageCode:text` structure.
 
-**Alternative recommendation**: Skip CSV for the 5 endpoints with arrays (phase 1 = easy wins only), and add them later once the array serialization convention is validated with consumers. This reduces initial scope from 11 to 6 endpoints.
+**Alternative recommendation**: Skip CSV for the 9 endpoints with arrays (phase 1 = easy wins only), and add them later once the array serialization convention is validated with consumers. This reduces initial scope from 14 to 5 endpoints (+ 1 logistic-details = 6 trivially flat).
 
 ### Decision 4: CSV Dialect & Conventions
 

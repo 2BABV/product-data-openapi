@@ -1,5 +1,5 @@
 get:
-  operationId: getBulkTradeItemPackagingLogisticDetails
+  operationId: getBulkTradeItemPackagingUnitLogisticDetails
   tags:
     - TradeItems bulk
   summary: List trade item packaging logistic details

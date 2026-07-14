@@ -1,5 +1,5 @@
 get:
-  operationId: getBulkTradeItemEnclosedItems
+  operationId: getBulkTradeItemPackagingUnitEnclosedItems
   tags:
     - TradeItems bulk
   summary: List trade item enclosed items

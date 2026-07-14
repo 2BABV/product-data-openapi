@@ -1,0 +1,100 @@
+type: object
+description: |
+  Single trade item identification keys with packaging units.
+
+  Returns the full `PackagingUnit` domain structure with nested packaging identification,
+  logistic details per physical part, and enclosed items per packaging unit.
+
+  For flattened ETL-optimized data, use the bulk endpoints
+  `/trade-items/bulk/packaging-identification` and `/trade-items/bulk/packaging-logistic-details`.
+
+  **ETIM xChange**: `PackagingUnit[]`
+  **Path**: `Supplier[].Product[].TradeItem[].PackagingUnit[]`
+required:
+  - supplierIdGln
+  - supplierItemNumber
+  - packagingUnits
+properties:
+  supplierIdGln:
+    $ref: ../../../../shared/schemas/identifiers/Gln.yaml
+    description: Global Location Number (GLN) uniquely identifying the supplier
+    examples:
+      - "1234567890123"
+  supplierItemNumber:
+    type: string
+    minLength: 1
+    maxLength: 35
+    description: Supplier's unique item number
+    examples:
+      - "SKU-12345"
+  packagingUnits:
+    type: array
+    description: |
+      Array of packaging units for this trade item. Each unit represents a packaging level
+      (e.g., piece, box, pallet) with nested identification, logistic details, and enclosed items.
+      Returns an empty array if no packaging units are available.
+    items:
+      $ref: ../domain/PackagingUnit.yaml
+examples:
+  - supplierIdGln: "1234567890123"
+    supplierItemNumber: "SKU-12345"
+    packagingUnits:
+      - packagingIdentification:
+          supplierPackagingNumber: "PKG-001"
+          manufacturerPackagingNumber: null
+          packagingGtins: ["04012345678901"]
+          packagingTypeCode: BX
+          packagingUnitName: "Box"
+          packagingQuantity: 10
+          tradeItemPrimaryPackaging: true
+          packagingGs1Code128: null
+          packagingBreak: false
+          numberOfPackagingParts: 1
+        packagingLogisticDetails:
+          - supplierPackagingPartNumber: null
+            manufacturerPackagingPartNumber: null
+            packagingPartGtins: null
+            packagingTypeLength: 40.0
+            packagingTypeWidth: 30.0
+            packagingTypeHeight: 20.0
+            packagingTypeDiameter: null
+            packagingTypeDimensionUnit: CMT
+            packagingTypeWeight: 5000.0
+            packagingTypeWeightUnit: GRM
+            serialNumberOnPackaging: false
+            stackingFactor: 2
+            packagingTippable: true
+        tradeItemEnclosed:
+          - enclosedSupplierItemNumber: "WIDGET-001"
+            enclosedManufacturerItemNumber: "MFG-WIDGET-001"
+            enclosedItemGtins: ["4012345678901"]
+            enclosedItemQuantity: 5
+      - packagingIdentification:
+          supplierPackagingNumber: "PKG-PALLET"
+          manufacturerPackagingNumber: null
+          packagingGtins: null
+          packagingTypeCode: PF
+          packagingUnitName: "Pallet"
+          packagingQuantity: 100
+          tradeItemPrimaryPackaging: false
+          packagingGs1Code128: null
+          packagingBreak: null
+          numberOfPackagingParts: 1
+        packagingLogisticDetails:
+          - supplierPackagingPartNumber: null
+            manufacturerPackagingPartNumber: null
+            packagingPartGtins: null
+            packagingTypeLength: 120.0
+            packagingTypeWidth: 80.0
+            packagingTypeHeight: 100.0
+            packagingTypeDiameter: null
+            packagingTypeDimensionUnit: CMT
+            packagingTypeWeight: 15000.0
+            packagingTypeWeightUnit: GRM
+            serialNumberOnPackaging: null
+            stackingFactor: 3
+            packagingTippable: false
+        tradeItemEnclosed: null
+  - supplierIdGln: "1234567890123"
+    supplierItemNumber: "SKU-12345"
+    packagingUnits: []

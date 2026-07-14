@@ -77,8 +77,8 @@ paths:
   /trade-items/{supplierIdGln}/{supplierItemNumber}/attachments:
     $ref: ./paths/trade-item-attachments.yaml
   
-  /trade-items/{supplierIdGln}/{supplierItemNumber}/enclosed-items:
-    $ref: ./paths/trade-item-enclosed-items.yaml
+  /trade-items/{supplierIdGln}/{supplierItemNumber}/packaging-units:
+    $ref: ./paths/trade-item-packaging-units.yaml
   
   # Bulk operations
   # Note: /trade-items/bulk/details consolidates what would have been separate
@@ -98,12 +98,12 @@ paths:
     $ref: ./paths/bulk/logistic-details.yaml
   /trade-items/bulk/attachments:
     $ref: ./paths/bulk/attachments.yaml
-  /trade-items/bulk/enclosed-items:
-    $ref: ./paths/bulk/enclosed-items.yaml
-  /trade-items/bulk/packaging-identification:
-    $ref: ./paths/bulk/packaging-identification.yaml
-  /trade-items/bulk/packaging-logistic-details:
-    $ref: ./paths/bulk/packaging-logistic-details.yaml
+  /trade-items/bulk/packaging-unit-enclosed-items:
+    $ref: ./paths/bulk/packaging-unit-enclosed-items.yaml
+  /trade-items/bulk/packaging-unit-identification:
+    $ref: ./paths/bulk/packaging-unit-identification.yaml
+  /trade-items/bulk/packaging-unit-logistic-details:
+    $ref: ./paths/bulk/packaging-unit-logistic-details.yaml
     
 components:
   schemas:
@@ -141,16 +141,20 @@ components:
       $ref: ./schemas/domain/ItemAttachment.yaml
     ItemAttachmentSummary:
       $ref: ./schemas/domain/ItemAttachmentSummary.yaml
-    TradeItemEnclosed:
-      $ref: ./schemas/domain/TradeItemEnclosed.yaml
-    TradeItemEnclosedSummary:
-      $ref: ./schemas/domain/TradeItemEnclosedSummary.yaml
+    PackagingUnitTradeItemEnclosedSummary:
+      $ref: ./schemas/domain/PackagingUnitTradeItemEnclosedSummary.yaml
     PackagingUnit:
       $ref: ./schemas/domain/PackagingUnit.yaml
-    PackagingIdentificationSummary:
-      $ref: ./schemas/domain/PackagingIdentificationSummary.yaml
-    PackagingLogisticDetailsSummary:
-      $ref: ./schemas/domain/PackagingLogisticDetailsSummary.yaml
+    PackagingUnitPackagingIdentification:
+      $ref: ./schemas/domain/PackagingUnitPackagingIdentification.yaml
+    PackagingUnitPackagingLogisticDetail:
+      $ref: ./schemas/domain/PackagingUnitPackagingLogisticDetail.yaml
+    PackagingUnitTradeItemEnclosed:
+      $ref: ./schemas/domain/PackagingUnitTradeItemEnclosed.yaml
+    PackagingUnitPackagingIdentificationSummary:
+      $ref: ./schemas/domain/PackagingUnitPackagingIdentificationSummary.yaml
+    PackagingUnitPackagingLogisticDetailSummary:
+      $ref: ./schemas/domain/PackagingUnitPackagingLogisticDetailSummary.yaml
     AttachmentType:
       $ref: ./schemas/enums/AttachmentType.yaml
     AttachmentTypeSpecification:
@@ -209,18 +213,16 @@ components:
       $ref: ./schemas/responses/TradeItemAttachmentsResponseData.yaml
     BulkTradeItemAttachmentsResponse:
       $ref: ./schemas/responses/BulkTradeItemAttachmentsResponse.yaml
-    TradeItemEnclosedItemsResponse:
-      $ref: ./schemas/responses/TradeItemEnclosedItemsResponse.yaml
-    TradeItemEnclosedItemsResponseData:
-      $ref: ./schemas/responses/TradeItemEnclosedItemsResponseData.yaml
-    TradeItemEnclosedItem:
-      $ref: ./schemas/responses/TradeItemEnclosedItem.yaml
     BulkTradeItemEnclosedItemsResponse:
       $ref: ./schemas/responses/BulkTradeItemEnclosedItemsResponse.yaml
     BulkTradeItemPackagingIdentificationResponse:
       $ref: ./schemas/responses/BulkTradeItemPackagingIdentificationResponse.yaml
     BulkTradeItemPackagingLogisticDetailsResponse:
       $ref: ./schemas/responses/BulkTradeItemPackagingLogisticDetailsResponse.yaml
+    TradeItemPackagingUnitsResponse:
+      $ref: ./schemas/responses/TradeItemPackagingUnitsResponse.yaml
+    TradeItemPackagingUnitsResponseData:
+      $ref: ./schemas/responses/TradeItemPackagingUnitsResponseData.yaml
 
   parameters:
     SupplierIdGln:

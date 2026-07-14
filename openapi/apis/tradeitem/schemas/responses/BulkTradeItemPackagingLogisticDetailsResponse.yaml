@@ -16,7 +16,7 @@ properties:
     type: array
     description: Array of packaging logistic detail entries. Each row is one logistic detail per packaging unit per trade item.
     items:
-      $ref: ../domain/PackagingLogisticDetailsSummary.yaml
+      $ref: ../domain/PackagingUnitPackagingLogisticDetailSummary.yaml
   meta:
     $ref: ../../../../shared/schemas/common/CursorPaginationMetadata.yaml
 examples:

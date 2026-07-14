@@ -25,7 +25,7 @@ get:
     - `/relations` - Accessories, spare parts, and related items
     - `/logistic-details` - Dimensions, weights, and volumes
     - `/attachments` - Images, documents, and certificates
-    - `/enclosed-items` - Denormalized from packaging units (no corresponding aggregate root property)
+    - `/packaging-units` - Full packaging structure with identification, logistic details, and enclosed items
     
     **Examples**: Example payloads show documented fields only. Clients must accept and ignore additional fields, including nested fields, when they are added in backward-compatible updates.
     
@@ -117,16 +117,19 @@ get:
                       attachmentDescription: "Product main image"
                       attachmentFilename: "hammer-main.jpg"
                   packagingUnits:
-                    - packagingTypeCode: BX
-                      packagingGtins: ["14012345678908"]
-                      packagingQuantity: 10
-                      grossLength: 30.0
-                      grossWidth: 20.0
-                      grossHeight: 15.0
-                      grossDiameter: null
-                      grossDimensionUnit: CMT
-                      grossWeight: 5500.0
-                      grossWeightUnit: GRM
+                    - packagingIdentification:
+                        packagingTypeCode: BX
+                        packagingGtins: ["14012345678908"]
+                        packagingQuantity: 10
+                      packagingLogisticDetails:
+                        - packagingTypeLength: 30.0
+                          packagingTypeWidth: 20.0
+                          packagingTypeHeight: 15.0
+                          packagingTypeDiameter: null
+                          packagingTypeDimensionUnit: CMT
+                          packagingTypeWeight: 5500.0
+                          packagingTypeWeightUnit: GRM
+                      tradeItemEnclosed: null
             minimalTradeItem:
               summary: Minimal trade item with only required fields
               value:

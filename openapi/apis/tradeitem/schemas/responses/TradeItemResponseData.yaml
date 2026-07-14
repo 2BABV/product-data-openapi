@@ -11,13 +11,11 @@ description: |
   - `relations`: Accessories, spare parts, and other related items
   - `logisticDetails`: Dimensions, weights, and volumes
   - `attachments`: Images, documents, and certificates
-  - `packagingUnits`: Packaging level information (aggregate root only — no dedicated sub-resource)
+  - `packagingUnits`: Packaging level information with nested identification, logistic details, and enclosed items
   
   Each component is also available via a dedicated subresource endpoint:
   `/details`, `/descriptions`, `/ordering`, `/pricings`, `/relations`,
-  `/logistic-details`, `/attachments`.
-  The `/enclosed-items` subresource is denormalized from packaging units and has
-  no corresponding top-level property in this response.
+  `/logistic-details`, `/attachments`, `/packaging-units`.
 required:
   - supplierIdGln
   - supplierItemNumber

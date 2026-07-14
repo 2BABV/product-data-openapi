@@ -15,7 +15,7 @@ properties:
     type: array
     description: Array of packaging identification entries. Each row is one packaging unit per trade item.
     items:
-      $ref: ../domain/PackagingIdentificationSummary.yaml
+      $ref: ../domain/PackagingUnitPackagingIdentificationSummary.yaml
   meta:
     $ref: ../../../../shared/schemas/common/CursorPaginationMetadata.yaml
 examples:

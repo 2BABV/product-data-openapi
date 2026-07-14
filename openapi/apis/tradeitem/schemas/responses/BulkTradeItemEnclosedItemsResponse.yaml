@@ -15,7 +15,7 @@ properties:
     type: array
     description: Array of enclosed items. Each row is one enclosed item per packaging unit per trade item.
     items:
-      $ref: ../domain/TradeItemEnclosedSummary.yaml
+      $ref: ../domain/PackagingUnitTradeItemEnclosedSummary.yaml
   meta:
     $ref: ../../../../shared/schemas/common/CursorPaginationMetadata.yaml
 examples:
