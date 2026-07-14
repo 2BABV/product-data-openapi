@@ -25,7 +25,9 @@ properties:
       - null
   
   weeeCategory:
-    $ref: ../enums/WeeeCategory.yaml
+    anyOf:
+      - $ref: ../enums/WeeeCategory.yaml
+      - type: "null"
     description: |
       WEEE (Waste Electrical and Electronic Equipment) category according to EU directive.
       
