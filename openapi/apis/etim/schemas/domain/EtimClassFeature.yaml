@@ -1,0 +1,93 @@
+type: object
+description: |
+  Flat relation record linking a feature to a regular ETIM class (EC).
+  Each record represents one feature assignment within a specific class version.
+required:
+  - classCode
+  - classVersion
+  - featureCode
+  - orderNumber
+  - unitCode
+  - unitImperialCode
+  - featureGroupCode
+  - type
+  - deprecated
+  - local
+properties:
+  classCode:
+    type: string
+    description: ETIM class code this feature belongs to.
+    pattern: "^EC[0-9]{6}$"
+    examples:
+      - "EC002714"
+  classVersion:
+    type: integer
+    description: Class version number.
+    minimum: 1
+    examples:
+      - 4
+  featureCode:
+    type: string
+    description: ETIM feature code.
+    pattern: "^EF[0-9]{6}$"
+    examples:
+      - "EF000007"
+  orderNumber:
+    type: integer
+    description: Display order of this feature within the class.
+    minimum: 1
+    examples:
+      - 1
+  unitCode:
+    type:
+      - string
+      - "null"
+    description: ETIM unit code for this feature (null for non-numeric features).
+    pattern: "^EU[0-9]{6}$"
+    examples:
+      - "EU000001"
+      - null
+  unitImperialCode:
+    type:
+      - string
+      - "null"
+    description: Imperial unit code alternative (null when not applicable).
+    pattern: "^EU[0-9]{6}$"
+    examples:
+      - "EU000045"
+      - null
+  featureGroupCode:
+    type:
+      - string
+      - "null"
+    description: Feature group code for categorization within the class.
+    pattern: "^EFG[0-9]{5}$"
+    examples:
+      - "EFG00001"
+      - null
+  type:
+    type: string
+    description: Feature data type (Alphanumeric, Numeric, Range, Logical).
+    examples:
+      - "Alphanumeric"
+  deprecated:
+    type: boolean
+    description: Whether this feature assignment is deprecated.
+    examples:
+      - false
+  local:
+    type: boolean
+    description: Whether this is a local (non-international) feature.
+    examples:
+      - false
+examples:
+  - classCode: "EC002714"
+    classVersion: 4
+    featureCode: "EF000007"
+    orderNumber: 1
+    unitCode: null
+    unitImperialCode: null
+    featureGroupCode: "EFG00001"
+    type: "Alphanumeric"
+    deprecated: false
+    local: false

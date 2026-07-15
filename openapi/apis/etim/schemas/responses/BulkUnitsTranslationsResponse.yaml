@@ -1,0 +1,14 @@
+type: object
+description: |
+  Bulk response containing ETIM unit translations with cursor-based pagination.
+required:
+  - data
+  - meta
+properties:
+  data:
+    type: array
+    description: Array of ETIM unit translations.
+    items:
+      $ref: ../domain/EtimUnitTranslation.yaml
+  meta:
+    $ref: ../../../../shared/schemas/common/CursorPaginationMetadata.yaml

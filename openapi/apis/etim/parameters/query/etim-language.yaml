@@ -1,0 +1,15 @@
+name: language
+in: query
+required: false
+description: |
+  Single language code for the `description` field in the response.
+  Supports both short ISO 639-1 codes ("EN", "NL", "DE") and full codes with country ("nl-NL", "de-DE").
+  When omitted, the description defaults to English (EN).
+schema:
+  type: string
+  examples:
+    - "EN"
+    - "NL"
+    - "nl-NL"
+    - "de-DE"
+example: "EN"

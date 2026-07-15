@@ -1,0 +1,43 @@
+type: object
+description: |
+  Translation record for ETIM units.
+  Includes abbreviation in addition to the description.
+required:
+  - code
+  - languageCode
+  - description
+  - abbreviation
+properties:
+  code:
+    type: string
+    description: Unit code.
+    pattern: "^EU[0-9]{6}$"
+    examples:
+      - "EU000001"
+  languageCode:
+    type: string
+    description: Language code (ISO 639-1 with country code).
+    pattern: "^[a-z]{2}-[A-Z]{2}$"
+    examples:
+      - "nl-NL"
+  description:
+    type: string
+    description: Unit description in the specified language.
+    examples:
+      - "Millimeter"
+  abbreviation:
+    type:
+      - string
+      - "null"
+    description: Unit abbreviation in the specified language (null if not applicable).
+    examples:
+      - "mm"
+examples:
+  - code: "EU000001"
+    languageCode: "nl-NL"
+    description: "Millimeter"
+    abbreviation: "mm"
+  - code: "EU000001"
+    languageCode: "de-DE"
+    description: "Millimeter"
+    abbreviation: "mm"

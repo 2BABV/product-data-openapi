@@ -1,0 +1,11 @@
+type: object
+description: |
+  Response containing all available versions for a modelling class code, each with full details.
+required:
+  - data
+properties:
+  data:
+    type: array
+    description: Array of full modelling class details for each version of the requested class code, ordered by version number descending.
+    items:
+      $ref: ../domain/EtimModellingClassDetail.yaml

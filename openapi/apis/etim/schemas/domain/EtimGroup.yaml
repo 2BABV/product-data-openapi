@@ -1,0 +1,32 @@
+type: object
+description: |
+  Flat representation of an ETIM group for bulk retrieval.
+required:
+  - code
+  - descriptionEn
+  - description
+properties:
+  code:
+    type: string
+    description: ETIM group code.
+    pattern: "^EG[0-9]{6}$"
+    minLength: 8
+    maxLength: 8
+    examples:
+      - "EG000001"
+  descriptionEn:
+    type: string
+    description: Group description in ETIM English.
+    examples:
+      - "Installation (low voltage)"
+  description:
+    type:
+      - string
+      - "null"
+    description: Group description in the requested language.
+    examples:
+      - "Installatie (laagspanning)"
+examples:
+  - code: "EG000017"
+    descriptionEn: "Installation (low voltage)"
+    description: "Installatie (laagspanning)"

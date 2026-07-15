@@ -1,0 +1,28 @@
+get:
+  operationId: getBulkEtimFeatures
+  tags:
+    - ETIM bulk
+  summary: List ETIM features
+  description: |
+    Retrieve all ETIM features in bulk with cursor-based pagination.
+
+    Returns flat feature records with code, type, descriptions, and lifecycle metadata.
+  parameters:
+    - $ref: ../../../../shared/parameters/query/cursor.yaml
+    - $ref: ../../../../shared/parameters/query/limit.yaml
+    - $ref: ../../parameters/query/etim-language.yaml
+  responses:
+    '200':
+      description: Successfully retrieved data
+      content:
+        application/json:
+          schema:
+            $ref: ../../schemas/responses/BulkFeaturesResponse.yaml
+    '400':
+      $ref: ../../../../shared/responses/400-bad-request.yaml
+    '401':
+      $ref: ../../../../shared/responses/401-unauthorized.yaml
+    '403':
+      $ref: ../../../../shared/responses/403-forbidden.yaml
+    '500':
+      $ref: ../../../../shared/responses/500-internal-server-error.yaml

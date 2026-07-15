@@ -1,0 +1,160 @@
+type: object
+description: |
+  Detailed ETIM class representation for single-entity lookup.
+  Contains full nested structure including features with their values,
+  linked modelling classes, and release membership.
+  No embedded translations — use the translation endpoints instead.
+required:
+  - code
+  - version
+  - groupCode
+  - status
+  - descriptionEn
+  - description
+  - synonyms
+  - mutationDate
+  - revision
+  - deprecated
+  - sectors
+  - releases
+  - features
+  - linkedModellingClasses
+properties:
+  code:
+    type: string
+    description: ETIM class code.
+    pattern: "^EC[0-9]{6}$"
+    examples:
+      - "EC002714"
+  version:
+    type: integer
+    description: Class version number.
+    minimum: 1
+    examples:
+      - 4
+  groupCode:
+    type: string
+    description: Code of the ETIM group this class belongs to.
+    pattern: "^EG[0-9]{6}$"
+    examples:
+      - "EG000017"
+  groupDescriptionEn:
+    type: string
+    description: Group description in ETIM English.
+    examples:
+      - "Installation (low voltage)"
+  status:
+    type: integer
+    description: |
+      Class lifecycle status code.
+      2 = Under construction, 3 = Ready for publication, 5 = Published, 9 = Deleted.
+    examples:
+      - 5
+  descriptionEn:
+    type: string
+    description: Class description in ETIM English.
+    examples:
+      - "Socket outlet"
+  description:
+    type:
+      - string
+      - "null"
+    description: Class description in the requested language.
+    examples:
+      - "Wandcontactdoos"
+  synonyms:
+    type: array
+    description: Synonyms in the requested language.
+    items:
+      type: string
+    examples:
+      - ["Stopcontact", "Contactdoos"]
+  mutationDate:
+    type: string
+    format: date-time
+    description: Date and time of last mutation.
+    examples:
+      - "2024-06-15T10:30:00Z"
+  revision:
+    type: integer
+    description: Revision number.
+    minimum: 0
+    examples:
+      - 3
+  deprecated:
+    type: boolean
+    description: Whether this class is deprecated.
+    examples:
+      - false
+  sectors:
+    type: array
+    description: Industry sectors (E, B, M, T, W).
+    items:
+      type: string
+    examples:
+      - ["E", "B"]
+  releases:
+    type: array
+    description: ETIM releases this class is included in.
+    items:
+      type: string
+    examples:
+      - ["ETIM-10.0", "ETIM-9.0", "DYNAMIC"]
+  features:
+    type: array
+    description: Features assigned to this class with their allowed values.
+    items:
+      $ref: ./EtimClassDetailFeature.yaml
+  linkedModellingClasses:
+    type: array
+    description: Modelling classes linked to this product class.
+    items:
+      type: object
+      required:
+        - code
+        - version
+        - descriptionEn
+      properties:
+        code:
+          type: string
+          pattern: "^MC[0-9]{6}$"
+          examples:
+            - "MC000001"
+        version:
+          type: integer
+          minimum: 1
+          examples:
+            - 2
+        descriptionEn:
+          type: string
+          examples:
+            - "Valve body"
+examples:
+  - code: "EC002714"
+    version: 4
+    groupCode: "EG000017"
+    groupDescriptionEn: "Installation (low voltage)"
+    status: 5
+    descriptionEn: "Socket outlet"
+    description: "Wandcontactdoos"
+    synonyms: ["Stopcontact"]
+    mutationDate: "2024-06-15T10:30:00Z"
+    revision: 3
+    deprecated: false
+    sectors: ["E", "B"]
+    releases: ["ETIM-10.0", "ETIM-9.0", "DYNAMIC"]
+    features:
+      - featureCode: "EF000007"
+        descriptionEn: "Colour"
+        description: "Kleur"
+        type: "Alphanumeric"
+        orderNumber: 1
+        unitCode: null
+        featureGroupCode: "EFG00001"
+        deprecated: false
+        values:
+          - valueCode: "EV000028"
+            descriptionEn: "White"
+            description: "Wit"
+            orderNumber: 1
+    linkedModellingClasses: []

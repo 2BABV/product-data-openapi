@@ -1,0 +1,32 @@
+type: object
+description: |
+  Flat representation of an ETIM feature group for bulk retrieval.
+required:
+  - code
+  - descriptionEn
+  - description
+properties:
+  code:
+    type: string
+    description: ETIM feature group code.
+    pattern: "^EFG[0-9]{5}$"
+    minLength: 8
+    maxLength: 8
+    examples:
+      - "EFG00001"
+  descriptionEn:
+    type: string
+    description: Feature group description in ETIM English.
+    examples:
+      - "General"
+  description:
+    type:
+      - string
+      - "null"
+    description: Feature group description in the requested language.
+    examples:
+      - "Algemeen"
+examples:
+  - code: "EFG00001"
+    descriptionEn: "General"
+    description: "Algemeen"

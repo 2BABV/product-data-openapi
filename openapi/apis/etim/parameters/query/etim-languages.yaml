@@ -1,0 +1,21 @@
+name: language
+in: query
+required: true
+description: |
+  One or more language codes to filter translations.
+  Supports both short ISO 639-1 codes ("EN", "NL", "DE") and full codes with country ("nl-NL", "de-DE").
+  Multiple values are comma-separated.
+schema:
+  type: array
+  items:
+    type: string
+  minItems: 1
+style: form
+explode: false
+examples:
+  singleLanguage:
+    summary: Single language
+    value: ["NL"]
+  multipleLanguages:
+    summary: Multiple languages
+    value: ["nl-NL", "de-DE", "fr-FR"]

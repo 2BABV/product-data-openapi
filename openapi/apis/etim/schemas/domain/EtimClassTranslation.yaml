@@ -1,0 +1,51 @@
+type: object
+description: |
+  Translation record for ETIM classes and modelling classes.
+  Includes synonyms in addition to the description.
+required:
+  - code
+  - version
+  - languageCode
+  - description
+  - synonyms
+properties:
+  code:
+    type: string
+    description: Class code (EC or MC prefix).
+    examples:
+      - "EC002714"
+  version:
+    type: integer
+    description: Class version number.
+    minimum: 1
+    examples:
+      - 4
+  languageCode:
+    type: string
+    description: Language code (ISO 639-1 with country code).
+    pattern: "^[a-z]{2}-[A-Z]{2}$"
+    examples:
+      - "nl-NL"
+  description:
+    type: string
+    description: Class description in the specified language.
+    examples:
+      - "Wandcontactdoos"
+  synonyms:
+    type: array
+    description: List of synonyms in the specified language.
+    items:
+      type: string
+    examples:
+      - ["Stopcontact", "Contactdoos"]
+examples:
+  - code: "EC002714"
+    version: 4
+    languageCode: "nl-NL"
+    description: "Wandcontactdoos"
+    synonyms: ["Stopcontact", "Contactdoos"]
+  - code: "EC002714"
+    version: 4
+    languageCode: "de-DE"
+    description: "Steckdose"
+    synonyms: ["Wandsteckdose"]

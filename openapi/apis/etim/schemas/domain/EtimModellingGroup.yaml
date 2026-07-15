@@ -1,0 +1,32 @@
+type: object
+description: |
+  Flat representation of an ETIM modelling group for bulk retrieval.
+required:
+  - code
+  - descriptionEn
+  - description
+properties:
+  code:
+    type: string
+    description: ETIM modelling group code.
+    pattern: "^MG[0-9]{6}$"
+    minLength: 8
+    maxLength: 8
+    examples:
+      - "MG000001"
+  descriptionEn:
+    type: string
+    description: Modelling group description in ETIM English.
+    examples:
+      - "Valves"
+  description:
+    type:
+      - string
+      - "null"
+    description: Modelling group description in the requested language.
+    examples:
+      - "Kleppen"
+examples:
+  - code: "MG000001"
+    descriptionEn: "Valves"
+    description: "Kleppen"

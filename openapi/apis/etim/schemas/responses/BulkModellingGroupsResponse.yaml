@@ -1,0 +1,14 @@
+type: object
+description: |
+  Bulk response containing ETIM modelling groups with cursor-based pagination.
+required:
+  - data
+  - meta
+properties:
+  data:
+    type: array
+    description: Array of ETIM modelling groups.
+    items:
+      $ref: ../domain/EtimModellingGroup.yaml
+  meta:
+    $ref: ../../../../shared/schemas/common/CursorPaginationMetadata.yaml

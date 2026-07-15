@@ -1,0 +1,93 @@
+type: object
+description: |
+  Flat representation of an ETIM modelling class for bulk retrieval.
+required:
+  - code
+  - version
+  - groupCode
+  - status
+  - descriptionEn
+  - description
+  - mutationDate
+  - revision
+  - dimensionalDrawingSvgUrl
+  - releases
+properties:
+  code:
+    type: string
+    description: ETIM modelling class code.
+    pattern: "^MC[0-9]{6}$"
+    minLength: 8
+    maxLength: 8
+    examples:
+      - "MC000001"
+  version:
+    type: integer
+    description: Class version number.
+    minimum: 1
+    examples:
+      - 2
+  groupCode:
+    type: string
+    description: Code of the modelling group this class belongs to.
+    pattern: "^MG[0-9]{6}$"
+    examples:
+      - "MG000001"
+  status:
+    type: integer
+    description: |
+      Class lifecycle status code.
+      2 = Under construction, 3 = Ready for publication, 5 = Published, 9 = Deleted.
+    examples:
+      - 5
+  descriptionEn:
+    type: string
+    description: Class description in ETIM English.
+    examples:
+      - "Valve body"
+  description:
+    type:
+      - string
+      - "null"
+    description: Class description in the requested language.
+    examples:
+      - "Kleplichaam"
+  mutationDate:
+    type: string
+    format: date-time
+    description: Date and time of last mutation.
+    examples:
+      - "2024-05-01T12:00:00Z"
+  revision:
+    type: integer
+    description: Revision number within the current version.
+    minimum: 0
+    examples:
+      - 1
+  dimensionalDrawingSvgUrl:
+    type:
+      - string
+      - "null"
+    format: uri
+    description: URL to the dimensional drawing SVG for this modelling class.
+    examples:
+      - "https://cdn.etim-international.com/drawings/MC000001.svg"
+      - null
+  releases:
+    type: array
+    description: ETIM releases this modelling class is included in.
+    items:
+      type: string
+    examples:
+      - ["ETIM-10.0", "DYNAMIC"]
+examples:
+  - code: "MC000001"
+    version: 2
+    groupCode: "MG000001"
+    status: 5
+    descriptionEn: "Valve body"
+    description: "Kleplichaam"
+    mutationDate: "2024-05-01T12:00:00Z"
+    revision: 1
+    dimensionalDrawingSvgUrl: "https://cdn.etim-international.com/drawings/MC000001.svg"
+    releases: ["ETIM-10.0", "DYNAMIC"]

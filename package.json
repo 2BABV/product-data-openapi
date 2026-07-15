@@ -1,11 +1,12 @@
 {
   "scripts": {
-    "lint": "redocly lint --config openapi/redocly.yaml product@v1 tradeitem@v1",
-    "lint:all": "redocly lint --config openapi/redocly.yaml product@v1 tradeitem@v1 product-domain@v1 tradeitem-domain@v1 netprice@v1 stock@v1",
+    "lint": "redocly lint --config openapi/redocly.yaml product@v1 tradeitem@v1 etim@v1",
+    "lint:all": "redocly lint --config openapi/redocly.yaml product@v1 tradeitem@v1 product-domain@v1 tradeitem-domain@v1 netprice@v1 stock@v1 etim@v1",
     "bundle:product": "redocly bundle --config openapi/redocly.yaml product@v1 -o openapi/apis/product/generated/product-api.yaml",
     "bundle:tradeitem": "redocly bundle --config openapi/redocly.yaml tradeitem@v1 -o openapi/apis/tradeitem/generated/tradeitem-api.yaml",
     "bundle:product-domain": "redocly bundle --config openapi/redocly.yaml product-domain@v1 -o openapi/apis/product/generated/product-domain-api.yaml",
     "bundle:tradeitem-domain": "redocly bundle --config openapi/redocly.yaml tradeitem-domain@v1 -o openapi/apis/tradeitem/generated/tradeitem-domain-api.yaml",
+    "bundle:etim": "redocly bundle --config openapi/redocly.yaml etim@v1 -o openapi/apis/etim/generated/etim-api.yaml",
     "bundle": "npm run bundle:product && npm run bundle:tradeitem && npm run bundle:product-domain && npm run bundle:tradeitem-domain",
     "bundle:nswag": "node scripts/generate-nswag-spec.mjs",
     "build:product": "redocly build-docs --config openapi/redocly.yaml product@v1 -o openapi/apis/product/generated/product.html",
@@ -14,6 +15,7 @@
     "build:product-domain": "redocly build-docs --config openapi/redocly.yaml product-domain@v1 -o openapi/apis/product/generated/product-domain.html",
     "build:netprice": "redocly build-docs --config openapi/redocly.yaml netprice@v1 -o openapi/apis/netprice/generated/netprice.html",
     "build:stock": "redocly build-docs --config openapi/redocly.yaml stock@v1 -o openapi/apis/stock/generated/stock.html",
+    "build:etim": "redocly build-docs --config openapi/redocly.yaml etim@v1 -o openapi/apis/etim/generated/etim.html",
     "build:docs": "npm run build:product && npm run build:tradeitem && npm run build:product-domain && npm run build:tradeitem-domain && npm run build:netprice && npm run build:stock",
     "build:models": "node scripts/generate-model-docs.mjs",
     "preview:product": "npm run build:product && start openapi/apis/product/generated/product.html",
@@ -21,7 +23,8 @@
     "preview:tradeitem-domain": "npm run build:tradeitem-domain && start openapi/apis/tradeitem/generated/tradeitem-domain.html",
     "preview:product-domain": "npm run build:product-domain && start openapi/apis/product/generated/product-domain.html",
     "preview:netprice": "npm run build:netprice && start openapi/apis/netprice/generated/netprice.html",
-    "preview:stock": "npm run build:stock && start openapi/apis/stock/generated/stock.html"
+    "preview:stock": "npm run build:stock && start openapi/apis/stock/generated/stock.html",
+    "preview:etim": "npm run build:etim && start openapi/apis/etim/generated/etim.html"
   },
   "devDependencies": {
     "@redocly/cli": "^2.29.2",

@@ -1,0 +1,122 @@
+type: object
+description: |
+  Feature within a class detail response, including allowed values.
+required:
+  - featureCode
+  - descriptionEn
+  - description
+  - type
+  - orderNumber
+  - unitCode
+  - featureGroupCode
+  - deprecated
+  - values
+properties:
+  featureCode:
+    type: string
+    description: ETIM feature code.
+    pattern: "^EF[0-9]{6}$"
+    examples:
+      - "EF000007"
+  descriptionEn:
+    type: string
+    description: Feature description in ETIM English.
+    examples:
+      - "Colour"
+  description:
+    type:
+      - string
+      - "null"
+    description: Feature description in the requested language.
+    examples:
+      - "Kleur"
+  type:
+    type: string
+    description: Feature data type (Alphanumeric, Numeric, Range, Logical).
+    examples:
+      - "Alphanumeric"
+  orderNumber:
+    type: integer
+    description: Display order within the class.
+    minimum: 1
+    examples:
+      - 1
+  unitCode:
+    type:
+      - string
+      - "null"
+    description: ETIM unit code (null for non-numeric features).
+    pattern: "^EU[0-9]{6}$"
+    examples:
+      - null
+  unitImperialCode:
+    type:
+      - string
+      - "null"
+    description: Imperial unit code alternative.
+    pattern: "^EU[0-9]{6}$"
+    examples:
+      - null
+  featureGroupCode:
+    type:
+      - string
+      - "null"
+    description: Feature group code.
+    pattern: "^EFG[0-9]{5}$"
+    examples:
+      - "EFG00001"
+  deprecated:
+    type: boolean
+    description: Whether this feature assignment is deprecated.
+    examples:
+      - false
+  values:
+    type: array
+    description: Allowed values for this feature within the class.
+    items:
+      type: object
+      required:
+        - valueCode
+        - descriptionEn
+        - description
+        - orderNumber
+      properties:
+        valueCode:
+          type: string
+          pattern: "^EV[0-9]{6}$"
+          examples:
+            - "EV000028"
+        descriptionEn:
+          type: string
+          examples:
+            - "White"
+        description:
+          type:
+            - string
+            - "null"
+          examples:
+            - "Wit"
+        orderNumber:
+          type: integer
+          minimum: 1
+          examples:
+            - 1
+examples:
+  - featureCode: "EF000007"
+    descriptionEn: "Colour"
+    description: "Kleur"
+    type: "Alphanumeric"
+    orderNumber: 1
+    unitCode: null
+    unitImperialCode: null
+    featureGroupCode: "EFG00001"
+    deprecated: false
+    values:
+      - valueCode: "EV000028"
+        descriptionEn: "White"
+        description: "Wit"
+        orderNumber: 1
+      - valueCode: "EV000054"
+        descriptionEn: "Black"
+        description: "Zwart"
+        orderNumber: 2

@@ -1,0 +1,32 @@
+type: object
+description: |
+  Generic translation record for ETIM entities (features, feature-groups, groups, modelling-groups, values).
+  Used by bulk translation endpoints.
+required:
+  - code
+  - languageCode
+  - description
+properties:
+  code:
+    type: string
+    description: Entity code (e.g., feature code, group code, value code).
+    examples:
+      - "EF000007"
+  languageCode:
+    type: string
+    description: Language code (ISO 639-1 with country code).
+    pattern: "^[a-z]{2}-[A-Z]{2}$"
+    examples:
+      - "nl-NL"
+  description:
+    type: string
+    description: Entity description in the specified language.
+    examples:
+      - "Kleur"
+examples:
+  - code: "EF000007"
+    languageCode: "nl-NL"
+    description: "Kleur"
+  - code: "EF000007"
+    languageCode: "de-DE"
+    description: "Farbe"

@@ -1,0 +1,31 @@
+get:
+  operationId: getBulkEtimUnitsTranslations
+  tags:
+    - ETIM bulk
+  summary: List ETIM unit translations
+  description: |
+    Retrieve translations for ETIM units filtered by language(s).
+
+    Returns unit code, language code, description, and abbreviation.
+    
+    The `language` parameter is required and accepts one or more comma-separated language codes
+    to filter which translations are returned.
+  parameters:
+    - $ref: ../../../../shared/parameters/query/cursor.yaml
+    - $ref: ../../../../shared/parameters/query/limit.yaml
+    - $ref: ../../parameters/query/etim-languages.yaml
+  responses:
+    '200':
+      description: Successfully retrieved translations
+      content:
+        application/json:
+          schema:
+            $ref: ../../schemas/responses/BulkUnitsTranslationsResponse.yaml
+    '400':
+      $ref: ../../../../shared/responses/400-bad-request.yaml
+    '401':
+      $ref: ../../../../shared/responses/401-unauthorized.yaml
+    '403':
+      $ref: ../../../../shared/responses/403-forbidden.yaml
+    '500':
+      $ref: ../../../../shared/responses/500-internal-server-error.yaml

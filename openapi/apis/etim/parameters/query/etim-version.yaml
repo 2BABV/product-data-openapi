@@ -1,0 +1,11 @@
+name: version
+in: query
+required: false
+description: |
+  ETIM class version number. When omitted, the latest published version is returned.
+schema:
+  type: integer
+  minimum: 1
+  examples:
+    - 1
+    - 4

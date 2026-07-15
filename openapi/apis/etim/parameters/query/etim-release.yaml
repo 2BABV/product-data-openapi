@@ -1,0 +1,14 @@
+name: release
+in: query
+required: false
+description: |
+  Filter by ETIM release identifier.
+  Format: "ETIM-" followed by a Major.Minor version (e.g., "ETIM-10.0") or "DYNAMIC" for dynamic releases.
+schema:
+  type: string
+  pattern: "^ETIM-[0-9]{1,2}\\.[0-9]$|^DYNAMIC$"
+  examples:
+    - "ETIM-10.0"
+    - "ETIM-9.0"
+    - "DYNAMIC"
+example: "ETIM-10.0"

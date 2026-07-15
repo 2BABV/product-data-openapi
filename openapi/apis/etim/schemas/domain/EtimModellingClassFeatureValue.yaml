@@ -1,0 +1,58 @@
+type: object
+description: |
+  Flat relation record linking a value to a modelling class-feature combination (MC).
+  Extends the regular class-feature-value with the portcode discriminator.
+required:
+  - classCode
+  - classVersion
+  - featureCode
+  - valueCode
+  - orderNumber
+  - portcode
+properties:
+  classCode:
+    type: string
+    description: ETIM modelling class code.
+    pattern: "^MC[0-9]{6}$"
+    examples:
+      - "MC000001"
+  classVersion:
+    type: integer
+    description: Class version number.
+    minimum: 1
+    examples:
+      - 2
+  featureCode:
+    type: string
+    description: ETIM feature code.
+    pattern: "^EF[0-9]{6}$"
+    examples:
+      - "EF000100"
+  valueCode:
+    type: string
+    description: ETIM value code.
+    pattern: "^EV[0-9]{6}$"
+    examples:
+      - "EV000050"
+  orderNumber:
+    type: integer
+    description: Display order of this value within the class-feature combination.
+    minimum: 1
+    examples:
+      - 1
+  portcode:
+    type:
+      - integer
+      - "null"
+    description: |
+      Port code. Null or 0 = class-level feature value, non-zero = port-specific.
+    examples:
+      - null
+      - 1
+examples:
+  - classCode: "MC000001"
+    classVersion: 2
+    featureCode: "EF000100"
+    valueCode: "EV000050"
+    orderNumber: 1
+    portcode: null

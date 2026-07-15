@@ -1,0 +1,39 @@
+type: object
+description: |
+  Flat representation of an ETIM value for bulk retrieval.
+required:
+  - code
+  - descriptionEn
+  - description
+  - deprecated
+properties:
+  code:
+    type: string
+    description: ETIM value code.
+    pattern: "^EV[0-9]{6}$"
+    minLength: 8
+    maxLength: 8
+    examples:
+      - "EV000001"
+  descriptionEn:
+    type: string
+    description: Value description in ETIM English.
+    examples:
+      - "White"
+  description:
+    type:
+      - string
+      - "null"
+    description: Value description in the requested language.
+    examples:
+      - "Wit"
+  deprecated:
+    type: boolean
+    description: Whether this value is deprecated.
+    examples:
+      - false
+examples:
+  - code: "EV000028"
+    descriptionEn: "White"
+    description: "Wit"
+    deprecated: false

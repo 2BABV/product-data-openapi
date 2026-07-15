@@ -1,0 +1,28 @@
+get:
+  operationId: getBulkEtimModellingClassFeatureValues
+  tags:
+    - ETIM bulk
+  summary: List ETIM modelling class-feature-value relations
+  description: |
+    Retrieve all class-feature-value records for ETIM modelling classes (MC) in bulk.
+
+    Extends regular class-feature-values with the portcode discriminator.
+  parameters:
+    - $ref: ../../../../shared/parameters/query/cursor.yaml
+    - $ref: ../../../../shared/parameters/query/limit.yaml
+    - $ref: ../../parameters/query/etim-release.yaml
+  responses:
+    '200':
+      description: Successfully retrieved data
+      content:
+        application/json:
+          schema:
+            $ref: ../../schemas/responses/BulkModellingClassFeatureValuesResponse.yaml
+    '400':
+      $ref: ../../../../shared/responses/400-bad-request.yaml
+    '401':
+      $ref: ../../../../shared/responses/401-unauthorized.yaml
+    '403':
+      $ref: ../../../../shared/responses/403-forbidden.yaml
+    '500':
+      $ref: ../../../../shared/responses/500-internal-server-error.yaml

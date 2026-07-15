@@ -1,0 +1,33 @@
+get:
+  operationId: getEtimClassVersions
+  tags:
+    - ETIM single
+  summary: List ETIM class versions
+  description: |
+    Retrieve all available versions for a specific ETIM class code.
+
+    Returns an array of version summaries including version number, status,
+    mutation date, revision, and release membership. Ordered by version number descending.
+
+    Use this to discover which versions exist before fetching full details via
+    `GET /etim/classes/{classCode}?version=N`.
+  parameters:
+    - $ref: ../parameters/path/etim-class-code.yaml
+    - $ref: ../parameters/query/etim-language.yaml
+  responses:
+    '200':
+      description: Versions found and returned successfully
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/responses/ClassVersionsResponse.yaml
+    '400':
+      $ref: ../../../shared/responses/400-bad-request.yaml
+    '401':
+      $ref: ../../../shared/responses/401-unauthorized.yaml
+    '403':
+      $ref: ../../../shared/responses/403-forbidden.yaml
+    '404':
+      $ref: ../../../shared/responses/404-not-found.yaml
+    '500':
+      $ref: ../../../shared/responses/500-internal-server-error.yaml

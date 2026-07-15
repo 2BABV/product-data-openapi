@@ -1,0 +1,43 @@
+get:
+  operationId: getEtimModellingClass
+  tags:
+    - ETIM single
+  summary: Get ETIM modelling class
+  description: |
+    Retrieve a single ETIM modelling class by its code with full details including
+    nested features with port assignments, variable-axis units, ports with connection types,
+    and linked product classes.
+
+    **Lookup behavior:**
+    - Code only (no version, no release) → latest published version (DYNAMIC release)
+    - Code + `version` → that specific version or 404
+    - Code + `release` → the version included in that release or 404
+
+    The `language` parameter controls the language of description fields and synonyms.
+    Default language is English (EN).
+
+    No embedded translations — use the bulk translation endpoints for multi-language data.
+
+    To retrieve all available versions, use `GET /etim/modelling-classes/{classCode}/versions`.
+  parameters:
+    - $ref: ../parameters/path/etim-modelling-class-code.yaml
+    - $ref: ../parameters/query/etim-version.yaml
+    - $ref: ../parameters/query/etim-release.yaml
+    - $ref: ../parameters/query/etim-language.yaml
+  responses:
+    '200':
+      description: Modelling class found and returned successfully
+      content:
+        application/json:
+          schema:
+            $ref: ../schemas/responses/ModellingClassResponse.yaml
+    '400':
+      $ref: ../../../shared/responses/400-bad-request.yaml
+    '401':
+      $ref: ../../../shared/responses/401-unauthorized.yaml
+    '403':
+      $ref: ../../../shared/responses/403-forbidden.yaml
+    '404':
+      $ref: ../../../shared/responses/404-not-found.yaml
+    '500':
+      $ref: ../../../shared/responses/500-internal-server-error.yaml

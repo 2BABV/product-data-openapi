@@ -1,0 +1,26 @@
+get:
+  operationId: getBulkEtimModellingGroups
+  tags:
+    - ETIM bulk
+  summary: List ETIM modelling groups
+  description: |
+    Retrieve all ETIM modelling groups in bulk with cursor-based pagination.
+  parameters:
+    - $ref: ../../../../shared/parameters/query/cursor.yaml
+    - $ref: ../../../../shared/parameters/query/limit.yaml
+    - $ref: ../../parameters/query/etim-language.yaml
+  responses:
+    '200':
+      description: Successfully retrieved data
+      content:
+        application/json:
+          schema:
+            $ref: ../../schemas/responses/BulkModellingGroupsResponse.yaml
+    '400':
+      $ref: ../../../../shared/responses/400-bad-request.yaml
+    '401':
+      $ref: ../../../../shared/responses/401-unauthorized.yaml
+    '403':
+      $ref: ../../../../shared/responses/403-forbidden.yaml
+    '500':
+      $ref: ../../../../shared/responses/500-internal-server-error.yaml

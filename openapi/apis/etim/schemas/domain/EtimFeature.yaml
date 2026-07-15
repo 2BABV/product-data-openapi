@@ -1,0 +1,71 @@
+type: object
+description: |
+  Flat representation of an ETIM feature for bulk retrieval.
+required:
+  - code
+  - type
+  - descriptionEn
+  - description
+  - deprecated
+  - status
+  - mutationDate
+  - revision
+properties:
+  code:
+    type: string
+    description: ETIM feature code.
+    pattern: "^EF[0-9]{6}$"
+    minLength: 8
+    maxLength: 8
+    examples:
+      - "EF000001"
+  type:
+    type: string
+    description: |
+      Feature data type.
+      Alphanumeric, Numeric, Range, or Logical.
+    examples:
+      - "Alphanumeric"
+  descriptionEn:
+    type: string
+    description: Feature description in ETIM English.
+    examples:
+      - "Colour"
+  description:
+    type:
+      - string
+      - "null"
+    description: Feature description in the requested language.
+    examples:
+      - "Kleur"
+  deprecated:
+    type: boolean
+    description: Whether this feature is deprecated.
+    examples:
+      - false
+  status:
+    type: integer
+    description: Feature lifecycle status code.
+    examples:
+      - 5
+  mutationDate:
+    type: string
+    format: date-time
+    description: Date and time of last mutation.
+    examples:
+      - "2024-03-20T08:00:00Z"
+  revision:
+    type: integer
+    description: Revision number.
+    minimum: 0
+    examples:
+      - 2
+examples:
+  - code: "EF000007"
+    type: "Alphanumeric"
+    descriptionEn: "Colour"
+    description: "Kleur"
+    deprecated: false
+    status: 5
+    mutationDate: "2024-03-20T08:00:00Z"
+    revision: 2

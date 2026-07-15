@@ -1,0 +1,203 @@
+type: object
+description: |
+  Detailed ETIM modelling class representation for single-entity lookup.
+  Contains full nested structure including features with values and port assignments,
+  linked product classes, and ports.
+  No embedded translations — use the translation endpoints instead.
+required:
+  - code
+  - version
+  - groupCode
+  - status
+  - descriptionEn
+  - description
+  - synonyms
+  - mutationDate
+  - revision
+  - dimensionalDrawingSvgUrl
+  - releases
+  - features
+  - ports
+  - linkedProductClasses
+properties:
+  code:
+    type: string
+    description: ETIM modelling class code.
+    pattern: "^MC[0-9]{6}$"
+    examples:
+      - "MC000001"
+  version:
+    type: integer
+    description: Class version number.
+    minimum: 1
+    examples:
+      - 2
+  groupCode:
+    type: string
+    description: Code of the modelling group this class belongs to.
+    pattern: "^MG[0-9]{6}$"
+    examples:
+      - "MG000001"
+  groupDescriptionEn:
+    type: string
+    description: Modelling group description in ETIM English.
+    examples:
+      - "Valves"
+  status:
+    type: integer
+    description: |
+      Class lifecycle status code.
+      2 = Under construction, 3 = Ready for publication, 5 = Published, 9 = Deleted.
+    examples:
+      - 5
+  descriptionEn:
+    type: string
+    description: Class description in ETIM English.
+    examples:
+      - "Valve body"
+  description:
+    type:
+      - string
+      - "null"
+    description: Class description in the requested language.
+    examples:
+      - "Kleplichaam"
+  synonyms:
+    type: array
+    description: Synonyms in the requested language.
+    items:
+      type: string
+    examples:
+      - []
+  mutationDate:
+    type: string
+    format: date-time
+    description: Date and time of last mutation.
+    examples:
+      - "2024-05-01T12:00:00Z"
+  revision:
+    type: integer
+    description: Revision number.
+    minimum: 0
+    examples:
+      - 1
+  dimensionalDrawingSvgUrl:
+    type:
+      - string
+      - "null"
+    format: uri
+    description: URL to the dimensional drawing SVG.
+    examples:
+      - "https://cdn.etim-international.com/drawings/MC000001.svg"
+  releases:
+    type: array
+    description: ETIM releases this modelling class is included in.
+    items:
+      type: string
+    examples:
+      - ["ETIM-10.0", "DYNAMIC"]
+  features:
+    type: array
+    description: |
+      Features assigned to this modelling class (class-level and port-level).
+      Port-level features have a non-null portcode.
+    items:
+      $ref: ./EtimModellingClassDetailFeature.yaml
+  ports:
+    type: array
+    description: Ports defined on this modelling class.
+    items:
+      type: object
+      required:
+        - portcode
+        - connectionTypes
+      properties:
+        portcode:
+          type: integer
+          description: Port identifier number.
+          examples:
+            - 1
+        connectionTypes:
+          type: array
+          description: Connection type classes linked to this port.
+          items:
+            type: object
+            required:
+              - code
+              - version
+              - descriptionEn
+            properties:
+              code:
+                type: string
+                pattern: "^EC[0-9]{6}$"
+                examples:
+                  - "EC001234"
+              version:
+                type: integer
+                minimum: 1
+                examples:
+                  - 1
+              descriptionEn:
+                type: string
+                examples:
+                  - "Threaded connection"
+  linkedProductClasses:
+    type: array
+    description: Regular product classes linked to this modelling class.
+    items:
+      type: object
+      required:
+        - code
+        - version
+        - descriptionEn
+      properties:
+        code:
+          type: string
+          pattern: "^EC[0-9]{6}$"
+          examples:
+            - "EC002714"
+        version:
+          type: integer
+          minimum: 1
+          examples:
+            - 4
+        descriptionEn:
+          type: string
+          examples:
+            - "Socket outlet"
+examples:
+  - code: "MC000001"
+    version: 2
+    groupCode: "MG000001"
+    groupDescriptionEn: "Valves"
+    status: 5
+    descriptionEn: "Valve body"
+    description: "Kleplichaam"
+    synonyms: []
+    mutationDate: "2024-05-01T12:00:00Z"
+    revision: 1
+    dimensionalDrawingSvgUrl: "https://cdn.etim-international.com/drawings/MC000001.svg"
+    releases: ["ETIM-10.0", "DYNAMIC"]
+    features:
+      - featureCode: "EF000100"
+        descriptionEn: "Nominal diameter"
+        description: "Nominale diameter"
+        type: "Numeric"
+        orderNumber: 1
+        unitCode: "EU000001"
+        unitVariableAxisCode: "EU000020"
+        featureGroupCode: "EFG00001"
+        deprecated: false
+        portcode: null
+        dimensionalDrawingCode: "D1"
+        values: []
+    ports:
+      - portcode: 1
+        connectionTypes:
+          - code: "EC001234"
+            version: 1
+            descriptionEn: "Threaded connection"
+    linkedProductClasses:
+      - code: "EC002714"
+        version: 4
+        descriptionEn: "Socket outlet"

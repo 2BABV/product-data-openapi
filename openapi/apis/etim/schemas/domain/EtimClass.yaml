@@ -1,0 +1,101 @@
+type: object
+description: |
+  Flat representation of an ETIM class for bulk retrieval.
+  Contains the class code, version, group assignment, lifecycle metadata, and release membership.
+required:
+  - code
+  - version
+  - groupCode
+  - status
+  - descriptionEn
+  - description
+  - mutationDate
+  - revision
+  - deprecated
+  - sectors
+  - releases
+properties:
+  code:
+    type: string
+    description: ETIM class code.
+    pattern: "^EC[0-9]{6}$"
+    minLength: 8
+    maxLength: 8
+    examples:
+      - "EC000001"
+  version:
+    type: integer
+    description: Class version number.
+    minimum: 1
+    examples:
+      - 4
+  groupCode:
+    type: string
+    description: Code of the ETIM group this class belongs to.
+    pattern: "^EG[0-9]{6}$"
+    examples:
+      - "EG000001"
+  status:
+    type: integer
+    description: |
+      Class lifecycle status code.
+      2 = Under construction, 3 = Ready for publication, 5 = Published, 9 = Deleted.
+    examples:
+      - 5
+  descriptionEn:
+    type: string
+    description: Class description in ETIM English (always present as stable fallback).
+    examples:
+      - "Socket outlet"
+  description:
+    type:
+      - string
+      - "null"
+    description: Class description in the requested language. Null if translation is unavailable.
+    examples:
+      - "Wandcontactdoos"
+  mutationDate:
+    type: string
+    format: date-time
+    description: Date and time of last mutation.
+    examples:
+      - "2024-06-15T10:30:00Z"
+  revision:
+    type: integer
+    description: Revision number within the current version.
+    minimum: 0
+    examples:
+      - 3
+  deprecated:
+    type: boolean
+    description: Whether this class is deprecated (derived from status = 9).
+    examples:
+      - false
+  sectors:
+    type: array
+    description: |
+      Industry sectors this class belongs to.
+      E = Electrical, B = Building, M = Mechanical, T = Technical, W = HVAC/Plumbing.
+    items:
+      type: string
+    examples:
+      - ["E", "B"]
+  releases:
+    type: array
+    description: ETIM releases this class is included in.
+    items:
+      type: string
+    examples:
+      - ["ETIM-10.0", "ETIM-9.0", "DYNAMIC"]
+examples:
+  - code: "EC002714"
+    version: 4
+    groupCode: "EG000017"
+    status: 5
+    descriptionEn: "Socket outlet"
+    description: "Wandcontactdoos"
+    mutationDate: "2024-06-15T10:30:00Z"
+    revision: 3
+    deprecated: false
+    sectors: ["E", "B"]
+    releases: ["ETIM-10.0", "ETIM-9.0", "DYNAMIC"]

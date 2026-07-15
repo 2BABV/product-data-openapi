@@ -1,0 +1,8 @@
+type: object
+description: |
+  Response containing a single ETIM modelling class with full details.
+required:
+  - data
+properties:
+  data:
+    $ref: ./ModellingClassResponseData.yaml

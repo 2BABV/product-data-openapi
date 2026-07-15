@@ -35,6 +35,12 @@ apis:
       no-unused-components: error
       no-invalid-media-type-examples: error
 
+  etim@v1:
+    root: ./apis/etim/openapi.yaml
+    rules:
+      no-unused-components: error
+      no-invalid-media-type-examples: error
+
 # Shared linting rules for all APIs
 rules:
   operation-description: error

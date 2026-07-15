@@ -1,0 +1,55 @@
+type: object
+description: |
+  Flat representation of an ETIM unit for bulk retrieval.
+required:
+  - code
+  - descriptionEn
+  - description
+  - abbreviation
+  - abbreviationEn
+  - deprecated
+properties:
+  code:
+    type: string
+    description: ETIM unit code.
+    pattern: "^EU[0-9]{6}$"
+    minLength: 8
+    maxLength: 8
+    examples:
+      - "EU000001"
+  descriptionEn:
+    type: string
+    description: Unit description in ETIM English.
+    examples:
+      - "Millimetre"
+  description:
+    type:
+      - string
+      - "null"
+    description: Unit description in the requested language.
+    examples:
+      - "Millimeter"
+  abbreviation:
+    type:
+      - string
+      - "null"
+    description: Unit abbreviation in the requested language.
+    examples:
+      - "mm"
+  abbreviationEn:
+    type: string
+    description: Unit abbreviation in ETIM English.
+    examples:
+      - "mm"
+  deprecated:
+    type: boolean
+    description: Whether this unit is deprecated.
+    examples:
+      - false
+examples:
+  - code: "EU000001"
+    descriptionEn: "Millimetre"
+    description: "Millimeter"
+    abbreviation: "mm"
+    abbreviationEn: "mm"
+    deprecated: false

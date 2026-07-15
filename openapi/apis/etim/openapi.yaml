@@ -1,0 +1,265 @@
+openapi: 3.1.0
+info:
+  title: ETIM API
+  version: 3.0.0
+  description: |
+    API for accessing the ETIM classification system.
+
+    ## Features
+
+    - Bulk data retrieval for all ETIM entity types with cursor-based pagination
+    - Separate translation endpoints for efficient multi-language sync
+    - Single entity lookup for classes and modelling classes
+    
+    ## Data Model
+
+    ETIM classification entities: classes, features, feature-groups, groups,
+    modelling-classes, modelling-groups, units, values, and their relations.
+    
+    Translations are served separately from entity data to support efficient
+    incremental sync per language.
+  contact:
+    name: ETIM International
+    email: info@etim-international.com
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+
+servers:
+  - url: https://{host}/api/v3
+    description: ETIM API v3
+    variables:
+      host:
+        default: etimapi.etim-international.com
+        description: >-
+          ETIM API hostname.
+          Production: etimapi.etim-international.com
+          Test: etimapi-test.etim-international.com
+        enum:
+          - etimapi.etim-international.com
+          - etimapi-test.etim-international.com
+
+tags:
+  - name: ETIM single
+    description: Single entity lookup operations
+    x-displayName: Single
+  - name: ETIM bulk
+    description: Bulk data retrieval operations with cursor-based pagination for high-volume data exchange
+    x-displayName: Bulk
+
+x-tagGroups:
+  - name: ETIM
+    tags:
+      - ETIM single
+      - ETIM bulk
+
+paths:
+  # Single entity endpoints
+  /etim/classes/{classCode}:
+    $ref: ./paths/classes.yaml
+  /etim/classes/{classCode}/versions:
+    $ref: ./paths/classes-versions.yaml
+  /etim/modelling-classes/{classCode}:
+    $ref: ./paths/modelling-classes.yaml
+  /etim/modelling-classes/{classCode}/versions:
+    $ref: ./paths/modelling-classes-versions.yaml
+
+  # Bulk entity endpoints
+  /etim/bulk/classes:
+    $ref: ./paths/bulk/classes.yaml
+  /etim/bulk/features:
+    $ref: ./paths/bulk/features.yaml
+  /etim/bulk/feature-groups:
+    $ref: ./paths/bulk/feature-groups.yaml
+  /etim/bulk/groups:
+    $ref: ./paths/bulk/groups.yaml
+  /etim/bulk/modelling-classes:
+    $ref: ./paths/bulk/modelling-classes.yaml
+  /etim/bulk/modelling-groups:
+    $ref: ./paths/bulk/modelling-groups.yaml
+  /etim/bulk/units:
+    $ref: ./paths/bulk/units.yaml
+  /etim/bulk/values:
+    $ref: ./paths/bulk/values.yaml
+  /etim/bulk/class-features:
+    $ref: ./paths/bulk/class-features.yaml
+  /etim/bulk/class-feature-values:
+    $ref: ./paths/bulk/class-feature-values.yaml
+  /etim/bulk/modelling-class-features:
+    $ref: ./paths/bulk/modelling-class-features.yaml
+  /etim/bulk/modelling-class-feature-values:
+    $ref: ./paths/bulk/modelling-class-feature-values.yaml
+
+  # Bulk translation endpoints
+  /etim/bulk/classes/translations:
+    $ref: ./paths/bulk/classes-translations.yaml
+  /etim/bulk/features/translations:
+    $ref: ./paths/bulk/features-translations.yaml
+  /etim/bulk/feature-groups/translations:
+    $ref: ./paths/bulk/feature-groups-translations.yaml
+  /etim/bulk/groups/translations:
+    $ref: ./paths/bulk/groups-translations.yaml
+  /etim/bulk/modelling-classes/translations:
+    $ref: ./paths/bulk/modelling-classes-translations.yaml
+  /etim/bulk/modelling-groups/translations:
+    $ref: ./paths/bulk/modelling-groups-translations.yaml
+  /etim/bulk/units/translations:
+    $ref: ./paths/bulk/units-translations.yaml
+  /etim/bulk/values/translations:
+    $ref: ./paths/bulk/values-translations.yaml
+
+components:
+  schemas:
+    # Shared
+    ProblemDetails:
+      $ref: ../../shared/schemas/common/ProblemDetails.yaml
+    CursorPaginationMetadata:
+      $ref: ../../shared/schemas/common/CursorPaginationMetadata.yaml
+
+    # Domain schemas - entities
+    EtimClass:
+      $ref: ./schemas/domain/EtimClass.yaml
+    EtimFeature:
+      $ref: ./schemas/domain/EtimFeature.yaml
+    EtimFeatureGroup:
+      $ref: ./schemas/domain/EtimFeatureGroup.yaml
+    EtimGroup:
+      $ref: ./schemas/domain/EtimGroup.yaml
+    EtimModellingClass:
+      $ref: ./schemas/domain/EtimModellingClass.yaml
+    EtimModellingGroup:
+      $ref: ./schemas/domain/EtimModellingGroup.yaml
+    EtimUnit:
+      $ref: ./schemas/domain/EtimUnit.yaml
+    EtimValue:
+      $ref: ./schemas/domain/EtimValue.yaml
+    EtimClassFeature:
+      $ref: ./schemas/domain/EtimClassFeature.yaml
+    EtimClassFeatureValue:
+      $ref: ./schemas/domain/EtimClassFeatureValue.yaml
+    EtimModellingClassFeature:
+      $ref: ./schemas/domain/EtimModellingClassFeature.yaml
+    EtimModellingClassFeatureValue:
+      $ref: ./schemas/domain/EtimModellingClassFeatureValue.yaml
+
+    # Domain schemas - translations
+    EtimTranslation:
+      $ref: ./schemas/domain/EtimTranslation.yaml
+    EtimClassTranslation:
+      $ref: ./schemas/domain/EtimClassTranslation.yaml
+    EtimUnitTranslation:
+      $ref: ./schemas/domain/EtimUnitTranslation.yaml
+
+    # Domain schemas - detail (single endpoints)
+    EtimClassDetail:
+      $ref: ./schemas/domain/EtimClassDetail.yaml
+    EtimClassDetailFeature:
+      $ref: ./schemas/domain/EtimClassDetailFeature.yaml
+    EtimModellingClassDetail:
+      $ref: ./schemas/domain/EtimModellingClassDetail.yaml
+    EtimModellingClassDetailFeature:
+      $ref: ./schemas/domain/EtimModellingClassDetailFeature.yaml
+
+    # Response schemas - bulk entities
+    BulkClassesResponse:
+      $ref: ./schemas/responses/BulkClassesResponse.yaml
+    BulkFeaturesResponse:
+      $ref: ./schemas/responses/BulkFeaturesResponse.yaml
+    BulkFeatureGroupsResponse:
+      $ref: ./schemas/responses/BulkFeatureGroupsResponse.yaml
+    BulkGroupsResponse:
+      $ref: ./schemas/responses/BulkGroupsResponse.yaml
+    BulkModellingClassesResponse:
+      $ref: ./schemas/responses/BulkModellingClassesResponse.yaml
+    BulkModellingGroupsResponse:
+      $ref: ./schemas/responses/BulkModellingGroupsResponse.yaml
+    BulkUnitsResponse:
+      $ref: ./schemas/responses/BulkUnitsResponse.yaml
+    BulkValuesResponse:
+      $ref: ./schemas/responses/BulkValuesResponse.yaml
+    BulkClassFeaturesResponse:
+      $ref: ./schemas/responses/BulkClassFeaturesResponse.yaml
+    BulkClassFeatureValuesResponse:
+      $ref: ./schemas/responses/BulkClassFeatureValuesResponse.yaml
+    BulkModellingClassFeaturesResponse:
+      $ref: ./schemas/responses/BulkModellingClassFeaturesResponse.yaml
+    BulkModellingClassFeatureValuesResponse:
+      $ref: ./schemas/responses/BulkModellingClassFeatureValuesResponse.yaml
+
+    # Response schemas - bulk translations
+    BulkClassesTranslationsResponse:
+      $ref: ./schemas/responses/BulkClassesTranslationsResponse.yaml
+    BulkFeaturesTranslationsResponse:
+      $ref: ./schemas/responses/BulkFeaturesTranslationsResponse.yaml
+    BulkFeatureGroupsTranslationsResponse:
+      $ref: ./schemas/responses/BulkFeatureGroupsTranslationsResponse.yaml
+    BulkGroupsTranslationsResponse:
+      $ref: ./schemas/responses/BulkGroupsTranslationsResponse.yaml
+    BulkModellingClassesTranslationsResponse:
+      $ref: ./schemas/responses/BulkModellingClassesTranslationsResponse.yaml
+    BulkModellingGroupsTranslationsResponse:
+      $ref: ./schemas/responses/BulkModellingGroupsTranslationsResponse.yaml
+    BulkUnitsTranslationsResponse:
+      $ref: ./schemas/responses/BulkUnitsTranslationsResponse.yaml
+    BulkValuesTranslationsResponse:
+      $ref: ./schemas/responses/BulkValuesTranslationsResponse.yaml
+
+    # Response schemas - single
+    ClassResponse:
+      $ref: ./schemas/responses/ClassResponse.yaml
+    ClassResponseData:
+      $ref: ./schemas/responses/ClassResponseData.yaml
+    ClassVersionsResponse:
+      $ref: ./schemas/responses/ClassVersionsResponse.yaml
+    ModellingClassVersionsResponse:
+      $ref: ./schemas/responses/ModellingClassVersionsResponse.yaml
+    ModellingClassResponse:
+      $ref: ./schemas/responses/ModellingClassResponse.yaml
+    ModellingClassResponseData:
+      $ref: ./schemas/responses/ModellingClassResponseData.yaml
+
+  parameters:
+    EtimClassCode:
+      $ref: ./parameters/path/etim-class-code.yaml
+    EtimModellingClassCode:
+      $ref: ./parameters/path/etim-modelling-class-code.yaml
+    EtimVersion:
+      $ref: ./parameters/query/etim-version.yaml
+    EtimLanguage:
+      $ref: ./parameters/query/etim-language.yaml
+    EtimLanguages:
+      $ref: ./parameters/query/etim-languages.yaml
+    EtimRelease:
+      $ref: ./parameters/query/etim-release.yaml
+    Cursor:
+      $ref: ../../shared/parameters/query/cursor.yaml
+    Limit:
+      $ref: ../../shared/parameters/query/limit.yaml
+
+  responses:
+    BadRequest:
+      $ref: ../../shared/responses/400-bad-request.yaml
+    Unauthorized:
+      $ref: ../../shared/responses/401-unauthorized.yaml
+    Forbidden:
+      $ref: ../../shared/responses/403-forbidden.yaml
+    NotFound:
+      $ref: ../../shared/responses/404-not-found.yaml
+    InternalServerError:
+      $ref: ../../shared/responses/500-internal-server-error.yaml
+
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      description: |
+        OAuth 2.0 Client Credentials grant (RFC 6749 §4.4).
+        Supports both client_secret and client_assertion (RFC 7523) authentication.
+      flows:
+        clientCredentials:
+          tokenUrl: https://identity.2ba.nl/connect/token
+          scopes:
+            read:etim: Grants read access to ETIM classification data
+
+security:
+  - oauth2:
+      - read:etim

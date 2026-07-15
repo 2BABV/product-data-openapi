@@ -1,0 +1,47 @@
+type: object
+description: |
+  Flat relation record linking a value to a class-feature combination for regular ETIM classes (EC).
+  Each record represents one valid value for a specific feature within a class version.
+required:
+  - classCode
+  - classVersion
+  - featureCode
+  - valueCode
+  - orderNumber
+properties:
+  classCode:
+    type: string
+    description: ETIM class code.
+    pattern: "^EC[0-9]{6}$"
+    examples:
+      - "EC002714"
+  classVersion:
+    type: integer
+    description: Class version number.
+    minimum: 1
+    examples:
+      - 4
+  featureCode:
+    type: string
+    description: ETIM feature code.
+    pattern: "^EF[0-9]{6}$"
+    examples:
+      - "EF000007"
+  valueCode:
+    type: string
+    description: ETIM value code.
+    pattern: "^EV[0-9]{6}$"
+    examples:
+      - "EV000028"
+  orderNumber:
+    type: integer
+    description: Display order of this value within the class-feature combination.
+    minimum: 1
+    examples:
+      - 1
+examples:
+  - classCode: "EC002714"
+    classVersion: 4
+    featureCode: "EF000007"
+    valueCode: "EV000028"
+    orderNumber: 1

@@ -1,0 +1,12 @@
+name: classCode
+in: path
+required: true
+description: ETIM class code (e.g., "EC000001").
+schema:
+  type: string
+  pattern: "^EC[0-9]{6}$"
+  minLength: 8
+  maxLength: 8
+  examples:
+    - "EC000001"
+    - "EC002714"

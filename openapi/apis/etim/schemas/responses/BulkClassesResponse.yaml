@@ -1,0 +1,14 @@
+type: object
+description: |
+  Bulk response containing ETIM classes with cursor-based pagination.
+required:
+  - data
+  - meta
+properties:
+  data:
+    type: array
+    description: Array of ETIM classes.
+    items:
+      $ref: ../domain/EtimClass.yaml
+  meta:
+    $ref: ../../../../shared/schemas/common/CursorPaginationMetadata.yaml

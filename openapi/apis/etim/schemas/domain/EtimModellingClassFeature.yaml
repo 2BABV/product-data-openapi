@@ -1,0 +1,137 @@
+type: object
+description: |
+  Flat relation record linking a feature to an ETIM modelling class (MC).
+  Extends the regular class-feature with modelling-specific fields: portcode,
+  variable-axis units, and dimensional drawing code.
+required:
+  - classCode
+  - classVersion
+  - featureCode
+  - orderNumber
+  - unitCode
+  - unitImperialCode
+  - unitVariableAxisCode
+  - unitVariableAxisImperialCode
+  - featureGroupCode
+  - type
+  - deprecated
+  - local
+  - portcode
+  - dimensionalDrawingCode
+properties:
+  classCode:
+    type: string
+    description: ETIM modelling class code.
+    pattern: "^MC[0-9]{6}$"
+    examples:
+      - "MC000001"
+  classVersion:
+    type: integer
+    description: Class version number.
+    minimum: 1
+    examples:
+      - 2
+  featureCode:
+    type: string
+    description: ETIM feature code.
+    pattern: "^EF[0-9]{6}$"
+    examples:
+      - "EF000100"
+  orderNumber:
+    type: integer
+    description: Display order of this feature within the class.
+    minimum: 1
+    examples:
+      - 1
+  unitCode:
+    type:
+      - string
+      - "null"
+    description: ETIM unit code (null for non-numeric features).
+    pattern: "^EU[0-9]{6}$"
+    examples:
+      - "EU000001"
+      - null
+  unitImperialCode:
+    type:
+      - string
+      - "null"
+    description: Imperial unit code alternative.
+    pattern: "^EU[0-9]{6}$"
+    examples:
+      - null
+  unitVariableAxisCode:
+    type:
+      - string
+      - "null"
+    description: Variable axis unit code (modelling-specific).
+    pattern: "^EU[0-9]{6}$"
+    examples:
+      - "EU000020"
+      - null
+  unitVariableAxisImperialCode:
+    type:
+      - string
+      - "null"
+    description: Variable axis imperial unit code (modelling-specific).
+    pattern: "^EU[0-9]{6}$"
+    examples:
+      - null
+  featureGroupCode:
+    type:
+      - string
+      - "null"
+    description: Feature group code for categorization.
+    pattern: "^EFG[0-9]{5}$"
+    examples:
+      - "EFG00001"
+      - null
+  type:
+    type: string
+    description: Feature data type (Alphanumeric, Numeric, Range, Logical).
+    examples:
+      - "Numeric"
+  deprecated:
+    type: boolean
+    description: Whether this feature assignment is deprecated.
+    examples:
+      - false
+  local:
+    type: boolean
+    description: Whether this is a local (non-international) feature.
+    examples:
+      - false
+  portcode:
+    type:
+      - integer
+      - "null"
+    description: |
+      Port code indicating which port this feature belongs to.
+      Null or 0 = class-level feature, non-zero = port-specific feature.
+    examples:
+      - null
+      - 1
+      - 2
+  dimensionalDrawingCode:
+    type:
+      - string
+      - "null"
+    description: Dimensional drawing reference code for this feature in the modelling class.
+    examples:
+      - "D1"
+      - null
+examples:
+  - classCode: "MC000001"
+    classVersion: 2
+    featureCode: "EF000100"
+    orderNumber: 1
+    unitCode: "EU000001"
+    unitImperialCode: null
+    unitVariableAxisCode: "EU000020"
+    unitVariableAxisImperialCode: null
+    featureGroupCode: "EFG00001"
+    type: "Numeric"
+    deprecated: false
+    local: false
+    portcode: null
+    dimensionalDrawingCode: "D1"

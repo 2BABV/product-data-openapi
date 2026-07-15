@@ -1,0 +1,3 @@
+description: |
+  Single ETIM class response data. Wraps the detailed class representation.
+$ref: ../domain/EtimClassDetail.yaml
