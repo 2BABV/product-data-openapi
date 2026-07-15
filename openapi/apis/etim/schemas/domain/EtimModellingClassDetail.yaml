@@ -187,7 +187,6 @@ examples:
         unitCode: "EU000001"
         unitVariableAxisCode: "EU000020"
         featureGroupCode: "EFG00001"
-        deprecated: false
         portcode: null
         dimensionalDrawingCode: "D1"
         values: []

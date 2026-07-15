@@ -9,7 +9,6 @@ required:
   - orderNumber
   - unitCode
   - featureGroupCode
-  - deprecated
   - values
 properties:
   featureCode:
@@ -65,11 +64,6 @@ properties:
     pattern: "^EFG[0-9]{5}$"
     examples:
       - "EFG00001"
-  deprecated:
-    type: boolean
-    description: Whether this feature assignment is deprecated.
-    examples:
-      - false
   values:
     type: array
     description: Allowed values for this feature within the class.
@@ -110,7 +104,6 @@ examples:
     unitCode: null
     unitImperialCode: null
     featureGroupCode: "EFG00001"
-    deprecated: false
     values:
       - valueCode: "EV000028"
         descriptionEn: "White"

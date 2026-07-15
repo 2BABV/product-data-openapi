@@ -14,7 +14,6 @@ required:
   - synonyms
   - mutationDate
   - revision
-  - deprecated
   - sectors
   - releases
   - features
@@ -81,11 +80,6 @@ properties:
     minimum: 0
     examples:
       - 3
-  deprecated:
-    type: boolean
-    description: Whether this class is deprecated.
-    examples:
-      - false
   sectors:
     type: array
     description: Industry sectors (E, B, M, T, W).
@@ -140,7 +134,6 @@ examples:
     synonyms: ["Stopcontact"]
     mutationDate: "2024-06-15T10:30:00Z"
     revision: 3
-    deprecated: false
     sectors: ["E", "B"]
     releases: ["ETIM-10.0", "ETIM-9.0", "DYNAMIC"]
     features:
@@ -151,7 +144,6 @@ examples:
         orderNumber: 1
         unitCode: null
         featureGroupCode: "EFG00001"
-        deprecated: false
         values:
           - valueCode: "EV000028"
             descriptionEn: "White"

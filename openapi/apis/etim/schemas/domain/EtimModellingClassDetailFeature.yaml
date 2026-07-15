@@ -10,7 +10,6 @@ required:
   - orderNumber
   - unitCode
   - featureGroupCode
-  - deprecated
   - portcode
   - dimensionalDrawingCode
   - values
@@ -84,11 +83,6 @@ properties:
     pattern: "^EFG[0-9]{5}$"
     examples:
       - "EFG00001"
-  deprecated:
-    type: boolean
-    description: Whether this feature assignment is deprecated.
-    examples:
-      - false
   portcode:
     type:
       - integer
@@ -147,7 +141,6 @@ examples:
     unitVariableAxisCode: "EU000020"
     unitVariableAxisImperialCode: null
     featureGroupCode: "EFG00001"
-    deprecated: false
     portcode: null
     dimensionalDrawingCode: "D1"
     values:
