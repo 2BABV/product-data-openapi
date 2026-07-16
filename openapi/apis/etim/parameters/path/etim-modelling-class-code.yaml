@@ -1,12 +1,12 @@
 name: classCode
 in: path
 required: true
-description: ETIM modelling class code (e.g., "MC000001").
+description: ETIM modelling class code — MC (modelling class) or CT (connection type), e.g., "MC000001" or "CT000001".
 schema:
   type: string
-  pattern: "^MC[0-9]{6}$"
+  pattern: "^(MC|CT)[0-9]{6}$"
   minLength: 8
   maxLength: 8
   examples:
     - "MC000001"
-    - "MC000042"
+    - "CT000001"

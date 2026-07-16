@@ -3,8 +3,8 @@ description: |
   Flat representation of an ETIM modelling group for bulk retrieval.
 required:
   - code
-  - descriptionEn
   - description
+  - mutationDate
 properties:
   code:
     type: string
@@ -14,19 +14,18 @@ properties:
     maxLength: 8
     examples:
       - "MG000001"
-  descriptionEn:
+  description:
     type: string
     description: Modelling group description in ETIM English.
     examples:
       - "Valves"
-  description:
-    type:
-      - string
-      - "null"
-    description: Modelling group description in the requested language.
+  mutationDate:
+    type: string
+    format: date-time
+    description: Date and time of last mutation.
     examples:
-      - "Kleppen"
+      - "2024-05-01T12:00:00Z"
 examples:
   - code: "MG000001"
-    descriptionEn: "Valves"
-    description: "Kleppen"
+    description: "Valves"
+    mutationDate: "2024-05-01T12:00:00Z"

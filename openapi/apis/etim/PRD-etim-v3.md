@@ -52,7 +52,9 @@ Create a new ETIM API v3 that:
 
 13. As an ETIM data consumer, I want to bulk-download translations for feature-groups, groups, modelling-classes, modelling-groups, units, and values filtered by language(s), so that translation sync is independent per entity type.
 
-14. As an ETIM data consumer, I want each flat entity to include `descriptionEn` (always present), a `description` in my requested language, `deprecated` flag (where applicable), `status`, `mutationDate`, and `revision`, so that I have enough metadata for local processing.
+14. As an ETIM data consumer, I want each flat entity to include a `description` in ETIM English (the default language), `deprecated` flag (where applicable), and `mutationDate`, so that I have enough metadata for local processing. Classes and modelling classes additionally include `status` and `revision` (these lifecycle properties do not apply to features, groups, units, or values). Units additionally include `abbreviation` in ETIM English.
+
+15. As an ETIM data consumer, I want features to include a `local` boolean indicating whether a feature is country-specific (local) or international, so that I can distinguish local extensions from the global ETIM standard.
 
 15. As an ETIM data consumer, I want to filter bulk endpoints by ETIM release (e.g. `ETIM-10.0`, `DYNAMIC`), so that I only sync entities relevant to a specific release.
 
@@ -96,18 +98,18 @@ Create a new ETIM API v3 that:
 
 | Endpoint | Description |
 |----------|-------------|
-| `GET /api/v3/etim/bulk/classes` | Flat classes (code, version, groupCode, status, descriptionEn, description, mutationDate, revision, deprecated, sectors) |
-| `GET /api/v3/etim/bulk/features` | Flat features (code, type, descriptionEn, description, deprecated, status, mutationDate, revision) |
-| `GET /api/v3/etim/bulk/feature-groups` | Flat feature-groups (code, descriptionEn, description) |
-| `GET /api/v3/etim/bulk/groups` | Flat groups (code, descriptionEn, description) |
-| `GET /api/v3/etim/bulk/modelling-classes` | Flat modelling-classes (code, version, groupCode, status, descriptionEn, description, mutationDate, revision) |
-| `GET /api/v3/etim/bulk/modelling-groups` | Flat modelling-groups (code, descriptionEn, description) |
-| `GET /api/v3/etim/bulk/units` | Flat units (code, descriptionEn, description, abbreviation, abbreviationEn, deprecated) |
-| `GET /api/v3/etim/bulk/values` | Flat values (code, descriptionEn, description, deprecated) |
-| `GET /api/v3/etim/bulk/class-features` | Flat relation (classCode, classVersion, featureCode, orderNumber, unitCode, unitImperialCode, featureGroupCode, type, deprecated, local) |
-| `GET /api/v3/etim/bulk/class-feature-values` | Flat relation (classCode, classVersion, featureCode, valueCode, orderNumber) |
+| `GET /api/v3/etim/bulk/classes` | Flat classes (code, version, groupCode, status, description, mutationDate, revision, deprecated, sectors) |
+| `GET /api/v3/etim/bulk/features` | Flat features (code, type, description, deprecated, local, mutationDate) |
+| `GET /api/v3/etim/bulk/feature-groups` | Flat feature-groups (code, description, mutationDate) |
+| `GET /api/v3/etim/bulk/groups` | Flat groups (code, description, mutationDate) |
+| `GET /api/v3/etim/bulk/modelling-classes` | Flat modelling-classes (code, version, groupCode, status, description, mutationDate, revision) |
+| `GET /api/v3/etim/bulk/modelling-groups` | Flat modelling-groups (code, description, mutationDate) |
+| `GET /api/v3/etim/bulk/units` | Flat units (code, description, abbreviation, deprecated, mutationDate) |
+| `GET /api/v3/etim/bulk/values` | Flat values (code, description, deprecated, mutationDate) |
+| `GET /api/v3/etim/bulk/class-features` | Flat relation (classCode, classVersion, featureCode, orderNumber, unitCode, unitImperialCode, featureGroupCode, type, deprecated, local, mutationDate) |
+| `GET /api/v3/etim/bulk/class-feature-values` | Flat relation (classCode, classVersion, featureCode, valueCode, orderNumber, mutationDate) |
 
-Common query params for bulk: `cursor`, `limit`, `language` (for description field), `release` (filter by ETIM release).
+Common query params for bulk: `cursor`, `limit`, `release` (filter by ETIM release; only on classes, modelling-classes, and relation endpoints).
 
 #### Bulk Translation Endpoints (Tag: `ETIM bulk`)
 
@@ -158,13 +160,22 @@ Common query params for translations: `cursor`, `limit`, `language` (comma-separ
 ### Schema Design Decisions
 
 - **No embedded translations**: Entity responses do NOT include `translations[]` arrays in nested objects. Translations are fetched separately via dedicated endpoints.
+- **Single English description on bulk endpoints**: All bulk entity endpoints return a single `description` field in ETIM English (EN) — no `language` query param and no `descriptionEn` separate field. Translated descriptions are available only via the dedicated `/translations` endpoints. Units include a single `abbreviation` field (ETIM English).
+- **All entities include `mutationDate`**: Every bulk entity (including relation tables like class-features and class-feature-values) includes a `mutationDate` field for incremental sync support.
 - **Flat relation records**: `class-features` and `class-feature-values` are fully denormalized junction records with all foreign keys inline.
 - **Modelling port inclusion**: Modelling class-feature relations include `portcode` in the flat record to indicate port association (null/0 = class-level feature).
-- **Single-language description**: All entity endpoints accept a `language` query param and return a single `description` field in that language, plus `descriptionEn` as the invariant English label.
-- **Modelling classes stay separate**: Separate endpoint paths for modelling-classes vs regular classes (different entity codes: MC vs EC, different groups: MG vs EG).
+- **Modelling classes include connection types**: Connection type classes (CT) are a subtype of modelling class — they have features and values but no ports. They are served by the same modelling class endpoints (code pattern `^(MC|CT)[0-9]{6}$`). MC classes can reference a CT code on a port.
+- **Modelling classes stay separate**: Separate endpoint paths for modelling-classes vs regular classes (different entity codes: MC/CT vs EC, different groups: MG vs EG).
 - **Response envelope**: All responses wrap content in `data` (with a named `$ref` schema), bulk adds `meta` with `CursorPaginationMetadata`.
 - **Nullable fields**: Use OpenAPI 3.1 `type: ["string", "null"]` pattern.
-- **ETIM code patterns**: Retain regex validation (`^EC[0-9]{6}$`, `^EF[0-9]{6}$`, `^EU[0-9]{6}$`, `^EV[0-9]{6}$`, `^EG[0-9]{6}$`, `^MC[0-9]{6}$`, `^MG[0-9]{6}$`).
+- **ETIM code patterns**: Retain regex validation (`^EC[0-9]{6}$`, `^EF([0-9]{6}|I[0-9]{5}|[A-Z]{2}[0-9]{4})$`, `^EU[0-9]{6}$`, `^EV[0-9]{6}$`, `^EG[0-9]{6}$`, `^(MC|CT)[0-9]{6}$`, `^MG[0-9]{6}$`).
+  - Feature codes have three variants per ETIM xChange V1.1:
+    - `^EF[0-9]{6}$` — international features (e.g., EF000007)
+    - `^EFI[0-9]{5}$` — imperial features with imperial units (e.g., EFI00001)
+    - `^EF[A-Z]{2}[0-9]{4}$` — local features with 2-letter country code (e.g., EFNL9999)
+  - Modelling class codes include connection types: `^(MC|CT)[0-9]{6}$`. Connection types (CT) are modelling classes that have features and values but no ports. MC classes can reference a CT code on a port.
+- **Lifecycle properties scoping**: `status` and `revision` only apply to classes (EC) and modelling classes (MC/CT). Features, groups, units, and values do NOT have these properties. All bulk entities (including relation tables) include `mutationDate` for incremental sync.
+- **Local feature flag**: Features include a `local` boolean to distinguish country-specific features from international ones.
 
 ### Directory Structure
 

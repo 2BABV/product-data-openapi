@@ -18,11 +18,12 @@ required:
   - local
   - portcode
   - dimensionalDrawingCode
+  - mutationDate
 properties:
   classCode:
     type: string
-    description: ETIM modelling class code.
-    pattern: "^MC[0-9]{6}$"
+    description: ETIM modelling class code (MC or CT).
+    pattern: "^(MC|CT)[0-9]{6}$"
     examples:
       - "MC000001"
   classVersion:
@@ -34,7 +35,7 @@ properties:
   featureCode:
     type: string
     description: ETIM feature code.
-    pattern: "^EF[0-9]{6}$"
+    pattern: "^EF([0-9]{6}|I[0-9]{5}|[A-Z]{2}[0-9]{4})$"
     examples:
       - "EF000100"
   orderNumber:
@@ -120,6 +121,12 @@ properties:
     examples:
       - "D1"
       - null
+  mutationDate:
+    type: string
+    format: date-time
+    description: Date and time of last mutation.
+    examples:
+      - "2024-05-01T12:00:00Z"
 examples:
   - classCode: "MC000001"
     classVersion: 2
@@ -135,3 +142,4 @@ examples:
     local: false
     portcode: null
     dimensionalDrawingCode: "D1"
+    mutationDate: "2024-05-01T12:00:00Z"

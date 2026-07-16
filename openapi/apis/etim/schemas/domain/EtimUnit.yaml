@@ -3,11 +3,10 @@ description: |
   Flat representation of an ETIM unit for bulk retrieval.
 required:
   - code
-  - descriptionEn
   - description
   - abbreviation
-  - abbreviationEn
   - deprecated
+  - mutationDate
 properties:
   code:
     type: string
@@ -17,26 +16,12 @@ properties:
     maxLength: 8
     examples:
       - "EU000001"
-  descriptionEn:
+  description:
     type: string
     description: Unit description in ETIM English.
     examples:
       - "Millimetre"
-  description:
-    type:
-      - string
-      - "null"
-    description: Unit description in the requested language.
-    examples:
-      - "Millimeter"
   abbreviation:
-    type:
-      - string
-      - "null"
-    description: Unit abbreviation in the requested language.
-    examples:
-      - "mm"
-  abbreviationEn:
     type: string
     description: Unit abbreviation in ETIM English.
     examples:
@@ -46,10 +31,15 @@ properties:
     description: Whether this unit is deprecated.
     examples:
       - false
+  mutationDate:
+    type: string
+    format: date-time
+    description: Date and time of last mutation.
+    examples:
+      - "2024-02-10T08:00:00Z"
 examples:
   - code: "EU000001"
-    descriptionEn: "Millimetre"
-    description: "Millimeter"
+    description: "Millimetre"
     abbreviation: "mm"
-    abbreviationEn: "mm"
     deprecated: false
+    mutationDate: "2024-02-10T08:00:00Z"

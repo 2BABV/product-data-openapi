@@ -3,8 +3,8 @@ description: |
   Flat representation of an ETIM group for bulk retrieval.
 required:
   - code
-  - descriptionEn
   - description
+  - mutationDate
 properties:
   code:
     type: string
@@ -14,19 +14,18 @@ properties:
     maxLength: 8
     examples:
       - "EG000001"
-  descriptionEn:
+  description:
     type: string
     description: Group description in ETIM English.
     examples:
       - "Installation (low voltage)"
-  description:
-    type:
-      - string
-      - "null"
-    description: Group description in the requested language.
+  mutationDate:
+    type: string
+    format: date-time
+    description: Date and time of last mutation.
     examples:
-      - "Installatie (laagspanning)"
+      - "2024-06-15T10:30:00Z"
 examples:
   - code: "EG000017"
-    descriptionEn: "Installation (low voltage)"
-    description: "Installatie (laagspanning)"
+    description: "Installation (low voltage)"
+    mutationDate: "2024-06-15T10:30:00Z"

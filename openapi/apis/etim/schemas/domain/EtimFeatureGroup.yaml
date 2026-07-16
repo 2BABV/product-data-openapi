@@ -3,8 +3,8 @@ description: |
   Flat representation of an ETIM feature group for bulk retrieval.
 required:
   - code
-  - descriptionEn
   - description
+  - mutationDate
 properties:
   code:
     type: string
@@ -14,19 +14,18 @@ properties:
     maxLength: 8
     examples:
       - "EFG00001"
-  descriptionEn:
+  description:
     type: string
     description: Feature group description in ETIM English.
     examples:
       - "General"
-  description:
-    type:
-      - string
-      - "null"
-    description: Feature group description in the requested language.
+  mutationDate:
+    type: string
+    format: date-time
+    description: Date and time of last mutation.
     examples:
-      - "Algemeen"
+      - "2024-04-10T09:00:00Z"
 examples:
   - code: "EFG00001"
-    descriptionEn: "General"
-    description: "Algemeen"
+    description: "General"
+    mutationDate: "2024-04-10T09:00:00Z"

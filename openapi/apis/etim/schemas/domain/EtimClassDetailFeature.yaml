@@ -14,7 +14,7 @@ properties:
   featureCode:
     type: string
     description: ETIM feature code.
-    pattern: "^EF[0-9]{6}$"
+    pattern: "^EF([0-9]{6}|I[0-9]{5}|[A-Z]{2}[0-9]{4})$"
     examples:
       - "EF000007"
   descriptionEn:

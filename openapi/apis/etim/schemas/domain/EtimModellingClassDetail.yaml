@@ -22,8 +22,8 @@ required:
 properties:
   code:
     type: string
-    description: ETIM modelling class code.
-    pattern: "^MC[0-9]{6}$"
+    description: ETIM modelling class code (MC = modelling class, CT = connection type).
+    pattern: "^(MC|CT)[0-9]{6}$"
     examples:
       - "MC000001"
   version:
@@ -129,9 +129,9 @@ properties:
             properties:
               code:
                 type: string
-                pattern: "^EC[0-9]{6}$"
+                pattern: "^CT[0-9]{6}$"
                 examples:
-                  - "EC001234"
+                  - "CT001234"
               version:
                 type: integer
                 minimum: 1
@@ -193,7 +193,7 @@ examples:
     ports:
       - portcode: 1
         connectionTypes:
-          - code: "EC001234"
+          - code: "CT001234"
             version: 1
             descriptionEn: "Threaded connection"
     linkedProductClasses:

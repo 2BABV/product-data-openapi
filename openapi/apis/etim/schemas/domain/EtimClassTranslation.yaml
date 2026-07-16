@@ -11,7 +11,7 @@ required:
 properties:
   code:
     type: string
-    description: Class code (EC or MC prefix).
+    description: Class code (EC, MC, or CT prefix).
     examples:
       - "EC002714"
   version:

@@ -3,9 +3,9 @@ description: |
   Flat representation of an ETIM value for bulk retrieval.
 required:
   - code
-  - descriptionEn
   - description
   - deprecated
+  - mutationDate
 properties:
   code:
     type: string
@@ -15,25 +15,24 @@ properties:
     maxLength: 8
     examples:
       - "EV000001"
-  descriptionEn:
+  description:
     type: string
     description: Value description in ETIM English.
     examples:
       - "White"
-  description:
-    type:
-      - string
-      - "null"
-    description: Value description in the requested language.
-    examples:
-      - "Wit"
   deprecated:
     type: boolean
     description: Whether this value is deprecated.
     examples:
       - false
+  mutationDate:
+    type: string
+    format: date-time
+    description: Date and time of last mutation.
+    examples:
+      - "2024-03-01T10:00:00Z"
 examples:
   - code: "EV000028"
-    descriptionEn: "White"
-    description: "Wit"
+    description: "White"
     deprecated: false
+    mutationDate: "2024-03-01T10:00:00Z"

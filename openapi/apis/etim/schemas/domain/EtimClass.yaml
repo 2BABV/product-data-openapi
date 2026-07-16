@@ -7,7 +7,6 @@ required:
   - version
   - groupCode
   - status
-  - descriptionEn
   - description
   - mutationDate
   - revision
@@ -42,18 +41,11 @@ properties:
       2 = Under construction, 3 = Ready for publication, 5 = Published, 9 = Deleted.
     examples:
       - 5
-  descriptionEn:
+  description:
     type: string
-    description: Class description in ETIM English (always present as stable fallback).
+    description: Class description in ETIM English.
     examples:
       - "Socket outlet"
-  description:
-    type:
-      - string
-      - "null"
-    description: Class description in the requested language. Null if translation is unavailable.
-    examples:
-      - "Wandcontactdoos"
   mutationDate:
     type: string
     format: date-time
@@ -92,8 +84,7 @@ examples:
     version: 4
     groupCode: "EG000017"
     status: 5
-    descriptionEn: "Socket outlet"
-    description: "Wandcontactdoos"
+    description: "Socket outlet"
     mutationDate: "2024-06-15T10:30:00Z"
     revision: 3
     deprecated: false

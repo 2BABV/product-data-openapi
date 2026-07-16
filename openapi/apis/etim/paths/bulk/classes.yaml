@@ -12,7 +12,6 @@ get:
   parameters:
     - $ref: ../../../../shared/parameters/query/cursor.yaml
     - $ref: ../../../../shared/parameters/query/limit.yaml
-    - $ref: ../../parameters/query/etim-language.yaml
     - $ref: ../../parameters/query/etim-release.yaml
   responses:
     '200':

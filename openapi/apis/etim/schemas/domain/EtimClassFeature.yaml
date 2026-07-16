@@ -13,6 +13,7 @@ required:
   - type
   - deprecated
   - local
+  - mutationDate
 properties:
   classCode:
     type: string
@@ -29,7 +30,7 @@ properties:
   featureCode:
     type: string
     description: ETIM feature code.
-    pattern: "^EF[0-9]{6}$"
+    pattern: "^EF([0-9]{6}|I[0-9]{5}|[A-Z]{2}[0-9]{4})$"
     examples:
       - "EF000007"
   orderNumber:
@@ -80,6 +81,12 @@ properties:
     description: Whether this is a local (non-international) feature.
     examples:
       - false
+  mutationDate:
+    type: string
+    format: date-time
+    description: Date and time of last mutation.
+    examples:
+      - "2024-06-15T10:30:00Z"
 examples:
   - classCode: "EC002714"
     classVersion: 4
@@ -91,3 +98,4 @@ examples:
     type: "Alphanumeric"
     deprecated: false
     local: false
+    mutationDate: "2024-06-15T10:30:00Z"

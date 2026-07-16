@@ -4,21 +4,25 @@ description: |
 required:
   - code
   - type
-  - descriptionEn
   - description
   - deprecated
-  - status
+  - local
   - mutationDate
-  - revision
 properties:
   code:
     type: string
-    description: ETIM feature code.
-    pattern: "^EF[0-9]{6}$"
+    description: |
+      ETIM feature code. Three variants exist:
+      - International: EF + 6 digits (e.g., EF000007)
+      - Imperial: EF + I + 5 digits (e.g., EFI00001) — features with imperial units
+      - Local: EF + 2-letter country code + 4 digits (e.g., EFNL9999) — country-specific features
+    pattern: "^EF([0-9]{6}|I[0-9]{5}|[A-Z]{2}[0-9]{4})$"
     minLength: 8
     maxLength: 8
     examples:
-      - "EF000001"
+      - "EF000007"
+      - "EFI00001"
+      - "EFNL9999"
   type:
     type: string
     description: |
@@ -26,46 +30,45 @@ properties:
       Alphanumeric, Numeric, Range, or Logical.
     examples:
       - "Alphanumeric"
-  descriptionEn:
+  description:
     type: string
     description: Feature description in ETIM English.
     examples:
       - "Colour"
-  description:
-    type:
-      - string
-      - "null"
-    description: Feature description in the requested language.
-    examples:
-      - "Kleur"
   deprecated:
     type: boolean
     description: Whether this feature is deprecated.
     examples:
       - false
-  status:
-    type: integer
-    description: Feature lifecycle status code.
+  local:
+    type: boolean
+    description: |
+      Whether this is a local (country-specific, non-international) feature.
+      Local features have codes like EFNL9999 with a 2-letter country code.
     examples:
-      - 5
+      - false
   mutationDate:
     type: string
     format: date-time
     description: Date and time of last mutation.
     examples:
       - "2024-03-20T08:00:00Z"
-  revision:
-    type: integer
-    description: Revision number.
-    minimum: 0
-    examples:
-      - 2
 examples:
   - code: "EF000007"
     type: "Alphanumeric"
-    descriptionEn: "Colour"
-    description: "Kleur"
+    description: "Colour"
     deprecated: false
-    status: 5
+    local: false
     mutationDate: "2024-03-20T08:00:00Z"
-    revision: 2
+  - code: "EFNL9999"
+    type: "Alphanumeric"
+    description: "Local NL feature"
+    deprecated: false
+    local: true
+    mutationDate: "2024-05-10T14:00:00Z"
+  - code: "EFI00001"
+    type: "Numeric"
+    description: "Length (imperial)"
+    deprecated: false
+    local: false
+    mutationDate: "2024-01-15T09:00:00Z"

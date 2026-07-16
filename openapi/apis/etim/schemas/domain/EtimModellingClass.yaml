@@ -1,12 +1,13 @@
 type: object
 description: |
-  Flat representation of an ETIM modelling class for bulk retrieval.
+  Flat representation of an ETIM modelling class or connection type for bulk retrieval.
+  Connection types (CT) are modelling classes that have features and values but no ports.
+  MC classes can reference a CT code on a port.
 required:
   - code
   - version
   - groupCode
   - status
-  - descriptionEn
   - description
   - mutationDate
   - revision
@@ -15,12 +16,13 @@ required:
 properties:
   code:
     type: string
-    description: ETIM modelling class code.
-    pattern: "^MC[0-9]{6}$"
+    description: ETIM modelling class code (MC = modelling class, CT = connection type).
+    pattern: "^(MC|CT)[0-9]{6}$"
     minLength: 8
     maxLength: 8
     examples:
       - "MC000001"
+      - "CT000001"
   version:
     type: integer
     description: Class version number.
@@ -40,18 +42,11 @@ properties:
       2 = Under construction, 3 = Ready for publication, 5 = Published, 9 = Deleted.
     examples:
       - 5
-  descriptionEn:
+  description:
     type: string
     description: Class description in ETIM English.
     examples:
       - "Valve body"
-  description:
-    type:
-      - string
-      - "null"
-    description: Class description in the requested language.
-    examples:
-      - "Kleplichaam"
   mutationDate:
     type: string
     format: date-time
@@ -85,8 +80,7 @@ examples:
     version: 2
     groupCode: "MG000001"
     status: 5
-    descriptionEn: "Valve body"
-    description: "Kleplichaam"
+    description: "Valve body"
     mutationDate: "2024-05-01T12:00:00Z"
     revision: 1
     dimensionalDrawingSvgUrl: "https://cdn.etim-international.com/drawings/MC000001.svg"
