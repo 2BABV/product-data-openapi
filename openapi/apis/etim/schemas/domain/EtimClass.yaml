@@ -46,6 +46,11 @@ properties:
     description: Class description in ETIM English.
     examples:
       - "Socket outlet"
+  definition:
+    type: string
+    description: Definition or extended description of this class.
+    examples:
+      - "A device installed in a wall to provide an electrical connection point for plugs"
   mutationDate:
     type: string
     format: date-time
@@ -72,6 +77,16 @@ properties:
       type: string
     examples:
       - ["E", "B"]
+  successors:
+    type: array
+    description: Codes of successor classes that replace this one (typically when deprecated).
+    items:
+      type: string
+      pattern: "^EC[0-9]{6}$"
+      minLength: 8
+      maxLength: 8
+    examples:
+      - ["EC000123"]
   releases:
     type: array
     description: ETIM releases this class is included in.

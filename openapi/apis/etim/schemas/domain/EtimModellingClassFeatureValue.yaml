@@ -8,7 +8,6 @@ required:
   - featureCode
   - valueCode
   - orderNumber
-  - portcode
   - mutationDate
 properties:
   classCode:
@@ -42,13 +41,11 @@ properties:
     examples:
       - 1
   portcode:
-    type:
-      - integer
-      - "null"
+    type: integer
     description: |
-      Port code. Null or 0 = class-level feature value, non-zero = port-specific.
+      Port code. Absent = class-level feature value, present (≥ 1) = port-specific.
+    minimum: 1
     examples:
-      - null
       - 1
   mutationDate:
     type: string
@@ -62,5 +59,4 @@ examples:
     featureCode: "EF000100"
     valueCode: "EV000050"
     orderNumber: 1
-    portcode: null
     mutationDate: "2024-05-01T12:00:00Z"

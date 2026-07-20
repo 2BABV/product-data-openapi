@@ -19,6 +19,21 @@ properties:
     description: Modelling group description in ETIM English.
     examples:
       - "Valves"
+  definition:
+    type: string
+    description: Definition or extended description of this modelling group.
+    examples:
+      - "Group containing modelling classes for valve components"
+  successors:
+    type: array
+    description: Codes of successor modelling groups that replace this one (typically when deprecated).
+    items:
+      type: string
+      pattern: "^MG[0-9]{6}$"
+      minLength: 8
+      maxLength: 8
+    examples:
+      - ["MG000099"]
   mutationDate:
     type: string
     format: date-time

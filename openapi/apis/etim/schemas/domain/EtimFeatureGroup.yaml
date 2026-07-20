@@ -19,6 +19,21 @@ properties:
     description: Feature group description in ETIM English.
     examples:
       - "General"
+  definition:
+    type: string
+    description: Definition or extended description of this feature group.
+    examples:
+      - "General characteristics applicable to most product types"
+  successors:
+    type: array
+    description: Codes of successor feature groups that replace this one (typically when deprecated).
+    items:
+      type: string
+      pattern: "^EFG[0-9]{5}$"
+      minLength: 8
+      maxLength: 8
+    examples:
+      - ["EFG00099"]
   mutationDate:
     type: string
     format: date-time

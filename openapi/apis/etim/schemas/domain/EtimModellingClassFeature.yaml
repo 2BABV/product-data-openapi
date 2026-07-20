@@ -8,16 +8,8 @@ required:
   - classVersion
   - featureCode
   - orderNumber
-  - unitCode
-  - unitImperialCode
-  - unitVariableAxisCode
-  - unitVariableAxisImperialCode
-  - featureGroupCode
   - type
-  - deprecated
   - local
-  - portcode
-  - dimensionalDrawingCode
   - mutationDate
 properties:
   classCode:
@@ -45,82 +37,64 @@ properties:
     examples:
       - 1
   unitCode:
-    type:
-      - string
-      - "null"
-    description: ETIM unit code (null for non-numeric features).
+    type: string
+    description: ETIM unit code. Absent for non-numeric features.
     pattern: "^EU[0-9]{6}$"
     examples:
       - "EU000001"
-      - null
   unitImperialCode:
-    type:
-      - string
-      - "null"
-    description: Imperial unit code alternative.
+    type: string
+    description: Imperial unit code alternative. Absent when not applicable.
     pattern: "^EU[0-9]{6}$"
     examples:
-      - null
+      - "EU000045"
   unitVariableAxisCode:
-    type:
-      - string
-      - "null"
-    description: Variable axis unit code (modelling-specific).
+    type: string
+    description: Variable axis unit code (modelling-specific). Absent when not applicable.
     pattern: "^EU[0-9]{6}$"
     examples:
       - "EU000020"
-      - null
   unitVariableAxisImperialCode:
-    type:
-      - string
-      - "null"
-    description: Variable axis imperial unit code (modelling-specific).
+    type: string
+    description: Variable axis imperial unit code (modelling-specific). Absent when not applicable.
     pattern: "^EU[0-9]{6}$"
     examples:
-      - null
+      - "EU000030"
   featureGroupCode:
-    type:
-      - string
-      - "null"
-    description: Feature group code for categorization.
+    type: string
+    description: Feature group code for categorization. Absent when not assigned.
     pattern: "^EFG[0-9]{5}$"
     examples:
       - "EFG00001"
-      - null
   type:
     type: string
     description: Feature data type (Alphanumeric, Numeric, Range, Logical).
     examples:
       - "Numeric"
-  deprecated:
-    type: boolean
-    description: Whether this feature assignment is deprecated.
+  definition:
+    type: string
+    description: Definition or extended description of this feature in the context of this class.
     examples:
-      - false
+      - "The nominal voltage of the product"
   local:
     type: boolean
     description: Whether this is a local (non-international) feature.
     examples:
       - false
   portcode:
-    type:
-      - integer
-      - "null"
+    type: integer
     description: |
       Port code indicating which port this feature belongs to.
-      Null or 0 = class-level feature, non-zero = port-specific feature.
+      Absent = class-level feature, present (≥ 1) = port-specific feature.
+    minimum: 1
     examples:
-      - null
       - 1
       - 2
   dimensionalDrawingCode:
-    type:
-      - string
-      - "null"
-    description: Dimensional drawing reference code for this feature in the modelling class.
+    type: string
+    description: Dimensional drawing reference code for this feature. Absent when not applicable.
     examples:
       - "D1"
-      - null
   mutationDate:
     type: string
     format: date-time
@@ -133,13 +107,9 @@ examples:
     featureCode: "EF000100"
     orderNumber: 1
     unitCode: "EU000001"
-    unitImperialCode: null
     unitVariableAxisCode: "EU000020"
-    unitVariableAxisImperialCode: null
     featureGroupCode: "EFG00001"
     type: "Numeric"
-    deprecated: false
     local: false
-    portcode: null
     dimensionalDrawingCode: "D1"
     mutationDate: "2024-05-01T12:00:00Z"

@@ -7,11 +7,7 @@ required:
   - classVersion
   - featureCode
   - orderNumber
-  - unitCode
-  - unitImperialCode
-  - featureGroupCode
   - type
-  - deprecated
   - local
   - mutationDate
 properties:
@@ -40,42 +36,33 @@ properties:
     examples:
       - 1
   unitCode:
-    type:
-      - string
-      - "null"
-    description: ETIM unit code for this feature (null for non-numeric features).
+    type: string
+    description: ETIM unit code for this feature. Absent for non-numeric features.
     pattern: "^EU[0-9]{6}$"
     examples:
       - "EU000001"
-      - null
   unitImperialCode:
-    type:
-      - string
-      - "null"
-    description: Imperial unit code alternative (null when not applicable).
+    type: string
+    description: Imperial unit code alternative. Absent when not applicable.
     pattern: "^EU[0-9]{6}$"
     examples:
       - "EU000045"
-      - null
   featureGroupCode:
-    type:
-      - string
-      - "null"
-    description: Feature group code for categorization within the class.
+    type: string
+    description: Feature group code for categorization within the class. Absent when not assigned.
     pattern: "^EFG[0-9]{5}$"
     examples:
       - "EFG00001"
-      - null
   type:
     type: string
     description: Feature data type (Alphanumeric, Numeric, Range, Logical).
     examples:
       - "Alphanumeric"
-  deprecated:
-    type: boolean
-    description: Whether this feature assignment is deprecated.
+  definition:
+    type: string
+    description: Definition or extended description of this feature in the context of this class.
     examples:
-      - false
+      - "The nominal voltage of the product"
   local:
     type: boolean
     description: Whether this is a local (non-international) feature.
@@ -92,10 +79,7 @@ examples:
     classVersion: 4
     featureCode: "EF000007"
     orderNumber: 1
-    unitCode: null
-    unitImperialCode: null
     featureGroupCode: "EFG00001"
     type: "Alphanumeric"
-    deprecated: false
     local: false
     mutationDate: "2024-06-15T10:30:00Z"

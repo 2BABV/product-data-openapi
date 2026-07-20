@@ -4,11 +4,8 @@ description: |
 required:
   - featureCode
   - descriptionEn
-  - description
   - type
   - orderNumber
-  - unitCode
-  - featureGroupCode
   - values
 properties:
   featureCode:
@@ -23,10 +20,8 @@ properties:
     examples:
       - "Colour"
   description:
-    type:
-      - string
-      - "null"
-    description: Feature description in the requested language.
+    type: string
+    description: Feature description in the requested language. Absent when no translation is available.
     examples:
       - "Kleur"
   type:
@@ -41,26 +36,20 @@ properties:
     examples:
       - 1
   unitCode:
-    type:
-      - string
-      - "null"
-    description: ETIM unit code (null for non-numeric features).
+    type: string
+    description: ETIM unit code. Absent for non-numeric features.
     pattern: "^EU[0-9]{6}$"
     examples:
-      - null
+      - "EU000001"
   unitImperialCode:
-    type:
-      - string
-      - "null"
-    description: Imperial unit code alternative.
+    type: string
+    description: Imperial unit code alternative. Absent when not applicable.
     pattern: "^EU[0-9]{6}$"
     examples:
-      - null
+      - "EU000045"
   featureGroupCode:
-    type:
-      - string
-      - "null"
-    description: Feature group code.
+    type: string
+    description: Feature group code. Absent when not assigned.
     pattern: "^EFG[0-9]{5}$"
     examples:
       - "EFG00001"
@@ -72,7 +61,6 @@ properties:
       required:
         - valueCode
         - descriptionEn
-        - description
         - orderNumber
       properties:
         valueCode:
@@ -85,9 +73,8 @@ properties:
           examples:
             - "White"
         description:
-          type:
-            - string
-            - "null"
+          type: string
+          description: Value description in the requested language. Absent when no translation is available.
           examples:
             - "Wit"
         orderNumber:
@@ -101,8 +88,6 @@ examples:
     description: "Kleur"
     type: "Alphanumeric"
     orderNumber: 1
-    unitCode: null
-    unitImperialCode: null
     featureGroupCode: "EFG00001"
     values:
       - valueCode: "EV000028"

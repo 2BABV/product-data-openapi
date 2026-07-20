@@ -19,6 +19,21 @@ properties:
     description: Group description in ETIM English.
     examples:
       - "Installation (low voltage)"
+  definition:
+    type: string
+    description: Definition or extended description of this group.
+    examples:
+      - "Products used for low-voltage electrical installation"
+  successors:
+    type: array
+    description: Codes of successor groups that replace this one (typically when deprecated).
+    items:
+      type: string
+      pattern: "^EG[0-9]{6}$"
+      minLength: 8
+      maxLength: 8
+    examples:
+      - ["EG000099"]
   mutationDate:
     type: string
     format: date-time

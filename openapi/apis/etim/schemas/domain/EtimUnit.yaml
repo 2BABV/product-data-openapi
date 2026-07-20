@@ -21,6 +21,11 @@ properties:
     description: Unit description in ETIM English.
     examples:
       - "Millimetre"
+  definition:
+    type: string
+    description: Definition or extended description of this unit.
+    examples:
+      - "One thousandth of a metre"
   abbreviation:
     type: string
     description: Unit abbreviation in ETIM English.
@@ -31,6 +36,16 @@ properties:
     description: Whether this unit is deprecated.
     examples:
       - false
+  successors:
+    type: array
+    description: Codes of successor units that replace this one (typically when deprecated).
+    items:
+      type: string
+      pattern: "^EU[0-9]{6}$"
+      minLength: 8
+      maxLength: 8
+    examples:
+      - ["EU000099"]
   mutationDate:
     type: string
     format: date-time

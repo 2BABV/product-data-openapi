@@ -10,11 +10,9 @@ required:
   - groupCode
   - status
   - descriptionEn
-  - description
   - synonyms
   - mutationDate
   - revision
-  - dimensionalDrawingSvgUrl
   - releases
   - features
   - ports
@@ -55,11 +53,14 @@ properties:
     description: Class description in ETIM English.
     examples:
       - "Valve body"
+  definition:
+    type: string
+    description: Definition or extended description of this modelling class.
+    examples:
+      - "The main body component of a valve assembly"
   description:
-    type:
-      - string
-      - "null"
-    description: Class description in the requested language.
+    type: string
+    description: Class description in the requested language. Absent when no translation is available for the requested language.
     examples:
       - "Kleplichaam"
   synonyms:
@@ -82,13 +83,21 @@ properties:
     examples:
       - 1
   dimensionalDrawingSvgUrl:
-    type:
-      - string
-      - "null"
+    type: string
     format: uri
-    description: URL to the dimensional drawing SVG.
+    description: URL to the dimensional drawing SVG. Absent when no drawing is available.
     examples:
       - "https://cdn.etim-international.com/drawings/MC000001.svg"
+  successors:
+    type: array
+    description: Codes of successor modelling classes that replace this one (typically when deprecated).
+    items:
+      type: string
+      pattern: "^(MC|CT)[0-9]{6}$"
+      minLength: 8
+      maxLength: 8
+    examples:
+      - ["MC000099"]
   releases:
     type: array
     description: ETIM releases this modelling class is included in.
@@ -187,7 +196,6 @@ examples:
         unitCode: "EU000001"
         unitVariableAxisCode: "EU000020"
         featureGroupCode: "EFG00001"
-        portcode: null
         dimensionalDrawingCode: "D1"
         values: []
     ports:

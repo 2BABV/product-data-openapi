@@ -5,13 +5,8 @@ description: |
 required:
   - featureCode
   - descriptionEn
-  - description
   - type
   - orderNumber
-  - unitCode
-  - featureGroupCode
-  - portcode
-  - dimensionalDrawingCode
   - values
 properties:
   featureCode:
@@ -26,10 +21,8 @@ properties:
     examples:
       - "Nominal diameter"
   description:
-    type:
-      - string
-      - "null"
-    description: Feature description in the requested language.
+    type: string
+    description: Feature description in the requested language. Absent when no translation is available.
     examples:
       - "Nominale diameter"
   type:
@@ -44,59 +37,45 @@ properties:
     examples:
       - 1
   unitCode:
-    type:
-      - string
-      - "null"
-    description: ETIM unit code.
+    type: string
+    description: ETIM unit code. Absent for non-numeric features.
     pattern: "^EU[0-9]{6}$"
     examples:
       - "EU000001"
   unitImperialCode:
-    type:
-      - string
-      - "null"
-    description: Imperial unit code.
+    type: string
+    description: Imperial unit code. Absent when not applicable.
     pattern: "^EU[0-9]{6}$"
     examples:
-      - null
+      - "EU000045"
   unitVariableAxisCode:
-    type:
-      - string
-      - "null"
-    description: Variable axis unit code (modelling-specific).
+    type: string
+    description: Variable axis unit code (modelling-specific). Absent when not applicable.
     pattern: "^EU[0-9]{6}$"
     examples:
       - "EU000020"
   unitVariableAxisImperialCode:
-    type:
-      - string
-      - "null"
-    description: Variable axis imperial unit code (modelling-specific).
+    type: string
+    description: Variable axis imperial unit code (modelling-specific). Absent when not applicable.
     pattern: "^EU[0-9]{6}$"
     examples:
-      - null
+      - "EU000030"
   featureGroupCode:
-    type:
-      - string
-      - "null"
-    description: Feature group code.
+    type: string
+    description: Feature group code. Absent when not assigned.
     pattern: "^EFG[0-9]{5}$"
     examples:
       - "EFG00001"
   portcode:
-    type:
-      - integer
-      - "null"
+    type: integer
     description: |
-      Port this feature belongs to. Null = class-level, non-zero = port-specific.
+      Port this feature belongs to. Absent = class-level feature, present (≥ 1) = port-specific.
+    minimum: 1
     examples:
-      - null
       - 1
   dimensionalDrawingCode:
-    type:
-      - string
-      - "null"
-    description: Dimensional drawing reference code.
+    type: string
+    description: Dimensional drawing reference code. Absent when not applicable.
     examples:
       - "D1"
   values:
@@ -107,7 +86,6 @@ properties:
       required:
         - valueCode
         - descriptionEn
-        - description
         - orderNumber
       properties:
         valueCode:
@@ -120,9 +98,8 @@ properties:
           examples:
             - "DN 15"
         description:
-          type:
-            - string
-            - "null"
+          type: string
+          description: Value description in the requested language. Absent when no translation is available.
           examples:
             - "DN 15"
         orderNumber:
@@ -137,11 +114,8 @@ examples:
     type: "Numeric"
     orderNumber: 1
     unitCode: "EU000001"
-    unitImperialCode: null
     unitVariableAxisCode: "EU000020"
-    unitVariableAxisImperialCode: null
     featureGroupCode: "EFG00001"
-    portcode: null
     dimensionalDrawingCode: "D1"
     values:
       - valueCode: "EV000050"

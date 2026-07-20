@@ -6,7 +6,6 @@ required:
   - code
   - languageCode
   - description
-  - abbreviation
 properties:
   code:
     type: string
@@ -26,10 +25,8 @@ properties:
     examples:
       - "Millimeter"
   abbreviation:
-    type:
-      - string
-      - "null"
-    description: Unit abbreviation in the specified language (null if not applicable).
+    type: string
+    description: Unit abbreviation in the specified language. Absent when not applicable.
     examples:
       - "mm"
 examples:

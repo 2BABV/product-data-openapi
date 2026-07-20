@@ -11,7 +11,6 @@ required:
   - description
   - mutationDate
   - revision
-  - dimensionalDrawingSvgUrl
   - releases
 properties:
   code:
@@ -47,6 +46,11 @@ properties:
     description: Class description in ETIM English.
     examples:
       - "Valve body"
+  definition:
+    type: string
+    description: Definition or extended description of this modelling class.
+    examples:
+      - "The main body component of a valve assembly"
   mutationDate:
     type: string
     format: date-time
@@ -60,14 +64,21 @@ properties:
     examples:
       - 1
   dimensionalDrawingSvgUrl:
-    type:
-      - string
-      - "null"
+    type: string
     format: uri
-    description: URL to the dimensional drawing SVG for this modelling class.
+    description: URL to the dimensional drawing SVG for this modelling class. Absent when no drawing is available.
     examples:
       - "https://cdn.etim-international.com/drawings/MC000001.svg"
-      - null
+  successors:
+    type: array
+    description: Codes of successor modelling classes that replace this one (typically when deprecated).
+    items:
+      type: string
+      pattern: "^(MC|CT)[0-9]{6}$"
+      minLength: 8
+      maxLength: 8
+    examples:
+      - ["MC000099"]
   releases:
     type: array
     description: ETIM releases this modelling class is included in.
