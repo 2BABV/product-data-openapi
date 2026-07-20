@@ -76,53 +76,61 @@ paths:
   /etim/modelling-classes/{classCode}/versions:
     $ref: ./paths/modelling-classes-versions.yaml
 
-  # Classification - Bulk entity endpoints
+  # Classification - Bulk endpoints (grouped by resource)
   /etim/bulk/classes:
     $ref: ./paths/bulk/classes.yaml
+  /etim/bulk/classes/translations:
+    $ref: ./paths/bulk/classes-translations.yaml
+  /etim/bulk/classes/synonyms:
+    $ref: ./paths/bulk/classes-synonyms.yaml
+
   /etim/bulk/features:
     $ref: ./paths/bulk/features.yaml
+  /etim/bulk/features/translations:
+    $ref: ./paths/bulk/features-translations.yaml
+
   /etim/bulk/feature-groups:
     $ref: ./paths/bulk/feature-groups.yaml
+  /etim/bulk/feature-groups/translations:
+    $ref: ./paths/bulk/feature-groups-translations.yaml
+
   /etim/bulk/groups:
     $ref: ./paths/bulk/groups.yaml
+  /etim/bulk/groups/translations:
+    $ref: ./paths/bulk/groups-translations.yaml
+
   /etim/bulk/units:
     $ref: ./paths/bulk/units.yaml
+  /etim/bulk/units/translations:
+    $ref: ./paths/bulk/units-translations.yaml
+
   /etim/bulk/values:
     $ref: ./paths/bulk/values.yaml
+  /etim/bulk/values/translations:
+    $ref: ./paths/bulk/values-translations.yaml
+
   /etim/bulk/class-features:
     $ref: ./paths/bulk/class-features.yaml
   /etim/bulk/class-feature-values:
     $ref: ./paths/bulk/class-feature-values.yaml
 
-  # Modelling - Bulk entity endpoints
+  # Modelling - Bulk endpoints (grouped by resource)
   /etim/bulk/modelling-classes:
     $ref: ./paths/bulk/modelling-classes.yaml
+  /etim/bulk/modelling-classes/translations:
+    $ref: ./paths/bulk/modelling-classes-translations.yaml
+  /etim/bulk/modelling-classes/synonyms:
+    $ref: ./paths/bulk/modelling-classes-synonyms.yaml
+
   /etim/bulk/modelling-groups:
     $ref: ./paths/bulk/modelling-groups.yaml
+  /etim/bulk/modelling-groups/translations:
+    $ref: ./paths/bulk/modelling-groups-translations.yaml
+
   /etim/bulk/modelling-class-features:
     $ref: ./paths/bulk/modelling-class-features.yaml
   /etim/bulk/modelling-class-feature-values:
     $ref: ./paths/bulk/modelling-class-feature-values.yaml
-
-  # Classification - Bulk translation endpoints
-  /etim/bulk/classes/translations:
-    $ref: ./paths/bulk/classes-translations.yaml
-  /etim/bulk/features/translations:
-    $ref: ./paths/bulk/features-translations.yaml
-  /etim/bulk/feature-groups/translations:
-    $ref: ./paths/bulk/feature-groups-translations.yaml
-  /etim/bulk/groups/translations:
-    $ref: ./paths/bulk/groups-translations.yaml
-  /etim/bulk/units/translations:
-    $ref: ./paths/bulk/units-translations.yaml
-  /etim/bulk/values/translations:
-    $ref: ./paths/bulk/values-translations.yaml
-
-  # Modelling - Bulk translation endpoints
-  /etim/bulk/modelling-classes/translations:
-    $ref: ./paths/bulk/modelling-classes-translations.yaml
-  /etim/bulk/modelling-groups/translations:
-    $ref: ./paths/bulk/modelling-groups-translations.yaml
 
 components:
   schemas:
@@ -163,6 +171,8 @@ components:
       $ref: ./schemas/domain/EtimTranslation.yaml
     EtimClassTranslation:
       $ref: ./schemas/domain/EtimClassTranslation.yaml
+    EtimClassSynonym:
+      $ref: ./schemas/domain/EtimClassSynonym.yaml
     EtimUnitTranslation:
       $ref: ./schemas/domain/EtimUnitTranslation.yaml
 
@@ -205,6 +215,8 @@ components:
     # Response schemas - bulk translations
     BulkClassesTranslationsResponse:
       $ref: ./schemas/responses/BulkClassesTranslationsResponse.yaml
+    BulkClassesSynonymsResponse:
+      $ref: ./schemas/responses/BulkClassesSynonymsResponse.yaml
     BulkFeaturesTranslationsResponse:
       $ref: ./schemas/responses/BulkFeaturesTranslationsResponse.yaml
     BulkFeatureGroupsTranslationsResponse:
@@ -213,6 +225,8 @@ components:
       $ref: ./schemas/responses/BulkGroupsTranslationsResponse.yaml
     BulkModellingClassesTranslationsResponse:
       $ref: ./schemas/responses/BulkModellingClassesTranslationsResponse.yaml
+    BulkModellingClassesSynonymsResponse:
+      $ref: ./schemas/responses/BulkModellingClassesSynonymsResponse.yaml
     BulkModellingGroupsTranslationsResponse:
       $ref: ./schemas/responses/BulkModellingGroupsTranslationsResponse.yaml
     BulkUnitsTranslationsResponse:

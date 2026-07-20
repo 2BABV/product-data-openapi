@@ -6,6 +6,7 @@ required:
   - code
   - languageCode
   - description
+  - mutationDate
 properties:
   code:
     type: string
@@ -29,12 +30,20 @@ properties:
     description: Unit abbreviation in the specified language. Absent when not applicable.
     examples:
       - "mm"
+  mutationDate:
+    type: string
+    format: date-time
+    description: Date and time of last mutation.
+    examples:
+      - "2024-06-15T10:30:00Z"
 examples:
   - code: "EU000001"
     languageCode: "nl-NL"
     description: "Millimeter"
     abbreviation: "mm"
+    mutationDate: "2024-06-15T10:30:00Z"
   - code: "EU000001"
     languageCode: "de-DE"
     description: "Millimeter"
     abbreviation: "mm"
+    mutationDate: "2024-06-15T10:30:00Z"

@@ -1,15 +1,15 @@
 get:
-  operationId: getBulkEtimModellingClassesTranslations
+  operationId: getBulkEtimModellingClassesSynonyms
   tags:
     - Modelling bulk
-  summary: List ETIM modelling class translations
+  summary: List ETIM modelling class synonyms
   description: |
-    Retrieve translations for ETIM modelling classes filtered by language(s).
+    Retrieve synonyms for ETIM modelling classes filtered by language(s).
 
-    Returns class code, version, language code, and description.
-    
+    Returns class code, version, language code, and synonym.
+
     The `language` parameter is required and accepts one or more comma-separated language codes
-    to filter which translations are returned.
+    to filter which synonyms are returned.
   parameters:
     - $ref: ../../../../shared/parameters/query/cursor.yaml
     - $ref: ../../../../shared/parameters/query/limit.yaml
@@ -17,11 +17,11 @@ get:
     - $ref: ../../parameters/query/etim-release.yaml
   responses:
     '200':
-      description: Successfully retrieved translations
+      description: Successfully retrieved modelling class synonyms
       content:
         application/json:
           schema:
-            $ref: ../../schemas/responses/BulkModellingClassesTranslationsResponse.yaml
+            $ref: ../../schemas/responses/BulkModellingClassesSynonymsResponse.yaml
     '400':
       $ref: ../../../../shared/responses/400-bad-request.yaml
     '401':

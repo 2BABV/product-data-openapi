@@ -124,7 +124,8 @@ Common query params for modelling bulk: `cursor`, `limit`, `release`.
 
 | Endpoint | Description |
 |----------|-------------|
-| `GET /api/v3/etim/bulk/classes/translations` | Class translations (code, version, languageCode, description, synonyms) |
+| `GET /api/v3/etim/bulk/classes/translations` | Class translations (code, version, languageCode, description) |
+| `GET /api/v3/etim/bulk/classes/synonyms` | Class synonyms (code, version, languageCode, synonym) |
 | `GET /api/v3/etim/bulk/features/translations` | Feature translations (code, languageCode, description) |
 | `GET /api/v3/etim/bulk/feature-groups/translations` | Feature-group translations (code, languageCode, description) |
 | `GET /api/v3/etim/bulk/groups/translations` | Group translations (code, languageCode, description) |
@@ -137,7 +138,8 @@ Common query params for translations: `cursor`, `limit`, `language` (comma-separ
 
 | Endpoint | Description |
 |----------|-------------|
-| `GET /api/v3/etim/bulk/modelling-classes/translations` | Modelling-class translations (code, version, languageCode, description, synonyms) |
+| `GET /api/v3/etim/bulk/modelling-classes/translations` | Modelling-class translations (code, version, languageCode, description) |
+| `GET /api/v3/etim/bulk/modelling-classes/synonyms` | Modelling-class synonyms (code, version, languageCode, synonym) |
 | `GET /api/v3/etim/bulk/modelling-groups/translations` | Modelling-group translations (code, languageCode, description) |
 
 Common query params for modelling translations: `cursor`, `limit`, `language` (comma-separated, required).
@@ -181,6 +183,7 @@ Common query params for modelling translations: `cursor`, `limit`, `language` (c
 ### Schema Design Decisions
 
 - **No embedded translations**: Entity responses do NOT include `translations[]` arrays in nested objects. Translations are fetched separately via dedicated endpoints.
+- **Class synonyms have dedicated bulk endpoints**: Class and modelling-class synonyms are served via dedicated `/synonyms` bulk endpoints instead of being embedded in translation records.
 - **Single English description on bulk endpoints**: All bulk entity endpoints return a single `description` field in ETIM English (EN) — no `language` query param and no `descriptionEn` separate field. Translated descriptions are available only via the dedicated `/translations` endpoints. Units include a single `abbreviation` field (ETIM English).
 - **All entities include `mutationDate`**: Every bulk entity (including relation tables like class-features and class-feature-values) includes a `mutationDate` field for incremental sync support.
 - **Flat relation records**: `class-features` and `class-feature-values` are fully denormalized junction records with all foreign keys inline.
@@ -208,6 +211,7 @@ openapi/apis/etim/
 │   ├── bulk/
 │   │   ├── classes.yaml
 │   │   ├── classes-translations.yaml
+│   │   ├── classes-synonyms.yaml
 │   │   ├── features.yaml
 │   │   ├── features-translations.yaml
 │   │   ├── feature-groups.yaml
@@ -216,6 +220,7 @@ openapi/apis/etim/
 │   │   ├── groups-translations.yaml
 │   │   ├── modelling-classes.yaml
 │   │   ├── modelling-classes-translations.yaml
+│   │   ├── modelling-classes-synonyms.yaml
 │   │   ├── modelling-groups.yaml
 │   │   ├── modelling-groups-translations.yaml
 │   │   ├── units.yaml

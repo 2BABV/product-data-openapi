@@ -6,6 +6,7 @@ required:
   - code
   - languageCode
   - description
+  - mutationDate
 properties:
   code:
     type: string
@@ -23,10 +24,18 @@ properties:
     description: Entity description in the specified language.
     examples:
       - "Kleur"
+  mutationDate:
+    type: string
+    format: date-time
+    description: Date and time of last mutation.
+    examples:
+      - "2024-06-15T10:30:00Z"
 examples:
   - code: "EF000007"
     languageCode: "nl-NL"
     description: "Kleur"
+    mutationDate: "2024-06-15T10:30:00Z"
   - code: "EF000007"
     languageCode: "de-DE"
     description: "Farbe"
+    mutationDate: "2024-06-15T10:30:00Z"

@@ -1,11 +1,11 @@
 type: object
 description: |
-  Translation record for ETIM classes and modelling classes.
+  Synonym record for ETIM classes and modelling classes.
 required:
   - code
   - version
   - languageCode
-  - description
+  - synonym
   - mutationDate
 properties:
   code:
@@ -25,11 +25,11 @@ properties:
     pattern: "^[a-z]{2}-[A-Z]{2}$"
     examples:
       - "nl-NL"
-  description:
+  synonym:
     type: string
-    description: Class description in the specified language.
+    description: Class synonym in the specified language.
     examples:
-      - "Wandcontactdoos"
+      - "Stopcontact"
   mutationDate:
     type: string
     format: date-time
@@ -40,10 +40,10 @@ examples:
   - code: "EC002714"
     version: 4
     languageCode: "nl-NL"
-    description: "Wandcontactdoos"
+    synonym: "Stopcontact"
     mutationDate: "2024-06-15T10:30:00Z"
   - code: "EC002714"
     version: 4
     languageCode: "de-DE"
-    description: "Steckdose"
+    synonym: "Wandsteckdose"
     mutationDate: "2024-06-15T10:30:00Z"

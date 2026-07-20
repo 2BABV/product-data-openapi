@@ -6,7 +6,7 @@ get:
   description: |
     Retrieve translations for ETIM classes filtered by language(s).
 
-    Returns class code, version, language code, description, and synonyms.
+    Returns class code, version, language code, and description.
     
     The `language` parameter is required and accepts one or more comma-separated language codes
     to filter which translations are returned.
@@ -14,6 +14,7 @@ get:
     - $ref: ../../../../shared/parameters/query/cursor.yaml
     - $ref: ../../../../shared/parameters/query/limit.yaml
     - $ref: ../../parameters/query/etim-languages.yaml
+    - $ref: ../../parameters/query/etim-release.yaml
   responses:
     '200':
       description: Successfully retrieved translations
