@@ -1,7 +1,7 @@
 get:
   operationId: getBulkEtimClasses
   tags:
-    - ETIM bulk
+    - Classification bulk
   summary: List ETIM classes
   description: |
     Retrieve all ETIM classes in bulk with cursor-based pagination.

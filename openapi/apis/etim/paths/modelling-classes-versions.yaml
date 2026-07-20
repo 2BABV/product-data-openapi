@@ -1,7 +1,7 @@
 get:
   operationId: getEtimModellingClassVersions
   tags:
-    - ETIM single
+    - Modelling single
   summary: List ETIM modelling class versions
   description: |
     Retrieve all available versions for a specific ETIM modelling class code.

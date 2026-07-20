@@ -1,7 +1,7 @@
 get:
   operationId: getBulkEtimModellingClassFeatureValues
   tags:
-    - ETIM bulk
+    - Modelling bulk
   summary: List ETIM modelling class-feature-value relations
   description: |
     Retrieve all class-feature-value records for ETIM modelling classes (MC) in bulk.

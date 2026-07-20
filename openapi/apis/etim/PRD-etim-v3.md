@@ -94,7 +94,7 @@ Create a new ETIM API v3 that:
 
 ### Endpoint Design
 
-#### Bulk Entity Endpoints (Tag: `ETIM bulk`)
+#### Bulk Classification Entity Endpoints (Tag: `Classification bulk`)
 
 | Endpoint | Description |
 |----------|-------------|
@@ -102,8 +102,6 @@ Create a new ETIM API v3 that:
 | `GET /api/v3/etim/bulk/features` | Flat features (code, type, description, deprecated, local, mutationDate, successors) |
 | `GET /api/v3/etim/bulk/feature-groups` | Flat feature-groups (code, description, mutationDate, successors) |
 | `GET /api/v3/etim/bulk/groups` | Flat groups (code, description, mutationDate, successors) |
-| `GET /api/v3/etim/bulk/modelling-classes` | Flat modelling-classes (code, version, groupCode, status, description, mutationDate, revision, successors) |
-| `GET /api/v3/etim/bulk/modelling-groups` | Flat modelling-groups (code, description, mutationDate, successors) |
 | `GET /api/v3/etim/bulk/units` | Flat units (code, description, abbreviation, deprecated, mutationDate, successors) |
 | `GET /api/v3/etim/bulk/values` | Flat values (code, description, deprecated, mutationDate, successors) |
 | `GET /api/v3/etim/bulk/class-features` | Flat relation (classCode, classVersion, featureCode, orderNumber, unitCode, unitImperialCode, featureGroupCode, type, definition, local, mutationDate) |
@@ -111,7 +109,18 @@ Create a new ETIM API v3 that:
 
 Common query params for bulk: `cursor`, `limit`, `release` (filter by ETIM release; only on classes, modelling-classes, and relation endpoints).
 
-#### Bulk Translation Endpoints (Tag: `ETIM bulk`)
+#### Bulk Modelling Entity Endpoints (Tag: `Modelling bulk`)
+
+| Endpoint | Description |
+|----------|-------------|
+| `GET /api/v3/etim/bulk/modelling-classes` | Flat modelling-classes (code, version, groupCode, status, description, mutationDate, revision, successors) |
+| `GET /api/v3/etim/bulk/modelling-groups` | Flat modelling-groups (code, description, mutationDate, successors) |
+| `GET /api/v3/etim/bulk/modelling-class-features` | Flat relation (classCode, classVersion, featureCode, orderNumber, unitCode, unitImperialCode, featureGroupCode, type, definition, portcode, mutationDate) |
+| `GET /api/v3/etim/bulk/modelling-class-feature-values` | Flat relation (classCode, classVersion, featureCode, valueCode, orderNumber, mutationDate) |
+
+Common query params for modelling bulk: `cursor`, `limit`, `release`.
+
+#### Bulk Classification Translation Endpoints (Tag: `Classification bulk`)
 
 | Endpoint | Description |
 |----------|-------------|
@@ -119,14 +128,21 @@ Common query params for bulk: `cursor`, `limit`, `release` (filter by ETIM relea
 | `GET /api/v3/etim/bulk/features/translations` | Feature translations (code, languageCode, description) |
 | `GET /api/v3/etim/bulk/feature-groups/translations` | Feature-group translations (code, languageCode, description) |
 | `GET /api/v3/etim/bulk/groups/translations` | Group translations (code, languageCode, description) |
-| `GET /api/v3/etim/bulk/modelling-classes/translations` | Modelling-class translations (code, version, languageCode, description, synonyms) |
-| `GET /api/v3/etim/bulk/modelling-groups/translations` | Modelling-group translations (code, languageCode, description) |
 | `GET /api/v3/etim/bulk/units/translations` | Unit translations (code, languageCode, description, abbreviation) |
 | `GET /api/v3/etim/bulk/values/translations` | Value translations (code, languageCode, description) |
 
 Common query params for translations: `cursor`, `limit`, `language` (comma-separated, required — filters which languages to return).
 
-#### Single Entity Endpoints (Tag: `ETIM single`)
+#### Bulk Modelling Translation Endpoints (Tag: `Modelling bulk`)
+
+| Endpoint | Description |
+|----------|-------------|
+| `GET /api/v3/etim/bulk/modelling-classes/translations` | Modelling-class translations (code, version, languageCode, description, synonyms) |
+| `GET /api/v3/etim/bulk/modelling-groups/translations` | Modelling-group translations (code, languageCode, description) |
+
+Common query params for modelling translations: `cursor`, `limit`, `language` (comma-separated, required).
+
+#### Single Classification Endpoints (Tag: `Classification single`)
 
 | Endpoint | Description |
 |----------|-------------|
@@ -135,20 +151,25 @@ Common query params for translations: `cursor`, `limit`, `language` (comma-separ
 | `GET /api/v3/etim/features/{featureCode}` | Single feature (query: `language`) |
 | `GET /api/v3/etim/feature-groups/{featureGroupCode}` | Single feature-group (query: `language`) |
 | `GET /api/v3/etim/groups/{groupCode}` | Single group (query: `language`) |
-| `GET /api/v3/etim/modelling-classes/{classCode}` | Single modelling-class (query: `version`, `language`) |
-| `GET /api/v3/etim/modelling-groups/{groupCode}` | Single modelling-group (query: `language`) |
 | `GET /api/v3/etim/units/{unitCode}` | Single unit (query: `language`) |
 | `GET /api/v3/etim/values/{valueCode}` | Single value (query: `language`) |
 
-#### Search Endpoints (Tag: `ETIM single`)
+#### Single Modelling Endpoints (Tag: `Modelling single`)
 
 | Endpoint | Description |
 |----------|-------------|
-| `GET /api/v3/etim/classes/search` | Search classes (query: `q`, `language`, `release`, `group`, `cursor`, `limit`) |
-| `GET /api/v3/etim/features/search` | Search features (query: `q`, `language`, `deprecated`, `local`, `cursor`, `limit`) |
-| `GET /api/v3/etim/modelling-classes/search` | Search modelling-classes (query: `q`, `language`, `release`, `group`, `cursor`, `limit`) |
+| `GET /api/v3/etim/modelling-classes/{classCode}` | Single modelling-class (query: `version`, `language`) |
+| `GET /api/v3/etim/modelling-groups/{groupCode}` | Single modelling-group (query: `language`) |
 
-#### Misc & Mutation Endpoints
+#### Search Endpoints (Tag: `Classification single` / `Modelling single`)
+
+| Endpoint | Tag | Description |
+|----------|-----|-------------|
+| `GET /api/v3/etim/classes/search` | Classification single | Search classes (query: `q`, `language`, `release`, `group`, `cursor`, `limit`) |
+| `GET /api/v3/etim/features/search` | Classification single | Search features (query: `q`, `language`, `deprecated`, `local`, `cursor`, `limit`) |
+| `GET /api/v3/etim/modelling-classes/search` | Modelling single | Search modelling-classes (query: `q`, `language`, `release`, `group`, `cursor`, `limit`) |
+
+#### Misc & Mutation Endpoints (Tag: `Classification single`)
 
 | Endpoint | Description |
 |----------|-------------|
@@ -251,8 +272,12 @@ openapi/apis/etim/
 
 ### Tags and Grouping
 
-- Tags: `ETIM single`, `ETIM bulk`
-- `x-tagGroups`: single group named `ETIM`
+- Tags: `Classification single`, `Classification bulk`, `Modelling single`, `Modelling bulk`
+- `x-tagGroups`:
+  - `Classification` group containing `Classification single` and `Classification bulk`
+  - `Modelling` group containing `Modelling single` and `Modelling bulk`
+- Classification covers: classes, features, feature-groups, groups, units, values, class-features, class-feature-values, plus misc endpoints (releases, languages, rfcs)
+- Modelling covers: modelling-classes, modelling-groups, modelling-class-features, modelling-class-feature-values
 
 ## Testing Decisions
 

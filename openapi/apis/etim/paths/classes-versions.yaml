@@ -1,7 +1,7 @@
 get:
   operationId: getEtimClassVersions
   tags:
-    - ETIM single
+    - Classification single
   summary: List ETIM class versions
   description: |
     Retrieve all available versions for a specific ETIM class code.

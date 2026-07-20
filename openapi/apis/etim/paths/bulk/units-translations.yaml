@@ -1,7 +1,7 @@
 get:
   operationId: getBulkEtimUnitsTranslations
   tags:
-    - ETIM bulk
+    - Classification bulk
   summary: List ETIM unit translations
   description: |
     Retrieve translations for ETIM units filtered by language(s).

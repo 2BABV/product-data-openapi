@@ -1,7 +1,7 @@
 get:
   operationId: getBulkEtimModellingGroups
   tags:
-    - ETIM bulk
+    - Modelling bulk
   summary: List ETIM modelling groups
   description: |
     Retrieve all ETIM modelling groups in bulk with cursor-based pagination.

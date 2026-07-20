@@ -1,7 +1,7 @@
 get:
   operationId: getBulkEtimModellingClassesTranslations
   tags:
-    - ETIM bulk
+    - Modelling bulk
   summary: List ETIM modelling class translations
   description: |
     Retrieve translations for ETIM modelling classes filtered by language(s).

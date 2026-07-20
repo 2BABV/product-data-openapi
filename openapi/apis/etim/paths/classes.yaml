@@ -1,7 +1,7 @@
 get:
   operationId: getEtimClass
   tags:
-    - ETIM single
+    - Classification single
   summary: Get ETIM class
   description: |
     Retrieve a single ETIM class by its code with full details including nested features,

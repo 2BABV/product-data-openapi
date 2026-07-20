@@ -1,7 +1,7 @@
 get:
   operationId: getBulkEtimClassesTranslations
   tags:
-    - ETIM bulk
+    - Classification bulk
   summary: List ETIM class translations
   description: |
     Retrieve translations for ETIM classes filtered by language(s).

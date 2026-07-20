@@ -1,7 +1,7 @@
 get:
   operationId: getBulkEtimGroups
   tags:
-    - ETIM bulk
+    - Classification bulk
   summary: List ETIM groups
   description: |
     Retrieve all ETIM groups in bulk with cursor-based pagination.

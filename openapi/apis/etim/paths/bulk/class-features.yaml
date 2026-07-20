@@ -1,7 +1,7 @@
 get:
   operationId: getBulkEtimClassFeatures
   tags:
-    - ETIM bulk
+    - Classification bulk
   summary: List ETIM class-feature relations
   description: |
     Retrieve all class-feature assignment records for regular ETIM classes (EC) in bulk.

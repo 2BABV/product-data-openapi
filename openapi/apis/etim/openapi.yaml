@@ -40,31 +40,43 @@ servers:
           - etimapi-test.etim-international.com
 
 tags:
-  - name: ETIM single
-    description: Single entity lookup operations
+  - name: Classification single
+    description: Single entity lookup operations for ETIM classification entities (classes, features, feature-groups, groups, units, values)
     x-displayName: Single
-  - name: ETIM bulk
-    description: Bulk data retrieval operations with cursor-based pagination for high-volume data exchange
+  - name: Classification bulk
+    description: Bulk data retrieval operations with cursor-based pagination for classification entities
+    x-displayName: Bulk
+  - name: Modelling single
+    description: Single entity lookup operations for ETIM modelling entities (modelling-classes, modelling-groups)
+    x-displayName: Single
+  - name: Modelling bulk
+    description: Bulk data retrieval operations with cursor-based pagination for modelling entities
     x-displayName: Bulk
 
 x-tagGroups:
-  - name: ETIM
+  - name: Classification
     tags:
-      - ETIM single
-      - ETIM bulk
+      - Classification single
+      - Classification bulk
+  - name: Modelling
+    tags:
+      - Modelling single
+      - Modelling bulk
 
 paths:
-  # Single entity endpoints
+  # Classification - Single entity endpoints
   /etim/classes/{classCode}:
     $ref: ./paths/classes.yaml
   /etim/classes/{classCode}/versions:
     $ref: ./paths/classes-versions.yaml
+
+  # Modelling - Single entity endpoints
   /etim/modelling-classes/{classCode}:
     $ref: ./paths/modelling-classes.yaml
   /etim/modelling-classes/{classCode}/versions:
     $ref: ./paths/modelling-classes-versions.yaml
 
-  # Bulk entity endpoints
+  # Classification - Bulk entity endpoints
   /etim/bulk/classes:
     $ref: ./paths/bulk/classes.yaml
   /etim/bulk/features:
@@ -73,10 +85,6 @@ paths:
     $ref: ./paths/bulk/feature-groups.yaml
   /etim/bulk/groups:
     $ref: ./paths/bulk/groups.yaml
-  /etim/bulk/modelling-classes:
-    $ref: ./paths/bulk/modelling-classes.yaml
-  /etim/bulk/modelling-groups:
-    $ref: ./paths/bulk/modelling-groups.yaml
   /etim/bulk/units:
     $ref: ./paths/bulk/units.yaml
   /etim/bulk/values:
@@ -85,12 +93,18 @@ paths:
     $ref: ./paths/bulk/class-features.yaml
   /etim/bulk/class-feature-values:
     $ref: ./paths/bulk/class-feature-values.yaml
+
+  # Modelling - Bulk entity endpoints
+  /etim/bulk/modelling-classes:
+    $ref: ./paths/bulk/modelling-classes.yaml
+  /etim/bulk/modelling-groups:
+    $ref: ./paths/bulk/modelling-groups.yaml
   /etim/bulk/modelling-class-features:
     $ref: ./paths/bulk/modelling-class-features.yaml
   /etim/bulk/modelling-class-feature-values:
     $ref: ./paths/bulk/modelling-class-feature-values.yaml
 
-  # Bulk translation endpoints
+  # Classification - Bulk translation endpoints
   /etim/bulk/classes/translations:
     $ref: ./paths/bulk/classes-translations.yaml
   /etim/bulk/features/translations:
@@ -99,14 +113,16 @@ paths:
     $ref: ./paths/bulk/feature-groups-translations.yaml
   /etim/bulk/groups/translations:
     $ref: ./paths/bulk/groups-translations.yaml
-  /etim/bulk/modelling-classes/translations:
-    $ref: ./paths/bulk/modelling-classes-translations.yaml
-  /etim/bulk/modelling-groups/translations:
-    $ref: ./paths/bulk/modelling-groups-translations.yaml
   /etim/bulk/units/translations:
     $ref: ./paths/bulk/units-translations.yaml
   /etim/bulk/values/translations:
     $ref: ./paths/bulk/values-translations.yaml
+
+  # Modelling - Bulk translation endpoints
+  /etim/bulk/modelling-classes/translations:
+    $ref: ./paths/bulk/modelling-classes-translations.yaml
+  /etim/bulk/modelling-groups/translations:
+    $ref: ./paths/bulk/modelling-groups-translations.yaml
 
 components:
   schemas:

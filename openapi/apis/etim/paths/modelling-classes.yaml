@@ -1,7 +1,7 @@
 get:
   operationId: getEtimModellingClass
   tags:
-    - ETIM single
+    - Modelling single
   summary: Get ETIM modelling class
   description: |
     Retrieve a single ETIM modelling class by its code with full details including

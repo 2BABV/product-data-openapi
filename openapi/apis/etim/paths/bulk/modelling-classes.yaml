@@ -1,7 +1,7 @@
 get:
   operationId: getBulkEtimModellingClasses
   tags:
-    - ETIM bulk
+    - Modelling bulk
   summary: List ETIM modelling classes
   description: |
     Retrieve all ETIM modelling classes in bulk with cursor-based pagination.

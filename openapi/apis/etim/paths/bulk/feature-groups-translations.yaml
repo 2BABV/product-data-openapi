@@ -1,7 +1,7 @@
 get:
   operationId: getBulkEtimFeatureGroupsTranslations
   tags:
-    - ETIM bulk
+    - Classification bulk
   summary: List ETIM feature group translations
   description: |
     Retrieve translations for ETIM feature groups filtered by language(s).

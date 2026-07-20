@@ -1,7 +1,7 @@
 get:
   operationId: getBulkEtimUnits
   tags:
-    - ETIM bulk
+    - Classification bulk
   summary: List ETIM units
   description: |
     Retrieve all ETIM units in bulk with cursor-based pagination.
