@@ -5,6 +5,7 @@ description: |
 required:
   - classCode
   - classVersion
+  - classRevision
   - featureCode
   - valueCode
   - orderNumber
@@ -22,6 +23,12 @@ properties:
     minimum: 1
     examples:
       - 2
+  classRevision:
+    type: integer
+    description: Revision of the owning modelling class or connection type aggregate.
+    minimum: 0
+    examples:
+      - 1
   featureCode:
     type: string
     description: ETIM feature code.
@@ -56,6 +63,7 @@ properties:
 examples:
   - classCode: "MC000001"
     classVersion: 2
+    classRevision: 1
     featureCode: "EF000100"
     valueCode: "EV000050"
     orderNumber: 1

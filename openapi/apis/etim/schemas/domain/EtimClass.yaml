@@ -5,11 +5,11 @@ description: |
 required:
   - code
   - version
+  - revision
   - groupCode
   - status
   - description
   - mutationDate
-  - revision
   - deprecated
   - sectors
   - releases
@@ -28,6 +28,12 @@ properties:
     minimum: 1
     examples:
       - 4
+  revision:
+    type: integer
+    description: Revision number within the current version.
+    minimum: 0
+    examples:
+      - 3
   groupCode:
     type: string
     description: Code of the ETIM group this class belongs to.
@@ -57,12 +63,6 @@ properties:
     description: Date and time of last mutation.
     examples:
       - "2024-06-15T10:30:00Z"
-  revision:
-    type: integer
-    description: Revision number within the current version.
-    minimum: 0
-    examples:
-      - 3
   deprecated:
     type: boolean
     description: Whether this class is deprecated (derived from status = 9).
@@ -97,11 +97,11 @@ properties:
 examples:
   - code: "EC002714"
     version: 4
+    revision: 3
     groupCode: "EG000017"
     status: 5
     description: "Socket outlet"
     mutationDate: "2024-06-15T10:30:00Z"
-    revision: 3
     deprecated: false
     sectors: ["E", "B"]
     releases: ["ETIM-10.0", "ETIM-9.0", "DYNAMIC"]

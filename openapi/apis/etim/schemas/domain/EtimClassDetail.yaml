@@ -1,22 +1,20 @@
 type: object
 description: |
   Detailed ETIM class representation for single-entity lookup.
-  Contains full nested structure including features with their values,
-  linked modelling classes, and release membership.
+  Contains full nested structure including features with their values and release membership.
   No embedded translations — use the translation endpoints instead.
 required:
   - code
   - version
+  - revision
   - groupCode
   - status
   - descriptionEn
   - synonyms
   - mutationDate
-  - revision
   - sectors
   - releases
   - features
-  - linkedModellingClasses
 properties:
   code:
     type: string
@@ -30,6 +28,12 @@ properties:
     minimum: 1
     examples:
       - 4
+  revision:
+    type: integer
+    description: Revision number.
+    minimum: 0
+    examples:
+      - 3
   groupCode:
     type: string
     description: Code of the ETIM group this class belongs to.
@@ -76,12 +80,6 @@ properties:
     description: Date and time of last mutation.
     examples:
       - "2024-06-15T10:30:00Z"
-  revision:
-    type: integer
-    description: Revision number.
-    minimum: 0
-    examples:
-      - 3
   sectors:
     type: array
     description: Industry sectors (E, B, M, T, W).
@@ -111,33 +109,10 @@ properties:
     description: Features assigned to this class with their allowed values.
     items:
       $ref: ./EtimClassDetailFeature.yaml
-  linkedModellingClasses:
-    type: array
-    description: Modelling classes linked to this product class.
-    items:
-      type: object
-      required:
-        - code
-        - version
-        - descriptionEn
-      properties:
-        code:
-          type: string
-          pattern: "^MC[0-9]{6}$"
-          examples:
-            - "MC000001"
-        version:
-          type: integer
-          minimum: 1
-          examples:
-            - 2
-        descriptionEn:
-          type: string
-          examples:
-            - "Valve body"
 examples:
   - code: "EC002714"
     version: 4
+    revision: 3
     groupCode: "EG000017"
     groupDescriptionEn: "Installation (low voltage)"
     status: 5
@@ -145,7 +120,6 @@ examples:
     description: "Wandcontactdoos"
     synonyms: ["Stopcontact"]
     mutationDate: "2024-06-15T10:30:00Z"
-    revision: 3
     sectors: ["E", "B"]
     releases: ["ETIM-10.0", "ETIM-9.0", "DYNAMIC"]
     features:
@@ -160,4 +134,3 @@ examples:
             descriptionEn: "White"
             description: "Wit"
             orderNumber: 1
-    linkedModellingClasses: []

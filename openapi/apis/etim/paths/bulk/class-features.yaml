@@ -7,6 +7,8 @@ get:
     Retrieve all class-feature assignment records for regular ETIM classes (EC) in bulk.
 
     Each record links a feature to a class version with order, unit, and group information.
+    When a class aggregate changes, every current relation is returned with the class
+    `revision` copied to `classRevision` and the class aggregate's mutation timestamp.
   parameters:
     - $ref: ../../../../shared/parameters/query/cursor.yaml
     - $ref: ../../../../shared/parameters/query/limit.yaml

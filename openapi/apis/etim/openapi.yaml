@@ -113,8 +113,6 @@ paths:
     $ref: ./paths/bulk/class-features.yaml
   /etim/bulk/class-feature-values:
     $ref: ./paths/bulk/class-feature-values.yaml
-  /etim/bulk/class-modelling-classes:
-    $ref: ./paths/bulk/class-modelling-classes.yaml
 
   # Modelling - Bulk endpoints (grouped by resource)
   /etim/bulk/modelling-classes:
@@ -133,8 +131,6 @@ paths:
     $ref: ./paths/bulk/modelling-class-features.yaml
   /etim/bulk/modelling-class-feature-values:
     $ref: ./paths/bulk/modelling-class-feature-values.yaml
-  /etim/bulk/modelling-class-ports:
-    $ref: ./paths/bulk/modelling-class-ports.yaml
 
 components:
   schemas:
@@ -171,8 +167,6 @@ components:
       $ref: ./schemas/domain/EtimModellingClassFeatureValue.yaml
     EtimModellingClassPort:
       $ref: ./schemas/domain/EtimModellingClassPort.yaml
-    EtimClassModellingClass:
-      $ref: ./schemas/domain/EtimClassModellingClass.yaml
 
     # Domain schemas - translations
     EtimTranslation:
@@ -221,10 +215,6 @@ components:
       $ref: ./schemas/responses/BulkModellingClassFeaturesResponse.yaml
     BulkModellingClassFeatureValuesResponse:
       $ref: ./schemas/responses/BulkModellingClassFeatureValuesResponse.yaml
-    BulkModellingClassPortsResponse:
-      $ref: ./schemas/responses/BulkModellingClassPortsResponse.yaml
-    BulkClassModellingClassesResponse:
-      $ref: ./schemas/responses/BulkClassModellingClassesResponse.yaml
 
     # Response schemas - bulk translations
     BulkClassesTranslationsResponse:

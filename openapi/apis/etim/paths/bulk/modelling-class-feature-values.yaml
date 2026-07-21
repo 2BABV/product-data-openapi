@@ -7,6 +7,8 @@ get:
     Retrieve all class-feature-value records for ETIM modelling classes (MC) in bulk.
 
     Extends regular class-feature-values with the portcode discriminator.
+    When a modelling class or connection type aggregate changes, every current relation is
+    returned with the owning class `revision` copied to `classRevision`.
   parameters:
     - $ref: ../../../../shared/parameters/query/cursor.yaml
     - $ref: ../../../../shared/parameters/query/limit.yaml

@@ -7,6 +7,8 @@ get:
     Retrieve all class-feature-value records for regular ETIM classes (EC) in bulk.
 
     Each record links a value to a specific class-feature combination.
+    When a class aggregate changes, every current relation is returned with the class
+    `revision` copied to `classRevision` and the class aggregate's mutation timestamp.
   parameters:
     - $ref: ../../../../shared/parameters/query/cursor.yaml
     - $ref: ../../../../shared/parameters/query/limit.yaml

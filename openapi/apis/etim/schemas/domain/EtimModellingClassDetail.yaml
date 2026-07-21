@@ -2,21 +2,21 @@ type: object
 description: |
   Detailed ETIM modelling class representation for single-entity lookup.
   Contains full nested structure including features with values and port assignments,
-  linked product classes, and ports.
+  linked product class codes, and ports.
   No embedded translations — use the translation endpoints instead.
 required:
   - code
   - version
+  - revision
   - groupCode
   - status
   - descriptionEn
   - synonyms
   - mutationDate
-  - revision
   - releases
   - features
   - ports
-  - linkedProductClasses
+  - productClassCodes
 properties:
   code:
     type: string
@@ -30,6 +30,12 @@ properties:
     minimum: 1
     examples:
       - 2
+  revision:
+    type: integer
+    description: Revision number.
+    minimum: 0
+    examples:
+      - 1
   groupCode:
     type: string
     description: Code of the modelling group this class belongs to.
@@ -76,12 +82,6 @@ properties:
     description: Date and time of last mutation.
     examples:
       - "2024-05-01T12:00:00Z"
-  revision:
-    type: integer
-    description: Revision number.
-    minimum: 0
-    examples:
-      - 1
   dimensionalDrawingSvgUrl:
     type: string
     format: uri
@@ -116,67 +116,20 @@ properties:
     type: array
     description: Ports defined on this modelling class.
     items:
-      type: object
-      required:
-        - portcode
-        - connectionTypes
-      properties:
-        portcode:
-          type: integer
-          description: Port identifier number.
-          examples:
-            - 1
-        connectionTypes:
-          type: array
-          description: Connection type classes linked to this port.
-          items:
-            type: object
-            required:
-              - code
-              - version
-              - descriptionEn
-            properties:
-              code:
-                type: string
-                pattern: "^CT[0-9]{6}$"
-                examples:
-                  - "CT001234"
-              version:
-                type: integer
-                minimum: 1
-                examples:
-                  - 1
-              descriptionEn:
-                type: string
-                examples:
-                  - "Threaded connection"
-  linkedProductClasses:
+      $ref: ./EtimModellingClassPort.yaml
+  productClassCodes:
     type: array
-    description: Regular product classes linked to this modelling class.
+    description: |
+      Regular product class codes linked to this modelling class.
+      Linked versions are resolved through the selected ETIM release.
+    uniqueItems: true
     items:
-      type: object
-      required:
-        - code
-        - version
-        - descriptionEn
-      properties:
-        code:
-          type: string
-          pattern: "^EC[0-9]{6}$"
-          examples:
-            - "EC002714"
-        version:
-          type: integer
-          minimum: 1
-          examples:
-            - 4
-        descriptionEn:
-          type: string
-          examples:
-            - "Socket outlet"
+      type: string
+      pattern: "^EC[0-9]{6}$"
 examples:
   - code: "MC000001"
     version: 2
+    revision: 1
     groupCode: "MG000001"
     groupDescriptionEn: "Valves"
     status: 5
@@ -184,7 +137,6 @@ examples:
     description: "Kleplichaam"
     synonyms: []
     mutationDate: "2024-05-01T12:00:00Z"
-    revision: 1
     dimensionalDrawingSvgUrl: "https://cdn.etim-international.com/drawings/MC000001.svg"
     releases: ["ETIM-10.0", "DYNAMIC"]
     features:
@@ -200,11 +152,5 @@ examples:
         values: []
     ports:
       - portcode: 1
-        connectionTypes:
-          - code: "CT001234"
-            version: 1
-            descriptionEn: "Threaded connection"
-    linkedProductClasses:
-      - code: "EC002714"
-        version: 4
-        descriptionEn: "Socket outlet"
+        connectionTypeCodes: ["CT001234"]
+    productClassCodes: ["EC002714"]

@@ -5,8 +5,8 @@ get:
   summary: Get ETIM modelling class
   description: |
     Retrieve a single ETIM modelling class by its code with full details including
-    nested features with port assignments, variable-axis units, ports with connection types,
-    and linked product classes.
+    nested features with port assignments, variable-axis units, ports with connection type codes,
+    and linked product class codes.
 
     **Lookup behavior:**
     - Code only (no version, no release) → latest published version (DYNAMIC release)
