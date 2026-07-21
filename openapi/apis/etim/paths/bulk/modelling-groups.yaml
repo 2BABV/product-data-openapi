@@ -8,6 +8,7 @@ get:
   parameters:
     - $ref: ../../../../shared/parameters/query/cursor.yaml
     - $ref: ../../../../shared/parameters/query/limit.yaml
+    - $ref: ../../../../shared/parameters/query/mutation-date-time.yaml
   responses:
     '200':
       description: Successfully retrieved data

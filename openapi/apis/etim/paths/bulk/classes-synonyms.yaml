@@ -15,6 +15,7 @@ get:
     - $ref: ../../../../shared/parameters/query/limit.yaml
     - $ref: ../../parameters/query/etim-languages.yaml
     - $ref: ../../parameters/query/etim-release.yaml
+    - $ref: ../../../../shared/parameters/query/mutation-date-time.yaml
   responses:
     '200':
       description: Successfully retrieved class synonyms

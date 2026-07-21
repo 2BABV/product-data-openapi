@@ -261,6 +261,8 @@ components:
       $ref: ./parameters/query/etim-languages.yaml
     EtimRelease:
       $ref: ./parameters/query/etim-release.yaml
+    MutationDateTime:
+      $ref: ../../shared/parameters/query/mutation-date-time.yaml
     Cursor:
       $ref: ../../shared/parameters/query/cursor.yaml
     Limit:

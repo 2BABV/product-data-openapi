@@ -3,7 +3,8 @@ in: query
 required: true
 description: |
   One or more language codes to filter translations.
-  Supports both short ISO 639-1 codes ("EN", "NL", "DE") and full codes with country ("nl-NL", "de-DE").
+  Uses the full locale format `xx-XX` (ISO 639-1 + ISO 3166-1 alpha-2, e.g., "nl-NL", "de-DE").
+  The only exception is "EN" which is accepted as the short code for ETIM English.
   Multiple values are comma-separated.
 schema:
   type: array
@@ -15,7 +16,7 @@ explode: false
 examples:
   singleLanguage:
     summary: Single language
-    value: ["NL"]
+    value: ["nl-NL"]
   multipleLanguages:
     summary: Multiple languages
     value: ["nl-NL", "de-DE", "fr-FR"]

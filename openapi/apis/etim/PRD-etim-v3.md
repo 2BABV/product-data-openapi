@@ -82,6 +82,8 @@ Create a new ETIM API v3 that:
 
 27. As an ETIM data consumer, I want the bulk translation endpoints to accept multiple comma-separated language codes (e.g. `language=nl-NL,de-DE`), so that I can fetch translations for multiple markets in one request.
 
+28. As an ETIM data consumer, I want to filter bulk endpoints by a `mutationDateTime` timestamp (ISO 8601 / RFC 3339 UTC), so that I can retrieve only records modified on or after my last sync instead of re-downloading the full dataset.
+
 ## Implementation Decisions
 
 ### API Structure
@@ -107,7 +109,7 @@ Create a new ETIM API v3 that:
 | `GET /api/v3/etim/bulk/class-features` | Flat relation (classCode, classVersion, featureCode, orderNumber, unitCode, unitImperialCode, featureGroupCode, type, definition, local, mutationDate) |
 | `GET /api/v3/etim/bulk/class-feature-values` | Flat relation (classCode, classVersion, featureCode, valueCode, orderNumber, mutationDate) |
 
-Common query params for bulk: `cursor`, `limit`, `release` (filter by ETIM release; only on classes, modelling-classes, and relation endpoints).
+Common query params for bulk: `cursor`, `limit`, `release` (filter by ETIM release; only on classes, modelling-classes, and relation endpoints), `mutationDateTime` (incremental sync filter; see [Delta Sync](#delta-sync)).
 
 #### Bulk Modelling Entity Endpoints (Tag: `Modelling bulk`)
 
@@ -118,7 +120,7 @@ Common query params for bulk: `cursor`, `limit`, `release` (filter by ETIM relea
 | `GET /api/v3/etim/bulk/modelling-class-features` | Flat relation (classCode, classVersion, featureCode, orderNumber, unitCode, unitImperialCode, featureGroupCode, type, definition, portcode, mutationDate) |
 | `GET /api/v3/etim/bulk/modelling-class-feature-values` | Flat relation (classCode, classVersion, featureCode, valueCode, orderNumber, mutationDate) |
 
-Common query params for modelling bulk: `cursor`, `limit`, `release`.
+Common query params for modelling bulk: `cursor`, `limit`, `release`, `mutationDateTime`.
 
 #### Bulk Classification Translation Endpoints (Tag: `Classification bulk`)
 
@@ -132,7 +134,7 @@ Common query params for modelling bulk: `cursor`, `limit`, `release`.
 | `GET /api/v3/etim/bulk/units/translations` | Unit translations (code, languageCode, description, abbreviation) |
 | `GET /api/v3/etim/bulk/values/translations` | Value translations (code, languageCode, description) |
 
-Common query params for translations: `cursor`, `limit`, `language` (comma-separated, required — filters which languages to return).
+Common query params for translations: `cursor`, `limit`, `language` (comma-separated, required — filters which languages to return), `mutationDateTime`.
 
 #### Bulk Modelling Translation Endpoints (Tag: `Modelling bulk`)
 
@@ -142,7 +144,7 @@ Common query params for translations: `cursor`, `limit`, `language` (comma-separ
 | `GET /api/v3/etim/bulk/modelling-classes/synonyms` | Modelling-class synonyms (code, version, languageCode, synonym) |
 | `GET /api/v3/etim/bulk/modelling-groups/translations` | Modelling-group translations (code, languageCode, description) |
 
-Common query params for modelling translations: `cursor`, `limit`, `language` (comma-separated, required).
+Common query params for modelling translations: `cursor`, `limit`, `language` (comma-separated, required), `mutationDateTime`.
 
 #### Single Classification Endpoints (Tag: `Classification single`)
 
@@ -185,7 +187,31 @@ Common query params for modelling translations: `cursor`, `limit`, `language` (c
 - **No embedded translations**: Entity responses do NOT include `translations[]` arrays in nested objects. Translations are fetched separately via dedicated endpoints.
 - **Class synonyms have dedicated bulk endpoints**: Class and modelling-class synonyms are served via dedicated `/synonyms` bulk endpoints instead of being embedded in translation records.
 - **Single English description on bulk endpoints**: All bulk entity endpoints return a single `description` field in ETIM English (EN) — no `language` query param and no `descriptionEn` separate field. Translated descriptions are available only via the dedicated `/translations` endpoints. Units include a single `abbreviation` field (ETIM English).
-- **All entities include `mutationDate`**: Every bulk entity (including relation tables like class-features and class-feature-values) includes a `mutationDate` field for incremental sync support.
+- **All entities include `mutationDate`**: Every bulk entity (including relation tables like class-features and class-feature-values) AND all translation/synonym records includes a `mutationDate` field for incremental sync support.
+
+### Delta Sync
+
+Support incremental sync via an optional `?mutationDateTime={RFC 3339 UTC}` query parameter on **all bulk endpoints** (entities, relations, translations, and synonyms). This allows consumers to retrieve only records modified on or after their last sync instead of re-downloading the full dataset.
+
+```http
+GET /api/v3/etim/bulk/classes?release=ETIM-10.0&mutationDateTime=2026-07-01T00:00:00Z
+```
+
+**Design rules:**
+
+- **Parameter**: Reuses the shared `mutationDateTime` parameter (`openapi/shared/parameters/query/mutation-date-time.yaml`) for cross-API consistency.
+- **Filter semantics**: Returns records where `mutationDate >= mutationDateTime` (inclusive). Inclusive comparison means consumers may receive the same record on consecutive syncs at the boundary.
+- **UTC only**: The value MUST be RFC 3339 with `Z` suffix (no timezone offsets). The server rejects non-UTC values with 400 Bad Request.
+- **Cursor stability**: A pagination cursor binds the full filter set (`mutationDateTime`, `release`, `language`). Reusing a cursor obtained with different filter values produces undefined results; the server may reject it with 400.
+- **Ordering**: Results are ordered by `(mutationDate, <entity composite key>)` for deterministic pagination. No chronological ordering guarantee beyond cursor stability.
+- **Consumer responsibility — upsert and dedup**: Because the filter is inclusive (`>=`), consumers must upsert records by their composite identity:
+  - Entities: `code` (+ `version` for classes/modelling-classes)
+  - Relations: `classCode` + `classVersion` + `featureCode` (+ `valueCode` for feature-values)
+  - Translations: `code` (+ `version`) + `languageCode`
+  - Synonyms: `code` + `version` + `languageCode` + `synonym`
+- **Watermark advancement**: Consumers should advance their stored watermark only after successfully processing ALL pages of a paginated response.
+- **Deletions out of scope**: `mutationDateTime` supports incremental upsert only. Deleted entities/relations/translations are NOT surfaced. Consumers needing an exact mirror must perform periodic full reconciliation (omit `mutationDateTime`).
+- **`estimatedTotal` reflects the filter**: The `meta.estimatedTotal` value represents the approximate count of records matching the current filter set, not the total dataset size.
 - **Flat relation records**: `class-features` and `class-feature-values` are fully denormalized junction records with all foreign keys inline.
 - **Modelling port inclusion**: Modelling class-feature relations include `portcode` in the flat record to indicate port association (absent = class-level feature, present ≥ 1 = port-specific).
 - **Modelling classes include connection types**: Connection type classes (CT) are a subtype of modelling class — they have features and values but no ports. They are served by the same modelling class endpoints (code pattern `^(MC|CT)[0-9]{6}$`). MC classes can reference a CT code on a port.
