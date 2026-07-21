@@ -7,9 +7,5 @@ description: |
   The only exception is "EN" which is accepted as the short code for ETIM English.
   When omitted, the description defaults to ETIM English (EN).
 schema:
-  type: string
-  examples:
-    - "EN"
-    - "nl-NL"
-    - "de-DE"
+  $ref: ../../schemas/domain/EtimLanguageCode.yaml
 example: "nl-NL"

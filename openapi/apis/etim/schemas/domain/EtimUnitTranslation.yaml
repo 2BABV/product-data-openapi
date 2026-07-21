@@ -15,11 +15,7 @@ properties:
     examples:
       - "EU000001"
   languageCode:
-    type: string
-    description: Language code (ISO 639-1 with country code).
-    pattern: "^[a-z]{2}-[A-Z]{2}$"
-    examples:
-      - "nl-NL"
+    $ref: ./EtimLanguageCode.yaml
   description:
     type: string
     description: Unit description in the specified language.

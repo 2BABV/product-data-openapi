@@ -20,11 +20,7 @@ properties:
     examples:
       - 4
   languageCode:
-    type: string
-    description: Language code (ISO 639-1 with country code).
-    pattern: "^[a-z]{2}-[A-Z]{2}$"
-    examples:
-      - "nl-NL"
+    $ref: ./EtimLanguageCode.yaml
   synonym:
     type: string
     description: Class synonym in the specified language.

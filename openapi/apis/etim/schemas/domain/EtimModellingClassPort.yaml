@@ -1,0 +1,63 @@
+type: object
+description: |
+  Flat relation record for a port on an ETIM modelling class.
+  A record without connection type fields represents a port with no connection types.
+  When a port has multiple connection types, one record is returned per connection type.
+required:
+  - classCode
+  - classVersion
+  - portcode
+  - mutationDate
+properties:
+  classCode:
+    type: string
+    description: ETIM modelling class code. Connection types do not define ports.
+    pattern: "^MC[0-9]{6}$"
+    examples:
+      - "MC000001"
+  classVersion:
+    type: integer
+    description: Modelling class version number.
+    minimum: 1
+    examples:
+      - 2
+  portcode:
+    type: integer
+    description: Port identifier within the modelling class version.
+    minimum: 1
+    examples:
+      - 1
+  connectionTypeCode:
+    type: string
+    description: Connection type assigned to the port. Absent when the port has no connection types.
+    pattern: "^CT[0-9]{6}$"
+    examples:
+      - "CT001234"
+  connectionTypeVersion:
+    type: integer
+    description: Connection type version. Present when `connectionTypeCode` is present.
+    minimum: 1
+    examples:
+      - 1
+  mutationDate:
+    type: string
+    format: date-time
+    description: Date and time of last mutation.
+    examples:
+      - "2024-05-01T12:00:00Z"
+dependentRequired:
+  connectionTypeCode:
+    - connectionTypeVersion
+  connectionTypeVersion:
+    - connectionTypeCode
+examples:
+  - classCode: "MC000001"
+    classVersion: 2
+    portcode: 1
+    connectionTypeCode: "CT001234"
+    connectionTypeVersion: 1
+    mutationDate: "2024-05-01T12:00:00Z"
+  - classCode: "MC000002"
+    classVersion: 1
+    portcode: 1
+    mutationDate: "2024-05-01T12:00:00Z"

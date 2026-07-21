@@ -1,0 +1,9 @@
+type: string
+description: |
+  ETIM language code. Uses the full locale format `xx-XX`, except ETIM English,
+  which uses the short code `EN`.
+pattern: "^(EN|[a-z]{2}-[A-Z]{2})$"
+examples:
+  - "EN"
+  - "nl-NL"
+  - "de-DE"

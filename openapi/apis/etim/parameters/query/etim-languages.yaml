@@ -9,7 +9,7 @@ description: |
 schema:
   type: array
   items:
-    type: string
+    $ref: ../../schemas/domain/EtimLanguageCode.yaml
   minItems: 1
 style: form
 explode: false

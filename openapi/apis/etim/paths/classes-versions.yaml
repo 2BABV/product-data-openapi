@@ -6,11 +6,12 @@ get:
   description: |
     Retrieve all available versions for a specific ETIM class code.
 
-    Returns an array of version summaries including version number, status,
-    mutation date, revision, and release membership. Ordered by version number descending.
+    Returns full class details for every available version, including nested features,
+    allowed values, linked modelling classes, and release membership.
+    Results are ordered by version number descending.
 
-    Use this to discover which versions exist before fetching full details via
-    `GET /etim/classes/{classCode}?version=N`.
+    This response can be substantially larger than a single class lookup. To retrieve one
+    known version, use `GET /etim/classes/{classCode}?version=N`.
   parameters:
     - $ref: ../parameters/path/etim-class-code.yaml
     - $ref: ../parameters/query/etim-language.yaml

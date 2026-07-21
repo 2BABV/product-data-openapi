@@ -108,6 +108,7 @@ Create a new ETIM API v3 that:
 | `GET /api/v3/etim/bulk/values` | Flat values (code, description, deprecated, mutationDate, successors) |
 | `GET /api/v3/etim/bulk/class-features` | Flat relation (classCode, classVersion, featureCode, orderNumber, unitCode, unitImperialCode, featureGroupCode, type, definition, local, mutationDate) |
 | `GET /api/v3/etim/bulk/class-feature-values` | Flat relation (classCode, classVersion, featureCode, valueCode, orderNumber, mutationDate) |
+| `GET /api/v3/etim/bulk/class-modelling-classes` | Versioned relation linking regular classes to modelling classes; reconstructs links in both directions |
 
 Common query params for bulk: `cursor`, `limit`, `release` (filter by ETIM release; only on classes, modelling-classes, and relation endpoints), `mutationDateTime` (incremental sync filter; see [Delta Sync](#delta-sync)).
 
@@ -119,6 +120,7 @@ Common query params for bulk: `cursor`, `limit`, `release` (filter by ETIM relea
 | `GET /api/v3/etim/bulk/modelling-groups` | Flat modelling-groups (code, description, mutationDate, successors) |
 | `GET /api/v3/etim/bulk/modelling-class-features` | Flat relation (classCode, classVersion, featureCode, orderNumber, unitCode, unitImperialCode, featureGroupCode, type, definition, portcode, mutationDate) |
 | `GET /api/v3/etim/bulk/modelling-class-feature-values` | Flat relation (classCode, classVersion, featureCode, valueCode, orderNumber, mutationDate) |
+| `GET /api/v3/etim/bulk/modelling-class-ports` | Flat port/connection-type relation; absent connection type fields represent an empty port |
 
 Common query params for modelling bulk: `cursor`, `limit`, `release`, `mutationDateTime`.
 
@@ -151,6 +153,7 @@ Common query params for modelling translations: `cursor`, `limit`, `language` (c
 | Endpoint | Description |
 |----------|-------------|
 | `GET /api/v3/etim/classes/{classCode}` | Single class details (query: `version`, `language`) |
+| `GET /api/v3/etim/classes/{classCode}/versions` | Full details for every class version, ordered by version descending |
 | `GET /api/v3/etim/classes/{classCode}/diff` | Class version diff (query: `version`, `language`) |
 | `GET /api/v3/etim/features/{featureCode}` | Single feature (query: `language`) |
 | `GET /api/v3/etim/feature-groups/{featureGroupCode}` | Single feature-group (query: `language`) |
@@ -163,6 +166,7 @@ Common query params for modelling translations: `cursor`, `limit`, `language` (c
 | Endpoint | Description |
 |----------|-------------|
 | `GET /api/v3/etim/modelling-classes/{classCode}` | Single modelling-class (query: `version`, `language`) |
+| `GET /api/v3/etim/modelling-classes/{classCode}/versions` | Full details for every modelling-class version, ordered by version descending |
 | `GET /api/v3/etim/modelling-groups/{groupCode}` | Single modelling-group (query: `language`) |
 
 #### Search Endpoints (Tag: `Classification single` / `Modelling single`)
@@ -203,17 +207,24 @@ GET /api/v3/etim/bulk/classes?release=ETIM-10.0&mutationDateTime=2026-07-01T00:0
 - **Filter semantics**: Returns records where `mutationDate >= mutationDateTime` (inclusive). Inclusive comparison means consumers may receive the same record on consecutive syncs at the boundary.
 - **UTC only**: The value MUST be RFC 3339 with `Z` suffix (no timezone offsets). The server rejects non-UTC values with 400 Bad Request.
 - **Cursor stability**: A pagination cursor binds the full filter set (`mutationDateTime`, `release`, `language`). Reusing a cursor obtained with different filter values produces undefined results; the server may reject it with 400.
-- **Ordering**: Results are ordered by `(mutationDate, <entity composite key>)` for deterministic pagination. No chronological ordering guarantee beyond cursor stability.
+- **Ordering**: Results are ordered by `(mutationDate, <complete entity composite key>)` for deterministic pagination. The identities below are also the pagination tie-breakers. No chronological ordering guarantee beyond cursor stability.
 - **Consumer responsibility — upsert and dedup**: Because the filter is inclusive (`>=`), consumers must upsert records by their composite identity:
   - Entities: `code` (+ `version` for classes/modelling-classes)
-  - Relations: `classCode` + `classVersion` + `featureCode` (+ `valueCode` for feature-values)
+  - Regular class-feature relations: `classCode` + `classVersion` + `featureCode`
+  - Regular class-feature-value relations: `classCode` + `classVersion` + `featureCode` + `valueCode`
+  - Modelling class-feature relations: `classCode` + `classVersion` + `featureCode` + optional `portcode`
+  - Modelling class-feature-value relations: `classCode` + `classVersion` + `featureCode` + `valueCode` + optional `portcode`
+  - Modelling class ports: `classCode` + `classVersion` + `portcode` + optional `connectionTypeCode` + optional `connectionTypeVersion`
+  - Class-modelling-class links: `classCode` + `classVersion` + `modellingClassCode` + `modellingClassVersion`
   - Translations: `code` (+ `version`) + `languageCode`
   - Synonyms: `code` + `version` + `languageCode` + `synonym`
 - **Watermark advancement**: Consumers should advance their stored watermark only after successfully processing ALL pages of a paginated response.
-- **Deletions out of scope**: `mutationDateTime` supports incremental upsert only. Deleted entities/relations/translations are NOT surfaced. Consumers needing an exact mirror must perform periodic full reconciliation (omit `mutationDateTime`).
+- **HIGH / VERY IMPORTANT TODO — surface removals**: `mutationDateTime` currently supports incremental upsert only. Deleted entities, relations, translations, and synonyms are NOT surfaced, so stale records remain in consumer datasets after a delta sync. A future design must add tombstones or equivalent deletion events. Until then, consumers needing an exact mirror must perform periodic full reconciliation (omit `mutationDateTime`).
 - **`estimatedTotal` reflects the filter**: The `meta.estimatedTotal` value represents the approximate count of records matching the current filter set, not the total dataset size.
 - **Flat relation records**: `class-features` and `class-feature-values` are fully denormalized junction records with all foreign keys inline.
 - **Modelling port inclusion**: Modelling class-feature relations include `portcode` in the flat record to indicate port association (absent = class-level feature, present ≥ 1 = port-specific).
+- **Modelling port reconstruction**: `modelling-class-ports` returns one record per port/connection-type assignment. A record without connection type fields preserves a port that has no connection types.
+- **Class/modelling link reconstruction**: `class-modelling-classes` stores each versioned EC-to-MC link once. Consumers use it from either direction to rebuild `linkedModellingClasses` and `linkedProductClasses`.
 - **Modelling classes include connection types**: Connection type classes (CT) are a subtype of modelling class — they have features and values but no ports. They are served by the same modelling class endpoints (code pattern `^(MC|CT)[0-9]{6}$`). MC classes can reference a CT code on a port.
 - **Modelling classes stay separate**: Separate endpoint paths for modelling-classes vs regular classes (different entity codes: MC/CT vs EC, different groups: MG vs EG).
 - **Response envelope**: All responses wrap content in `data` (with a named `$ref` schema), bulk adds `meta` with `CursorPaginationMetadata`.

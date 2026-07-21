@@ -1,0 +1,48 @@
+type: object
+description: |
+  Flat relation record linking a regular ETIM class version to a modelling class version.
+  The same record reconstructs linked modelling classes from the product-class side and
+  linked product classes from the modelling-class side.
+required:
+  - classCode
+  - classVersion
+  - modellingClassCode
+  - modellingClassVersion
+  - mutationDate
+properties:
+  classCode:
+    type: string
+    description: Regular ETIM class code.
+    pattern: "^EC[0-9]{6}$"
+    examples:
+      - "EC002714"
+  classVersion:
+    type: integer
+    description: Regular class version number.
+    minimum: 1
+    examples:
+      - 4
+  modellingClassCode:
+    type: string
+    description: Linked ETIM modelling class code.
+    pattern: "^MC[0-9]{6}$"
+    examples:
+      - "MC000001"
+  modellingClassVersion:
+    type: integer
+    description: Linked modelling class version number.
+    minimum: 1
+    examples:
+      - 2
+  mutationDate:
+    type: string
+    format: date-time
+    description: Date and time of last mutation.
+    examples:
+      - "2024-05-01T12:00:00Z"
+examples:
+  - classCode: "EC002714"
+    classVersion: 4
+    modellingClassCode: "MC000001"
+    modellingClassVersion: 2
+    mutationDate: "2024-05-01T12:00:00Z"
