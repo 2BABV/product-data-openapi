@@ -7,15 +7,8 @@ This API adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
-### Added
-- Bulk packaging identification endpoint: `GET /trade-items/bulk/packaging-identification`
-  - Flat `PackagingIdentificationSummary` schema with all packaging identification fields
-  - New fields: `packagingBreak`, `numberOfPackagingParts`
-- Bulk packaging logistic details endpoint: `GET /trade-items/bulk/packaging-logistic-details`
-  - Flat `PackagingLogisticDetailsSummary` schema with per-part logistic detail fields
-  - Parent packaging context: `packagingTypeCode`, `supplierPackagingNumber`
-  - New fields: `supplierPackagingPartNumber`, `manufacturerPackagingPartNumber`, `packagingPartGtins`, `serialNumberOnPackaging`, `stackingFactor`, `packagingTippable`
-  - Uses ETIM-aligned field names (`packagingTypeLength`, etc.) for bulk summary
+## [1.0.0-Preview3] - 2026-07-22
+
 ### Changed
 - **Response convention: sub-resource 404 removed** — Sub-resource endpoints (`/details`, `/descriptions`, `/ordering`, `/pricings`, `/relations`, `/logistic-details`, `/attachments`, `/enclosed-items`) no longer return `404`. They always return `200` with an empty collection (`[]`) or `null` object. Only the root endpoint (`/trade-items/{gln}/{num}`) returns `404`.
 - **Response convention: root 404 uses shared response** — The root endpoint `404` now uses the shared `application/problem+json` response (was inline `application/json`).
