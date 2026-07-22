@@ -24,11 +24,6 @@ examples:
         minimumOrderQuantity: 1
         orderStepSize: 1
         standardOrderLeadTime: 5
-        useUnit: null
-        useUnitConversionFactor: null
-        singleUseUnitQuantity: null
-        alternativeUseUnit: null
-        alternativeUseUnitConversionFactor: null
   - data:
       supplierIdGln: "8712423012485"
       supplierItemNumber: "SKU-CABLE-002"
@@ -40,5 +35,3 @@ examples:
         useUnit: MTR
         useUnitConversionFactor: 1.0
         singleUseUnitQuantity: 1.0
-        alternativeUseUnit: null
-        alternativeUseUnitConversionFactor: null

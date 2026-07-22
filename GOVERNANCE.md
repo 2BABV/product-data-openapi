@@ -16,7 +16,7 @@ Its goals are:
 ## 2. Principles
 
 1. **Stability over speed**
-2. **No breaking changes within a major version**
+2. **No breaking changes within a stable major version**
 3. **Full transparency (public repository)**
 4. **Traceability of every change**
 5. **International participation through a formal process**
@@ -112,6 +112,11 @@ The API uses **Semantic Versioning (SemVer)**:
 MAJOR.MINOR.PATCH
 ```
 
+Pre-release versions (for example, `1.0.0-Preview1`) may contain breaking changes
+between successive pre-release releases. Compatibility is frozen when the first stable
+release for that major version is published. Breaking changes after stable `1.0.0`
+require a new major version and URL path.
+
 ### MAJOR
 Breaking changes:
 - Required field added
@@ -152,7 +157,8 @@ Optional fields added anywhere in the object model, including nested models, rem
 
 ## 6. Breaking Change Policy
 
-- No breaking changes within a major version
+- Breaking changes are permitted between pre-release versions before the first stable release
+- No breaking changes within a stable major version
 - Deprecation period: at least **24 months**
 - Parallel major versions are allowed
 - Clients must ignore unknown enum values
@@ -270,4 +276,3 @@ TODO:
 - Create a formal `CONTRIBUTING.md`
 - Document a concrete GitHub folder structure
 - Generate an example RFC template
-

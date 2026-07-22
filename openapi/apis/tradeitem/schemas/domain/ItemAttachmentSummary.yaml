@@ -12,9 +12,6 @@ description: |
   - ETL/data warehouse ingestion
   - Streaming data processing
 
-  **Payload Optimization**: Optional properties with null values may be omitted from the response
-  to minimize payload size. Clients should treat missing properties as null/not applicable.
-
   **ETIM xChange**: `ItemAttachments[]`  
   **Path**: `Supplier[].Product[].TradeItem[].ItemAttachments[]`
 required:
@@ -71,7 +68,7 @@ properties:
       **Path**: `Supplier[].Product[].TradeItem[].ItemAttachments[].AttachmentTypeSpecification`
 
   attachmentLanguages:
-    type: ["array", "null"]
+    type: array
     description: |
       Languages for which the attachment is applicable (e.g., "en-GB", "de-DE").
 
@@ -82,10 +79,9 @@ properties:
       $ref: ../../../../shared/schemas/common/LanguageCode.yaml
     examples:
       - ["en-GB", "de-DE"]
-      - null
 
   attachmentFilename:
-    type: ["string", "null"]
+    type: string
     minLength: 1
     maxLength: 100
     description: |
@@ -96,7 +92,6 @@ properties:
     examples:
       - "product_image.jpg"
       - "manual_en.pdf"
-      - null
 
   attachmentUri:
     type: string
@@ -111,7 +106,7 @@ properties:
       - "https://cdn.supplier.com/manuals/manual_en.pdf"
 
   attachmentDescription:
-    type: ["string", "null"]
+    type: string
     minLength: 1
     maxLength: 255
     description: |
@@ -122,10 +117,9 @@ properties:
     examples:
       - "Front view product image"
       - "User manual in English"
-      - null
 
   attachmentIssueDate:
-    type: ["string", "null"]
+    type: string
     format: date
     description: |
       Date when the attachment was issued. ISO 8601 date format (YYYY-MM-DD).
@@ -134,10 +128,9 @@ properties:
       **Path**: `Supplier[].Product[].TradeItem[].ItemAttachments[].AttachmentDetails[].AttachmentIssueDate`
     examples:
       - "2024-01-15"
-      - null
 
   attachmentExpiryDate:
-    type: ["string", "null"]
+    type: string
     format: date
     description: |
       Date when the attachment expires. ISO 8601 date format (YYYY-MM-DD).
@@ -146,19 +139,16 @@ properties:
       **Path**: `Supplier[].Product[].TradeItem[].ItemAttachments[].AttachmentDetails[].AttachmentExpiryDate`
     examples:
       - "2026-12-31"
-      - null
 
 examples:
   - supplierIdGln: "8712423012485"
     supplierItemNumber: "SKU-LAMP-001"
     attachmentType: "ATX001"
     attachmentTypeSpecification: "MDX002"
-    attachmentLanguages: null
     attachmentFilename: "product_image.jpg"
     attachmentUri: "https://example.com/images/product.jpg"
     attachmentDescription: "Front view product image"
     attachmentIssueDate: "2024-01-15"
-    attachmentExpiryDate: null
 
   - supplierIdGln: "8712423012485"
     supplierItemNumber: "SKU-LAMP-001"
@@ -169,15 +159,11 @@ examples:
     attachmentUri: "https://cdn.supplier.com/datasheets/datasheet-en.pdf"
     attachmentDescription: "Technical datasheet"
     attachmentIssueDate: "2024-06-15"
-    attachmentExpiryDate: null
 
   - supplierIdGln: "9876543210987"
     supplierItemNumber: "ITEM-67890"
     attachmentType: "ATX026"
-    attachmentTypeSpecification: null
-    attachmentLanguages: null
     attachmentFilename: "ce-certificate.pdf"
     attachmentUri: "https://cdn.supplier.com/certs/ce-certificate.pdf"
-    attachmentDescription: null
     attachmentIssueDate: "2024-03-01"
     attachmentExpiryDate: "2029-03-01"

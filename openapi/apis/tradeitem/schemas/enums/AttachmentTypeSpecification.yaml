@@ -1,4 +1,4 @@
-type: ["string", "null"]
+type: string
 enum:
   - "MDX002"
   - "MDX005"
@@ -62,7 +62,6 @@ enum:
   - "MDX108"
   - "MDX109"
   - "MDX999"
-  - null
 description: |
   ETIM standardized media/attachment specification codes providing additional detail about the attachment type.
 
@@ -87,4 +86,3 @@ examples:
   - "MDX002"
   - "MDX007"
   - "MDX020"
-  - null

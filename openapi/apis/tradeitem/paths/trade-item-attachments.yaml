@@ -41,12 +41,10 @@ get:
                   attachments:
                     - attachmentType: "ATX001"
                       attachmentTypeSpecification: "MDX002"
-                      attachmentLanguages: null
                       attachmentFilename: "product_image.jpg"
                       attachmentUri: "https://example.com/images/product.jpg"
                       attachmentDescription: "Front view product image"
                       attachmentIssueDate: "2024-01-15"
-                      attachmentExpiryDate: null
                     - attachmentType: "ATX014"
                       attachmentTypeSpecification: "MDX005"
                       attachmentLanguages: ["en-GB"]
@@ -54,13 +52,9 @@ get:
                       attachmentUri: "https://cdn.supplier.com/datasheets/datasheet-en.pdf"
                       attachmentDescription: "Technical datasheet"
                       attachmentIssueDate: "2024-06-15"
-                      attachmentExpiryDate: null
                     - attachmentType: "ATX026"
-                      attachmentTypeSpecification: null
-                      attachmentLanguages: null
                       attachmentFilename: "ce-certificate.pdf"
                       attachmentUri: "https://cdn.supplier.com/certs/ce-certificate.pdf"
-                      attachmentDescription: null
                       attachmentIssueDate: "2024-03-01"
                       attachmentExpiryDate: "2029-03-01"
             singleAttachment:
@@ -72,12 +66,9 @@ get:
                   attachments:
                     - attachmentType: "ATX001"
                       attachmentTypeSpecification: "MDX002"
-                      attachmentLanguages: null
                       attachmentFilename: "lamp-front.jpg"
                       attachmentUri: "https://example.com/images/lamp-front.jpg"
                       attachmentDescription: "Front view"
-                      attachmentIssueDate: null
-                      attachmentExpiryDate: null
             noAttachments:
               summary: Trade item without attachments
               value:

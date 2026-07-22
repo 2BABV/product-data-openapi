@@ -39,7 +39,6 @@ get:
                     baseItemNetLength: 96.0
                     baseItemNetWidth: 5.0
                     baseItemNetHeight: 56.0
-                    baseItemNetDiameter: null
                     netDimensionUnit: CMT
                     baseItemNetWeight: 0.26
                     netWeightUnit: KGM
@@ -50,23 +49,16 @@ get:
                     baseItemNetLength: 25.5
                     baseItemNetWidth: 15.0
                     baseItemNetHeight: 10.0
-                    baseItemNetDiameter: null
                     netDimensionUnit: CMT
                     baseItemNetWeight: 500.0
                     netWeightUnit: GRM
-                    baseItemNetVolume: null
-                    netVolumeUnit: null
                   - supplierIdGln: "9876543210987"
                     supplierItemNumber: "SKU-CABLE-002"
                     baseItemNetLength: 1000.0
-                    baseItemNetWidth: null
-                    baseItemNetHeight: null
                     baseItemNetDiameter: 5.5
                     netDimensionUnit: MMT
                     baseItemNetWeight: 3.2
                     netWeightUnit: KGM
-                    baseItemNetVolume: null
-                    netVolumeUnit: null
                 meta:
                   cursor: "eyJpZCI6MTIzfQ=="
                   hasNext: true

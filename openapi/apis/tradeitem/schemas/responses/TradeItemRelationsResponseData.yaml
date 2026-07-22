@@ -39,8 +39,6 @@ examples:
         relationType: SPAREPART
         relatedItemQuantity: 2
       - relatedSupplierItemNumber: "ACC-789"
-        relatedManufacturerItemNumber: null
-        relatedItemGtins: null
         relationType: ACCESSORY
         relatedItemQuantity: 1
   - supplierIdGln: "1234567890123"

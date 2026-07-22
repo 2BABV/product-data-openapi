@@ -9,8 +9,7 @@ description: |
   - ETL/data warehouse ingestion
   - Streaming data processing
   
-  **Payload Optimization**: Optional properties with null values are omitted from the response
-  to minimize payload size. Clients should treat missing properties as null/not applicable.
+  Optional properties are omitted from each row when no value exists.
   
   **Parent context fields**: Key fields from the parent LcaEnvironmental object are included
   (`declaredUnitUnit`, `declaredUnitQuantity`, `lcaReferenceLifetime`, `thirdPartyVerification`,
@@ -165,7 +164,7 @@ properties:
       - "2024-01-01"
   
   epdValidityExpiryDate:
-    type: ["string", "null"]
+    type: string
     format: date
     description: |
       Expiry date of EPD validity period. ISO 8601 date format (YYYY-MM-DD).
@@ -174,10 +173,9 @@ properties:
       **Path**: `Supplier[].Product[].LcaEnvironmental.EpdValidityExpiryDate`
     examples:
       - "2029-12-31"
-      - null
   
   epdOperatorName:
-    type: ["string", "null"]
+    type: string
     minLength: 1
     maxLength: 100
     description: |
@@ -188,10 +186,9 @@ properties:
     examples:
       - "IBU - Institut Bauen und Umwelt e.V."
       - "The International EPD System"
-      - null
   
   epdOperatorUri:
-    type: ["string", "null"]
+    type: string
     format: uri
     description: |
       URI/URL to the EPD program operator's website.
@@ -201,10 +198,9 @@ properties:
     examples:
       - "https://ibu-epd.com"
       - "https://www.environdec.com"
-      - null
   
   operatorEpdId:
-    type: ["string", "null"]
+    type: string
     minLength: 1
     maxLength: 35
     description: |
@@ -214,10 +210,9 @@ properties:
       **Path**: `Supplier[].Product[].LcaEnvironmental.OperatorEpdId`
     examples:
       - "EPD-IBU-2024-001234"
-      - null
   
   manufacturerEpdId:
-    type: ["string", "null"]
+    type: string
     minLength: 1
     maxLength: 35
     description: |
@@ -227,10 +222,9 @@ properties:
       **Path**: `Supplier[].Product[].LcaEnvironmental.ManufacturerEpdId`
     examples:
       - "MFR-EPD-LED-2024-001"
-      - null
   
   productCategoryRulesDescription:
-    type: ["string", "null"]
+    type: string
     minLength: 1
     maxLength: 100
     description: |
@@ -242,10 +236,9 @@ properties:
     examples:
       - "PCR 2019:14 Lighting equipment"
       - "EN 15804+A2 Construction products"
-      - null
   
   productCategoryRulesUri:
-    type: ["string", "null"]
+    type: string
     format: uri
     description: |
       URI/URL to the Product Category Rules (PCR) document.
@@ -254,10 +247,9 @@ properties:
       **Path**: `Supplier[].Product[].LcaEnvironmental.ProductCategoryRulesUri`
     examples:
       - "https://www.environdec.com/pcr-library/pcr-2019-14"
-      - null
   
   productSpecificRulesDescription:
-    type: ["string", "null"]
+    type: string
     minLength: 1
     maxLength: 100
     description: |
@@ -268,10 +260,9 @@ properties:
       **Path**: `Supplier[].Product[].LcaEnvironmental.ProductSpecificRulesDescription`
     examples:
       - "PSR for LED lamps and luminaires"
-      - null
   
   productSpecificRulesUri:
-    type: ["string", "null"]
+    type: string
     format: uri
     description: |
       URI/URL to the Product Specific Rules (PSR) document.
@@ -280,7 +271,6 @@ properties:
       **Path**: `Supplier[].Product[].LcaEnvironmental.ProductSpecificRulesUri`
     examples:
       - "https://www.environdec.com/psr-library/psr-led-lighting"
-      - null
   
   # LcaDeclaration fields (flattened)
   lifeCycleStage:
@@ -367,7 +357,7 @@ properties:
   
   # Environmental indicators
   declaredUnitGwpTotal:
-    type: ["number", "null"]
+    type: number
     format: decimal
     description: |
       Total Global Warming Potential (GWP) in kg CO2 equivalent per declared unit.
@@ -379,7 +369,7 @@ properties:
       - 0.85
   
   declaredUnitGwpFossil:
-    type: ["number", "null"]
+    type: number
     format: decimal
     description: |
       Fossil Global Warming Potential in kg CO2 equivalent per declared unit.
@@ -390,7 +380,7 @@ properties:
       - 14.25
   
   declaredUnitGwpBiogenic:
-    type: ["number", "null"]
+    type: number
     format: decimal
     description: |
       Biogenic Global Warming Potential in kg CO2 equivalent per declared unit.
@@ -401,7 +391,7 @@ properties:
       - 1.2
   
   declaredUnitGwpLuluc:
-    type: ["number", "null"]
+    type: number
     format: decimal
     description: |
       Global Warming Potential from Land Use and Land Use Change (GWP-LULUC) 
@@ -413,7 +403,7 @@ properties:
       - 0.25
   
   declaredUnitAp:
-    type: ["number", "null"]
+    type: number
     format: decimal
     description: |
       Acidification Potential (AP) in kg SO2 equivalent per declared unit.
@@ -424,7 +414,7 @@ properties:
       - 0.05
   
   declaredUnitEpFreshwater:
-    type: ["number", "null"]
+    type: number
     format: decimal
     description: |
       Eutrophication Potential for freshwater in kg PO4 equivalent per declared unit.
@@ -435,7 +425,7 @@ properties:
       - 0.002
   
   declaredUnitEpMarine:
-    type: ["number", "null"]
+    type: number
     format: decimal
     description: |
       Eutrophication Potential for marine water (EP-marine) in kg N equivalent per declared unit.
@@ -446,7 +436,7 @@ properties:
       - 0.0015
   
   declaredUnitEpTerrestrial:
-    type: ["number", "null"]
+    type: number
     format: decimal
     description: |
       Eutrophication Potential for terrestrial ecosystems (EP-terrestrial) 
@@ -458,7 +448,7 @@ properties:
       - 0.12
   
   declaredUnitPocp:
-    type: ["number", "null"]
+    type: number
     format: decimal
     description: |
       Photochemical Ozone Creation Potential (POCP) in kg NMVOC equivalent per declared unit.
@@ -470,7 +460,7 @@ properties:
       - 0.035
   
   declaredUnitOdp:
-    type: ["number", "null"]
+    type: number
     format: decimal
     description: |
       Ozone Depletion Potential (ODP) in kg CFC-11 equivalent per declared unit.
@@ -481,7 +471,7 @@ properties:
       - 0.0000012
   
   declaredUnitAdpe:
-    type: ["number", "null"]
+    type: number
     format: decimal
     description: |
       Abiotic Depletion Potential for non-fossil resources (ADP-elements) 
@@ -493,7 +483,7 @@ properties:
       - 0.00025
   
   declaredUnitAdpf:
-    type: ["number", "null"]
+    type: number
     format: decimal
     description: |
       Abiotic Depletion Potential for fossil resources (ADP-fossil) in MJ per declared unit.
@@ -504,7 +494,7 @@ properties:
       - 185.5
   
   declaredUnitWdp:
-    type: ["number", "null"]
+    type: number
     format: decimal
     description: |
       Water Deprivation Potential (WDP) in m³ world equivalent per declared unit.
@@ -515,7 +505,7 @@ properties:
       - 2.5
   
   declaredUnitPert:
-    type: ["number", "null"]
+    type: number
     format: decimal
     description: |
       Use of renewable primary energy resources (PERT) in MJ per declared unit.
@@ -527,7 +517,7 @@ properties:
       - 45.2
   
   declaredUnitPenrt:
-    type: ["number", "null"]
+    type: number
     format: decimal
     description: |
       Use of non-renewable primary energy resources (PENRT) in MJ per declared unit.
@@ -539,7 +529,7 @@ properties:
       - 195.8
   
   declaredUnitPm:
-    type: ["number", "null"]
+    type: number
     format: decimal
     description: |
       Particulate Matter emissions (PM) expressed as disease incidence per declared unit.
@@ -550,7 +540,7 @@ properties:
       - 0.0000015
   
   declaredUnitIrp:
-    type: ["number", "null"]
+    type: number
     format: decimal
     description: |
       Ionising Radiation Potential (IRP) in kBq U235 equivalent per declared unit.
@@ -561,7 +551,7 @@ properties:
       - 1.25
   
   declaredUnitEtpfw:
-    type: ["number", "null"]
+    type: number
     format: decimal
     description: |
       Ecotoxicity Potential for freshwater (ETP-fw) in CTUe (Comparative Toxic Unit for ecosystems) 
@@ -573,7 +563,7 @@ properties:
       - 125.5
   
   declaredUnitHtpc:
-    type: ["number", "null"]
+    type: number
     format: decimal
     description: |
       Human Toxicity Potential - cancer effects (HTP-c) in CTUh (Comparative Toxic Unit for humans) 
@@ -585,7 +575,7 @@ properties:
       - 0.0000025
   
   declaredUnitHtpnc:
-    type: ["number", "null"]
+    type: number
     format: decimal
     description: |
       Human Toxicity Potential - non-cancer effects (HTP-nc) in CTUh (Comparative Toxic Unit for humans) 
@@ -597,7 +587,7 @@ properties:
       - 0.000045
   
   declaredUnitSqp:
-    type: ["number", "null"]
+    type: number
     format: decimal
     description: |
       Soil Quality Potential (SQP) - dimensionless indicator per declared unit.

@@ -16,7 +16,7 @@ properties:
       - "EC002745"
   
   etimClassVersion:
-    type: ["integer", "null"]
+    type: integer
     minimum: 1
     description: |
       Version number of the ETIM class. Incremented when class definition changes.
@@ -27,7 +27,6 @@ properties:
     examples:
       - 1
       - 2
-      - null
   
   etimReleaseVersion:
     type: string
@@ -45,7 +44,7 @@ properties:
       - "DYNAMIC"
   
   etimDynamicReleaseDate:
-    type: ["string", "null"]
+    type: string
     format: date
     description: |
       Release date for dynamic ETIM classes. ISO 8601 date format (YYYY-MM-DD).
@@ -55,10 +54,9 @@ properties:
       **Path**: `Supplier[].Product[].EtimClassification[].EtimDynamicReleaseDate`
     examples:
       - "2024-06-15"
-      - null
   
   etimFeatures:
-    type: ["array", "null"]
+    type: array
     items:
       $ref: ./EtimFeature.yaml
     description: |
@@ -72,7 +70,6 @@ properties:
           etimValueCode: "EV000789"
         - etimFeatureCode: "EF000456"
           etimValueNumeric: 230.0
-      - null
 
   # TODO: ETIM Modelling Classes (etimModellingClassCode, etimModellingClassVersion)
   # These fields are defined in ETIM xChange V2.0 but are reserved for future implementation.
@@ -94,5 +91,4 @@ examples:
     etimClassVersion: 2
     etimReleaseVersion: "11.0"
   - etimClassCode: "EC001234"
-    etimClassVersion: null
     etimReleaseVersion: "10.0"

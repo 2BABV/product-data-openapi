@@ -3,7 +3,7 @@ required:
   - attachmentUri
 properties:
   attachmentLanguage:
-    type: ["array", "null"]
+    type: array
     uniqueItems: true
     items:
       $ref: ../../../../shared/schemas/common/LanguageCode.yaml
@@ -15,10 +15,9 @@ properties:
       **Path**: `Supplier[].Product[].ProductAttachments[].AttachmentDetails[].AttachmentLanguage[]`
     examples:
       - ["en-GB", "de-DE"]
-      - null
   
   attachmentFilename:
-    type: ["string", "null"]
+    type: string
     minLength: 1
     maxLength: 100
     description: |
@@ -29,7 +28,6 @@ properties:
     examples:
       - "product-datasheet-v2.pdf"
       - "LED-bulb-front-view.jpg"
-      - null
   
   attachmentUri:
     type: string
@@ -44,7 +42,7 @@ properties:
       - "https://images.manufacturer.com/products/LED-12345-front.jpg"
   
   attachmentDescription:
-    type: ["array", "null"]
+    type: array
     items:
       type: object
       required:
@@ -74,10 +72,9 @@ properties:
     examples:
       - - language: "en-GB"
           attachmentDescription: "Technical datasheet with electrical specifications"
-      - null
   
   attachmentIssueDate:
-    type: ["string", "null"]
+    type: string
     format: date
     description: |
       Date when the attachment was issued or published. ISO 8601 date format (YYYY-MM-DD).
@@ -86,10 +83,9 @@ properties:
       **Path**: `Supplier[].Product[].ProductAttachments[].AttachmentDetails[].AttachmentIssueDate`
     examples:
       - "2024-06-15"
-      - null
   
   attachmentExpiryDate:
-    type: ["string", "null"]
+    type: string
     format: date
     description: |
       Date when the attachment expires or becomes obsolete. ISO 8601 date format (YYYY-MM-DD).
@@ -98,7 +94,6 @@ properties:
       **Path**: `Supplier[].Product[].ProductAttachments[].AttachmentDetails[].AttachmentExpiryDate`
     examples:
       - "2026-12-31"
-      - null
 
 examples:
   - attachmentUri: "https://cdn.manufacturer.com/products/datasheets/LED-12345.pdf"

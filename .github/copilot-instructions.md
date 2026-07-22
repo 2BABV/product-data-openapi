@@ -34,10 +34,11 @@ When working with this repository:
   - Use `meta` for cursor pagination information (reuse `CursorPaginationMetadata` with `cursor`, `prevCursor`, `hasNext`, `hasPrev`, `limit`, `estimatedTotal`)
 
 2. **OpenAPI 3.1 / JSON Schema 2020-12 Requirements**:
-   - Use `type: ["string", "null"]` for nullable fields (NOT `nullable: true`)
+   - Optional ETIM scalars use a non-null type and are omitted from `required`; absent means no value
+   - Optional ETIM objects use a direct `$ref` and are omitted from `required`
+   - Use JSON Schema null types only where the API intentionally gives `null` distinct semantics (NOT deprecated `nullable: true`)
    - Use `type: array` (required, never nullable) for collection properties in sub-resource response schemas — empty collections use `[]`, never `null`
    - **Exception**: Aggregate root response schemas (`ProductResponseData`, `TradeItemResponseData`) use `type: ["array", "null"]` for collection properties to support partial inclusion (`null` = not included in this response, `[]` = included but empty)
-   - Use `anyOf: [$ref, type: "null"]` for optional singular objects — property is required but value may be `null`
    - Use `anyOf`, `oneOf`, `allOf` for composition (avoid deprecated patterns)
   - Allow `additionalProperties` throughout the object model, including nested models, to preserve backward compatibility when optional fields are added
    - Use `examples` array (plural) in schemas, not `example` (singular, deprecated)
@@ -110,7 +111,10 @@ When working with this repository:
      - `[]` — requested, but empty (no data exists)
      - `null` — not included in this response (not requested)
      Code-gen: `required ICollection<T>?` (nullable collection).
-   - **Objects `null` when absent**: Singular optional objects are required but nullable (`anyOf: [$ref, type: "null"]`). Always present, value is `null` when unavailable. Code-gen: `T?`.
+   - **Optional objects are absent**: Singular optional ETIM objects use a direct `$ref` and are omitted when unavailable. Required objects remain in `required`. Use nullable objects only for explicitly documented API-specific three-state semantics.
+   - **Required-nullable singular sub-resource `data` (exactly four)**: `ProductDetailsResponseData.details`, `ProductLcaEnvironmentalResponseData.lcaEnvironmental`, `TradeItemDetailsResponseData.details`, and `TradeItemOrderingResponseData.ordering` are required and nullable (`anyOf: [$ref, type: "null"]`). `null` signals the singular resource is unavailable (parent entity not found, or no data of that kind); the endpoint returns `200`, never `404`.
+   - **Intentional `null` allowlist**: JSON `null` is permitted **only** in (1) aggregate response arrays in `ProductResponseData`/`TradeItemResponseData`, (2) the four required-nullable singular sub-resource `data` properties above, and (3) pagination metadata members `cursor`/`prevCursor`/`estimatedTotal` in `CursorPaginationMetadata`. Every other optional value is omitted (Option B), enforced by `scripts/validate-option-b.mjs`.
+   - **Flattened pricing conditional absence**: In `TradeItemPricingSummary`, rows without an allowance/surcharge omit all seven `allowanceSurcharge*` fields (never `null`). `dependentRequired` couples `allowanceSurchargeIndicator` and `allowanceSurchargeType` and requires both whenever any other allowance/surcharge field is present.
    - **Errors RFC 9457 ProblemDetails**: All errors use Problem Details with `application/problem+json`. Branch on `type`/`status`, never on `detail`/`title`. Validation errors include `errors` extension member.
 
 ## Naming Convention Details
@@ -134,15 +138,13 @@ When working with this repository:
 
 ### Nullable Fields (OpenAPI 3.1 / JSON Schema 2020-12)
 ```yaml
-# ✅ CORRECT - Use type array
-propertyName:
-  type: ["string", "null"]
-  description: Optional field that can be null
-
-# ❌ INCORRECT - Don't use nullable keyword (OpenAPI 3.0 only)
+# ✅ Optional ETIM scalar — absent when unavailable
 propertyName:
   type: string
-  nullable: true
+
+# ❌ INCORRECT — do not model ordinary optionality as null
+propertyName:
+  type: ["string", "null"]
 
 # ✅ Sub-resource arrays — required, never nullable (empty = [])
 descriptions:
@@ -163,11 +165,9 @@ descriptions:
   items:
     $ref: '#/components/schemas/ProductDescription'
 
-# ✅ Optional objects — required + nullable
+# ✅ Optional objects — direct reference, not in required
 ordering:
-  anyOf:
-    - $ref: '#/components/schemas/TradeItemOrdering'
-    - type: "null"
+  $ref: '#/components/schemas/TradeItemOrdering'
 ```
 
 ### Examples (OpenAPI 3.1+)

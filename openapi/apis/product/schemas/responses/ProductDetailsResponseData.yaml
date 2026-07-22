@@ -20,7 +20,7 @@ properties:
     examples:
       - "929002376910"
   details:
-    anyOf:
+    oneOf:
       - $ref: ../domain/ProductDetails.yaml
       - type: "null"
     description: |

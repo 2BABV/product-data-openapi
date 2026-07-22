@@ -6,14 +6,17 @@ description: |
   
   **LEFT JOIN semantics**: A pricing entry with N allowances/surcharges produces N rows
   (pricing fields repeated on each). A pricing entry without surcharges produces 1 row
-  with all `allowanceSurcharge*` fields set to `null`.
+  that **omits** all seven `allowanceSurcharge*` fields entirely (absent, never `null`).
   
   **Required field relaxation**: In the domain model (`AllowanceSurcharge`),
   `allowanceSurchargeIndicator` and `allowanceSurchargeType` are required fields.
-  In this flattened bulk schema they are **nullable** because rows representing
-  pricings without surcharges carry `null` for all allowance/surcharge fields.
-  When `allowanceSurchargeIndicator` is non-null, `allowanceSurchargeType` is also
-  guaranteed to be non-null.
+  In this flattened bulk schema they are **optional** because rows representing
+  pricings without surcharges omit all allowance/surcharge fields. The exact
+  conditional-presence contract is declared via `dependentRequired`: whenever
+  `allowanceSurchargeIndicator` or `allowanceSurchargeType` is present, the other
+  is required, and whenever any of the remaining five allowance/surcharge fields
+  is present, both `allowanceSurchargeIndicator` and `allowanceSurchargeType`
+  are required alongside it.
   
   This flattened structure is optimized for:
   - Predictable payload sizes per row (uniform shape)
@@ -24,8 +27,9 @@ description: |
   A trade item may have multiple pricing entries (e.g., quantity tiers, validity periods),
   resulting in multiple rows with the same composite key but different pricing data.
   
-  **Payload Optimization**: Optional properties with null values may be omitted from the response
-  to minimize payload size. Clients should treat missing properties as null/not applicable.
+  **Payload Optimization**: Optional properties are omitted from the response when they
+  have no value, to minimize payload size. Clients should treat missing properties as
+  not applicable. Optional properties never carry a literal `null`.
   
   **ETIM xChange**: `Pricing` + `AllowanceSurcharge`
   **Path**: `Supplier[].Product[].TradeItem[].Pricing[]` × `Pricing[].AllowanceSurcharge[]`
@@ -36,6 +40,26 @@ required:
   - priceQuantity
   - currencyCode
   - priceValidityDate
+dependentRequired:
+  allowanceSurchargeIndicator:
+    - allowanceSurchargeType
+  allowanceSurchargeType:
+    - allowanceSurchargeIndicator
+  allowanceSurchargeSequenceNumber:
+    - allowanceSurchargeIndicator
+    - allowanceSurchargeType
+  allowanceSurchargeValidityDate:
+    - allowanceSurchargeIndicator
+    - allowanceSurchargeType
+  allowanceSurchargeAmount:
+    - allowanceSurchargeIndicator
+    - allowanceSurchargeType
+  allowanceSurchargePercentage:
+    - allowanceSurchargeIndicator
+    - allowanceSurchargeType
+  allowanceSurchargeMinimumQuantity:
+    - allowanceSurchargeIndicator
+    - allowanceSurchargeType
 properties:
   # =========================================================================
   # KEY FIELDS (required for bulk retrieval)
@@ -84,7 +108,7 @@ properties:
       - MTR  # Meter
   
   priceUnitFactor:
-    type: ["number", "null"]
+    type: number
     format: decimal
     description: |
       Factor to convert price unit to order unit (converted from ETIM xChange string to number).
@@ -123,7 +147,7 @@ properties:
       - EUR
   
   priceOnRequest:
-    type: ["boolean", "null"]
+    type: boolean
     description: |
       Indicates whether the price is available only on request.
       
@@ -134,7 +158,7 @@ properties:
       - true
   
   grossListPrice:
-    type: ["number", "null"]
+    type: number
     format: decimal
     description: |
       Gross list price (before discounts) (converted from ETIM xChange string to number).
@@ -149,7 +173,7 @@ properties:
       - 1500.0
   
   netPrice:
-    type: ["number", "null"]
+    type: number
     format: decimal
     description: |
       Net price (after discounts, before tax) (converted from ETIM xChange string to number).
@@ -164,7 +188,7 @@ properties:
       - 1200.0
   
   recommendedRetailPrice:
-    type: ["number", "null"]
+    type: number
     format: decimal
     description: |
       Recommended retail price (MSRP) (converted from ETIM xChange string to number).
@@ -179,7 +203,7 @@ properties:
       - 1800.0
   
   vat:
-    type: ["number", "null"]
+    type: number
     format: decimal
     description: |
       VAT/tax percentage (converted from ETIM xChange string to number).
@@ -207,7 +231,7 @@ properties:
       - "2025-01-01"
   
   priceExpiryDate:
-    type: ["string", "null"]
+    type: string
     format: date
     description: |
       Date when the price expires. ISO 8601 date format (YYYY-MM-DD).
@@ -220,58 +244,60 @@ properties:
   # =========================================================================
   # ALLOWANCE/SURCHARGE FIELDS (flattened from Pricing[].AllowanceSurcharge[])
   #
-  # These fields are all null when the pricing entry has no surcharges.
-  # When allowanceSurchargeIndicator is non-null, allowanceSurchargeType is
-  # also guaranteed to be non-null.
+  # All seven fields are optional and non-null. Rows for pricings without
+  # surcharges (LEFT JOIN) omit all seven fields entirely — never emit `null`.
+  # Conditional presence is declared exactly via `dependentRequired` above:
+  # whenever `allowanceSurchargeIndicator` or `allowanceSurchargeType` is
+  # present, the other must also be present; whenever any of the remaining
+  # five fields is present, both `allowanceSurchargeIndicator` and
+  # `allowanceSurchargeType` must also be present.
   #
   # In the domain model (AllowanceSurcharge), allowanceSurchargeIndicator and
-  # allowanceSurchargeType are required. Here they are nullable because this
-  # flat schema includes rows for pricings without surcharges (LEFT JOIN).
+  # allowanceSurchargeType are required. Here they are optional (but never
+  # null) because this flat schema includes rows for pricings without
+  # surcharges (LEFT JOIN).
   # =========================================================================
   
   allowanceSurchargeIndicator:
-    type: ["string", "null"]
+    type: string
     description: |
       Indicates whether this price adjustment is an allowance (discount) or a surcharge (additional charge).
-      `null` when this row represents a pricing entry without surcharges.
+      Omitted entirely when this row represents a pricing entry without surcharges.
       
       **Required field relaxation**: This field is required in the domain model `AllowanceSurcharge`
-      but nullable here because the flat LEFT JOIN includes rows for pricings without surcharges.
+      but optional here because the flat LEFT JOIN includes rows for pricings without surcharges.
+      Use `dependentRequired` to determine correlation with `allowanceSurchargeType`.
       
       **ETIM xChange**: `AllowanceSurchargeIndicator`
       **Path**: `Supplier[].Product[].TradeItem[].Pricing[].AllowanceSurcharge[].AllowanceSurchargeIndicator`
     enum:
       - ALLOWANCE
       - SURCHARGE
-      - null
     examples:
       - ALLOWANCE
       - SURCHARGE
-      - null
   
   allowanceSurchargeType:
     description: |
       Code describing the reason for the allowance or surcharge.
-      `null` when this row represents a pricing entry without surcharges.
+      Omitted entirely when this row represents a pricing entry without surcharges.
       
       **Required field relaxation**: This field is required in the domain model `AllowanceSurcharge`
-      but nullable here because the flat LEFT JOIN includes rows for pricings without surcharges.
+      but optional here because the flat LEFT JOIN includes rows for pricings without surcharges.
+      Use `dependentRequired` to determine correlation with `allowanceSurchargeIndicator`.
       
       **ETIM xChange**: `AllowanceSurchargeType`
       **Path**: `Supplier[].Product[].TradeItem[].Pricing[].AllowanceSurcharge[].AllowanceSurchargeType`
-    anyOf:
-      - $ref: ../../../../shared/schemas/common/AllowanceSurchargeTypes.yaml
-      - type: "null"
+    $ref: ../../../../shared/schemas/common/AllowanceSurchargeTypes.yaml
     examples:
       - AEQ
       - DBD
-      - null
   
   allowanceSurchargeSequenceNumber:
-    type: ["integer", "null"]
+    type: integer
     description: |
       Sequence number used to order multiple allowances or surcharges applied to the same price.
-      `null` when this row represents a pricing entry without surcharges.
+      Omitted when this row represents a pricing entry without surcharges.
       
       **ETIM xChange**: `AllowanceSurchargeSequenceNumber`
       **Path**: `Supplier[].Product[].TradeItem[].Pricing[].AllowanceSurcharge[].AllowanceSurchargeSequenceNumber`
@@ -279,27 +305,25 @@ properties:
     examples:
       - 1
       - 2
-      - null
   
   allowanceSurchargeValidityDate:
-    type: ["string", "null"]
+    type: string
     format: date
     description: |
       Date from which the allowance or surcharge becomes valid. ISO 8601 date format (YYYY-MM-DD).
-      `null` when this row represents a pricing entry without surcharges or when not specified.
+      Omitted when this row represents a pricing entry without surcharges or when not specified.
       
       **ETIM xChange**: `AllowanceSurchargeValidityDate`
       **Path**: `Supplier[].Product[].TradeItem[].Pricing[].AllowanceSurcharge[].AllowanceSurchargeValidityDate`
     examples:
       - "2025-01-01"
-      - null
   
   allowanceSurchargeAmount:
-    type: ["number", "null"]
+    type: number
     format: decimal
     description: |
       Fixed monetary amount of the allowance or surcharge.
-      `null` when this row represents a pricing entry without surcharges or when not specified.
+      Omitted when this row represents a pricing entry without surcharges or when not specified.
       
       **ETIM xChange**: `AllowanceSurchargeAmount`
       **Path**: `Supplier[].Product[].TradeItem[].Pricing[].AllowanceSurcharge[].AllowanceSurchargeAmount`
@@ -309,14 +333,13 @@ properties:
     examples:
       - 15.50
       - 250.00
-      - null
   
   allowanceSurchargePercentage:
-    type: ["number", "null"]
+    type: number
     format: decimal
     description: |
       Percentage rate of the allowance or surcharge.
-      `null` when this row represents a pricing entry without surcharges or when not specified.
+      Omitted when this row represents a pricing entry without surcharges or when not specified.
       
       **ETIM xChange**: `AllowanceSurchargePercentage`
       **Path**: `Supplier[].Product[].TradeItem[].Pricing[].AllowanceSurcharge[].AllowanceSurchargePercentage`
@@ -326,14 +349,13 @@ properties:
     examples:
       - 5.5
       - 12.75
-      - null
   
   allowanceSurchargeMinimumQuantity:
-    type: ["number", "null"]
+    type: number
     format: decimal
     description: |
       Minimum ordered quantity required for the allowance or surcharge to apply.
-      `null` when this row represents a pricing entry without surcharges or when not specified.
+      Omitted when this row represents a pricing entry without surcharges or when not specified.
       
       **ETIM xChange**: `AllowanceSurchargeMinimumQuantity`
       **Path**: `Supplier[].Product[].TradeItem[].Pricing[].AllowanceSurcharge[].AllowanceSurchargeMinimumQuantity`
@@ -343,7 +365,7 @@ properties:
     examples:
       - 10
       - 50
-      - null
+
 
 examples:
   # Pricing with percentage-based allowance (row 1 of 2 for this pricing)
@@ -363,7 +385,6 @@ examples:
     allowanceSurchargeType: AEQ
     allowanceSurchargeSequenceNumber: 1
     allowanceSurchargeValidityDate: "2025-01-01"
-    allowanceSurchargeAmount: null
     allowanceSurchargePercentage: 5.5
     allowanceSurchargeMinimumQuantity: 50
   
@@ -383,12 +404,9 @@ examples:
     allowanceSurchargeIndicator: SURCHARGE
     allowanceSurchargeType: DBD
     allowanceSurchargeSequenceNumber: 2
-    allowanceSurchargeValidityDate: null
     allowanceSurchargeAmount: 25.00
-    allowanceSurchargePercentage: null
-    allowanceSurchargeMinimumQuantity: null
   
-  # Pricing without surcharges (all allowance/surcharge fields null)
+  # Pricing without surcharges (all seven allowance/surcharge fields omitted)
   - supplierIdGln: "8712423012485"
     supplierItemNumber: "SKU-CABLE-002"
     priceUnit: MTR
@@ -402,10 +420,3 @@ examples:
     vat: 21.0
     priceValidityDate: "2025-01-01"
     priceExpiryDate: "2025-06-30"
-    allowanceSurchargeIndicator: null
-    allowanceSurchargeType: null
-    allowanceSurchargeSequenceNumber: null
-    allowanceSurchargeValidityDate: null
-    allowanceSurchargeAmount: null
-    allowanceSurchargePercentage: null
-    allowanceSurchargeMinimumQuantity: null

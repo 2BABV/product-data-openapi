@@ -41,7 +41,6 @@ examples:
     supplierItemNumber: "SKU-12345"
     pricings:
       - priceUnit: C62
-        priceUnitFactor: null
         priceQuantity: 1
         currencyCode: EUR
         priceOnRequest: false
@@ -71,7 +70,6 @@ examples:
         vat: 21.0
         priceValidityDate: "2025-01-01"
         priceExpiryDate: "2025-06-30"
-        allowanceSurcharges: null
       - priceUnit: MTR
         priceUnitFactor: 1.0
         priceQuantity: 100
@@ -83,4 +81,3 @@ examples:
         vat: 21.0
         priceValidityDate: "2025-01-01"
         priceExpiryDate: "2025-06-30"
-        allowanceSurcharges: null

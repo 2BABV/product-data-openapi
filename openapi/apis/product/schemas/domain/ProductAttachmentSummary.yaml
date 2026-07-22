@@ -13,8 +13,7 @@ description: |
   - ETL/data warehouse ingestion
   - Streaming data processing
 
-  **Payload Optimization**: Optional properties with null values may be omitted from the response
-  to minimize payload size. Clients should treat missing properties as null/not applicable.
+  Optional properties are omitted from each row when no value exists.
 
   **ETIM xChange**: `ProductAttachments[].AttachmentDetails[]`  
   **Path**: `Supplier[].Product[].ProductAttachments[].AttachmentDetails[]`
@@ -73,7 +72,7 @@ properties:
       **Path**: `Supplier[].Product[].ProductAttachments[].AttachmentTypeSpecification`
 
   attachmentOrder:
-    type: ["integer", "null"]
+    type: integer
     minimum: 1
     description: |
       Display order/sequence number for this attachment when multiple attachments are present.
@@ -85,14 +84,13 @@ properties:
     examples:
       - 1
       - 2
-      - null
 
   # =========================================================================
   # ATTACHMENT DETAIL FIELDS (one row per detail)
   # =========================================================================
 
   attachmentFilename:
-    type: ["string", "null"]
+    type: string
     minLength: 1
     maxLength: 100
     description: |
@@ -103,7 +101,6 @@ properties:
     examples:
       - "LED-12345-datasheet.pdf"
       - "product-front-view.jpg"
-      - null
 
   attachmentUri:
     type: string
@@ -118,7 +115,7 @@ properties:
       - "https://images.manufacturer.com/products/LED-12345-front.jpg"
 
   attachmentIssueDate:
-    type: ["string", "null"]
+    type: string
     format: date
     description: |
       Date when the attachment was issued or published. ISO 8601 date format (YYYY-MM-DD).
@@ -127,10 +124,9 @@ properties:
       **Path**: `Supplier[].Product[].ProductAttachments[].AttachmentDetails[].AttachmentIssueDate`
     examples:
       - "2024-06-15"
-      - null
 
   attachmentExpiryDate:
-    type: ["string", "null"]
+    type: string
     format: date
     description: |
       Date when the attachment expires or becomes obsolete. ISO 8601 date format (YYYY-MM-DD).
@@ -139,35 +135,25 @@ properties:
       **Path**: `Supplier[].Product[].ProductAttachments[].AttachmentDetails[].AttachmentExpiryDate`
     examples:
       - "2026-12-31"
-      - null
 
 examples:
   - manufacturerIdGln: "0000333000005"
     manufacturerProductNumber: "18591-P47"
     attachmentType: "ATX015"
-    attachmentTypeSpecification: null
     attachmentOrder: 1
     attachmentFilename: "c0c8542e86907655140d81c9699e7a4c.jpg"
     attachmentUri: "http://att.2ba.nl/0000333000005/PPI/c0/c0c8/c0c8542e86907655140d81c9699e7a4c.jpg"
-    attachmentIssueDate: null
-    attachmentExpiryDate: null
 
   - manufacturerIdGln: "0000333000005"
     manufacturerProductNumber: "18591-P47"
     attachmentType: "ATX018"
-    attachmentTypeSpecification: null
     attachmentOrder: 1
     attachmentFilename: "c0c8542e86907655140d81c9699e7a4c.jpg"
     attachmentUri: "http://att.2ba.nl/0000333000005/PPI/c0/c0c8/c0c8542e86907655140d81c9699e7a4c.jpg"
-    attachmentIssueDate: null
-    attachmentExpiryDate: null
 
   - manufacturerIdGln: "0000333000005"
     manufacturerProductNumber: "3244 br hg 47"
     attachmentType: "ATX015"
-    attachmentTypeSpecification: null
     attachmentOrder: 1
     attachmentFilename: "9af382818c2af00d8ce97a6b95667b74.jpg"
     attachmentUri: "http://att.2ba.nl/0000333000005/PPI/9a/9af3/9af382818c2af00d8ce97a6b95667b74.jpg"
-    attachmentIssueDate: null
-    attachmentExpiryDate: null

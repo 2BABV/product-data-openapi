@@ -10,14 +10,16 @@ get:
     combination with embedded composite key (`supplierIdGln` + `supplierItemNumber`).
     
     - A pricing with N allowances/surcharges produces N rows (pricing fields repeated).
-    - A pricing without surcharges produces 1 row with all `allowanceSurcharge*` fields as `null`.
+    - A pricing without surcharges produces 1 row that **omits** all `allowanceSurcharge*` fields
+      entirely (absent, never `null`).
     
     This follows the same denormalization pattern as `/products/bulk/etim-classifications` — every
     row is the same shape, no nesting, no artificial keys.
     
     **Required field relaxation**: `allowanceSurchargeIndicator` and `allowanceSurchargeType` are
-    required in the domain model but nullable here because rows for pricings without surcharges
-    carry `null` for all allowance/surcharge fields.
+    required in the domain model but optional here because rows for pricings without surcharges
+    omit all allowance/surcharge fields. The exact conditional-presence contract is declared via
+    `dependentRequired` on `TradeItemPricingSummary`.
     
     This endpoint is optimized for:
     - Predictable payload sizes per row (uniform shape)
@@ -72,8 +74,6 @@ get:
                     currencyCode: "EUR"
                     netPrice: 1.99
                     priceValidityDate: "2025-01-01"
-                    allowanceSurchargeIndicator: null
-                    allowanceSurchargeType: null
                 meta:
                   cursor: "eyJzdXBwbGllcklkR2xuIjoiODcxMjQyMzAxMjQ4NSIsInByaWNlUXVhbnRpdHkiOjEwMH0="
                   hasNext: true

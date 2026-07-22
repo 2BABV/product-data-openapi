@@ -17,15 +17,11 @@ examples:
         manufacturerIdGln: "9876543210987"
         manufacturerProductNumber: "929002376910"
         itemGtins: ["4012345678901"]
-        buyerItemNumber: null
         discountGroupId: "DG-001"
-        bonusGroupId: null
         itemValidityDate: "2024-01-01"
-        itemObsolescenceDate: null
         itemStatus: "ACTIVE"
         itemCondition: "NEW"
         stockItem: true
-        shelfLifePeriod: null
       descriptions:
         - descriptionLanguage: en-GB
           minimalItemDescription: "Socket outlet double"
@@ -69,27 +65,19 @@ examples:
       supplierIdGln: "9876543210987"
       supplierItemNumber: "SKU-MIN-001"
       details:
-        supplierAltItemNumber: null
-        manufacturerItemNumber: null
         manufacturerIdGln: "9876543210987"
         manufacturerProductNumber: "PROD-MIN-001"
-        itemGtins: null
-        buyerItemNumber: null
-        discountGroupId: null
-        bonusGroupId: null
         itemValidityDate: "2024-01-01"
-        itemObsolescenceDate: null
         itemStatus: "ACTIVE"
         itemCondition: "NEW"
         stockItem: true
-        shelfLifePeriod: null
-      descriptions: null
       ordering:
         orderUnit: C62
         minimumOrderQuantity: 1
         orderStepSize: 1
-      pricings: null
-      relations: null
-      logisticDetails: null
-      attachments: null
-      packagingUnits: null
+      descriptions: []
+      pricings: []
+      relations: []
+      logisticDetails: []
+      attachments: []
+      packagingUnits: []

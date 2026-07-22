@@ -29,7 +29,7 @@ properties:
       - "Hammer 500g"
       - "Screwdriver Phillips"
   uniqueMainItemDescription:
-    type: ["string", "null"]
+    type: string
     description: |
       Extended unique description of the trade item (long description).
       **ETIM xChange**: `UniqueMainItemDescription`
@@ -38,9 +38,8 @@ properties:
     maxLength: 255
     examples:
       - "Professional claw hammer with fiberglass handle, 500g head weight, ergonomic grip"
-      - null
   discountGroupDescription:
-    type: ["string", "null"]
+    type: string
     description: |
       Human-readable description of the discount group in this language.
       **ETIM xChange**: `DiscountGroupDescription[].DiscountGroupDescription`
@@ -49,9 +48,8 @@ properties:
     maxLength: 100
     examples:
       - "Standard tools discount group"
-      - null
   bonusGroupDescription:
-    type: ["string", "null"]
+    type: string
     description: |
       Human-readable description of the bonus group in this language.
       **ETIM xChange**: `BonusGroupDescription[].BonusGroupDescription`
@@ -60,14 +58,11 @@ properties:
     maxLength: 100
     examples:
       - "Premium bonus tier"
-      - null
 examples:
   - descriptionLanguage: "en-US"
     minimalItemDescription: "Hammer 500g"
     uniqueMainItemDescription: "Professional claw hammer with fiberglass handle, 500g head weight"
     discountGroupDescription: "Standard tools discount group"
-    bonusGroupDescription: null
   - descriptionLanguage: "de-DE"
     minimalItemDescription: "Hammer 500g"
     discountGroupDescription: "Standardwerkzeuge Rabattgruppe"
-    bonusGroupDescription: null

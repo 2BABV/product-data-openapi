@@ -59,13 +59,11 @@ properties:
     items:
       $ref: ../domain/EtimClassification.yaml
   lcaEnvironmental:
-    anyOf:
-      - $ref: ../domain/LcaEnvironmental.yaml
-      - type: "null"
+    $ref: ../domain/LcaEnvironmental.yaml
     description: |
       Life Cycle Assessment and Environmental Product Declaration (EPD) data.
-      Returns null if the product has no LCA/EPD data.
-      
+      Absent if the product has no LCA/EPD data.
+
       **ETIM xChange**: `LcaEnvironmental`  
       **Path**: `Supplier[].Product[].LcaEnvironmental`
   attachments:
@@ -90,7 +88,6 @@ examples:
       brandName: "Hue"
       productAnnouncementDate: "2024-01-15"
       productValidityDate: "2024-03-01"
-      productObsolescenceDate: null
       customsCommodityCode: "8539502090"
       countryOfOrigin:
         - "NL"

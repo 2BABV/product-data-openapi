@@ -26,7 +26,7 @@ properties:
     examples:
       - "SKU-12345"
   details:
-    anyOf:
+    oneOf:
       - $ref: ../domain/TradeItemDetails.yaml
       - type: "null"
     description: |
@@ -43,15 +43,11 @@ examples:
       manufacturerIdGln: "9876543210987"
       manufacturerProductNumber: "929002376910"
       itemGtins: ["4012345678901"]
-      buyerItemNumber: null
       discountGroupId: "DG-001"
-      bonusGroupId: null
       itemValidityDate: "2024-01-01"
-      itemObsolescenceDate: null
       itemStatus: "ACTIVE"
       itemCondition: "NEW"
       stockItem: true
-      shelfLifePeriod: null
   - supplierIdGln: "1234567890123"
     supplierItemNumber: "NONEXISTENT-999"
     details: null

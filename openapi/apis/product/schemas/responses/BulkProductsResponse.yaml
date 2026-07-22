@@ -31,8 +31,7 @@ examples:
           - etimClassCode: "EC002745"
             etimClassVersion: 1
             etimReleaseVersion: "9.0"
-        lcaEnvironmental: null
-        attachments: null
+        attachments: []
     meta:
       cursor: "eyJpZCI6MTIzfQ=="
       hasNext: true

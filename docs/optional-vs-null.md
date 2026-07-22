@@ -6,6 +6,13 @@ Updated todo list
 
 The ETIM xChange V2.0 XML/JSON schema uses **optional presence** (Option B): properties that have no value are simply absent from the payload. They are not listed in the JSON Schema `required` array.
 
+The canonical `ETIM xChange_Schema_V2.0-2025-11-27.json` contains 404 properties:
+- 89 required properties
+- 315 optional properties
+- 0 schemas that allow JSON `null`
+
+Optional ETIM scalars, objects, and collections are therefore omitted when unavailable. If an optional property is present, its value must satisfy its non-null schema. Required child properties remain required whenever their containing optional object or array item is present.
+
 Examples of optional-absent fields in xChange:
 - `SupplierAltItemNumber` — absent when supplier has no alternative number
 - `ManufacturerItemNumber` — absent when unknown
@@ -16,7 +23,14 @@ This is standard JSON Schema behavior: if a property is not in `required`, it ma
 
 ## 2. What the OpenAPI Spec Currently Does
 
-The current API spec converts all optional xChange fields to **required + nullable** (Option A): every property is listed in `required` and uses `type: ["string", "null"]` (or `anyOf: [$ref, type: "null"]` for objects). The response always includes every field, with `null` meaning "no value."
+The current API spec is in a **mixed optional + nullable state**, not a uniform implementation of Option A:
+
+- Many optional ETIM properties are already omitted from `required`, but their schemas still allow `null` with `type: ["string", "null"]` or `anyOf: [$ref, type: "null"]`.
+- Truly required ETIM fields and API key fields are generally required and non-null.
+- Aggregate root response schemas use required nullable collections for API field-selection semantics.
+- Some flattened bulk schemas allow optional properties to be either omitted or explicitly `null`.
+
+For most optional scalars and objects, adopting Option B therefore means narrowing the value schema so a present property cannot be `null`; it does **not** necessarily require changing the containing object's `required` array.
 
 Additionally, for aggregate root response schemas (`ProductResponseData`, `TradeItemResponseData`), collection properties use three-state semantics:
 - `[...]` — requested, has data
@@ -27,6 +41,18 @@ Several bulk/summary schemas contain a contradictory exception note:
 > "Optional properties with null values **may be omitted** from the response to minimize payload size."
 
 This means the schema declares properties as `required` but the implementation may omit them — clients must handle both absent AND null, undermining the primary benefit of Option A.
+
+### Intentional API Differences from Canonical ETIM
+
+The REST API is not a byte-for-byte projection of the catalogue interchange document:
+
+- Composite API keys such as manufacturer GLN + product number and supplier GLN + item number may be required even where the canonical catalogue schema permits an identifier to be absent.
+- Catalogue-level values such as currency and validity dates may be inherited or materialized into API response records.
+- Sub-resource responses guarantee required arrays with `[]` for no results.
+- Aggregate response DTOs may use `null` to mean a component was not included.
+- Bulk summary schemas may flatten nested ETIM structures.
+
+These API-specific decisions must be reviewed separately from ETIM optionality. Option B must not mechanically remove fields from `required` or weaken API key constraints.
 
 ---
 
@@ -152,6 +178,17 @@ The three-state pattern (`null` = not requested, `[]` = empty, `[...]` = data) i
 
 However, this justification does **not** extend to scalar properties. For `supplierAltItemNumber: type: ["string", "null"]`, there is no three-state distinction — `null` simply means "no value," which is semantically identical to absence.
 
+### Flattened and Denormalized Projections
+
+Flattened bulk rows are API projections rather than canonical ETIM objects. For example, `TradeItemPricingSummary` represents a pricing entry LEFT JOINed with its allowance/surcharge entries. Canonical ETIM requires both `AllowanceSurchargeIndicator` and `AllowanceSurchargeType` whenever an allowance/surcharge object exists, while the flattened row also needs to represent a pricing entry with no allowance/surcharge.
+
+The flattened schema must therefore define a coherent row shape:
+
+- no allowance/surcharge properties when the related object does not exist; or
+- allowance/surcharge properties present with the canonical required pair enforced.
+
+Making every flattened allowance/surcharge property independently optional would permit invalid partial combinations. Literal `null` values in enum arrays must also be removed when a property becomes optional and non-null.
+
 ### JSON Merge Patch Compatibility
 
 If the API ever supports PATCH operations (RFC 7396 JSON Merge Patch), Option B naturally supports the semantics:
@@ -254,23 +291,37 @@ properties:
 
 ### Schema Changes Required
 
-1. **Remove scalar properties from `required` arrays** where they represent optional data (e.g., `supplierAltItemNumber`, `manufacturerItemNumber`, `itemGtin`, `replacedByTradeItemNumber`, etc.)
+1. **Inventory every nullable property before editing** — classify it as canonical ETIM optional data, a canonical required field, an API-required key/defaulted field, an API response projection, or a flattened projection field.
 
-2. **Change `type: ["string", "null"]` to `type: string`** for optional scalars (the nullability is no longer needed — absence conveys "no value")
+2. **Narrow optional scalar schemas** — change `type: ["string", "null"]` to `type: string` (and equivalent number, integer, boolean, and enum patterns). Remove the property from `required` only if it is currently required but is optional in the approved API contract.
 
-3. **Remove `anyOf: [$ref, type: "null"]` for optional objects** — replace with a simple `$ref` not listed in `required`
+3. **Use direct optional references** — replace `anyOf: [$ref, type: "null"]` with a direct `$ref` for optional objects and enum values that do not assign distinct semantics to `null`.
 
-4. **Keep aggregate root collection three-state pattern unchanged** — `type: ["array", "null"]` in `ProductResponseData` and `TradeItemResponseData` remains correct for field selection semantics
+4. **Preserve canonical required fields** — required ETIM fields remain required and non-null whenever their containing structure exists. Preserve independently justified API composite keys and materialized default fields.
 
-5. **Keep sub-resource collection pattern unchanged** — `type: array` (required, never nullable) remains correct
+5. **Keep aggregate response three-state semantics unchanged** — `type: ["array", "null"]` in `ProductResponseData` and `TradeItemResponseData` remains correct for field selection semantics.
 
-6. **Remove "may be omitted" exception notes** from summary schemas — with Option B, absence is the natural state for unset fields, not an exception that needs documenting
+6. **Keep sub-resource collection semantics unchanged** — required `type: array` remains correct; no results use `[]`.
+
+7. **Domain aggregate collection semantics (resolved)** — `Product.yaml` and `TradeItem.yaml` model canonical ETIM: optional, **non-null** collections and objects, omitted when unavailable. The API-specific `null`/`[]`/`[...]` field-selection semantics live **only** in `ProductResponseData.yaml` and `TradeItemResponseData.yaml`.
+
+8. **Flattened pricing semantics (resolved)** — `TradeItemPricingSummary` uses **conditional absence**: rows without an allowance/surcharge omit all seven `allowanceSurcharge*` fields; all are non-null when present. `dependentRequired` enforces that `allowanceSurchargeIndicator` and `allowanceSurchargeType` occur together and that any other allowance/surcharge field requires both. No literal `null` enum values remain.
+
+9. **Remove obsolete payload exception notes** — under Option B, omission is contractual rather than an exception.
+
+10. **Update examples** — omit unavailable optional properties instead of assigning `null`. Retain `null` examples only where the API intentionally defines distinct null semantics.
 
 ### Documentation Changes
 
-7. **Update copilot instructions** — replace the "Objects null when absent" rule with the new patterns above
+11. **Update all authoritative guidance**:
+    - `.github/copilot-instructions.md`
+    - `docs/best-practices.md`
+    - `docs/product-data-openapi-design-decisions.md`
+    - this decision document
 
-8. **Update this document** — replace the "Verdict" with the new recommendation (done)
+12. **NSwag compatibility tooling removed** — the `scripts/generate-nswag-spec.mjs` transform, the `bundle:nswag` npm script, and the generated `*-api-nswag.yaml` outputs have been removed. Optional ETIM enums now use a direct `$ref`, so no nullable-enum rewrite is needed; generate clients directly from the canonical `*-api.yaml` bundles.
+
+13. **Document release impact** — changing required-nullable properties to optional non-null properties changes generated client contracts. This migration is permitted during the current v1 Preview phase; compatibility becomes binding at stable `1.0.0`. Release notes must identify the breaking contract change and migration impact.
 
 ### No Changes Needed
 
@@ -282,7 +333,44 @@ properties:
 ### Estimated Scope
 
 The change affects primarily:
-- Domain schemas in `schemas/domain/` — remove nullable scalars, remove from required
-- Response schemas in `schemas/responses/` — adjust required arrays
+- Domain schemas in `schemas/domain/` — narrow optional values while preserving canonical required children and API-specific constraints
+- Summary and bulk projection schemas — narrow optional values and enforce correlated flattened fields
+- Response schemas in `schemas/responses/` — preserve intentional collection semantics and remove unintended nullable scalar/object patterns
 - Generated bundles — must be regenerated after changes
-- Copilot instructions in `.github/copilot-instructions.md` — update nullability rules
+- HTML and domain model documentation — regenerate after source schema changes
+- Authoritative guidance — update all documents listed above
+
+### Approved Decisions
+
+1. **Domain aggregates follow canonical ETIM**: `Product.yaml` and `TradeItem.yaml`
+   use optional, non-null collections and objects. Unavailable values are omitted.
+   The API-specific `null`/`[]`/`[...]` field-selection semantics remain only in
+   `ProductResponseData.yaml` and `TradeItemResponseData.yaml`.
+
+2. **Flattened pricing uses conditional absence**: Rows without an
+   allowance/surcharge omit every `allowanceSurcharge*` property. All such properties
+   are non-null when present. `dependentRequired` enforces that
+   `allowanceSurchargeIndicator` and `allowanceSurchargeType` occur together,
+   and that any additional allowance/surcharge property requires both canonical fields.
+   This preserves one flat bulk DTO while rejecting partial allowance/surcharge rows.
+
+### Intentional `null` Allowlist (exact)
+
+JSON `null` appears in **exactly** these places and nowhere else. Everything else is
+optional-absent. `scripts/validate-option-b.mjs` enforces this list.
+
+| Category | Schema | Members |
+|---|---|---|
+| Aggregate response arrays (`type: ["array","null"]`) | `ProductResponseData.yaml` | `descriptions`, `etimClassifications`, `attachments` |
+| Aggregate response arrays (`type: ["array","null"]`) | `TradeItemResponseData.yaml` | `descriptions`, `pricings`, `relations`, `logisticDetails`, `attachments`, `packagingUnits` |
+| Required-nullable singular sub-resource `data` (`anyOf: [$ref, null]`) | `ProductDetailsResponseData.yaml` | `details` |
+| Required-nullable singular sub-resource `data` | `ProductLcaEnvironmentalResponseData.yaml` | `lcaEnvironmental` |
+| Required-nullable singular sub-resource `data` | `TradeItemDetailsResponseData.yaml` | `details` |
+| Required-nullable singular sub-resource `data` | `TradeItemOrderingResponseData.yaml` | `ordering` |
+| Pagination metadata (`type: ["string"/"integer","null"]`) | `CursorPaginationMetadata.yaml` | `cursor`, `prevCursor`, `estimatedTotal` |
+
+The four singular `data` properties use `null` to mean "the singular resource is
+unavailable" — the parent entity was not found (`details`, `ordering`) or no data of that
+kind exists (`lcaEnvironmental`); the endpoint returns `200` with `null`, never `404`.
+Aggregate arrays use `null` to mean "not included in this response" (three-state field
+selection).

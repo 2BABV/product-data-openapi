@@ -27,7 +27,6 @@ examples:
         brandName: "Hue"
         productAnnouncementDate: "2024-01-15"
         productValidityDate: "2024-03-01"
-        productObsolescenceDate: null
         customsCommodityCode: "8539502090"
         countryOfOrigin:
           - "NL"

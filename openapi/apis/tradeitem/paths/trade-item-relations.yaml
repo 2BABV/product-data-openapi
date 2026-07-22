@@ -41,8 +41,6 @@ get:
                       relationType: "SPAREPART"
                       relatedItemQuantity: 2
                     - relatedSupplierItemNumber: "ACC-789"
-                      relatedManufacturerItemNumber: null
-                      relatedItemGtins: null
                       relationType: "ACCESSORY"
                       relatedItemQuantity: 1
                     - relatedSupplierItemNumber: "SKU-12346"
@@ -58,7 +56,6 @@ get:
                   supplierItemNumber: "SKU-LAMP-001"
                   relations:
                     - relatedSupplierItemNumber: "251270"
-                      relatedManufacturerItemNumber: null
                       relatedItemGtins: ["04015081027125"]
                       relationType: "UPSELLING"
                       relatedItemQuantity: 1

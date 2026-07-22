@@ -6,7 +6,7 @@ required:
   - packagingTypeCode
 properties:
   supplierPackagingNumber:
-    type: ["string", "null"]
+    type: string
     description: |
       Supplier's packaging number for this packaging unit.
       **ETIM xChange**: `SupplierPackagingNumber`
@@ -15,9 +15,8 @@ properties:
     maxLength: 35
     examples:
       - "PKG-12345"
-      - null
   manufacturerPackagingNumber:
-    type: ["string", "null"]
+    type: string
     description: |
       Manufacturer's packaging number for this packaging unit.
       **ETIM xChange**: `ManufacturerPackagingNumber`
@@ -26,9 +25,8 @@ properties:
     maxLength: 35
     examples:
       - "MFG-PKG-789"
-      - null
   packagingGtins:
-    type: ["array", "null"]
+    type: array
     description: |
       Array of GTINs for this packaging unit.
       **ETIM xChange**: `PackagingGtin[]`
@@ -38,7 +36,6 @@ properties:
       $ref: ../../../../shared/schemas/identifiers/Gtin.yaml
     examples:
       - ["04012345678901"]
-      - null
   packagingTypeCode:
     description: |
       Type of packaging (box, pallet, etc.).
@@ -50,7 +47,7 @@ properties:
       - PF   # Pallet
       - C62  # Piece
   packagingUnitName:
-    type: ["string", "null"]
+    type: string
     description: |
       Human-readable name of the packaging unit. Flattened from multilingual array.
       **ETIM xChange**: `PackagingUnitName[].PackagingUnitName`
@@ -60,9 +57,8 @@ properties:
     examples:
       - "Box"
       - "Pallet"
-      - null
   packagingQuantity:
-    type: ["number", "null"]
+    type: number
     format: decimal
     description: |
       Quantity of base items in this packaging unit (converted from ETIM xChange string to number).
@@ -75,9 +71,8 @@ properties:
       - 10
       - 100
       - 1000
-      - null
   tradeItemPrimaryPackaging:
-    type: ["boolean", "null"]
+    type: boolean
     description: |
       Indicates whether this is the primary/consumer packaging.
       **ETIM xChange**: `TradeItemPrimaryPackaging`
@@ -85,9 +80,8 @@ properties:
     examples:
       - true
       - false
-      - null
   packagingGs1Code128:
-    type: ["string", "null"]
+    type: string
     description: |
       GS1-128 barcode for the packaging unit.
       **ETIM xChange**: `PackagingGs1Code128`
@@ -96,9 +90,8 @@ properties:
     maxLength: 48
     examples:
       - "01040123456789011710123456"
-      - null
   grossLength:
-    type: ["number", "null"]
+    type: number
     format: decimal
     description: |
       Gross length of the packaging in specified unit (converted from ETIM xChange string to number).
@@ -110,9 +103,8 @@ properties:
     examples:
       - 40.0
       - 120.0
-      - null
   grossWidth:
-    type: ["number", "null"]
+    type: number
     format: decimal
     description: |
       Gross width of the packaging in specified unit (converted from ETIM xChange string to number).
@@ -124,9 +116,8 @@ properties:
     examples:
       - 30.0
       - 80.0
-      - null
   grossHeight:
-    type: ["number", "null"]
+    type: number
     format: decimal
     description: |
       Gross height of the packaging in specified unit (converted from ETIM xChange string to number).
@@ -138,9 +129,8 @@ properties:
     examples:
       - 20.0
       - 100.0
-      - null
   grossDiameter:
-    type: ["number", "null"]
+    type: number
     format: decimal
     description: |
       Gross diameter of the packaging in specified unit (for cylindrical packaging) (converted from ETIM xChange string to number).
@@ -151,9 +141,8 @@ properties:
     maximum: 999999999999.9999
     examples:
       - 15.0
-      - null
   grossDimensionUnit:
-    type: ["string", "null"]
+    type: string
     description: |
       Unit of measurement for gross dimensions (CMT=centimeter, MTR=meter, etc.).
       **ETIM xChange**: `GrossDimensionUnit`
@@ -168,13 +157,11 @@ properties:
       - INH  # Inch
       - SMI  # Mile (statute mile)
       - YRD  # Yard
-      - null
     examples:
       - CMT
       - MTR
-      - null
   grossWeight:
-    type: ["number", "null"]
+    type: number
     format: decimal
     description: |
       Gross weight of the packaging in specified unit (converted from ETIM xChange string to number).
@@ -186,9 +173,8 @@ properties:
     examples:
       - 500.0
       - 15000.0
-      - null
   grossWeightUnit:
-    type: ["string", "null"]
+    type: string
     description: |
       Unit of measurement for gross weight (GRM=gram, KGM=kilogram, etc.).
       **ETIM xChange**: `GrossWeightUnit`
@@ -201,13 +187,11 @@ properties:
       - LTN  # Long ton (UK)
       - LBR  # Pound
       - ONZ  # Ounce
-      - null
     examples:
       - GRM
       - KGM
-      - null
   tradeItemEnclosed:
-    type: ["array", "null"]
+    type: array
     description: |
       Array of trade items enclosed within this packaging unit.
       Describes which other trade items are physically contained in this package.
@@ -220,20 +204,16 @@ properties:
           enclosedManufacturerItemNumber: "MFG-WIDGET-001"
           enclosedItemGtins: ["4012345678901"]
           enclosedItemQuantity: 5
-      - null
 examples:
   - supplierPackagingNumber: "PKG-001"
-    manufacturerPackagingNumber: null
     packagingGtins: ["04012345678901"]
     packagingTypeCode: BX
     packagingUnitName: "Box"
     packagingQuantity: 10
     tradeItemPrimaryPackaging: false
-    packagingGs1Code128: null
     grossLength: 40.0
     grossWidth: 30.0
     grossHeight: 20.0
-    grossDiameter: null
     grossDimensionUnit: CMT
     grossWeight: 5000.0
     grossWeightUnit: GRM
@@ -243,6 +223,4 @@ examples:
         enclosedItemGtins: ["4012345678901"]
         enclosedItemQuantity: 5
       - enclosedSupplierItemNumber: "SCREW-M8-50"
-        enclosedManufacturerItemNumber: null
-        enclosedItemGtins: null
         enclosedItemQuantity: 100
