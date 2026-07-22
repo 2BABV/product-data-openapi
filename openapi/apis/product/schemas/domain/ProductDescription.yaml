@@ -30,7 +30,7 @@ properties:
       - "Industrial Motor 3-Phase"
   
   uniqueMainProductDescription:
-    type: ["string", "null"]
+    type: string
     minLength: 1
     maxLength: 255
     description: |
@@ -41,10 +41,9 @@ properties:
       **Path**: `Supplier[].Product[].ProductDetails.ProductDescriptions[].UniqueMainProductDescription`
     examples:
       - "Philips Hue White and Color Ambiance E27 LED Smart Bulb, 806 lumens, Bluetooth compatible"
-      - null
   
   fullProductDescription:
-    type: ["string", "null"]
+    type: string
     minLength: 1
     maxLength: 10000
     description: |
@@ -55,10 +54,9 @@ properties:
       **Path**: `Supplier[].Product[].ProductDetails.ProductDescriptions[].FullProductDescription`
     examples:
       - "The Philips Hue White and Color Ambiance E27 LED Smart Bulb offers 16 million colors and 50,000 shades of white light..."
-      - null
   
   productMarketingText:
-    type: ["string", "null"]
+    type: string
     minLength: 1
     maxLength: 10000
     description: |
@@ -69,10 +67,9 @@ properties:
       **Path**: `Supplier[].Product[].ProductDetails.ProductDescriptions[].ProductMarketingText`
     examples:
       - "Transform your home with smart lighting that adapts to your lifestyle..."
-      - null
   
   productSpecificationText:
-    type: ["string", "null"]
+    type: string
     minLength: 1
     maxLength: 10000
     description: |
@@ -83,10 +80,9 @@ properties:
       **Path**: `Supplier[].Product[].ProductDetails.ProductDescriptions[].ProductSpecificationText`
     examples:
       - "Technical Specifications: Voltage: 220-240V, Power: 9W, Luminous flux: 806 lm..."
-      - null
   
   productApplicationInstructions:
-    type: ["string", "null"]
+    type: string
     minLength: 1
     maxLength: 10000
     description: |
@@ -97,10 +93,9 @@ properties:
       **Path**: `Supplier[].Product[].ProductDetails.ProductDescriptions[].ProductApplicationInstructions`
     examples:
       - "Installation: Screw the bulb into an E27 socket. Connect to the Philips Hue Bridge..."
-      - null
   
   productKeyword:
-    type: ["array", "null"]
+    type: array
     uniqueItems: true
     items:
       type: string
@@ -114,10 +109,9 @@ properties:
       **Path**: `Supplier[].Product[].ProductDetails.ProductDescriptions[].ProductKeyword[]`
     examples:
       - ["smart lighting", "LED", "color", "Bluetooth", "energy efficient"]
-      - null
   
   productPageUrl:
-    type: ["string", "null"]
+    type: string
     format: uri
     description: |
       URL to the manufacturer's product page.
@@ -127,7 +121,6 @@ properties:
       **Path**: `Supplier[].Product[].ProductDetails.ProductDescriptions[].ProductPageUrl`
     examples:
       - "https://www.philips.com/products/hue-white-color-e27"
-      - null
 
 examples:
   - descriptionLanguage: "en-GB"

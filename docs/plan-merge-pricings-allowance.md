@@ -1,5 +1,17 @@
 # Analysis: Flattening Pricing + AllowanceSurcharges into One Bulk Service
 
+> **⚠️ Superseded (historical).** This document captures the original analysis that
+> recommended merging pricing and allowance/surcharge into one flat bulk endpoint. The
+> merge was adopted, **but the nullable-field mechanism described below was not.** The
+> implemented design uses **conditional absence** instead of `null`: a row without an
+> allowance/surcharge **omits all seven** `allowanceSurcharge*` fields entirely (never
+> `null`), and a `dependentRequired` block couples `allowanceSurchargeIndicator` and
+> `allowanceSurchargeType` (both required whenever any allowance/surcharge field is
+> present). Wherever this document shows `allowanceSurcharge*: null`, read it as "the
+> field is omitted." The examples below are retained for historical context only.
+> Authoritative rules: [`optional-vs-null.md`](optional-vs-null.md) and
+> [`product-data-openapi-design-decisions.md`](product-data-openapi-design-decisions.md#flattened-pricing-conditional-absence).
+
 ## Problem Statement
 
 In the TradeItem API, the ETIM xChange source model **nests** `AllowanceSurcharge[]` inside each `Pricing[]` entry. However, the current OpenAPI design exposes them as **two separate** bulk endpoints:
@@ -183,14 +195,19 @@ for key, group in groupby(rows, key=lambda r: (r.supplierIdGln, r.supplierItemNu
 
 **New unified summary schema** — `TradeItemPricingSummary.yaml`:
 1. Remove `pricingRef`
-2. Add all `AllowanceSurcharge` fields as nullable top-level properties:
-   - `allowanceSurchargeIndicator` (nullable — `null` when no surcharges)
-   - `allowanceSurchargeType` (nullable)
-   - `allowanceSurchargeSequenceNumber` (nullable)
-   - `allowanceSurchargeAmount` (nullable)
-   - `allowanceSurchargePercentage` (nullable)
-   - `allowanceSurchargeMinimumQuantity` (nullable)
-   - `allowanceSurchargeValidityDate` (nullable)
+2. Add all `AllowanceSurcharge` fields as **optional, non-null** top-level properties,
+   omitted entirely when a row has no allowance/surcharge (conditional absence, not `null`):
+   - `allowanceSurchargeIndicator`
+   - `allowanceSurchargeType`
+   - `allowanceSurchargeSequenceNumber`
+   - `allowanceSurchargeAmount`
+   - `allowanceSurchargePercentage`
+   - `allowanceSurchargeMinimumQuantity`
+   - `allowanceSurchargeValidityDate`
+3. Add a `dependentRequired` block coupling `allowanceSurchargeIndicator` and
+   `allowanceSurchargeType`, and requiring both whenever any of the other five fields
+   is present. (Originally proposed as independent nullable fields — replaced by
+   conditional absence + `dependentRequired`.)
 
 **Remove** (no longer needed):
 - `AllowanceSurchargeSummary.yaml` (bulk-specific flat schema)
@@ -283,7 +300,7 @@ In the Product API, `/bulk/product-etim-classification-features` denormalizes fe
 
 ### Files to Modify (Phase 1)
 
-1. `schemas/domain/TradeItemPricingSummary.yaml` — Add allowance/surcharge fields as nullable top-level properties, remove `pricingRef`
+1. `schemas/domain/TradeItemPricingSummary.yaml` — Add allowance/surcharge fields as optional non-null top-level properties (omitted when absent) with a `dependentRequired` block, remove `pricingRef`
 2. `schemas/domain/TradeItemPricing.yaml` — Remove `pricingRef`, populate `allowanceSurcharges` (no longer null)
 3. `paths/bulk/trade-item-pricings.yaml` — Update description, update examples to show flat merged rows
 4. `paths/trade-item-pricings.yaml` — Update description (remove "always null" note)

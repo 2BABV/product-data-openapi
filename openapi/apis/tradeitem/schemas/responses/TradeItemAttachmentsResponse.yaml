@@ -21,12 +21,10 @@ examples:
       attachments:
         - attachmentType: "ATX001"
           attachmentTypeSpecification: "MDX002"
-          attachmentLanguages: null
           attachmentFilename: "product_image.jpg"
           attachmentUri: "https://example.com/images/product.jpg"
           attachmentDescription: "Front view product image"
           attachmentIssueDate: "2024-01-15"
-          attachmentExpiryDate: null
         - attachmentType: "ATX014"
           attachmentTypeSpecification: "MDX005"
           attachmentLanguages: ["en-GB"]
@@ -34,7 +32,6 @@ examples:
           attachmentUri: "https://cdn.supplier.com/datasheets/datasheet-en.pdf"
           attachmentDescription: "Technical datasheet"
           attachmentIssueDate: "2024-06-15"
-          attachmentExpiryDate: null
   - data:
       supplierIdGln: "1234567890123"
       supplierItemNumber: "SKU-12345"

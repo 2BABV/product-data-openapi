@@ -30,18 +30,13 @@ examples:
         itemGtins:
           - "08712423012485"
           - "12345678901234"
-        buyerItemNumber: null
         discountGroupId: "DG-LIGHTING"
-        bonusGroupId: null
         itemValidityDate: "2024-01-01"
-        itemObsolescenceDate: null
         itemStatus: "ACTIVE"
         itemCondition: "NEW"
         stockItem: true
-        shelfLifePeriod: null
       - supplierIdGln: "8712423012485"
         supplierItemNumber: "SKU-TOOL-002"
-        supplierAltItemNumber: null
         manufacturerItemNumber: "MFR-54321"
         manufacturerIdGln: "9876543210987"
         manufacturerProductNumber: "HAMMER-PRO-500"
@@ -55,7 +50,6 @@ examples:
         itemStatus: "ACTIVE"
         itemCondition: "NEW"
         stockItem: true
-        shelfLifePeriod: null
     meta:
       cursor: "eyJzdXBwbGllcklkR2xuIjoiODcxMjQyMzAxMjQ4NSIsInN1cHBsaWVySXRlbU51bWJlciI6IlNLVS1UT09MLTAwMiJ9"
       hasNext: true

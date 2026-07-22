@@ -66,7 +66,7 @@ properties:
       - "ACC-789"
   
   relatedManufacturerItemNumber:
-    type: ["string", "null"]
+    type: string
     description: |
       Manufacturer item number of the related trade item.
       **ETIM xChange**: `RelatedManufacturerItemNumber`
@@ -75,10 +75,9 @@ properties:
     maxLength: 35
     examples:
       - "MFG-PART-456"
-      - null
   
   relatedItemGtins:
-    type: ["array", "null"]
+    type: array
     description: |
       Array of GTINs for the related trade item.
       **ETIM xChange**: `RelatedItemGtin[]`
@@ -88,7 +87,6 @@ properties:
       $ref: ../../../../shared/schemas/identifiers/Gtin.yaml
     examples:
       - ["4012345678918"]
-      - null
   
   relationType:
     description: |
@@ -127,8 +125,6 @@ examples:
   - supplierIdGln: "8712423012485"
     supplierItemNumber: "SKU-LAMP-001"
     relatedSupplierItemNumber: "ACC-789"
-    relatedManufacturerItemNumber: null
-    relatedItemGtins: null
     relationType: ACCESSORY
     relatedItemQuantity: 1
   

@@ -31,8 +31,6 @@ examples:
         supplierItemNumber: "SKU-KIT-001"
         packagingTypeCode: BX
         enclosedSupplierItemNumber: "SCREW-M8-50"
-        enclosedManufacturerItemNumber: null
-        enclosedItemGtins: null
         enclosedItemQuantity: 100
       - supplierIdGln: "9876543210987"
         supplierItemNumber: "SKU-PALLET-002"

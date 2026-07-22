@@ -35,7 +35,6 @@ examples:
       - baseItemNetLength: 96.0
         baseItemNetWidth: 5.0
         baseItemNetHeight: 56.0
-        baseItemNetDiameter: null
         netDimensionUnit: CMT
         baseItemNetWeight: 0.26
         netWeightUnit: KGM

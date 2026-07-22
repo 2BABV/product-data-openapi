@@ -86,7 +86,7 @@ properties:
       - "AGG"
   
   declaredUnitGwpTotal:
-    type: ["number", "null"]
+    type: number
     format: decimal
     description: |
       Total Global Warming Potential (GWP) in kg CO2 equivalent per declared unit.
@@ -96,10 +96,9 @@ properties:
     examples:
       - 15.75
       - 0.85
-      - null
   
   declaredUnitGwpFossil:
-    type: ["number", "null"]
+    type: number
     format: decimal
     description: |
       Fossil Global Warming Potential in kg CO2 equivalent per declared unit.
@@ -108,10 +107,9 @@ properties:
       **Path**: `Supplier[].Product[].LcaEnvironmental.LcaDeclaration[].DeclaredUnitGwpFossil`
     examples:
       - 14.25
-      - null
   
   declaredUnitGwpBiogenic:
-    type: ["number", "null"]
+    type: number
     format: decimal
     description: |
       Biogenic Global Warming Potential in kg CO2 equivalent per declared unit.
@@ -120,10 +118,9 @@ properties:
       **Path**: `Supplier[].Product[].LcaEnvironmental.LcaDeclaration[].DeclaredUnitGwpBiogenic`
     examples:
       - 1.2
-      - null
   
   declaredUnitAp:
-    type: ["number", "null"]
+    type: number
     format: decimal
     description: |
       Acidification Potential (AP) in kg SO2 equivalent per declared unit.
@@ -132,10 +129,9 @@ properties:
       **Path**: `Supplier[].Product[].LcaEnvironmental.LcaDeclaration[].DeclaredUnitAp`
     examples:
       - 0.05
-      - null
   
   declaredUnitEpFreshwater:
-    type: ["number", "null"]
+    type: number
     format: decimal
     description: |
       Eutrophication Potential for freshwater in kg PO4 equivalent per declared unit.
@@ -144,10 +140,9 @@ properties:
       **Path**: `Supplier[].Product[].LcaEnvironmental.LcaDeclaration[].DeclaredUnitEpFreshwater`
     examples:
       - 0.002
-      - null
   
   declaredUnitOdp:
-    type: ["number", "null"]
+    type: number
     format: decimal
     description: |
       Ozone Depletion Potential (ODP) in kg CFC-11 equivalent per declared unit.
@@ -156,10 +151,9 @@ properties:
       **Path**: `Supplier[].Product[].LcaEnvironmental.LcaDeclaration[].DeclaredUnitOdp`
     examples:
       - 0.0000012
-      - null
   
   declaredUnitGwpLuluc:
-    type: ["number", "null"]
+    type: number
     format: decimal
     description: |
       Global Warming Potential from Land Use and Land Use Change (GWP-LULUC) 
@@ -169,10 +163,9 @@ properties:
       **Path**: `Supplier[].Product[].LcaEnvironmental.LcaDeclaration[].DeclaredUnitGwpLuluc`
     examples:
       - 0.25
-      - null
   
   declaredUnitEpMarine:
-    type: ["number", "null"]
+    type: number
     format: decimal
     description: |
       Eutrophication Potential for marine water (EP-marine) in kg N equivalent per declared unit.
@@ -181,10 +174,9 @@ properties:
       **Path**: `Supplier[].Product[].LcaEnvironmental.LcaDeclaration[].DeclaredUnitEpMarine`
     examples:
       - 0.0015
-      - null
   
   declaredUnitEpTerrestrial:
-    type: ["number", "null"]
+    type: number
     format: decimal
     description: |
       Eutrophication Potential for terrestrial ecosystems (EP-terrestrial) 
@@ -194,10 +186,9 @@ properties:
       **Path**: `Supplier[].Product[].LcaEnvironmental.LcaDeclaration[].DeclaredUnitEpTerrestrial`
     examples:
       - 0.12
-      - null
   
   declaredUnitPocp:
-    type: ["number", "null"]
+    type: number
     format: decimal
     description: |
       Photochemical Ozone Creation Potential (POCP) in kg NMVOC equivalent per declared unit.
@@ -207,10 +198,9 @@ properties:
       **Path**: `Supplier[].Product[].LcaEnvironmental.LcaDeclaration[].DeclaredUnitPocp`
     examples:
       - 0.035
-      - null
   
   declaredUnitAdpe:
-    type: ["number", "null"]
+    type: number
     format: decimal
     description: |
       Abiotic Depletion Potential for non-fossil resources (ADP-elements) 
@@ -220,10 +210,9 @@ properties:
       **Path**: `Supplier[].Product[].LcaEnvironmental.LcaDeclaration[].DeclaredUnitAdpe`
     examples:
       - 0.00025
-      - null
   
   declaredUnitAdpf:
-    type: ["number", "null"]
+    type: number
     format: decimal
     description: |
       Abiotic Depletion Potential for fossil resources (ADP-fossil) in MJ per declared unit.
@@ -232,10 +221,9 @@ properties:
       **Path**: `Supplier[].Product[].LcaEnvironmental.LcaDeclaration[].DeclaredUnitAdpf`
     examples:
       - 185.5
-      - null
   
   declaredUnitWdp:
-    type: ["number", "null"]
+    type: number
     format: decimal
     description: |
       Water Deprivation Potential (WDP) in m³ world equivalent per declared unit.
@@ -244,10 +232,9 @@ properties:
       **Path**: `Supplier[].Product[].LcaEnvironmental.LcaDeclaration[].DeclaredUnitWdp`
     examples:
       - 2.5
-      - null
   
   declaredUnitPert:
-    type: ["number", "null"]
+    type: number
     format: decimal
     description: |
       Use of renewable primary energy resources (PERT) in MJ per declared unit.
@@ -257,10 +244,9 @@ properties:
       **Path**: `Supplier[].Product[].LcaEnvironmental.LcaDeclaration[].DeclaredUnitPert`
     examples:
       - 45.2
-      - null
   
   declaredUnitPenrt:
-    type: ["number", "null"]
+    type: number
     format: decimal
     description: |
       Use of non-renewable primary energy resources (PENRT) in MJ per declared unit.
@@ -270,10 +256,9 @@ properties:
       **Path**: `Supplier[].Product[].LcaEnvironmental.LcaDeclaration[].DeclaredUnitPenrt`
     examples:
       - 195.8
-      - null
   
   declaredUnitPm:
-    type: ["number", "null"]
+    type: number
     format: decimal
     description: |
       Particulate Matter emissions (PM) expressed as disease incidence per declared unit.
@@ -282,10 +267,9 @@ properties:
       **Path**: `Supplier[].Product[].LcaEnvironmental.LcaDeclaration[].DeclaredUnitPm`
     examples:
       - 0.0000015
-      - null
   
   declaredUnitIrp:
-    type: ["number", "null"]
+    type: number
     format: decimal
     description: |
       Ionising Radiation Potential (IRP) in kBq U235 equivalent per declared unit.
@@ -294,10 +278,9 @@ properties:
       **Path**: `Supplier[].Product[].LcaEnvironmental.LcaDeclaration[].DeclaredUnitIrp`
     examples:
       - 1.25
-      - null
   
   declaredUnitEtpfw:
-    type: ["number", "null"]
+    type: number
     format: decimal
     description: |
       Ecotoxicity Potential for freshwater (ETP-fw) in CTUe (Comparative Toxic Unit for ecosystems) 
@@ -307,10 +290,9 @@ properties:
       **Path**: `Supplier[].Product[].LcaEnvironmental.LcaDeclaration[].DeclaredUnitEtpfw`
     examples:
       - 125.5
-      - null
   
   declaredUnitHtpc:
-    type: ["number", "null"]
+    type: number
     format: decimal
     description: |
       Human Toxicity Potential - cancer effects (HTP-c) in CTUh (Comparative Toxic Unit for humans) 
@@ -320,10 +302,9 @@ properties:
       **Path**: `Supplier[].Product[].LcaEnvironmental.LcaDeclaration[].DeclaredUnitHtpc`
     examples:
       - 0.0000025
-      - null
   
   declaredUnitHtpnc:
-    type: ["number", "null"]
+    type: number
     format: decimal
     description: |
       Human Toxicity Potential - non-cancer effects (HTP-nc) in CTUh (Comparative Toxic Unit for humans) 
@@ -333,10 +314,9 @@ properties:
       **Path**: `Supplier[].Product[].LcaEnvironmental.LcaDeclaration[].DeclaredUnitHtpnc`
     examples:
       - 0.000045
-      - null
   
   declaredUnitSqp:
-    type: ["number", "null"]
+    type: number
     format: decimal
     description: |
       Soil Quality Potential (SQP) - dimensionless indicator per declared unit.
@@ -346,7 +326,6 @@ properties:
       **Path**: `Supplier[].Product[].LcaEnvironmental.LcaDeclaration[].DeclaredUnitSqp`
     examples:
       - 15.5
-      - null
 
 examples:
   - lifeCycleStage: "A1-A3"

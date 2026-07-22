@@ -60,20 +60,12 @@ get:
                   supplierIdGln: "9876543210987"
                   supplierItemNumber: "SKU-MIN-001"
                   details:
-                    supplierAltItemNumber: null
-                    manufacturerItemNumber: null
                     manufacturerIdGln: "1234567890123"
                     manufacturerProductNumber: "PROD-BASIC-001"
-                    itemGtins: null
-                    buyerItemNumber: null
-                    discountGroupId: null
-                    bonusGroupId: null
                     itemValidityDate: "2024-01-01"
-                    itemObsolescenceDate: null
                     itemStatus: "ACTIVE"
                     itemCondition: "NEW"
                     stockItem: true
-                    shelfLifePeriod: null
     '400':
       $ref: ../../../shared/responses/400-bad-request.yaml
     '401':

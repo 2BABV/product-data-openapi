@@ -27,7 +27,7 @@
 
 All schemas must adhere to OpenAPI 3.1 and JSON Schema 2020-12 standards:
 
-- **Nullable Fields**: Use `type: ["string", "null"]` for nullable fields (NOT deprecated `nullable: true` from OpenAPI 3.0)
+- **Optional ETIM Fields**: Omit unavailable properties; present values use non-null schemas. Reserve JSON `null` for explicitly documented API semantics.
 - **Examples**: Use `examples` (plural array) in schemas, not `example` (singular, deprecated)
 - **Format Hints**: Include `format` for type validation: `uri`, `email`, `date`, `date-time`, `uuid`. Use `format: decimal` for all ETIM-converted number fields as a code-generator hint (see [`format: decimal` — Code Generator Hint](#format-decimal--code-generator-hint) below). Note: `format: decimal` is not part of the official OpenAPI 3.1 standard but is recognized by NSwag (.NET → `decimal`) and configurable in OpenAPI Generator (Java → `BigDecimal`).
 - **Validation Constraints**: Apply `minLength`, `maxLength`, `minimum`, `maximum`, `multipleOf` for validation
@@ -61,17 +61,17 @@ FactorCustomsCommodityCode:
 
 # OpenAPI (number) ✅ CORRECT
 factorCustomsCommodityCode:
-  type: ["number", "null"]
+  type: number
   format: decimal
   minimum: 0
   multipleOf: 0.0001
   maximum: 99999999999.9999
   description: |
     Factor for customs commodity code calculations. Supports up to 4 decimal places.
+    Optional ETIM field — omitted from the payload when unavailable (not `null`).
   examples:
     - 1.0
     - 0.5
-    - null
 ```
 
 **Fields to Convert** (non-exhaustive):
@@ -107,9 +107,11 @@ JSON's `number` type has no inherent precision limit, but most language runtimes
 2. The `format: decimal` hint causes well-behaved generators to use arbitrary-precision types (`decimal`, `BigDecimal`), avoiding IEEE 754 entirely.
 3. Even without `format: decimal`, values with ≤15 significant digits round-trip safely through `double`, covering virtually all real data.
 
-#### 2. Nullable Fields Pattern
+#### 2. Optional and Nullable Fields
 
-ETIM xChange schema doesn't explicitly distinguish between nullable and optional fields. For OpenAPI 3.1, use proper nullable types:
+The canonical ETIM xChange JSON Schema distinguishes required properties from optional
+properties and contains no schemas that accept JSON `null`. Optional ETIM values are
+therefore omitted when unavailable and non-null when present:
 
 ```yaml
 # Required field (not nullable)
@@ -118,15 +120,15 @@ manufacturerName:
   minLength: 1
   maxLength: 80
 
-# Optional field that can be null
+# Optional field — not listed in required
 brandName:
-  type: ["string", "null"]
+  type: string
   minLength: 1
   maxLength: 50
 
-# Nullable numeric field
+# Optional numeric field
 factorCustomsCommodityCode:
-  type: ["number", "null"]
+  type: number
   minimum: 0
 
 # Response-level array (never null — empty = [])
@@ -135,28 +137,27 @@ descriptions:
   items:
     $ref: ./ProductDescription.yaml
 
-# Nullable reference - use anyOf pattern
+# Optional reference — direct $ref, not listed in required
 legislation:
-  anyOf:
-    - $ref: ./Legislation.yaml
-    - type: "null"
+  $ref: ./Legislation.yaml
 ```
 
 **Guidelines**:
-- Use `type: ["string", "null"]` for optional string fields
-- Use `type: ["number", "null"]` for optional numeric fields
-- Use `type: ["boolean", "null"]` for optional boolean fields
+- Use a non-null type for optional ETIM scalar fields and omit them from `required`
+- Use a direct `$ref` for optional ETIM objects and enum values
 - Use `type: array` for collection properties in sub-resource schemas — arrays are always required and never null (see [Response Conventions](#response-conventions))
 - **Exception**: Aggregate root schemas (`ProductResponseData`, `TradeItemResponseData`) use `type: ["array", "null"]` for partial inclusion support (see [Aggregate Root Collections](#aggregate-root-collections-support-partial-inclusion))
-- When referencing another schema, wrap with `anyOf` and add `{ "type": "null" }` branch
-- Do NOT add field to `required` array if it can be null/omitted
-- Always include `null` in examples when field is nullable
+- Preserve canonical ETIM required child fields whenever their containing optional structure is present
+- Preserve independently justified API key and materialized-default requirements
+- Use JSON `null` only where the API assigns it explicit semantics distinct from absence
+- Omit unavailable optional properties from examples; include `null` only for intentional nullable API fields
 
-#### Nullable Enum `$ref` Convention
+#### Optional and Nullable Enum `$ref` Convention
 
-**Standard**: Enum schema files MUST define only valid domain values (`type: string`) and MUST NOT include `null` in their type or enum values. Nullability is always expressed at the **usage site** via `anyOf`.
+**Standard**: Enum schema files MUST define only valid domain values (`type: string`) and MUST NOT include `null` in their type or enum values. Optionality is expressed at the **usage site** by omitting the property from `required`.
+Intentional nullability, where still required by API semantics, is also expressed at the usage site.
 
-This keeps enum schemas reusable in both nullable and non-nullable contexts.
+This keeps enum schemas reusable in optional, required, and intentionally nullable contexts.
 
 ```yaml
 # ✅ CORRECT — Enum schema file (e.g., enums/ItemStatus.yaml)
@@ -168,17 +169,21 @@ enum:
   - PLANNED WITHDRAWAL
   - OBSOLETE
 
-# ✅ CORRECT — Nullable usage site
+# ✅ CORRECT — optional ETIM usage site (property not in required)
 itemStatus:
+  $ref: ../enums/ItemStatus.yaml
+
+# ✅ CORRECT — required usage site
+orderUnit:
+  $ref: ../../../../shared/schemas/common/UnitCodes.yaml
+
+# Intentional API null semantics, when explicitly documented, stay at the usage site:
+selectedStatus:
   anyOf:
     - $ref: ../enums/ItemStatus.yaml
     - type: "null"
 
-# ✅ CORRECT — Non-nullable usage site (required enum)
-orderUnit:
-  $ref: ../../../../shared/schemas/common/UnitCodes.yaml
-
-# ❌ INCORRECT — Do NOT put null in the enum schema file
+# ❌ INCORRECT — never put null in the enum schema file
 type: ["string", "null"]
 enum:
   - PRE-LAUNCH
@@ -186,9 +191,7 @@ enum:
   - null
 ```
 
-**Rationale**: Enum schemas represent the domain's valid value set. Nullability is a contract concern of the usage site, not the enum definition. This allows the same enum (e.g., `UnitCodes`) to be used as required (`orderUnit`) and nullable (`useUnit`) without duplication.
-
-> **⚠️ NSwag Known Limitation**: NSwag (as of v14.x) does not correctly generate nullable enum types from `anyOf: [$ref, type: "null"]`. It may produce `string` instead of `EnumType?`. This is a known OpenAPI 3.1 support gap in NSwag. Workaround options are documented below — see [NSwag Nullable Enum Workaround](#nswag-nullable-enum-workaround).
+**Rationale**: Enum schemas represent the domain's valid value set. Presence and intentional nullability are contract concerns of the usage site, not the enum definition. This allows the same enum to be reused without adding `null` to its domain value set.
 
 #### 3. String Boolean Enums
 
@@ -205,18 +208,18 @@ enum:
 **OpenAPI 3.1 Pattern - Keep as String Enum**:
 ```yaml
 rohsIndicator:
-  type: ["string", "null"]
-  enum: ["true", "false", "exempt", null]
+  type: string
+  enum: ["true", "false", "exempt"]
   description: |
     RoHS compliance indicator. Can be true, false, or exempt.
+    Optional ETIM field — omitted from the payload when unavailable (not `null`).
   examples:
     - "true"
     - "exempt"
-    - null
 
 reachIndicator:
-  type: ["string", "null"]
-  enum: ["true", "false", null]
+  type: string
+  enum: ["true", "false"]
 ```
 
 **Do NOT convert these to boolean** - keep as string enums because they have more than two states or follow ETIM's specific semantics.
@@ -234,24 +237,24 @@ reachIndicator:
 **OpenAPI 3.1 Enhanced Pattern**:
 ```yaml
 productValidityDate:
-  type: ["string", "null"]
+  type: string
   format: date
   description: |
     Date from which product is valid for sale. ISO 8601 date format (YYYY-MM-DD).
+    Optional ETIM field — omitted from the payload when unavailable (not `null`).
     
     **ETIM xChange**: `ProductValidityDate`  
     **Path**: `Supplier[].Product[].ProductIdentification.ProductValidityDate`
   examples:
     - "2024-03-01"
     - "2025-01-15"
-    - null
 ```
 
 **Date Field Guidelines**:
 - Always use `format: date` for date-only fields (not datetime)
 - Include explicit description: "ISO 8601 date format (YYYY-MM-DD)"
 - Provide realistic examples in YYYY-MM-DD format
-- Make nullable with `type: ["string", "null"]` if date is optional
+- For optional dates, omit the property from `required` and keep a non-null `type: string` (absent when unavailable)
 - Common date fields: `productValidityDate`, `productObsolescenceDate`, `productAnnouncementDate`, `epdValidityStartDate`, `epdValidityExpiryDate`
 
 ---
@@ -596,29 +599,56 @@ properties:
 
 > **Scope**: This pattern applies **only** to `ProductResponseData` and `TradeItemResponseData`. All other response schemas (sub-resource, bulk) use non-nullable `type: array`.
 
-### Singular Optional Objects Are Present and Nullable
+### Singular Optional Objects Are Omitted
 
-Singular object-valued response members that may be unavailable MUST be present with value `null`. They MUST NOT be omitted.
+Singular optional ETIM object-valued members are omitted when unavailable and non-null when present.
 
-- The property is listed in `required`
-- The type uses `anyOf` with a `$ref` and `type: "null"`
-- Code generation target: `T?` (nullable reference type)
+- The property is omitted from `required`
+- The type uses a direct `$ref`
+- Required object properties remain listed in `required`
+- Nullable objects are used only when the API explicitly defines a meaning for `null`
 
 ```yaml
-# ✅ CORRECT — required, nullable object
-required:
-  - ordering
+# ✅ CORRECT — optional direct reference
+properties:
+  ordering:
+    $ref: ./TradeItemOrdering.yaml
+
+# ❌ INCORRECT — ordinary optionality modeled as null
 properties:
   ordering:
     anyOf:
       - $ref: ./TradeItemOrdering.yaml
       - type: "null"
-
-# ❌ INCORRECT — optional property (may be omitted)
-properties:
-  ordering:
-    $ref: ./TradeItemOrdering.yaml
 ```
+
+### Intentional `null` Allowlist
+
+JSON `null` is used in **exactly** the following places and nowhere else. Every other
+optional value is expressed by absence (Option B). A validator (`scripts/validate-option-b.mjs`)
+enforces this allowlist.
+
+**1. Aggregate response collection arrays** (`type: ["array", "null"]`, three-state partial inclusion):
+
+- `ProductResponseData.yaml`: `descriptions`, `etimClassifications`, `attachments`
+- `TradeItemResponseData.yaml`: `descriptions`, `pricings`, `relations`, `logisticDetails`, `attachments`, `packagingUnits`
+
+**2. Required-nullable singular sub-resource `data` properties** (four total; `null` = the singular resource is unavailable — e.g., the parent entity was not found, or no data of that kind exists — returned as `200`, never `404`):
+
+- `ProductDetailsResponseData.yaml`: `details`
+- `ProductLcaEnvironmentalResponseData.yaml`: `lcaEnvironmental`
+- `TradeItemDetailsResponseData.yaml`: `details`
+- `TradeItemOrderingResponseData.yaml`: `ordering`
+
+**3. Pagination metadata members** (`CursorPaginationMetadata.yaml`):
+
+- `cursor`, `prevCursor`, `estimatedTotal`
+
+Domain aggregates (`Product.yaml`, `TradeItem.yaml`) and all other domain/summary
+schemas follow canonical ETIM: optional scalars, objects, enums, and collections are
+**non-null and omitted when unavailable** (collections are required non-null `[]` in
+sub-resource response schemas). No schema outside this allowlist may declare a `null`
+type or emit a literal `null`.
 
 ### Errors Use RFC 9457 ProblemDetails with Stable Types
 
@@ -680,7 +710,7 @@ properties:
   manufacturerName:
     type: string
   brandName:
-    type: ["string", "null"]
+    type: string
   
   # Flattened from ProductDetails (top level)
   productStatus:
@@ -716,9 +746,9 @@ properties:
   manufacturerName:
     type: string
   brandName:
-    type: ["string", "null"]
+    type: string
   productGtins:
-    type: ["array", "null"]
+    type: array
   # ... other identification fields only
 ```
 
@@ -740,7 +770,7 @@ properties:
   productDescriptions:
     type: array
   warrantyConsumer:
-    type: ["integer", "null"]
+    type: integer
   # ... other detail fields only
 ```
 
@@ -768,6 +798,52 @@ manufacturerName:
 2. Original ETIM xChange field name (PascalCase)
 3. Full JSON path in ETIM schema
 4. Realistic examples
+
+### Flattened Pricing: Conditional Absence
+
+`TradeItemPricingSummary.yaml` denormalizes `Pricing[]` × `AllowanceSurcharge[]` into a
+single flat bulk row (LEFT JOIN), the same pattern as
+`ProductEtimClassificationFeature`. A pricing entry with N allowances/surcharges produces
+N rows (pricing fields repeated); a pricing entry **without** any allowance/surcharge
+produces one row that **omits all seven** `allowanceSurcharge*` fields entirely — they are
+never emitted as `null`.
+
+Because the flat schema mixes rows with and without surcharges, the two canonically
+required fields (`allowanceSurchargeIndicator`, `allowanceSurchargeType`) are **optional**
+here. The exact conditional-presence contract is declared with `dependentRequired` rather
+than nullability:
+
+```yaml
+# TradeItemPricingSummary.yaml
+dependentRequired:
+  allowanceSurchargeIndicator:
+    - allowanceSurchargeType
+  allowanceSurchargeType:
+    - allowanceSurchargeIndicator
+  allowanceSurchargeSequenceNumber:
+    - allowanceSurchargeIndicator
+    - allowanceSurchargeType
+  allowanceSurchargeValidityDate:
+    - allowanceSurchargeIndicator
+    - allowanceSurchargeType
+  allowanceSurchargeAmount:
+    - allowanceSurchargeIndicator
+    - allowanceSurchargeType
+  allowanceSurchargePercentage:
+    - allowanceSurchargeIndicator
+    - allowanceSurchargeType
+  allowanceSurchargeMinimumQuantity:
+    - allowanceSurchargeIndicator
+    - allowanceSurchargeType
+```
+
+Effect:
+- A row with **no** allowance/surcharge omits all seven fields.
+- Whenever `allowanceSurchargeIndicator` or `allowanceSurchargeType` is present, the other is required.
+- Whenever any of the other five fields is present, both canonical fields are required alongside it.
+
+This keeps one uniform flat DTO while rejecting partial allowance/surcharge rows, and it
+requires no literal `null` values.
 
 ---
 
@@ -946,24 +1022,24 @@ operationId: getBulkItemPricings
 1. **Business Description**: Explain the purpose and business context
 2. **ETIM xChange Field Name**: Original PascalCase field name
 3. **Full JSON Path**: Complete path in ETIM xChange schema
-4. **Realistic Examples**: At least 2 examples, including null if nullable
+4. **Realistic Examples**: At least 2 realistic values. Omit unavailable optional properties instead of showing `null`; include `null` only for members on the [intentional `null` allowlist](#intentional-null-allowlist) (aggregate response arrays, the four required-nullable singular response objects, and pagination metadata members).
 
 ### Documentation Template
 
 ```yaml
 propertyName:
-  type: ["string", "null"]
+  type: string
   minLength: 1
   maxLength: 50
   description: |
     [Business description explaining purpose, constraints, and usage]
+    Optional ETIM field — omitted from the payload when unavailable (not `null`).
     
     **ETIM xChange**: `OriginalFieldName`  
     **Path**: `Supplier[].Product[].Section.OriginalFieldName`
   examples:
     - "Example value 1"
     - "Example value 2"
-    - null
 ```
 
 ### Real-World Example
@@ -985,33 +1061,33 @@ manufacturerProductNumber:
     - "HUE-BULB-E27-10W"
 
 customsCommodityCode:
-  type: ["string", "null"]
+  type: string
   minLength: 6
   maxLength: 16
   description: |
     Harmonized System (HS) customs commodity code for international trade.
     Used for customs declarations and trade statistics. May include country-specific extensions.
+    Optional ETIM field — omitted from the payload when unavailable (not `null`).
     
     **ETIM xChange**: `CustomsCommodityCode`  
     **Path**: `Supplier[].Product[].ProductIdentification.CustomsCommodityCode`
   examples:
     - "8539502090"
     - "851310"
-    - null
 
 warrantyConsumer:
-  type: ["integer", "null"]
+  type: integer
   minimum: 0
   exclusiveMaximum: 1000
   description: |
     Consumer warranty period in months. Indicates the standard warranty coverage for consumer purchases.
+    Optional ETIM field — omitted from the payload when unavailable (not `null`).
     
     **ETIM xChange**: `WarrantyConsumer`  
     **Path**: `Supplier[].Product[].ProductDetails.WarrantyConsumer`
   examples:
     - 24
     - 36
-    - null
 ```
 
 ### Description Best Practices
@@ -1176,11 +1252,10 @@ productGtin:
 
 # DUNS (Data Universal Numbering System)
 manufacturerIdDuns:
-  type: ["string", "null"]
+  type: string
   pattern: "^[0-9]{9}$"
   examples:
     - "123456789"
-    - null
 
 # Currency Code (ISO 4217)
 currency:
@@ -1222,12 +1297,11 @@ netPrice:
 
 # Integer with range
 warrantyConsumer:
-  type: ["integer", "null"]
+  type: integer
   minimum: 0
   exclusiveMaximum: 1000
   examples:
     - 24
-    - null
 
 # Quantity
 quantity:
@@ -1253,7 +1327,7 @@ manufacturerProductNumber:
   maxLength: 35
 
 brandName:
-  type: ["string", "null"]
+  type: string
   minLength: 1
   maxLength: 50
 ```
@@ -1267,9 +1341,9 @@ descriptions:
   items:
     $ref: ./ProductDescription.yaml
 
-# Domain-level array (nullable — null = not available)
+# Domain-level array (optional, non-null — omitted when unavailable)
 productGtins:
-  type: ["array", "null"]
+  type: array
   uniqueItems: true
   items:
     type: string
@@ -1311,20 +1385,18 @@ properties:
     examples:
       - 400
   detail:
-    type: ["string", "null"]
+    type: string
     description: |
       A human-readable explanation specific to this occurrence of the problem.
     examples:
       - "The manufacturerIdGln field must be exactly 13 digits."
-      - null
   instance:
-    type: ["string", "null"]
+    type: string
     format: uri
     description: |
       A URI reference that identifies the specific occurrence of the problem.
     examples:
       - "/products/1234567890123/LED-12345-A"
-      - null
 ```
 
 > **Client guidance**: Clients MUST use `type` and `status` for control flow decisions.
@@ -1471,59 +1543,32 @@ https://{implementer-domain}[/optional-prefix]/v1/{resource}/{path-params}
 
 ---
 
-## NSwag Nullable Enum Workaround
+## Optional Enums Use a Direct `$ref` (No NSwag Workaround)
 
-### The Problem
+Under the Option B optional-absent contract, optional ETIM enum properties are
+expressed with a **direct `$ref`** to the enum schema and are simply omitted from
+`required`. They do **not** use the `anyOf: [$ref, type: "null"]` pattern, so no
+NSwag-specific transform is required:
 
-NSwag (as of v14.x) does not correctly interpret OpenAPI 3.1's `anyOf: [$ref, type: "null"]` pattern for enum schemas. Instead of generating:
-
-```csharp
-[JsonPropertyName("itemCondition")]
-[JsonConverter(typeof(JsonStringEnumConverter<ItemCondition>))]
-public ItemCondition? ItemCondition { get; set; }
+```yaml
+# ✅ CORRECT — optional enum usage site (property not in required)
+itemStatus:
+  $ref: ../enums/ItemStatus.yaml
 ```
 
-It may generate a plain `string` property or an incorrect union type.
+The intentional-`null` enum property (`allowanceSurchargeType` in
+`TradeItemPricingSummary`) is expressed with a direct `$ref` plus `dependentRequired`
+conditional absence — see [Flattened Pricing: Conditional Absence](#flattened-pricing-conditional-absence) — and never emits a literal `null`.
 
-### Root Cause
-
-NSwag's OpenAPI 3.1 support is incomplete. It doesn't recognize `anyOf` (or `oneOf`) wrapping a `$ref` to an enum as the standard nullable enum pattern. This is a known limitation that is expected to be resolved in a future NSwag release.
-
-### Affected Properties
-
-All nullable enum properties using the `anyOf: [$ref, type: "null"]` pattern:
-
-| Schema | Properties |
-|--------|-----------|
-| `TradeItemDetails` / `TradeItemDetailsSummary` | `itemStatus`, `itemCondition` |
-| `TradeItemOrdering` / `TradeItemOrderingSummary` | `useUnit`, `alternativeUseUnit` |
-| `TradeItemPricingSummary` | `allowanceSurchargeType` |
-| `ProductDetails` / `ProductDetailsSummary` | `productStatus`, `productType` |
-| `Legislation` | `weeeCategory` |
-
-### Recommended Workaround
-
-Use the NSwag-compatible bundled spec which inlines nullable enum `anyOf` patterns into `type: ["string", "null"]` with `null` in the enum values — the format NSwag understands.
-
-```bash
-# Generate NSwag-compatible specs (after running npm run bundle)
-npm run bundle:nswag
-```
-
-This produces:
-- `openapi/apis/product/generated/product-api-nswag.yaml`
-- `openapi/apis/tradeitem/generated/tradeitem-api-nswag.yaml`
-
-The transform only affects `anyOf` patterns referencing string enum schemas. Nullable object references (`anyOf: [$ref object, type: "null"]`) are left unchanged because NSwag handles those correctly.
-
-Point NSwag at the `*-nswag.yaml` files instead of the canonical `*-api.yaml` files.
+> There is no NSwag-compatibility bundle. The previous `bundle:nswag` script,
+> its `*-api-nswag.yaml` outputs, and the nullable-enum transform have been removed.
+> Generate clients directly from the canonical `*-api.yaml` bundles.
 
 ### Why Not `allOf` + `nullable: true`?
 
 The suggestion to use `allOf: [$ref] + nullable: true` comes from the OpenAPI 3.0 era. In OpenAPI 3.1:
 - `nullable: true` is **deprecated** (replaced by `type: ["...", "null"]`)
 - `allOf: [$ref enum, type: "null"]` is logically contradictory (nothing can be both a string and null simultaneously)
-- It only "works" because NSwag doesn't validate JSON Schema semantics — it's an accidental hack that will break when NSwag improves its 3.1 support
 
 ---
 

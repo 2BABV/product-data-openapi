@@ -8,7 +8,6 @@ description: |
 required:
   - supplierIdGln
   - supplierItemNumber
-  - details
   - ordering
 properties:
   # Core identifiers (required)
@@ -41,7 +40,7 @@ properties:
   
   # Item descriptions (multilingual)
   descriptions:
-    type: ["array", "null"]
+    type: array
     description: |
       Array of multilingual item descriptions. Each item contains descriptions
       in a specific language.
@@ -49,8 +48,6 @@ properties:
       **Path**: `Supplier[].Product[].TradeItem[].ItemDetails.ItemDescriptions[]`
     items:
       $ref: ./ItemDescription.yaml
-    examples:
-      - null
   
   # Ordering (required object)
   ordering:
@@ -62,59 +59,49 @@ properties:
   
   # Arrays for complex structures
   pricings:
-    type: ["array", "null"]
+    type: array
     description: |
       Array of pricing information for different conditions or customer groups.
       **ETIM xChange**: `Pricing[]`
       **Path**: `Supplier[].Product[].TradeItem[].Pricing[]`
     items:
       $ref: ./TradeItemPricing.yaml
-    examples:
-      - null
   
   relations:
-    type: ["array", "null"]
+    type: array
     description: |
       Array of relationships to other trade items (accessories, spare parts, etc.).
       **ETIM xChange**: `ItemRelations[]`
       **Path**: `Supplier[].Product[].TradeItem[].ItemRelations[]`
     items:
       $ref: ./ItemRelation.yaml
-    examples:
-      - null
   
   logisticDetails:
-    type: ["array", "null"]
+    type: array
     description: |
       Array of logistic details including dimensions and weights.
       **ETIM xChange**: `ItemLogisticDetails[]`
       **Path**: `Supplier[].Product[].TradeItem[].ItemLogisticDetails[]`
     items:
       $ref: ./ItemLogistic.yaml
-    examples:
-      - null
   
   attachments:
-    type: ["array", "null"]
+    type: array
     description: |
       Array of attachments (images, documents, certificates, etc.).
       **ETIM xChange**: `ItemAttachments[]`
       **Path**: `Supplier[].Product[].TradeItem[].ItemAttachments[]`
     items:
       $ref: ./ItemAttachment.yaml
-    examples:
-      - null
   
   packagingUnits:
-    type: ["array", "null"]
+    type: array
     description: |
       Array of packaging unit information for different packaging levels.
       **ETIM xChange**: `PackagingUnit[]`
       **Path**: `Supplier[].Product[].TradeItem[].PackagingUnit[]`
     items:
       $ref: ./PackagingUnit.yaml
-    examples:
-      - null
 
 examples:
   - supplierIdGln: "1234567890123"
@@ -125,28 +112,18 @@ examples:
       manufacturerIdGln: "9876543210987"
       manufacturerProductNumber: "929002376910"
       itemGtins: ["4012345678901"]
-      buyerItemNumber: null
       discountGroupId: "DG-001"
-      bonusGroupId: null
       itemValidityDate: "2024-01-01"
-      itemObsolescenceDate: null
       itemStatus: "ACTIVE"
       itemCondition: "NEW"
       stockItem: true
-      shelfLifePeriod: null
     ordering:
       orderUnit: C62
       minimumOrderQuantity: 1
       orderStepSize: 1
       standardOrderLeadTime: 5
-      useUnit: null
-      useUnitConversionFactor: null
-      singleUseUnitQuantity: null
-      alternativeUseUnit: null
-      alternativeUseUnitConversionFactor: null
     pricings:
       - priceUnit: C62
-        priceUnitFactor: null
         priceQuantity: 1
         currencyCode: EUR
         priceOnRequest: false
@@ -166,17 +143,10 @@ examples:
             allowanceSurchargeType: DBD
             allowanceSurchargeSequenceNumber: 2
             allowanceSurchargeAmount: 25.0
-            allowanceSurchargeMinimumQuantity: null
-    relations: null
     logisticDetails:
       - baseItemNetLength: 25.5
         baseItemNetWidth: 15.0
         baseItemNetHeight: 10.0
-        baseItemNetDiameter: null
         netDimensionUnit: CMT
         baseItemNetWeight: 500.0
         netWeightUnit: GRM
-        baseItemNetVolume: null
-        netVolumeUnit: null
-    attachments: null
-    packagingUnits: null

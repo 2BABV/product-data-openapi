@@ -56,7 +56,6 @@ get:
                     brandName: "Hue"
                     productAnnouncementDate: "2024-01-15"
                     productValidityDate: "2024-03-01"
-                    productObsolescenceDate: null
                     customsCommodityCode: "8539502090"
                     countryOfOrigin:
                       - "NL"
@@ -94,9 +93,8 @@ get:
                   descriptions:
                     - descriptionLanguage: "en-GB"
                       minimalProductDescription: "LED Lamp"
-                  etimClassifications: null
-                  lcaEnvironmental: null
-                  attachments: null
+                  etimClassifications: []
+                  attachments: []
     '400':
       $ref: ../../../shared/responses/400-bad-request.yaml
     '401':

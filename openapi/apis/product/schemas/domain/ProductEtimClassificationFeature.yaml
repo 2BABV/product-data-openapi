@@ -9,11 +9,10 @@ description: |
   - ETL/data warehouse ingestion
   - Streaming data processing
   
-  **Payload Optimization**: Optional properties with null values are omitted from the response
-  to minimize payload size. Clients should treat missing properties as null/not applicable.
+  Optional properties are omitted from each row when no value exists.
   
   **Classification-only rows**: Products with classification but no features are represented
-  with `etimFeatureCode` omitted (or null if explicitly set).
+  with `etimFeatureCode` omitted.
 required:
   - manufacturerIdGln
   - manufacturerProductNumber
@@ -52,7 +51,7 @@ properties:
       - "EC002745"
   
   etimClassVersion:
-    type: ["integer", "null"]
+    type: integer
     minimum: 1
     description: |
       Version number of the ETIM class. Incremented when class definition changes.
@@ -80,7 +79,7 @@ properties:
       - "DYNAMIC"
   
   etimDynamicReleaseDate:
-    type: ["string", "null"]
+    type: string
     format: date
     description: |
       Release date for dynamic ETIM classes. ISO 8601 date format (YYYY-MM-DD).
@@ -95,7 +94,7 @@ properties:
   # Reserved for future implementation. See EtimClassification.yaml for details.
 
   etimFeatureCode:
-    type: ["string", "null"]
+    type: string
     pattern: "^EF([0-9]{6}|I[0-9]{5}|[A-Z]{2}[0-9]{4})$"
     description: |
       ETIM standardized feature code identifying a specific product characteristic.
@@ -110,7 +109,7 @@ properties:
       - "EFI00456"
   
   etimValueCode:
-    type: ["string", "null"]
+    type: string
     pattern: "^EV[0-9]{6}$"
     description: |
       ETIM standardized value code for alphanumeric features (e.g., enumerations, selections).
@@ -123,7 +122,7 @@ properties:
       - "EV000789"
   
   etimValueNumeric:
-    type: ["number", "null"]
+    type: number
     format: decimal
     multipleOf: 0.0001
     minimum: -999999999999.9999
@@ -139,7 +138,7 @@ properties:
       - 50.5
   
   etimValueRangeLower:
-    type: ["number", "null"]
+    type: number
     format: decimal
     multipleOf: 0.0001
     minimum: -999999999999.9999
@@ -155,7 +154,7 @@ properties:
       - 0.5
   
   etimValueRangeUpper:
-    type: ["number", "null"]
+    type: number
     format: decimal
     multipleOf: 0.0001
     minimum: -999999999999.9999
@@ -171,7 +170,7 @@ properties:
       - 60.0
   
   etimValueLogical:
-    type: ["boolean", "null"]
+    type: boolean
     description: |
       Boolean/logical value for yes/no type features.
       Only present for logical feature types. Omitted when not applicable.
@@ -183,7 +182,7 @@ properties:
       - false
   
   etimValueDetails:
-    type: ["array", "null"]
+    type: array
     items:
       type: object
       required:
@@ -216,12 +215,11 @@ properties:
           etimValueDetails: "Certified for outdoor use"
   
   reasonNoValue:
-    type: ["string", "null"]
+    type: string
     enum:
       - "MV"
       - "NA"
       - "UN"
-      - null
     description: |
       Reason code when no feature value is provided.
       Omitted when a value is present.

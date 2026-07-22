@@ -15,8 +15,7 @@ get:
     - Streaming data processing
     - Filtering by life cycle stage
     
-    **Payload Optimization**: Optional properties with null values are omitted from the response
-    to minimize payload size. Clients should treat missing properties as null/not applicable.
+    **Payload Optimization**: Optional properties are omitted from the response when no value exists.
     
     **Parent Context**: Each row includes key parent fields from LcaEnvironmental
     (`declaredUnitUnit`, `declaredUnitQuantity`, `lcaReferenceLifetime`, `thirdPartyVerification`,

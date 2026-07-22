@@ -153,15 +153,11 @@ examples:
       manufacturerIdGln: "9876543210987"
       manufacturerProductNumber: "929002376910"
       itemGtins: ["4012345678901"]
-      buyerItemNumber: null
       discountGroupId: "DG-001"
-      bonusGroupId: null
       itemValidityDate: "2024-01-01"
-      itemObsolescenceDate: null
       itemStatus: "ACTIVE"
       itemCondition: "NEW"
       stockItem: true
-      shelfLifePeriod: null
     descriptions:
       - descriptionLanguage: en-GB
         minimalItemDescription: "Socket outlet double"
@@ -174,14 +170,8 @@ examples:
       minimumOrderQuantity: 1
       orderStepSize: 1
       standardOrderLeadTime: 5
-      useUnit: null
-      useUnitConversionFactor: null
-      singleUseUnitQuantity: null
-      alternativeUseUnit: null
-      alternativeUseUnitConversionFactor: null
     pricings:
       - priceUnit: C62
-        priceUnitFactor: null
         priceQuantity: 1
         currencyCode: EUR
         priceOnRequest: false
@@ -201,17 +191,13 @@ examples:
             allowanceSurchargeType: DBD
             allowanceSurchargeSequenceNumber: 2
             allowanceSurchargeAmount: 25.0
-            allowanceSurchargeMinimumQuantity: null
     relations: []
     logisticDetails:
       - baseItemNetLength: 25.5
         baseItemNetWidth: 15.0
         baseItemNetHeight: 10.0
-        baseItemNetDiameter: null
         netDimensionUnit: CMT
         baseItemNetWeight: 500.0
         netWeightUnit: GRM
-        baseItemNetVolume: null
-        netVolumeUnit: null
     attachments: []
     packagingUnits: []

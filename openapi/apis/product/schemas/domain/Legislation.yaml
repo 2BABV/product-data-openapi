@@ -1,7 +1,7 @@
 type: object
 properties:
   electricComponentContained:
-    type: ["boolean", "null"]
+    type: boolean
     description: |
       Indicates if the product contains electrical or electronic components.
       
@@ -10,10 +10,9 @@ properties:
     examples:
       - true
       - false
-      - null
   
   batteryContained:
-    type: ["boolean", "null"]
+    type: boolean
     description: |
       Indicates if the product contains batteries or accumulators.
       
@@ -22,12 +21,9 @@ properties:
     examples:
       - true
       - false
-      - null
   
   weeeCategory:
-    anyOf:
-      - $ref: ../enums/WeeeCategory.yaml
-      - type: "null"
+    $ref: ../enums/WeeeCategory.yaml
     description: |
       WEEE (Waste Electrical and Electronic Equipment) category according to EU directive.
       
@@ -35,12 +31,11 @@ properties:
       **Path**: `Supplier[].Product[].Legislation.WeeeCategory`
   
   rohsIndicator:
-    type: ["string", "null"]
+    type: string
     enum:
       - "true"
       - "false"
       - "exempt"
-      - null
     description: |
       RoHS (Restriction of Hazardous Substances) compliance indicator.
       - `true`: Compliant with RoHS
@@ -52,10 +47,9 @@ properties:
     examples:
       - "true"
       - "exempt"
-      - null
   
   rohsExemptionNumber:
-    type: ["string", "null"]
+    type: string
     minLength: 1
     maxLength: 20
     description: |
@@ -66,10 +60,9 @@ properties:
     examples:
       - "6(c)"
       - "7(a)"
-      - null
   
   ceMarking:
-    type: ["boolean", "null"]
+    type: boolean
     description: |
       Indicates if the product has CE marking (European Conformity).
       
@@ -78,10 +71,9 @@ properties:
     examples:
       - true
       - false
-      - null
   
   sdsIndicator:
-    type: ["boolean", "null"]
+    type: boolean
     description: |
       Indicates if a Safety Data Sheet (SDS/MSDS) is available for the product.
       
@@ -90,15 +82,13 @@ properties:
     examples:
       - true
       - false
-      - null
   
   reachIndicator:
-    type: ["string", "null"]
+    type: string
     enum:
       - "true"
       - "false"
       - "no data"
-      - null
     description: |
       REACH (Registration, Evaluation, Authorisation of Chemicals) indicator for SVHC substances.
       - `true`: Contains SVHC (Substances of Very High Concern)
@@ -110,10 +100,9 @@ properties:
     examples:
       - "false"
       - "no data"
-      - null
   
   reachDate:
-    type: ["string", "null"]
+    type: string
     format: date
     description: |
       Date of REACH regulation applicability or assessment. ISO 8601 date format (YYYY-MM-DD).
@@ -122,10 +111,9 @@ properties:
       **Path**: `Supplier[].Product[].Legislation.ReachDate`
     examples:
       - "2024-01-15"
-      - null
   
   scipNumber:
-    type: ["string", "null"]
+    type: string
     minLength: 36
     maxLength: 36
     description: |
@@ -136,10 +124,9 @@ properties:
       **Path**: `Supplier[].Product[].Legislation.ScipNumber`
     examples:
       - "550e8400-e29b-41d4-a716-446655440000"
-      - null
   
   ufiCode:
-    type: ["string", "null"]
+    type: string
     pattern: "^[a-zA-Z0-9]{4}[-]{1}[a-zA-Z0-9]{4}[-]{1}[a-zA-Z0-9]{4}[-]{1}[a-zA-Z0-9]{4}$"
     description: |
       UFI (Unique Formula Identifier) code for hazardous mixtures according to CLP regulation.
@@ -149,10 +136,9 @@ properties:
       **Path**: `Supplier[].Product[].Legislation.UfiCode`
     examples:
       - "D000-A0B1-C2D3-E4F5"
-      - null
   
   unNumber:
-    type: ["string", "null"]
+    type: string
     pattern: "^[0-9]{4}$"
     description: |
       UN Number for dangerous goods transport classification. 4-digit code.
@@ -162,10 +148,9 @@ properties:
     examples:
       - "1950"
       - "3082"
-      - null
   
   hazardClass:
-    type: ["array", "null"]
+    type: array
     uniqueItems: true
     items:
       type: string
@@ -208,17 +193,15 @@ properties:
       **Path**: `Supplier[].Product[].Legislation.HazardClass[]`
     examples:
       - ["3", "8"]
-      - null
   
   adrCategory:
-    type: ["string", "null"]
+    type: string
     enum:
       - "0"
       - "1"
       - "2"
       - "3"
       - "4"
-      - null
     description: |
       ADR (European Agreement concerning International Carriage of Dangerous Goods by Road) transport category.
       
@@ -233,10 +216,9 @@ properties:
     examples:
       - "0"
       - "2"
-      - null
   
   netWeightHazardousSubstances:
-    type: ["number", "null"]
+    type: number
     format: decimal
     minimum: 0
     multipleOf: 0.0001
@@ -251,10 +233,9 @@ properties:
       - 1.5
       - 0.25
       - 1250.75
-      - null
   
   volumeHazardousSubstances:
-    type: ["number", "null"]
+    type: number
     format: decimal
     minimum: 0
     multipleOf: 0.0001
@@ -268,7 +249,6 @@ properties:
     examples:
       - 500.0
       - 1.25
-      - null
 
 examples:
   - electricComponentContained: true

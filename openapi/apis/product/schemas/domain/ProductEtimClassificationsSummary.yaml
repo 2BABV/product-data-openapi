@@ -5,6 +5,7 @@ description: |
 required:
   - manufacturerIdGln
   - manufacturerProductNumber
+  - etimClassifications
 properties:
   manufacturerIdGln:
     $ref: ../../../../shared/schemas/identifiers/Gln.yaml
@@ -13,7 +14,10 @@ properties:
     minLength: 1
     maxLength: 35
   etimClassifications:
-    type: ["array", "null"]
+    type: array
+    description: |
+      Array of ETIM classifications for this product.
+      Returns an empty array if the product has no ETIM classifications.
     items:
       $ref: ./EtimClassification.yaml
 

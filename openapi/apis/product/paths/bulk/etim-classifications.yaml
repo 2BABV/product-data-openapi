@@ -13,8 +13,7 @@ get:
     - ETL/data warehouse ingestion
     - Streaming data processing
     
-    **Payload Optimization**: Optional properties with null values are omitted from the response
-    to minimize payload size. Clients should treat missing properties as null/not applicable.
+    **Payload Optimization**: Optional properties are omitted from the response when no value exists.
     
     **Data Reconstruction**: To reconstruct the hierarchical structure:
     1. Group rows by `manufacturerIdGln` + `manufacturerProductNumber` for products

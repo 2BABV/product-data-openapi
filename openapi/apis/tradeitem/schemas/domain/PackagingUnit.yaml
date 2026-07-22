@@ -39,7 +39,7 @@ properties:
           packagingTippable: true
       - null
   tradeItemEnclosed:
-    type: ["array", "null"]
+    type: array
     description: |
       Array of trade items enclosed within this packaging unit.
       Describes which other trade items are physically contained in this package.
@@ -52,7 +52,6 @@ properties:
           enclosedManufacturerItemNumber: "MFG-WIDGET-001"
           enclosedItemGtins: ["4012345678901"]
           enclosedItemQuantity: 5
-      - null
 examples:
   - packagingIdentification:
       supplierPackagingNumber: "PKG-001"
@@ -85,8 +84,6 @@ examples:
         enclosedItemGtins: ["4012345678901"]
         enclosedItemQuantity: 5
       - enclosedSupplierItemNumber: "SCREW-M8-50"
-        enclosedManufacturerItemNumber: null
-        enclosedItemGtins: null
         enclosedItemQuantity: 100
   - packagingIdentification:
       supplierPackagingNumber: "PKG-CRATE"

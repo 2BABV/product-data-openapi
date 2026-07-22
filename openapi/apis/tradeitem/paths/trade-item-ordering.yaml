@@ -41,11 +41,6 @@ get:
                     minimumOrderQuantity: 1
                     orderStepSize: 1
                     standardOrderLeadTime: 5
-                    useUnit: null
-                    useUnitConversionFactor: null
-                    singleUseUnitQuantity: null
-                    alternativeUseUnit: null
-                    alternativeUseUnitConversionFactor: null
             cableOrdering:
               summary: Cable with meter-based ordering
               value:
@@ -60,8 +55,6 @@ get:
                     useUnit: "MTR"
                     useUnitConversionFactor: 1.0
                     singleUseUnitQuantity: 1.0
-                    alternativeUseUnit: null
-                    alternativeUseUnitConversionFactor: null
             bulkOrdering:
               summary: Bulk item with different use unit
               value:
@@ -76,8 +69,6 @@ get:
                     useUnit: "LTR"
                     useUnitConversionFactor: 10.0
                     singleUseUnitQuantity: 10.0
-                    alternativeUseUnit: null
-                    alternativeUseUnitConversionFactor: null
     '400':
       $ref: ../../../shared/responses/400-bad-request.yaml
     '401':

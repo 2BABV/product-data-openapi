@@ -20,7 +20,7 @@ properties:
       **Path**: `Supplier[].Product[].ProductAttachments[].AttachmentTypeSpecification`
   
   attachmentOrder:
-    type: ["integer", "null"]
+    type: integer
     minimum: 1
     description: |
       Display order/sequence number for this attachment when multiple attachments are present.
@@ -31,7 +31,6 @@ properties:
     examples:
       - 1
       - 2
-      - null
   
   attachmentDetails:
     type: array

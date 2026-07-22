@@ -9,7 +9,6 @@ description: |
 required:
   - manufacturerIdGln
   - manufacturerProductNumber
-  - details
 properties:
   # Composite key
   manufacturerIdGln:
@@ -38,43 +37,45 @@ properties:
     description: |
       Product identification and operational details, combining fields from
       ETIM xChange `ProductIdentification` and `ProductDetails` sections (excluding descriptions).
+      Absent when no product details are available.
       Note: Product descriptions are available via `/{manufacturerIdGln}/{manufacturerProductNumber}/descriptions`.
     $ref: ./ProductDetails.yaml
 
   # Arrays for complex structures
   descriptions:
-    type: ["array", "null"]
+    type: array
     description: |
       Array of multilingual product descriptions. Each item contains descriptions
-      in a specific language.
+      in a specific language. Absent when no descriptions are available.
       **ETIM xChange**: `ProductDescriptions`
       **Path**: `Supplier[].Product[].ProductDetails.ProductDescriptions[]`
     items:
       $ref: ./ProductDescription.yaml
 
   etimClassifications:
-    type: ["array", "null"]
+    type: array
     description: |
       Array of ETIM classifications for this product with embedded features.
       Multiple classifications can exist across different ETIM releases.
+      Absent when no ETIM classifications are available.
       **ETIM xChange**: `EtimClassification`
       **Path**: `Supplier[].Product[].EtimClassification[]`
     items:
       $ref: ./EtimClassification.yaml
 
   lcaEnvironmental:
-    anyOf:
-      - $ref: ./LcaEnvironmental.yaml
-      - type: "null"
+    $ref: ./LcaEnvironmental.yaml
     description: |
       Life Cycle Assessment and Environmental Product Declaration (EPD) data.
+      Absent if the product has no LCA/EPD data.
       **ETIM xChange**: `LcaEnvironmental`
       **Path**: `Supplier[].Product[].LcaEnvironmental`
 
   attachments:
-    type: ["array", "null"]
+    type: array
     description: |
       Array of product attachments including images, documents, certificates, and other files.
+      Absent when no attachments are available.
       **ETIM xChange**: `ProductAttachments`
       **Path**: `Supplier[].Product[].ProductAttachments[]`
     items:
@@ -88,7 +89,6 @@ examples:
       brandName: "Hue"
       productAnnouncementDate: "2024-01-15"
       productValidityDate: "2024-03-01"
-      productObsolescenceDate: null
       customsCommodityCode: "8539502090"
       countryOfOrigin: ["NL"]
       productStatus: "ACTIVE"
@@ -105,5 +105,4 @@ examples:
       - etimClassCode: "EC002745"
         etimClassVersion: 1
         etimReleaseVersion: "9.0"
-    lcaEnvironmental: null
-    attachments: null
+    attachments: []

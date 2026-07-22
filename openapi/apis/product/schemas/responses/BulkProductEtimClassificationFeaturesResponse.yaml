@@ -9,8 +9,7 @@ description: |
   - ETL/data warehouse ingestion
   - Streaming data processing
   
-  **Payload Optimization**: Optional properties with null values are omitted from the response
-  to minimize payload size. Clients should treat missing properties as null/not applicable.
+  **Payload Optimization**: Optional properties are omitted from each row when no value exists.
   
   **Data Reconstruction**: To reconstruct the hierarchical structure:
   1. Group rows by `manufacturerIdGln` + `manufacturerProductNumber` for products
@@ -33,7 +32,7 @@ properties:
       1. `manufacturerIdGln` (ascending)
       2. `manufacturerProductNumber` (ascending)
       3. `etimClassCode` (ascending)
-      4. `etimFeatureCode` (ascending, nulls first)
+      4. `etimFeatureCode` (ascending, absent values first)
     items:
       $ref: ../domain/ProductEtimClassificationFeature.yaml
   meta:

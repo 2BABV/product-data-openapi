@@ -105,7 +105,6 @@ get:
                     - baseItemNetLength: 25.5
                       baseItemNetWidth: 15.0
                       baseItemNetHeight: 10.0
-                      baseItemNetDiameter: null
                       netDimensionUnit: CMT
                       baseItemNetWeight: 500.0
                       netWeightUnit: GRM
@@ -137,30 +136,22 @@ get:
                   supplierIdGln: "9876543210987"
                   supplierItemNumber: "SKU-MIN-001"
                   details:
-                    supplierAltItemNumber: null
-                    manufacturerItemNumber: null
                     manufacturerIdGln: "9876543210987"
                     manufacturerProductNumber: "PROD-MIN-001"
-                    itemGtins: null
-                    buyerItemNumber: null
-                    discountGroupId: null
-                    bonusGroupId: null
                     itemValidityDate: "2024-01-01"
-                    itemObsolescenceDate: null
                     itemStatus: "ACTIVE"
                     itemCondition: "NEW"
                     stockItem: true
-                    shelfLifePeriod: null
-                  descriptions: null
                   ordering:
                     orderUnit: C62
                     minimumOrderQuantity: 1
                     orderStepSize: 1
-                  pricings: null
-                  relations: null
-                  logisticDetails: null
-                  attachments: null
-                  packagingUnits: null
+                  descriptions: []
+                  pricings: []
+                  relations: []
+                  logisticDetails: []
+                  attachments: []
+                  packagingUnits: []
     '400':
       $ref: ../../../shared/responses/400-bad-request.yaml
     '401':

@@ -70,7 +70,7 @@ properties:
       - 100
   
   functionalUnitDescription:
-    type: ["array", "null"]
+    type: array
     items:
       type: object
       required:
@@ -99,7 +99,6 @@ properties:
     examples:
       - - language: "en-GB"
           functionalUnitDescription: "One LED bulb providing 806 lumens for 25,000 hours"
-      - null
   
   lcaReferenceLifetime:
     type: integer
@@ -147,7 +146,7 @@ properties:
       - "2024-01-01"
   
   epdValidityExpiryDate:
-    type: ["string", "null"]
+    type: string
     format: date
     description: |
       Expiry date of EPD validity period. ISO 8601 date format (YYYY-MM-DD).
@@ -156,10 +155,9 @@ properties:
       **Path**: `Supplier[].Product[].LcaEnvironmental.EpdValidityExpiryDate`
     examples:
       - "2029-12-31"
-      - null
   
   epdOperatorName:
-    type: ["string", "null"]
+    type: string
     minLength: 1
     maxLength: 100
     description: |
@@ -170,10 +168,9 @@ properties:
     examples:
       - "IBU - Institut Bauen und Umwelt e.V."
       - "The International EPD System"
-      - null
   
   epdOperatorUri:
-    type: ["string", "null"]
+    type: string
     format: uri
     description: |
       URI/URL to the EPD program operator's website.
@@ -183,10 +180,9 @@ properties:
     examples:
       - "https://ibu-epd.com"
       - "https://www.environdec.com"
-      - null
   
   operatorEpdId:
-    type: ["string", "null"]
+    type: string
     minLength: 1
     maxLength: 35
     description: |
@@ -196,10 +192,9 @@ properties:
       **Path**: `Supplier[].Product[].LcaEnvironmental.OperatorEpdId`
     examples:
       - "EPD-IBU-2024-001234"
-      - null
   
   manufacturerEpdId:
-    type: ["string", "null"]
+    type: string
     minLength: 1
     maxLength: 35
     description: |
@@ -209,10 +204,9 @@ properties:
       **Path**: `Supplier[].Product[].LcaEnvironmental.ManufacturerEpdId`
     examples:
       - "MFR-EPD-LED-2024-001"
-      - null
   
   productCategoryRulesDescription:
-    type: ["string", "null"]
+    type: string
     minLength: 1
     maxLength: 100
     description: |
@@ -224,10 +218,9 @@ properties:
     examples:
       - "PCR 2019:14 Lighting equipment"
       - "EN 15804+A2 Construction products"
-      - null
   
   productCategoryRulesUri:
-    type: ["string", "null"]
+    type: string
     format: uri
     description: |
       URI/URL to the Product Category Rules (PCR) document.
@@ -236,10 +229,9 @@ properties:
       **Path**: `Supplier[].Product[].LcaEnvironmental.ProductCategoryRulesUri`
     examples:
       - "https://www.environdec.com/pcr-library/pcr-2019-14"
-      - null
   
   productSpecificRulesDescription:
-    type: ["string", "null"]
+    type: string
     minLength: 1
     maxLength: 100
     description: |
@@ -250,10 +242,9 @@ properties:
       **Path**: `Supplier[].Product[].LcaEnvironmental.ProductSpecificRulesDescription`
     examples:
       - "PSR for LED lamps and luminaires"
-      - null
   
   productSpecificRulesUri:
-    type: ["string", "null"]
+    type: string
     format: uri
     description: |
       URI/URL to the Product Specific Rules (PSR) document.
@@ -262,7 +253,6 @@ properties:
       **Path**: `Supplier[].Product[].LcaEnvironmental.ProductSpecificRulesUri`
     examples:
       - "https://www.environdec.com/psr-library/psr-led-lighting"
-      - null
   
   lcaDeclaration:
     type: array
