@@ -44,7 +44,6 @@ examples:
         enclosedItemQuantity: 5
       - packagingTypeCode: BX
         enclosedSupplierItemNumber: "SCREW-M8-50"
-        enclosedManufacturerItemNumber: null
         enclosedItemGtins: []
         enclosedItemQuantity: 100
       - packagingTypeCode: PF

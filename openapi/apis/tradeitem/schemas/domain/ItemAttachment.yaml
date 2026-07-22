@@ -21,7 +21,7 @@ properties:
       **Path**: `Supplier[].Product[].TradeItem[].ItemAttachments[].AttachmentTypeSpecification`
   
   attachmentLanguages:
-    type: ["array", "null"]
+    type: array
     description: |
       Languages for which the attachment is applicable (e.g., 'en-GB', 'de-DE').
       **ETIM xChange**: `AttachmentLanguage[]`
@@ -31,9 +31,8 @@ properties:
       $ref: ../../../../shared/schemas/common/LanguageCode.yaml
     examples:
       - ["en-GB", "de-DE"]
-      - null
   attachmentFilename:
-    type: ["string", "null"]
+    type: string
     description: |
       Filename of the attachment.
       **ETIM xChange**: `AttachmentFilename`
@@ -43,7 +42,6 @@ properties:
     examples:
       - "product_image.jpg"
       - "manual_en.pdf"
-      - null
   attachmentUri:
     type: string
     format: uri
@@ -55,7 +53,7 @@ properties:
       - "https://example.com/attachments/product_image.jpg"
       - "https://cdn.supplier.com/manuals/manual_en.pdf"
   attachmentDescription:
-    type: ["string", "null"]
+    type: string
     description: |
       Human-readable description of the attachment. Flattened from multilingual array.
       **ETIM xChange**: `AttachmentDescription[].AttachmentDescription`
@@ -65,9 +63,8 @@ properties:
     examples:
       - "Front view product image"
       - "User manual in English"
-      - null
   attachmentIssueDate:
-    type: ["string", "null"]
+    type: string
     format: date
     description: |
       Date when the attachment was issued. ISO 8601 date format (YYYY-MM-DD).
@@ -75,9 +72,8 @@ properties:
       **Path**: `Supplier[].Product[].TradeItem[].ItemAttachments[].AttachmentDetails[].AttachmentIssueDate`
     examples:
       - "2024-01-15"
-      - null
   attachmentExpiryDate:
-    type: ["string", "null"]
+    type: string
     format: date
     description: |
       Date when the attachment expires. ISO 8601 date format (YYYY-MM-DD).
@@ -85,13 +81,10 @@ properties:
       **Path**: `Supplier[].Product[].TradeItem[].ItemAttachments[].AttachmentDetails[].AttachmentExpiryDate`
     examples:
       - "2026-12-31"
-      - null
 examples:
   - attachmentType: "ATX001"
     attachmentTypeSpecification: "MDX002"
-    attachmentLanguages: null
     attachmentFilename: "product_image.jpg"
     attachmentUri: "https://example.com/images/product.jpg"
     attachmentDescription: "Front view product image"
     attachmentIssueDate: "2024-01-15"
-    attachmentExpiryDate: null

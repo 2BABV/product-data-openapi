@@ -19,7 +19,7 @@ properties:
   # =========================================================================
   
   supplierAltItemNumber:
-    type: ["string", "null"]
+    type: string
     minLength: 1
     maxLength: 35
     description: |
@@ -30,10 +30,9 @@ properties:
       **Path**: `Supplier[].Product[].TradeItem[].ItemIdentification.SupplierAltItemNumber`
     examples:
       - "ALT-98765"
-      - null
   
   manufacturerItemNumber:
-    type: ["string", "null"]
+    type: string
     minLength: 1
     maxLength: 35
     description: |
@@ -44,7 +43,6 @@ properties:
       **Path**: `Supplier[].Product[].TradeItem[].ItemIdentification.ManufacturerItemNumber`
     examples:
       - "MFG-54321"
-      - null
   
   manufacturerIdGln:
     description: |
@@ -70,7 +68,7 @@ properties:
       - "PROD-ABC-123"
   
   itemGtins:
-    type: ["array", "null"]
+    type: array
     uniqueItems: true
     items:
       $ref: ../../../../shared/schemas/identifiers/Gtin.yaml
@@ -82,10 +80,9 @@ properties:
       **Path**: `Supplier[].Product[].TradeItem[].ItemIdentification.ItemGtin[]`
     examples:
       - ["4012345678901", "04012345678901"]
-      - null
   
   buyerItemNumber:
-    type: ["string", "null"]
+    type: string
     minLength: 1
     maxLength: 35
     description: |
@@ -96,10 +93,9 @@ properties:
       **Path**: `Supplier[].Product[].TradeItem[].ItemIdentification.BuyerItemNumber`
     examples:
       - "BUYER-XYZ-123"
-      - null
   
   discountGroupId:
-    type: ["string", "null"]
+    type: string
     minLength: 1
     maxLength: 20
     description: |
@@ -110,10 +106,9 @@ properties:
       **Path**: `Supplier[].Product[].TradeItem[].ItemIdentification.DiscountGroupId`
     examples:
       - "DG-001"
-      - null
   
   bonusGroupId:
-    type: ["string", "null"]
+    type: string
     minLength: 1
     maxLength: 20
     description: |
@@ -124,7 +119,6 @@ properties:
       **Path**: `Supplier[].Product[].TradeItem[].ItemIdentification.BonusGroupId`
     examples:
       - "BG-002"
-      - null
   
   itemValidityDate:
     type: string
@@ -142,7 +136,7 @@ properties:
       - "2024-06-01"
   
   itemObsolescenceDate:
-    type: ["string", "null"]
+    type: string
     format: date
     description: |
       Date when the trade item becomes obsolete and is no longer available for ordering.
@@ -152,7 +146,6 @@ properties:
       **Path**: `Supplier[].Product[].TradeItem[].ItemIdentification.ItemObsolescenceDate`
     examples:
       - "2026-12-31"
-      - null
   
   # =========================================================================
   # ITEM DETAILS (from TradeItem.ItemDetails)
@@ -170,13 +163,10 @@ properties:
       
       **ETIM xChange**: `ItemStatus`  
       **Path**: `Supplier[].Product[].TradeItem[].ItemDetails.ItemStatus`
-    anyOf:
-      - $ref: ../enums/ItemStatus.yaml
-      - type: "null"
+    $ref: ../enums/ItemStatus.yaml
     examples:
       - "ACTIVE"
       - "PRE-LAUNCH"
-      - null
   
   itemCondition:
     description: |
@@ -188,16 +178,13 @@ properties:
       
       **ETIM xChange**: `ItemCondition`  
       **Path**: `Supplier[].Product[].TradeItem[].ItemDetails.ItemCondition`
-    anyOf:
-      - $ref: ../enums/ItemCondition.yaml
-      - type: "null"
+    $ref: ../enums/ItemCondition.yaml
     examples:
       - "NEW"
       - "REFURBISHED"
-      - null
   
   stockItem:
-    type: ["boolean", "null"]
+    type: boolean
     description: |
       Indicates whether the item is a stock item (true) or made-to-order (false).
       Stock items are typically available for immediate delivery.
@@ -207,10 +194,9 @@ properties:
     examples:
       - true
       - false
-      - null
   
   shelfLifePeriod:
-    type: ["integer", "null"]
+    type: integer
     minimum: 0
     maximum: 999
     description: |
@@ -222,7 +208,6 @@ properties:
     examples:
       - 365
       - 730
-      - null
 
 examples:
   - supplierAltItemNumber: "ALT-12345"
@@ -230,12 +215,8 @@ examples:
     manufacturerIdGln: "9876543210987"
     manufacturerProductNumber: "929002376910"
     itemGtins: ["4012345678901"]
-    buyerItemNumber: null
     discountGroupId: "DG-001"
-    bonusGroupId: null
     itemValidityDate: "2024-01-01"
-    itemObsolescenceDate: null
     itemStatus: "ACTIVE"
     itemCondition: "NEW"
     stockItem: true
-    shelfLifePeriod: null

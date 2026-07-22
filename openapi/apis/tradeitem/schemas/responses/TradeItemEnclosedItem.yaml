@@ -39,7 +39,7 @@ properties:
       - "WIDGET-001"
       - "SCREW-M8-50"
   enclosedManufacturerItemNumber:
-    type: ["string", "null"]
+    type: string
     description: |
       Manufacturer item number of the enclosed trade item.
       **ETIM xChange**: `ManufacturerItemNumber`
@@ -48,7 +48,6 @@ properties:
     maxLength: 35
     examples:
       - "MFG-WIDGET-001"
-      - null
   enclosedItemGtins:
     type: array
     description: |
@@ -80,6 +79,5 @@ examples:
     enclosedItemQuantity: 5
   - packagingTypeCode: PF
     enclosedSupplierItemNumber: "SCREW-M8-50"
-    enclosedManufacturerItemNumber: null
     enclosedItemGtins: []
     enclosedItemQuantity: 100

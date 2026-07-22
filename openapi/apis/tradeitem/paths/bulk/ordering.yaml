@@ -40,11 +40,6 @@ get:
                     minimumOrderQuantity: 1
                     orderStepSize: 1
                     standardOrderLeadTime: 5
-                    useUnit: null
-                    useUnitConversionFactor: null
-                    singleUseUnitQuantity: null
-                    alternativeUseUnit: null
-                    alternativeUseUnitConversionFactor: null
                   - supplierIdGln: "8712423012485"
                     supplierItemNumber: "SKU-CABLE-002"
                     orderUnit: "MTR"
@@ -54,8 +49,6 @@ get:
                     useUnit: "MTR"
                     useUnitConversionFactor: 1.0
                     singleUseUnitQuantity: 1.0
-                    alternativeUseUnit: null
-                    alternativeUseUnitConversionFactor: null
                 meta:
                   cursor: "eyJzdXBwbGllcklkR2xuIjoiODcxMjQyMzAxMjQ4NSJ9"
                   hasNext: true

@@ -10,8 +10,7 @@ description: |
   - Streaming data processing
   - Language filtering at row level
   
-  **Payload Optimization**: Optional properties with null values may be omitted from the response
-  to minimize payload size. Clients should treat missing properties as null/not applicable.
+  Optional properties are omitted from each row when no value exists.
   
   **ETIM xChange**: `ProductDetails.ProductDescriptions`  
   **Path**: `Supplier[].Product[].ProductDetails.ProductDescriptions[]`
@@ -66,7 +65,7 @@ properties:
       - "LED Smart Bulb E27 White"
       - "Industrial Motor 3-Phase"
   uniqueMainProductDescription:
-    type: ["string", "null"]
+    type: string
     minLength: 1
     maxLength: 255
     description: |
@@ -78,7 +77,7 @@ properties:
     examples:
       - "Philips Hue White and Color Ambiance E27 LED Smart Bulb, 806 lumens, Bluetooth compatible"
   fullProductDescription:
-    type: ["string", "null"]
+    type: string
     minLength: 1
     maxLength: 10000
     description: |
@@ -90,7 +89,7 @@ properties:
     examples:
       - "The Philips Hue White and Color Ambiance E27 LED Smart Bulb offers 16 million colors..."
   productMarketingText:
-    type: ["string", "null"]
+    type: string
     minLength: 1
     maxLength: 10000
     description: |
@@ -102,7 +101,7 @@ properties:
     examples:
       - "Transform your home with smart lighting that adapts to your lifestyle..."
   productSpecificationText:
-    type: ["string", "null"]
+    type: string
     minLength: 1
     maxLength: 10000
     description: |
@@ -114,7 +113,7 @@ properties:
     examples:
       - "Technical Specifications: Voltage: 220-240V, Power: 9W, Luminous flux: 806 lm..."
   productApplicationInstructions:
-    type: ["string", "null"]
+    type: string
     minLength: 1
     maxLength: 10000
     description: |
@@ -126,7 +125,7 @@ properties:
     examples:
       - "Installation: Screw the bulb into an E27 socket. Connect to the Philips Hue Bridge..."
   productKeyword:
-    type: ["array", "null"]
+    type: array
     uniqueItems: true
     items:
       type: string
@@ -141,7 +140,7 @@ properties:
     examples:
       - ["smart lighting", "LED", "color", "Bluetooth", "energy efficient"]
   productPageUrl:
-    type: ["string", "null"]
+    type: string
     format: uri
     description: |
       URL to the manufacturer's product page.

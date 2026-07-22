@@ -19,7 +19,7 @@ properties:
     examples:
       - "929002376910"
   lcaEnvironmental:
-    anyOf:
+    oneOf:
       - $ref: ../domain/LcaEnvironmental.yaml
       - type: "null"
     description: |

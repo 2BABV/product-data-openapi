@@ -40,7 +40,7 @@ properties:
   # =========================================================================
   
   productGtins:
-    type: ["array", "null"]
+    type: array
     uniqueItems: true
     items:
       $ref: ../../../../shared/schemas/identifiers/Gtin.yaml
@@ -49,12 +49,12 @@ properties:
       Can include GTIN-8, GTIN-12, GTIN-13, or GTIN-14.
   
   unbrandedProduct:
-    type: ["boolean", "null"]
+    type: boolean
     description: |
       Indicates whether this is an unbranded/white-label product.
   
   brandName:
-    type: ["string", "null"]
+    type: string
     minLength: 1
     maxLength: 50
     description: |
@@ -65,7 +65,7 @@ properties:
   # =========================================================================
   
   productAnnouncementDate:
-    type: ["string", "null"]
+    type: string
     format: date
     description: |
       Date when the product was announced. ISO 8601 date format (YYYY-MM-DD).
@@ -82,7 +82,7 @@ properties:
       **Default from**: `CatalogueValidityStart`
   
   productObsolescenceDate:
-    type: ["string", "null"]
+    type: string
     format: date
     description: |
       Date when the product becomes obsolete. ISO 8601 date format (YYYY-MM-DD).
@@ -92,14 +92,14 @@ properties:
   # =========================================================================
   
   customsCommodityCode:
-    type: ["string", "null"]
+    type: string
     minLength: 6
     maxLength: 16
     description: |
       Customs/HS commodity code for the product.
   
   factorCustomsCommodityCode:
-    type: ["number", "null"]
+    type: number
     format: decimal
     minimum: 0
     multipleOf: 0.0001
@@ -113,10 +113,9 @@ properties:
     examples:
       - 1.0
       - 0.75
-      - null
   
   countryOfOrigin:
-    type: ["array", "null"]
+    type: array
     uniqueItems: true
     items:
       type: string
@@ -129,17 +128,13 @@ properties:
   # =========================================================================
   
   productStatus:
-    anyOf:
-      - $ref: ../enums/ProductStatus.yaml
-      - type: "null"
+    $ref: ../enums/ProductStatus.yaml
   
   productType:
-    anyOf:
-      - $ref: ../enums/ProductType.yaml
-      - type: "null"
+    $ref: ../enums/ProductType.yaml
   
   customisableProduct:
-    type: ["boolean", "null"]
+    type: boolean
     description: |
       Indicates whether the product can be customised.
       
@@ -147,7 +142,7 @@ properties:
       **Path**: `Supplier[].Product[].ProductDetails.CustomisableProduct`
   
   hasSerialNumber:
-    type: ["boolean", "null"]
+    type: boolean
     description: |
       Indicates whether the product has a serial number.
       
@@ -155,7 +150,7 @@ properties:
       **Path**: `Supplier[].Product[].ProductDetails.HasSerialNumber`
   
   warrantyConsumer:
-    type: ["integer", "null"]
+    type: integer
     minimum: 0
     exclusiveMaximum: 1000
     description: |
@@ -165,7 +160,7 @@ properties:
       **Path**: `Supplier[].Product[].ProductDetails.WarrantyConsumer`
   
   warrantyBusiness:
-    type: ["integer", "null"]
+    type: integer
     minimum: 0
     exclusiveMaximum: 1000
     description: |
@@ -175,7 +170,7 @@ properties:
       **Path**: `Supplier[].Product[].ProductDetails.WarrantyBusiness`
   
   relatedManufacturerProductGroup:
-    type: ["array", "null"]
+    type: array
     uniqueItems: true
     items:
       type: string

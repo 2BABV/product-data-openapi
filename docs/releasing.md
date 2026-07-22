@@ -13,6 +13,10 @@ tradeitem/v1.2.3
 Tags are **prefixed per API** so each API is versioned independently.
 Versions follow [Semantic Versioning](https://semver.org/): `MAJOR.MINOR.PATCH` (e.g. `1.2.0`) or a pre-release label (e.g. `1.0.0-Preview1`, `2.0.0-beta.1`).
 
+Breaking changes are permitted between pre-release versions before the first stable
+release of a major version. Once stable `1.0.0` is released, breaking API contract
+changes require a new major version and URL path.
+
 ## Release steps
 
 ### 1. Update `info.version` in the OpenAPI spec
@@ -92,6 +96,9 @@ Once the tag is pushed, the `release.yml` workflow:
 Versions containing a hyphen (e.g. `1.0.0-Preview1`, `2.0.0-beta.1`) are automatically
 marked as pre-releases on GitHub and are not promoted to "latest" in the version selector
 until a stable release exists.
+
+Pre-release consumers must expect contract changes between Preview/beta releases.
+Release notes must identify breaking changes and their migration impact.
 
 ## Rollback / re-release
 

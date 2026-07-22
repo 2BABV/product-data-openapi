@@ -40,17 +40,14 @@ get:
                       minimalItemDescription: "LED Lamp 10W E27"
                       uniqueMainItemDescription: "Professional LED lamp with E27 socket, 10W warm white"
                       discountGroupDescription: "Lighting products discount group"
-                      bonusGroupDescription: null
                     - descriptionLanguage: "de-DE"
                       minimalItemDescription: "LED Lampe 10W E27"
                       uniqueMainItemDescription: "Professionelle LED-Lampe mit E27-Fassung, 10W warmweiß"
                       discountGroupDescription: "Beleuchtungsprodukte Rabattgruppe"
-                      bonusGroupDescription: null
                     - descriptionLanguage: "nl-NL"
                       minimalItemDescription: "LED Lamp 10W E27"
                       uniqueMainItemDescription: "Professionele LED lamp met E27 fitting, 10W warm wit"
                       discountGroupDescription: "Verlichtingsproducten kortingsgroep"
-                      bonusGroupDescription: null
             singleLanguage:
               summary: Filtered to single language
               value:
@@ -62,7 +59,6 @@ get:
                       minimalItemDescription: "LED Lamp 10W E27"
                       uniqueMainItemDescription: "Professional LED lamp with E27 socket, 10W warm white"
                       discountGroupDescription: "Lighting products discount group"
-                      bonusGroupDescription: null
             noDescriptions:
               summary: Trade item without descriptions
               value:

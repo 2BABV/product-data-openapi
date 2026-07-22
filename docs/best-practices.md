@@ -17,7 +17,7 @@
 3. [Response Conventions](#response-conventions)
    - [404 Only From Root Endpoints](#404-only-from-root-endpoints)
    - [Collections Always Present](#collections-always-present)
-   - [Optional Objects Are Nullable](#optional-objects-are-nullable)
+   - [Optional Objects Are Omitted](#optional-objects-are-omitted)
    - [Error Responses (RFC 9457)](#error-responses-rfc-9457)
 4. [Pagination Strategies](#pagination-strategies)
    - [Cursor-Based Pagination (Recommended)](#cursor-based-pagination-recommended)
@@ -105,21 +105,24 @@ This project uses **OpenAPI 3.1** which aligns with **JSON Schema 2020-12**. Thi
 
 ### Nullable Fields
 
-Use type arrays for nullable fields instead of the deprecated `nullable` keyword:
+Optional ETIM values use property absence, not JSON `null`. Do not list an optional
+property in `required`, and give it a non-null value schema:
 
 ```yaml
-# ✅ CORRECT - OpenAPI 3.1 / JSON Schema 2020-12
-propertyName:
-  type: ["string", "null"]
-  description: Optional field that can be null
-
-# ❌ INCORRECT - OpenAPI 3.0 only (deprecated)
+# ✅ CORRECT — absent when unavailable; non-null when present
 propertyName:
   type: string
-  nullable: true
+
+# ❌ INCORRECT — optional ETIM values do not accept null
+propertyName:
+  type: ["string", "null"]
 ```
 
-For response shapes, distinguish collections from singular objects:
+When an API field intentionally assigns meaning to `null`, OpenAPI 3.1 uses a type
+array or composition with `type: "null"`; never use the deprecated OpenAPI 3.0
+`nullable: true` keyword.
+
+For response shapes, distinguish canonical optional data from API-specific collections:
 
 ```yaml
 # ✅ Sub-resource arrays are NEVER nullable — always required, empty = []
@@ -141,11 +144,9 @@ descriptions:
   items:
     $ref: '#/components/schemas/ProductDescription'
 
-# ✅ Optional objects use anyOf with null (required but nullable)
+# ✅ Optional object — omitted when unavailable
 ordering:
-  anyOf:
-    - $ref: '#/components/schemas/TradeItemOrdering'
-    - type: "null"
+  $ref: '#/components/schemas/TradeItemOrdering'
 ```
 
 See [Response Conventions](#response-conventions) below for the full rules on collections vs objects.
@@ -318,28 +319,27 @@ descriptions:
 
 Code generation target: `required List<T>` with default `[]`.
 
-### Optional Objects Are Nullable
+### Optional Objects Are Omitted
 
-Singular optional objects are always present in the response, set to `null` when unavailable:
+Singular optional ETIM objects are omitted when unavailable and non-null when present:
 
 ```yaml
-# ✅ CORRECT — required + nullable
-required:
-  - ordering
+# ✅ CORRECT — optional direct reference
+properties:
+  ordering:
+    $ref: '#/components/schemas/TradeItemOrdering'
+# Unavailable result: property omitted
+
+# ❌ INCORRECT — null has no distinct meaning here
 properties:
   ordering:
     anyOf:
       - $ref: '#/components/schemas/TradeItemOrdering'
       - type: "null"
-# Absent result: ordering: null
-
-# ❌ INCORRECT — optional (may be omitted entirely)
-properties:
-  ordering:
-    $ref: '#/components/schemas/TradeItemOrdering'
 ```
 
-Code generation target: `T?` (nullable reference type).
+Required object properties remain listed in `required` and use a direct `$ref`.
+Intentional API-specific null semantics must be documented at the usage site.
 
 ### Error Responses (RFC 9457)
 

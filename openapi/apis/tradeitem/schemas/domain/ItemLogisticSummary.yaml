@@ -51,7 +51,7 @@ properties:
   # =========================================================================
 
   baseItemNetLength:
-    type: ["number", "null"]
+    type: number
     format: decimal
     description: |
       Net length of the base item in specified unit (converted from ETIM xChange string to number).
@@ -63,10 +63,9 @@ properties:
     examples:
       - 25.5
       - 100.0
-      - null
 
   baseItemNetWidth:
-    type: ["number", "null"]
+    type: number
     format: decimal
     description: |
       Net width of the base item in specified unit (converted from ETIM xChange string to number).
@@ -78,10 +77,9 @@ properties:
     examples:
       - 15.25
       - 50.0
-      - null
 
   baseItemNetHeight:
-    type: ["number", "null"]
+    type: number
     format: decimal
     description: |
       Net height of the base item in specified unit (converted from ETIM xChange string to number).
@@ -93,10 +91,9 @@ properties:
     examples:
       - 10.5
       - 30.0
-      - null
 
   baseItemNetDiameter:
-    type: ["number", "null"]
+    type: number
     format: decimal
     description: |
       Net diameter of the base item in specified unit (for cylindrical items) (converted from ETIM xChange string to number).
@@ -107,10 +104,9 @@ properties:
     maximum: 999999999999.9999
     examples:
       - 8.75
-      - null
 
   netDimensionUnit:
-    type: ["string", "null"]
+    type: string
     description: |
       Unit of measurement for net dimensions (CMT=centimeter, MTR=meter, etc.).
       **ETIM xChange**: `NetDimensionUnit`
@@ -125,14 +121,12 @@ properties:
       - INH  # Inch
       - SMI  # Mile (statute mile)
       - YRD  # Yard
-      - null
     examples:
       - CMT
       - MTR
-      - null
 
   baseItemNetWeight:
-    type: ["number", "null"]
+    type: number
     format: decimal
     description: |
       Net weight of the base item in specified unit (converted from ETIM xChange string to number).
@@ -144,10 +138,9 @@ properties:
     examples:
       - 1.5
       - 1250.75
-      - null
 
   netWeightUnit:
-    type: ["string", "null"]
+    type: string
     description: |
       Unit of measurement for net weight (GRM=gram, KGM=kilogram, etc.).
       **ETIM xChange**: `NetWeightUnit`
@@ -160,14 +153,12 @@ properties:
       - LTN  # Long ton (UK)
       - LBR  # Pound
       - ONZ  # Ounce
-      - null
     examples:
       - GRM
       - KGM
-      - null
 
   baseItemNetVolume:
-    type: ["number", "null"]
+    type: number
     format: decimal
     description: |
       Net volume of the base item in specified unit (converted from ETIM xChange string to number).
@@ -179,10 +170,9 @@ properties:
     examples:
       - 0.5
       - 10.25
-      - null
 
   netVolumeUnit:
-    type: ["string", "null"]
+    type: string
     description: |
       Unit of measurement for net volume (LTR=liter, MTQ=cubic meter, etc.).
       **ETIM xChange**: `NetVolumeUnit`
@@ -198,11 +188,9 @@ properties:
       - MLT  # Milliliter
       - PT   # Pint (US)
       - QT   # Quart (US)
-      - null
     examples:
       - LTR
       - MTQ
-      - null
 
 examples:
   - supplierIdGln: "8712423012485"
@@ -210,7 +198,6 @@ examples:
     baseItemNetLength: 96.0
     baseItemNetWidth: 5.0
     baseItemNetHeight: 56.0
-    baseItemNetDiameter: null
     netDimensionUnit: CMT
     baseItemNetWeight: 0.26
     netWeightUnit: KGM
@@ -222,9 +209,6 @@ examples:
     baseItemNetLength: 25.5
     baseItemNetWidth: 15.0
     baseItemNetHeight: 10.0
-    baseItemNetDiameter: null
     netDimensionUnit: CMT
     baseItemNetWeight: 500.0
     netWeightUnit: GRM
-    baseItemNetVolume: null
-    netVolumeUnit: null

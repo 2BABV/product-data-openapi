@@ -83,7 +83,7 @@ properties:
       - "SCREW-M8-50"
 
   enclosedManufacturerItemNumber:
-    type: ["string", "null"]
+    type: string
     description: |
       Manufacturer item number of the enclosed trade item.
       **ETIM xChange**: `ManufacturerItemNumber`
@@ -92,10 +92,9 @@ properties:
     maxLength: 35
     examples:
       - "MFG-WIDGET-001"
-      - null
 
   enclosedItemGtins:
-    type: ["array", "null"]
+    type: array
     description: |
       Array of GTINs for the enclosed trade item.
       **ETIM xChange**: `ItemGtin[]`
@@ -105,7 +104,6 @@ properties:
       $ref: ../../../../shared/schemas/identifiers/Gtin.yaml
     examples:
       - ["4012345678901"]
-      - null
 
   enclosedItemQuantity:
     type: integer
@@ -134,8 +132,6 @@ examples:
     supplierItemNumber: "SKU-KIT-001"
     packagingTypeCode: BX
     enclosedSupplierItemNumber: "SCREW-M8-50"
-    enclosedManufacturerItemNumber: null
-    enclosedItemGtins: null
     enclosedItemQuantity: 100
 
   # Enclosed item on a pallet (different packaging unit)

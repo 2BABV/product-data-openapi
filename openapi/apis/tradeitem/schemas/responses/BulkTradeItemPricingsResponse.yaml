@@ -5,8 +5,8 @@ description: |
   
   **Flattened Structure (LEFT JOIN)**: Each row in the `data` array represents a single
   pricing × allowance/surcharge combination. Pricings without surcharges appear as one row
-  with all `allowanceSurcharge*` fields set to `null`. Pricings with N surcharges appear as
-  N rows with pricing fields repeated on each.
+  that **omits** all `allowanceSurcharge*` fields entirely (absent, never `null`). Pricings
+  with N surcharges appear as N rows with pricing fields repeated on each.
   
   This follows the same denormalization pattern as `ProductEtimClassificationFeature` —
   every row is the same shape, no nesting, no artificial keys.
@@ -66,7 +66,7 @@ examples:
         allowanceSurchargeType: DBD
         allowanceSurchargeSequenceNumber: 2
         allowanceSurchargeAmount: 25.00
-      # Pricing without surcharges (all allowance/surcharge fields null)
+      # Pricing without surcharges (all allowance/surcharge fields omitted)
       - supplierIdGln: "8712423012485"
         supplierItemNumber: "SKU-CABLE-002"
         priceUnit: MTR
@@ -75,8 +75,6 @@ examples:
         currencyCode: EUR
         netPrice: 1.99
         priceValidityDate: "2025-01-01"
-        allowanceSurchargeIndicator: null
-        allowanceSurchargeType: null
     meta:
       cursor: "eyJzdXBwbGllcklkR2xuIjoiODcxMjQyMzAxMjQ4NSIsInN1cHBsaWVySXRlbU51bWJlciI6IlNLVS1DQUJMRS0wMDIiLCJwcmljZVF1YW50aXR5IjoxMDB9"
       hasNext: true

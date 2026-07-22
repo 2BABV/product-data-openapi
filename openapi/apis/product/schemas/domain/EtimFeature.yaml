@@ -16,7 +16,7 @@ properties:
       - "EFI00456"
   
   etimValueCode:
-    type: ["string", "null"]
+    type: string
     pattern: "^EV[0-9]{6}$"
     description: |
       ETIM standardized value code for alphanumeric features (e.g., enumerations, selections).
@@ -26,10 +26,9 @@ properties:
       **Path**: `Supplier[].Product[].EtimClassification[].EtimFeatures[].EtimValueCode`
     examples:
       - "EV000789"
-      - null
   
   etimValueNumeric:
-    type: ["number", "null"]
+    type: number
     format: decimal
     multipleOf: 0.0001
     minimum: -999999999999.9999
@@ -44,10 +43,9 @@ properties:
       - 230.0
       - 50.5
       - -10.25
-      - null
   
   etimValueRangeLower:
-    type: ["number", "null"]
+    type: number
     format: decimal
     multipleOf: 0.0001
     minimum: -999999999999.9999
@@ -61,10 +59,9 @@ properties:
     examples:
       - 100.0
       - 0.5
-      - null
   
   etimValueRangeUpper:
-    type: ["number", "null"]
+    type: number
     format: decimal
     multipleOf: 0.0001
     minimum: -999999999999.9999
@@ -78,10 +75,9 @@ properties:
     examples:
       - 240.0
       - 60.0
-      - null
   
   etimValueLogical:
-    type: ["boolean", "null"]
+    type: boolean
     description: |
       Boolean/logical value for yes/no type features.
       
@@ -90,10 +86,9 @@ properties:
     examples:
       - true
       - false
-      - null
   
   etimValueDetails:
-    type: ["array", "null"]
+    type: array
     items:
       type: object
       required:
@@ -122,15 +117,13 @@ properties:
     examples:
       - - language: "en-GB"
           etimValueDetails: "Certified for outdoor use"
-      - null
   
   reasonNoValue:
-    type: ["string", "null"]
+    type: string
     enum:
       - "MV"
       - "NA"
       - "UN"
-      - null
     description: |
       Reason code when no feature value is provided.
       
@@ -142,7 +135,6 @@ properties:
       **Path**: `Supplier[].Product[].EtimClassification[].EtimFeatures[].ReasonNoValue`
     examples:
       - "NA"
-      - null
 
 examples:
   - etimFeatureCode: "EF000123"

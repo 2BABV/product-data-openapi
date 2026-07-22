@@ -9,10 +9,7 @@ description: |
   - ETL/data warehouse ingestion
   - Streaming data processing
   - Language filtering at row level
-  
-  **Payload Optimization**: Optional properties with null values may be omitted from the response
-  to minimize payload size. Clients should treat missing properties as null/not applicable.
-  
+
   **ETIM xChange**: `ItemDetails.ItemDescriptions`  
   **Path**: `Supplier[].Product[].TradeItem[].ItemDetails.ItemDescriptions[]`
 required:
@@ -66,7 +63,7 @@ properties:
       - "LED Lamp 10W E27"
       - "Hammer 500g"
   uniqueMainItemDescription:
-    type: ["string", "null"]
+    type: string
     minLength: 1
     maxLength: 255
     description: |
@@ -79,7 +76,7 @@ properties:
       - "Professional LED lamp with E27 socket, 10W warm white"
       - "Professional claw hammer with fiberglass handle, 500g head weight"
   discountGroupDescription:
-    type: ["string", "null"]
+    type: string
     minLength: 1
     maxLength: 100
     description: |
@@ -89,9 +86,8 @@ properties:
       **Path**: `Supplier[].Product[].TradeItem[].ItemIdentification.DiscountGroupDescription[].DiscountGroupDescription`
     examples:
       - "Standard tools discount group"
-      - null
   bonusGroupDescription:
-    type: ["string", "null"]
+    type: string
     minLength: 1
     maxLength: 100
     description: |
@@ -101,7 +97,6 @@ properties:
       **Path**: `Supplier[].Product[].TradeItem[].ItemIdentification.BonusGroupDescription[].BonusGroupDescription`
     examples:
       - "Premium bonus tier"
-      - null
 
 examples:
   # English description
@@ -111,7 +106,6 @@ examples:
     minimalItemDescription: "LED Lamp 10W E27"
     uniqueMainItemDescription: "Professional LED lamp with E27 socket, 10W warm white"
     discountGroupDescription: "Lighting products discount group"
-    bonusGroupDescription: null
   
   # German description for same item
   - supplierIdGln: "1234567890123"
@@ -120,7 +114,6 @@ examples:
     minimalItemDescription: "LED Lampe 10W E27"
     uniqueMainItemDescription: "Professionelle LED-Lampe mit E27-Fassung, 10W warmweiß"
     discountGroupDescription: "Beleuchtungsprodukte Rabattgruppe"
-    bonusGroupDescription: null
   
   # Minimal description only
   - supplierIdGln: "9876543210987"

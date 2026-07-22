@@ -16,7 +16,7 @@ properties:
       - "SPARE-MOTOR-42"
   
   relatedProductGtin:
-    type: ["array", "null"]
+    type: array
     uniqueItems: true
     items:
       $ref: ../../../../shared/schemas/identifiers/Gtin.yaml
@@ -28,10 +28,9 @@ properties:
       **Path**: `Supplier[].Product[].ProductRelations[].RelatedProducts[].RelatedProductGtin[]`
     examples:
       - ["8718699673840"]
-      - null
   
   relatedProductQuantity:
-    type: ["integer", "null"]
+    type: integer
     minimum: 1
     description: |
       Quantity of the related product required or included (e.g., number of spare parts needed).
@@ -41,7 +40,6 @@ properties:
     examples:
       - 1
       - 4
-      - null
 
 examples:
   - relatedManufacturerProductNumber: "LED-ACC-001"
