@@ -40,24 +40,16 @@ get:
                     manufacturerPackagingNumber: "100062"
                     packagingGtins: ["00095969042437"]
                     packagingTypeCode: CT
-                    packagingUnitName: null
                     packagingQuantity: 1
                     tradeItemPrimaryPackaging: true
-                    packagingGs1Code128: null
-                    packagingBreak: null
-                    numberOfPackagingParts: null
                   - supplierIdGln: "0095969000000"
                     supplierItemNumber: "114519"
                     supplierPackagingNumber: "114519"
                     manufacturerPackagingNumber: "114519"
                     packagingGtins: ["00095969040549"]
                     packagingTypeCode: CT
-                    packagingUnitName: null
                     packagingQuantity: 1
                     tradeItemPrimaryPackaging: true
-                    packagingGs1Code128: null
-                    packagingBreak: null
-                    numberOfPackagingParts: null
                 meta:
                   cursor: "eyJpZCI6MTIzfQ=="
                   hasNext: true

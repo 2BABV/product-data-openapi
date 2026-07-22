@@ -21,23 +21,17 @@ examples:
       packagingUnits:
         - packagingIdentification:
             supplierPackagingNumber: "PKG-001"
-            manufacturerPackagingNumber: null
             packagingGtins: ["04012345678901"]
             packagingTypeCode: BX
             packagingUnitName: "Box"
             packagingQuantity: 10
             tradeItemPrimaryPackaging: true
-            packagingGs1Code128: null
             packagingBreak: false
             numberOfPackagingParts: 1
           packagingLogisticDetails:
-            - supplierPackagingPartNumber: null
-              manufacturerPackagingPartNumber: null
-              packagingPartGtins: null
-              packagingTypeLength: 40.0
+            - packagingTypeLength: 40.0
               packagingTypeWidth: 30.0
               packagingTypeHeight: 20.0
-              packagingTypeDiameter: null
               packagingTypeDimensionUnit: CMT
               packagingTypeWeight: 5000.0
               packagingTypeWeightUnit: GRM

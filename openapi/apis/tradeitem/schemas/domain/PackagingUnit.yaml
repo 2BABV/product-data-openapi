@@ -16,13 +16,13 @@ properties:
       **Path**: `Supplier[].Product[].TradeItem[].PackagingUnit[].PackagingIdentification`
     $ref: ./PackagingUnitPackagingIdentification.yaml
   packagingLogisticDetails:
-    type: ["array", "null"]
+    type: array
     description: |
       Array of logistic details for each physical part of this packaging unit.
       A packaging unit with multiple physical parts (e.g., a crate body + lid)
       will have one entry per part, each with its own dimensions and weight.
 
-      Single-part packaging typically has one entry. `null` when logistic details
+      Single-part packaging typically has one entry. Absent when logistic details
       are not available.
       **ETIM xChange**: `PackagingLogisticDetails[]`
       **Path**: `Supplier[].Product[].TradeItem[].PackagingUnit[].PackagingLogisticDetails[]`
@@ -37,7 +37,6 @@ properties:
           packagingTypeWeightUnit: GRM
           stackingFactor: 2
           packagingTippable: true
-      - null
   tradeItemEnclosed:
     type: array
     description: |
@@ -55,23 +54,17 @@ properties:
 examples:
   - packagingIdentification:
       supplierPackagingNumber: "PKG-001"
-      manufacturerPackagingNumber: null
       packagingGtins: ["04012345678901"]
       packagingTypeCode: BX
       packagingUnitName: "Box"
       packagingQuantity: 10
       tradeItemPrimaryPackaging: true
-      packagingGs1Code128: null
       packagingBreak: false
       numberOfPackagingParts: 1
     packagingLogisticDetails:
-      - supplierPackagingPartNumber: null
-        manufacturerPackagingPartNumber: null
-        packagingPartGtins: null
-        packagingTypeLength: 40.0
+      - packagingTypeLength: 40.0
         packagingTypeWidth: 30.0
         packagingTypeHeight: 20.0
-        packagingTypeDiameter: null
         packagingTypeDimensionUnit: CMT
         packagingTypeWeight: 5000.0
         packagingTypeWeightUnit: GRM
@@ -88,12 +81,10 @@ examples:
   - packagingIdentification:
       supplierPackagingNumber: "PKG-CRATE"
       manufacturerPackagingNumber: "MFG-CRATE-001"
-      packagingGtins: null
       packagingTypeCode: CR
       packagingUnitName: "Crate"
       packagingQuantity: 1
       tradeItemPrimaryPackaging: false
-      packagingGs1Code128: null
       packagingBreak: false
       numberOfPackagingParts: 2
     packagingLogisticDetails:
@@ -103,7 +94,6 @@ examples:
         packagingTypeLength: 200.0
         packagingTypeWidth: 150.0
         packagingTypeHeight: 80.0
-        packagingTypeDiameter: null
         packagingTypeDimensionUnit: CMT
         packagingTypeWeight: 45000.0
         packagingTypeWeightUnit: GRM
@@ -116,11 +106,7 @@ examples:
         packagingTypeLength: 200.0
         packagingTypeWidth: 150.0
         packagingTypeHeight: 5.0
-        packagingTypeDiameter: null
         packagingTypeDimensionUnit: CMT
         packagingTypeWeight: 8000.0
         packagingTypeWeightUnit: GRM
         serialNumberOnPackaging: false
-        stackingFactor: null
-        packagingTippable: null
-    tradeItemEnclosed: null

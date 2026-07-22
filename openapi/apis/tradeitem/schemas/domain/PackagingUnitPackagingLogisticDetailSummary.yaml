@@ -66,7 +66,7 @@ properties:
       - PF   # Pallet
 
   supplierPackagingNumber:
-    type: ["string", "null"]
+    type: string
     description: |
       Supplier's packaging number for the parent packaging unit.
       Denormalized from `PackagingIdentification` to enable joins with the
@@ -78,14 +78,13 @@ properties:
     maxLength: 35
     examples:
       - "100062"
-      - null
 
   # =========================================================================
   # PACKAGING LOGISTIC DETAIL FIELDS
   # =========================================================================
 
   supplierPackagingPartNumber:
-    type: ["string", "null"]
+    type: string
     description: |
       Supplier's part number for this specific packaging part within the packaging unit.
       Used when a packaging unit consists of multiple physical parts.
@@ -96,10 +95,9 @@ properties:
     maxLength: 35
     examples:
       - "PKG-PART-001"
-      - null
 
   manufacturerPackagingPartNumber:
-    type: ["string", "null"]
+    type: string
     description: |
       Manufacturer's part number for this specific packaging part within the packaging unit.
       Used when a packaging unit consists of multiple physical parts.
@@ -110,10 +108,9 @@ properties:
     maxLength: 35
     examples:
       - "MFG-PKG-PART-001"
-      - null
 
   packagingPartGtins:
-    type: ["array", "null"]
+    type: array
     description: |
       Array of GTINs for this specific packaging part.
       Distinct from the parent packaging unit's `PackagingGtin[]` — this identifies
@@ -126,10 +123,9 @@ properties:
       $ref: ../../../../shared/schemas/identifiers/Gtin.yaml
     examples:
       - ["00095969042437"]
-      - null
 
   packagingTypeLength:
-    type: ["number", "null"]
+    type: number
     format: decimal
     description: |
       Length of the packaging part in the specified dimension unit.
@@ -145,10 +141,9 @@ properties:
     examples:
       - 0.400
       - 0.246
-      - null
 
   packagingTypeWidth:
-    type: ["number", "null"]
+    type: number
     format: decimal
     description: |
       Width of the packaging part in the specified dimension unit.
@@ -164,10 +159,9 @@ properties:
     examples:
       - 0.25
       - 0.125
-      - null
 
   packagingTypeHeight:
-    type: ["number", "null"]
+    type: number
     format: decimal
     description: |
       Height of the packaging part in the specified dimension unit.
@@ -183,10 +177,9 @@ properties:
     examples:
       - 0.200
       - 0.066
-      - null
 
   packagingTypeDiameter:
-    type: ["number", "null"]
+    type: number
     format: decimal
     description: |
       Diameter of the packaging part in the specified dimension unit (for cylindrical packaging).
@@ -201,10 +194,9 @@ properties:
     maximum: 999999999999.9999
     examples:
       - 15.0
-      - null
 
   packagingTypeDimensionUnit:
-    type: ["string", "null"]
+    type: string
     description: |
       Unit of measurement for packaging part dimensions (CMT=centimeter, MTR=meter, etc.).
 
@@ -222,14 +214,12 @@ properties:
       - INH  # Inch
       - SMI  # Mile (statute mile)
       - YRD  # Yard
-      - null
     examples:
       - MTR
       - CMT
-      - null
 
   packagingTypeWeight:
-    type: ["number", "null"]
+    type: number
     format: decimal
     description: |
       Weight of the packaging part in the specified weight unit.
@@ -245,10 +235,9 @@ properties:
     examples:
       - 0.560
       - 0.460
-      - null
 
   packagingTypeWeightUnit:
-    type: ["string", "null"]
+    type: string
     description: |
       Unit of measurement for packaging part weight (GRM=gram, KGM=kilogram, etc.).
 
@@ -264,14 +253,12 @@ properties:
       - LTN  # Long ton (UK)
       - LBR  # Pound
       - ONZ  # Ounce
-      - null
     examples:
       - KGM
       - GRM
-      - null
 
   serialNumberOnPackaging:
-    type: ["boolean", "null"]
+    type: boolean
     description: |
       Indicates whether a serial number is printed on this packaging part.
 
@@ -280,10 +267,9 @@ properties:
     examples:
       - true
       - false
-      - null
 
   stackingFactor:
-    type: ["integer", "null"]
+    type: integer
     description: |
       Maximum number of identical packaging units that can be stacked on top of each other.
 
@@ -293,10 +279,9 @@ properties:
     examples:
       - 2
       - 3
-      - null
 
   packagingTippable:
-    type: ["boolean", "null"]
+    type: boolean
     description: |
       Indicates whether the packaging can be tipped (laid on its side) during transport or storage.
 
@@ -305,41 +290,28 @@ properties:
     examples:
       - true
       - false
-      - null
 
 examples:
   - supplierIdGln: "0095969000000"
     supplierItemNumber: "100062"
     packagingTypeCode: CT
     supplierPackagingNumber: "100062"
-    supplierPackagingPartNumber: null
-    manufacturerPackagingPartNumber: null
     packagingPartGtins: ["00095969042437"]
     packagingTypeLength: 0.400
     packagingTypeWidth: 0.25
     packagingTypeHeight: 0.200
-    packagingTypeDiameter: null
     packagingTypeDimensionUnit: MTR
     packagingTypeWeight: 0.560
     packagingTypeWeightUnit: KGM
-    serialNumberOnPackaging: null
-    stackingFactor: null
-    packagingTippable: null
 
   - supplierIdGln: "0095969000000"
     supplierItemNumber: "114519"
     packagingTypeCode: CT
     supplierPackagingNumber: "114519"
-    supplierPackagingPartNumber: null
-    manufacturerPackagingPartNumber: null
     packagingPartGtins: ["00095969040549"]
     packagingTypeLength: 0.246
     packagingTypeWidth: 0.125
     packagingTypeHeight: 0.066
-    packagingTypeDiameter: null
     packagingTypeDimensionUnit: MTR
     packagingTypeWeight: 0.460
     packagingTypeWeightUnit: KGM
-    serialNumberOnPackaging: null
-    stackingFactor: null
-    packagingTippable: null

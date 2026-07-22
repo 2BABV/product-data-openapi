@@ -25,36 +25,24 @@ examples:
         supplierItemNumber: "100062"
         packagingTypeCode: CT
         supplierPackagingNumber: "100062"
-        supplierPackagingPartNumber: null
-        manufacturerPackagingPartNumber: null
         packagingPartGtins: ["00095969042437"]
         packagingTypeLength: 0.400
         packagingTypeWidth: 0.25
         packagingTypeHeight: 0.200
-        packagingTypeDiameter: null
         packagingTypeDimensionUnit: MTR
         packagingTypeWeight: 0.560
         packagingTypeWeightUnit: KGM
-        serialNumberOnPackaging: null
-        stackingFactor: null
-        packagingTippable: null
       - supplierIdGln: "0095969000000"
         supplierItemNumber: "114519"
         packagingTypeCode: CT
         supplierPackagingNumber: "114519"
-        supplierPackagingPartNumber: null
-        manufacturerPackagingPartNumber: null
         packagingPartGtins: ["00095969040549"]
         packagingTypeLength: 0.246
         packagingTypeWidth: 0.125
         packagingTypeHeight: 0.066
-        packagingTypeDiameter: null
         packagingTypeDimensionUnit: MTR
         packagingTypeWeight: 0.460
         packagingTypeWeightUnit: KGM
-        serialNumberOnPackaging: null
-        stackingFactor: null
-        packagingTippable: null
     meta:
       cursor: "eyJpZCI6MTIzfQ=="
       hasNext: true

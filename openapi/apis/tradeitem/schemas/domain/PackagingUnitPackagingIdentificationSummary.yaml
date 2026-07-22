@@ -53,7 +53,7 @@ properties:
   # =========================================================================
 
   supplierPackagingNumber:
-    type: ["string", "null"]
+    type: string
     description: |
       Supplier's packaging number for this packaging unit.
 
@@ -63,10 +63,9 @@ properties:
     maxLength: 35
     examples:
       - "100062"
-      - null
 
   manufacturerPackagingNumber:
-    type: ["string", "null"]
+    type: string
     description: |
       Manufacturer's packaging number for this packaging unit.
 
@@ -76,10 +75,9 @@ properties:
     maxLength: 35
     examples:
       - "100062"
-      - null
 
   packagingGtins:
-    type: ["array", "null"]
+    type: array
     description: |
       Array of GTINs for this packaging unit.
 
@@ -90,7 +88,6 @@ properties:
       $ref: ../../../../shared/schemas/identifiers/Gtin.yaml
     examples:
       - ["00095969042437"]
-      - null
 
   packagingTypeCode:
     description: |
@@ -105,7 +102,7 @@ properties:
       - PF   # Pallet
 
   packagingUnitName:
-    type: ["string", "null"]
+    type: string
     description: |
       Human-readable name of the packaging unit. Flattened from multilingual array.
 
@@ -116,10 +113,9 @@ properties:
     examples:
       - "Box"
       - "Pallet"
-      - null
 
   packagingQuantity:
-    type: ["number", "null"]
+    type: number
     format: decimal
     description: |
       Quantity of base items in this packaging unit (converted from ETIM xChange string to number).
@@ -133,10 +129,9 @@ properties:
       - 1
       - 10
       - 100
-      - null
 
   tradeItemPrimaryPackaging:
-    type: ["boolean", "null"]
+    type: boolean
     description: |
       Indicates whether this is the primary/consumer packaging.
 
@@ -145,10 +140,9 @@ properties:
     examples:
       - true
       - false
-      - null
 
   packagingGs1Code128:
-    type: ["string", "null"]
+    type: string
     description: |
       GS1-128 barcode for the packaging unit.
 
@@ -158,10 +152,9 @@ properties:
     maxLength: 48
     examples:
       - "01040123456789011710123456"
-      - null
 
   packagingBreak:
-    type: ["boolean", "null"]
+    type: boolean
     description: |
       Indicates whether the packaging can be broken (split into smaller units for sale).
 
@@ -170,10 +163,9 @@ properties:
     examples:
       - true
       - false
-      - null
 
   numberOfPackagingParts:
-    type: ["integer", "null"]
+    type: integer
     description: |
       Number of physical packaging parts that make up this packaging unit
       (e.g., a box with a separate lid = 2 parts).
@@ -184,7 +176,6 @@ properties:
     examples:
       - 1
       - 2
-      - null
 
 examples:
   - supplierIdGln: "0095969000000"
@@ -193,12 +184,8 @@ examples:
     manufacturerPackagingNumber: "100062"
     packagingGtins: ["00095969042437"]
     packagingTypeCode: CT
-    packagingUnitName: null
     packagingQuantity: 1
     tradeItemPrimaryPackaging: true
-    packagingGs1Code128: null
-    packagingBreak: null
-    numberOfPackagingParts: null
 
   - supplierIdGln: "0095969000000"
     supplierItemNumber: "114519"
@@ -206,9 +193,5 @@ examples:
     manufacturerPackagingNumber: "114519"
     packagingGtins: ["00095969040549"]
     packagingTypeCode: CT
-    packagingUnitName: null
     packagingQuantity: 1
     tradeItemPrimaryPackaging: true
-    packagingGs1Code128: null
-    packagingBreak: null
-    numberOfPackagingParts: null

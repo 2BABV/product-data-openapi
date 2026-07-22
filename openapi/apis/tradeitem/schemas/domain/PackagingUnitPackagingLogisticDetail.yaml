@@ -10,7 +10,7 @@ description: |
   **Path**: `Supplier[].Product[].TradeItem[].PackagingUnit[].PackagingLogisticDetails[]`
 properties:
   supplierPackagingPartNumber:
-    type: ["string", "null"]
+    type: string
     description: |
       Supplier's part number for this specific packaging part within the packaging unit.
       Used when a packaging unit consists of multiple physical parts.
@@ -20,9 +20,8 @@ properties:
     maxLength: 35
     examples:
       - "PKG-PART-001"
-      - null
   manufacturerPackagingPartNumber:
-    type: ["string", "null"]
+    type: string
     description: |
       Manufacturer's part number for this specific packaging part within the packaging unit.
       Used when a packaging unit consists of multiple physical parts.
@@ -32,9 +31,8 @@ properties:
     maxLength: 35
     examples:
       - "MFG-PKG-PART-001"
-      - null
   packagingPartGtins:
-    type: ["array", "null"]
+    type: array
     description: |
       Array of GTINs for this specific packaging part.
       Distinct from the parent packaging unit's `packagingGtins` — this identifies
@@ -46,9 +44,8 @@ properties:
       $ref: ../../../../shared/schemas/identifiers/Gtin.yaml
     examples:
       - ["04012345678901"]
-      - null
   packagingTypeLength:
-    type: ["number", "null"]
+    type: number
     format: decimal
     description: |
       Length of the packaging part in the specified dimension unit.
@@ -61,9 +58,8 @@ properties:
     examples:
       - 40.0
       - 120.0
-      - null
   packagingTypeWidth:
-    type: ["number", "null"]
+    type: number
     format: decimal
     description: |
       Width of the packaging part in the specified dimension unit.
@@ -76,9 +72,8 @@ properties:
     examples:
       - 30.0
       - 80.0
-      - null
   packagingTypeHeight:
-    type: ["number", "null"]
+    type: number
     format: decimal
     description: |
       Height of the packaging part in the specified dimension unit.
@@ -91,9 +86,8 @@ properties:
     examples:
       - 20.0
       - 100.0
-      - null
   packagingTypeDiameter:
-    type: ["number", "null"]
+    type: number
     format: decimal
     description: |
       Diameter of the packaging part in the specified dimension unit (for cylindrical packaging).
@@ -105,9 +99,8 @@ properties:
     maximum: 999999999999.9999
     examples:
       - 15.0
-      - null
   packagingTypeDimensionUnit:
-    type: ["string", "null"]
+    type: string
     description: |
       Unit of measurement for packaging part dimensions (CMT=centimeter, MTR=meter, etc.).
       **ETIM xChange**: `PackagingTypeDimensionUnit`
@@ -122,13 +115,11 @@ properties:
       - INH  # Inch
       - SMI  # Mile (statute mile)
       - YRD  # Yard
-      - null
     examples:
       - CMT
       - MTR
-      - null
   packagingTypeWeight:
-    type: ["number", "null"]
+    type: number
     format: decimal
     description: |
       Weight of the packaging part in the specified weight unit.
@@ -141,9 +132,8 @@ properties:
     examples:
       - 500.0
       - 15000.0
-      - null
   packagingTypeWeightUnit:
-    type: ["string", "null"]
+    type: string
     description: |
       Unit of measurement for packaging part weight (GRM=gram, KGM=kilogram, etc.).
       **ETIM xChange**: `PackagingTypeWeightUnit`
@@ -156,13 +146,11 @@ properties:
       - LTN  # Long ton (UK)
       - LBR  # Pound
       - ONZ  # Ounce
-      - null
     examples:
       - GRM
       - KGM
-      - null
   serialNumberOnPackaging:
-    type: ["boolean", "null"]
+    type: boolean
     description: |
       Indicates whether a serial number is printed on this packaging part.
       **ETIM xChange**: `SerialNumberOnPackaging`
@@ -170,9 +158,8 @@ properties:
     examples:
       - true
       - false
-      - null
   stackingFactor:
-    type: ["integer", "null"]
+    type: integer
     description: |
       Maximum number of identical packaging units that can be stacked on top of each other.
       **ETIM xChange**: `StackingFactor`
@@ -181,9 +168,8 @@ properties:
     examples:
       - 2
       - 3
-      - null
   packagingTippable:
-    type: ["boolean", "null"]
+    type: boolean
     description: |
       Indicates whether the packaging can be tipped (laid on its side) during transport or storage.
       **ETIM xChange**: `PackagingTippable`
@@ -191,15 +177,10 @@ properties:
     examples:
       - true
       - false
-      - null
 examples:
-  - supplierPackagingPartNumber: null
-    manufacturerPackagingPartNumber: null
-    packagingPartGtins: null
-    packagingTypeLength: 40.0
+  - packagingTypeLength: 40.0
     packagingTypeWidth: 30.0
     packagingTypeHeight: 20.0
-    packagingTypeDiameter: null
     packagingTypeDimensionUnit: CMT
     packagingTypeWeight: 5000.0
     packagingTypeWeightUnit: GRM
@@ -212,7 +193,6 @@ examples:
     packagingTypeLength: 200.0
     packagingTypeWidth: 150.0
     packagingTypeHeight: 80.0
-    packagingTypeDiameter: null
     packagingTypeDimensionUnit: CMT
     packagingTypeWeight: 45000.0
     packagingTypeWeightUnit: GRM

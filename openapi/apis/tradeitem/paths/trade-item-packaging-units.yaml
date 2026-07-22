@@ -42,49 +42,32 @@ get:
                   packagingUnits:
                     - packagingIdentification:
                         supplierPackagingNumber: "PKG-PIECE"
-                        manufacturerPackagingNumber: null
                         packagingGtins: ["04012345678901"]
                         packagingTypeCode: C62
-                        packagingUnitName: null
                         packagingQuantity: 1
                         tradeItemPrimaryPackaging: true
-                        packagingGs1Code128: null
-                        packagingBreak: null
                         numberOfPackagingParts: 1
                       packagingLogisticDetails:
-                        - supplierPackagingPartNumber: null
-                          manufacturerPackagingPartNumber: null
-                          packagingPartGtins: null
-                          packagingTypeLength: 25.5
+                        - packagingTypeLength: 25.5
                           packagingTypeWidth: 5.0
                           packagingTypeHeight: 15.0
-                          packagingTypeDiameter: null
                           packagingTypeDimensionUnit: CMT
                           packagingTypeWeight: 260.0
                           packagingTypeWeightUnit: GRM
                           serialNumberOnPackaging: false
-                          stackingFactor: null
-                          packagingTippable: null
-                      tradeItemEnclosed: null
                     - packagingIdentification:
                         supplierPackagingNumber: "PKG-BOX"
-                        manufacturerPackagingNumber: null
                         packagingGtins: ["04012345678918"]
                         packagingTypeCode: BX
                         packagingUnitName: "Box"
                         packagingQuantity: 10
                         tradeItemPrimaryPackaging: false
-                        packagingGs1Code128: null
                         packagingBreak: false
                         numberOfPackagingParts: 1
                       packagingLogisticDetails:
-                        - supplierPackagingPartNumber: null
-                          manufacturerPackagingPartNumber: null
-                          packagingPartGtins: null
-                          packagingTypeLength: 40.0
+                        - packagingTypeLength: 40.0
                           packagingTypeWidth: 30.0
                           packagingTypeHeight: 20.0
-                          packagingTypeDiameter: null
                           packagingTypeDimensionUnit: CMT
                           packagingTypeWeight: 3000.0
                           packagingTypeWeightUnit: GRM
@@ -106,12 +89,10 @@ get:
                     - packagingIdentification:
                         supplierPackagingNumber: "PKG-CRATE"
                         manufacturerPackagingNumber: "MFG-CRATE-001"
-                        packagingGtins: null
                         packagingTypeCode: CR
                         packagingUnitName: "Crate"
                         packagingQuantity: 1
                         tradeItemPrimaryPackaging: true
-                        packagingGs1Code128: null
                         packagingBreak: false
                         numberOfPackagingParts: 2
                       packagingLogisticDetails:
@@ -121,7 +102,6 @@ get:
                           packagingTypeLength: 200.0
                           packagingTypeWidth: 150.0
                           packagingTypeHeight: 80.0
-                          packagingTypeDiameter: null
                           packagingTypeDimensionUnit: CMT
                           packagingTypeWeight: 45000.0
                           packagingTypeWeightUnit: GRM
@@ -134,14 +114,10 @@ get:
                           packagingTypeLength: 200.0
                           packagingTypeWidth: 150.0
                           packagingTypeHeight: 5.0
-                          packagingTypeDiameter: null
                           packagingTypeDimensionUnit: CMT
                           packagingTypeWeight: 8000.0
                           packagingTypeWeightUnit: GRM
                           serialNumberOnPackaging: false
-                          stackingFactor: null
-                          packagingTippable: null
-                      tradeItemEnclosed: null
             noPackagingUnits:
               summary: Trade item without packaging units
               value:

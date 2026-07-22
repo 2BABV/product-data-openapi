@@ -9,7 +9,7 @@ required:
   - packagingTypeCode
 properties:
   supplierPackagingNumber:
-    type: ["string", "null"]
+    type: string
     description: |
       Supplier's packaging number for this packaging unit.
       **ETIM xChange**: `SupplierPackagingNumber`
@@ -18,9 +18,8 @@ properties:
     maxLength: 35
     examples:
       - "PKG-12345"
-      - null
   manufacturerPackagingNumber:
-    type: ["string", "null"]
+    type: string
     description: |
       Manufacturer's packaging number for this packaging unit.
       **ETIM xChange**: `ManufacturerPackagingNumber`
@@ -29,9 +28,8 @@ properties:
     maxLength: 35
     examples:
       - "MFG-PKG-789"
-      - null
   packagingGtins:
-    type: ["array", "null"]
+    type: array
     description: |
       Array of GTINs for this packaging unit.
       **ETIM xChange**: `PackagingGtin[]`
@@ -41,7 +39,6 @@ properties:
       $ref: ../../../../shared/schemas/identifiers/Gtin.yaml
     examples:
       - ["04012345678901"]
-      - null
   packagingTypeCode:
     description: |
       Type of packaging (box, pallet, etc.).
@@ -53,7 +50,7 @@ properties:
       - PF   # Pallet
       - C62  # Piece
   packagingUnitName:
-    type: ["string", "null"]
+    type: string
     description: |
       Human-readable name of the packaging unit. Flattened from multilingual array.
       **ETIM xChange**: `PackagingUnitName[].PackagingUnitName`
@@ -63,9 +60,8 @@ properties:
     examples:
       - "Box"
       - "Pallet"
-      - null
   packagingQuantity:
-    type: ["number", "null"]
+    type: number
     format: decimal
     description: |
       Quantity of base items in this packaging unit (converted from ETIM xChange string to number).
@@ -77,9 +73,8 @@ properties:
     examples:
       - 10
       - 100
-      - null
   tradeItemPrimaryPackaging:
-    type: ["boolean", "null"]
+    type: boolean
     description: |
       Indicates whether this is the primary/consumer packaging.
       **ETIM xChange**: `TradeItemPrimaryPackaging`
@@ -87,9 +82,8 @@ properties:
     examples:
       - true
       - false
-      - null
   packagingGs1Code128:
-    type: ["string", "null"]
+    type: string
     description: |
       GS1-128 barcode for the packaging unit.
       **ETIM xChange**: `PackagingGs1Code128`
@@ -98,9 +92,8 @@ properties:
     maxLength: 48
     examples:
       - "01040123456789011710123456"
-      - null
   packagingBreak:
-    type: ["boolean", "null"]
+    type: boolean
     description: |
       Indicates whether the packaging can be broken (split into smaller units for sale).
       **ETIM xChange**: `PackagingBreak`
@@ -108,9 +101,8 @@ properties:
     examples:
       - true
       - false
-      - null
   numberOfPackagingParts:
-    type: ["integer", "null"]
+    type: integer
     description: |
       Number of physical packaging parts that make up this packaging unit
       (e.g., a box with a separate lid = 2 parts).
@@ -120,25 +112,15 @@ properties:
     examples:
       - 1
       - 2
-      - null
 examples:
   - supplierPackagingNumber: "PKG-001"
-    manufacturerPackagingNumber: null
     packagingGtins: ["04012345678901"]
     packagingTypeCode: BX
     packagingUnitName: "Box"
     packagingQuantity: 10
     tradeItemPrimaryPackaging: true
-    packagingGs1Code128: null
     packagingBreak: false
     numberOfPackagingParts: 1
-  - supplierPackagingNumber: null
-    manufacturerPackagingNumber: null
-    packagingGtins: null
-    packagingTypeCode: C62
-    packagingUnitName: null
+  - packagingTypeCode: C62
     packagingQuantity: 1
     tradeItemPrimaryPackaging: true
-    packagingGs1Code128: null
-    packagingBreak: null
-    numberOfPackagingParts: null
