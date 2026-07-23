@@ -18,6 +18,8 @@ This API adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   - Uses ETIM-aligned field names (`packagingTypeLength`, etc.) for bulk summary
 - Bulk enclosed items endpoint: `GET /trade-items/bulk/packaging-unit-enclosed-items`
   - Flat `PackagingUnitTradeItemEnclosedSummary` schema
+## [1.0.0-Preview3] - 2026-07-22
+
 ### Changed
 - **Removed sub-resource `/enclosed-items`** — Enclosed items are now returned nested within the `/packaging-units` sub-resource via `PackagingUnit.tradeItemEnclosed[]`. The separate flattened view was redundant. Bulk endpoint `/bulk/packaging-unit-enclosed-items` remains for ETL.
 - **Response convention: sub-resource 404 removed** — Sub-resource endpoints (`/details`, `/descriptions`, `/ordering`, `/pricings`, `/relations`, `/logistic-details`, `/attachments`, `/packaging-units`) no longer return `404`. They always return `200` with an empty collection (`[]`) or `null` object. Only the root endpoint (`/trade-items/{gln}/{num}`) returns `404`.

@@ -181,4 +181,63 @@ The response `meta` object contains:
 
 The API version is embedded in the URL path (`/v1/`). Major version increments (breaking changes) produce a new path segment (`/v2/`). Minor and patch changes are backward-compatible and do not change the version segment.
 
+### Api-Version Response Header
+
+Implementers SHOULD return an `Api-Version` response header containing the highest
+released per-API specification version fully implemented by the server:
+
+```http
+Api-Version: 1.2.0
+```
+
+The value is a SemVer string matching the `info.version` of the specification release
+the implementer conforms to (e.g., Product API `1.2.0`). Each API is versioned
+independently, so the header value reflects the specific API being called.
+
+This header provides operational visibility (logging, debugging, support tickets)
+and allows clients to detect which minor-version features an implementer supports.
+Clients MUST NOT rely on this header for behavioral branching — the URL path (`/v1/`)
+remains the only contract-level version indicator.
+
 See [GOVERNANCE.md](../GOVERNANCE.md) for the full versioning policy.
+
+## Deprecation Lifecycle
+
+When a major API version is superseded (e.g., `/v2/` replaces `/v1/`), implementers
+signal the transition using standard HTTP headers. The deprecation period is at least
+**24 months** (see [GOVERNANCE.md](../GOVERNANCE.md) §6).
+
+### Headers
+
+Implementers SHOULD include these headers on every response to deprecated version endpoints:
+
+| Header | Format | RFC | Purpose |
+|--------|--------|-----|---------|
+| `Deprecation` | `@<unix-timestamp>` (Structured Field integer date) | [RFC 9745](https://www.rfc-editor.org/rfc/rfc9745) | When the version was/will be deprecated |
+| `Sunset` | `<HTTP-date>` | [RFC 8594](https://www.rfc-editor.org/rfc/rfc8594) | When the version will be removed |
+| `Link` | `<url>; rel="deprecation"` | [RFC 9745](https://www.rfc-editor.org/rfc/rfc9745) | Migration documentation |
+| `Link` | `<url>; rel="sunset"` | [RFC 8594](https://www.rfc-editor.org/rfc/rfc8594) | Sunset documentation |
+
+> **Note**: `Deprecation` and `Sunset` use different date formats by design.
+> `Deprecation` uses a Structured Field integer date (Unix timestamp), while `Sunset`
+> uses the standard HTTP-date format.
+
+### Example
+
+```http
+HTTP/1.1 200 OK
+Api-Version: 1.4.0
+Deprecation: @1830297600
+Sunset: Tue, 01 Jan 2030 00:00:00 GMT
+Link: <https://api.example.com/docs/migration/v2>; rel="deprecation"
+Content-Type: application/json
+```
+
+### Scope
+
+Deprecation applies to the **entire major version** (`/v1/`), not to individual endpoints.
+Individual endpoints within a stable major version are never sunsetted independently —
+deprecated operations remain available for the lifetime of their major version.
+
+Also mark deprecated endpoints with `deprecated: true` in the OpenAPI specification
+so that tooling (code generators, documentation, linters) can surface the deprecation.

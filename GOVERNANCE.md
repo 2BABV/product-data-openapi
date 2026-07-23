@@ -1,6 +1,16 @@
 # Governance Model (CONCEPT!)
 **Products & TradeItems API**
 
+## Terminology
+
+The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
+"SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be
+interpreted as described in [BCP 14](https://www.rfc-editor.org/info/bcp14)
+([RFC 2119](https://www.rfc-editor.org/rfc/rfc2119) /
+[RFC 8174](https://www.rfc-editor.org/rfc/rfc8174)).
+
+---
+
 ## 1. Purpose
 
 This document describes the governance model, change process, and release strategy for the Products & TradeItems API.
@@ -155,6 +165,25 @@ Optional fields added anywhere in the object model, including nested models, rem
 
 ---
 
+### Minor-Version Negotiation
+
+The API intentionally does not require clients to specify or negotiate a minor version.
+Because all MINOR changes are strictly additive (new optional fields, new endpoints,
+enum expansions) and clients are expected to accept unknown properties, every `/v1/`
+response is backward-compatible regardless of the server's exact minor version.
+
+**Compatibility direction**: An older client can always consume a newer server's response
+(forward compatibility). However, in a multi-implementer ecosystem, a client that depends
+on a feature introduced in version 1.2.0 cannot assume that every `/v1/` implementer has
+upgraded beyond 1.0.0. Clients that require specific minor-version features should check
+the `Api-Version` response header (see [Implementer Guide](docs/implementer-guide.md))
+or consult the implementer's conformance documentation.
+
+Introducing minor-version negotiation (e.g., a required request parameter) would require
+a separate governance change and is not planned.
+
+---
+
 ## 6. Breaking Change Policy
 
 - Breaking changes are permitted between pre-release versions before the first stable release
@@ -163,6 +192,43 @@ Optional fields added anywhere in the object model, including nested models, rem
 - Parallel major versions are allowed
 - Clients must ignore unknown enum values
 - Clients must accept and ignore unknown properties in response payloads
+
+### Deprecation & Sunset Headers
+
+When deprecating an **API version** (e.g., sunsetting `/v1/` after `/v2/` is stable),
+implementers SHOULD return these HTTP headers on every successful and API-generated
+error response to affected endpoints:
+
+- `Deprecation: @<unix-timestamp>` — The date the version was or will be deprecated
+  ([RFC 9745](https://www.rfc-editor.org/rfc/rfc9745))
+- `Sunset: <HTTP-date>` — The date the version will be removed
+  ([RFC 8594](https://www.rfc-editor.org/rfc/rfc8594))
+
+The `Sunset` date MUST be at least 24 months after the `Deprecation` date, consistent
+with the deprecation period above. In addition, deprecated endpoints SHOULD be marked
+`deprecated: true` in the OpenAPI specification.
+
+Individual endpoints within a stable major version are NOT sunsetted independently —
+deprecated operations remain available for the lifetime of their major version.
+The `Sunset` header applies to the entire major version path (e.g., all of `/v1/`).
+
+Implementers SHOULD also include `Link` headers pointing to migration documentation:
+
+```http
+Link: <https://example.com/docs/migration/v2>; rel="deprecation"
+Link: <https://example.com/docs/sunset/v1>; rel="sunset"
+```
+
+Example response headers for a deprecated `/v1/` endpoint:
+
+```http
+Deprecation: @1830297600
+Sunset: Tue, 01 Jan 2030 00:00:00 GMT
+Link: <https://example.com/docs/migration/v2>; rel="deprecation"
+```
+
+> **Note**: `Deprecation` uses a Structured Field integer date (RFC 9745), while `Sunset`
+> uses the standard HTTP-date format (RFC 8594). These formats differ by design.
 
 ---
 
