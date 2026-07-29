@@ -71,3 +71,13 @@ See [GOVERNANCE.md](GOVERNANCE.md) §7 for the full release process and [CHANGEL
 ### Development Guidelines
 - [Copilot Instructions](.github/copilot-instructions.md) - GitHub Copilot configuration for this repository
 - [Release Process](docs/releasing.md) - Step-by-step release and tagging procedure
+
+### Code Generation
+
+The bundled OpenAPI specs in `generated/` folders target **OpenAPI 3.1**. Some code generators need a post-processed variant:
+
+| Generator | Compatibility Script | Output |
+|-----------|---------------------|--------|
+| **Kiota** (C#) | `npm run transform:kiota` | `generated/kiota/{api}-api.yaml` (OpenAPI 3.0.3) |
+
+The Kiota transform rewrites 3.1 nullable patterns (`oneOf/anyOf: [$ref, type: null]`, `type: [T, null]`) to `nullable: true` (3.0 idiom) to avoid [microsoft/kiota#6776](https://github.com/microsoft/kiota/issues/6776) union-wrapper generation.

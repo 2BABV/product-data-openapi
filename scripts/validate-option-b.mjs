@@ -48,7 +48,7 @@ const REPO_ROOT = join(fileURLToPath(new URL('.', import.meta.url)), '..');
  * The value is the set of top-level property names that may be nullable.
  */
 const NULLABLE_ALLOWLIST = {
-  ProductResponseData: ['descriptions', 'etimClassifications', 'attachments'],
+  ProductResponseData: ['descriptions', 'etimClassifications', 'attachments', 'details', 'lcaEnvironmental'],
   TradeItemResponseData: [
     'descriptions',
     'pricings',
@@ -56,6 +56,8 @@ const NULLABLE_ALLOWLIST = {
     'logisticDetails',
     'attachments',
     'packagingUnits',
+    'details',
+    'ordering',
   ],
   ProductDetailsResponseData: ['details'],
   ProductLcaEnvironmentalResponseData: ['lcaEnvironmental'],

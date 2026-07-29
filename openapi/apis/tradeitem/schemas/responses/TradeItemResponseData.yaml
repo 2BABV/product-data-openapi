@@ -21,9 +21,7 @@ description: |
 required:
   - supplierIdGln
   - supplierItemNumber
-  - details
   - descriptions
-  - ordering
   - pricings
   - relations
   - logisticDetails
@@ -54,10 +52,16 @@ properties:
 
   # Combined ItemIdentification + ItemDetails
   details:
-    $ref: ../domain/TradeItemDetails.yaml
+    anyOf:
+      - $ref: ../domain/TradeItemDetails.yaml
+      - type: "null"
     description: |
       Trade item identification and operational details, combining fields from
       ETIM xChange `ItemIdentification` and `ItemDetails` sections (excluding descriptions).
+      - object — requested, has data
+      - `null` — requested, but no details data exists for this trade item
+      - absent — not included in this response (not requested)
+
       Note: Item descriptions are also available via `/{supplierIdGln}/{supplierItemNumber}/descriptions`.
 
   descriptions:
@@ -75,9 +79,15 @@ properties:
       $ref: ../domain/ItemDescription.yaml
 
   ordering:
-    $ref: ../domain/TradeItemOrdering.yaml
+    anyOf:
+      - $ref: ../domain/TradeItemOrdering.yaml
+      - type: "null"
     description: |
       Ordering information for the trade item.
+      - object — requested, has data
+      - `null` — requested, but no ordering data exists for this trade item
+      - absent — not included in this response (not requested)
+
       **ETIM xChange**: `Ordering`
       **Path**: `Supplier[].Product[].TradeItem[].Ordering`
 

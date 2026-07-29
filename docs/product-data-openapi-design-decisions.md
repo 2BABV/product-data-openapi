@@ -640,7 +640,12 @@ enforces this allowlist.
 - `TradeItemDetailsResponseData.yaml`: `details`
 - `TradeItemOrderingResponseData.yaml`: `ordering`
 
-**3. Pagination metadata members** (`CursorPaginationMetadata.yaml`):
+**3. Optional-nullable singular objects in aggregate root responses** (four total; three-state field selection: absent = not requested, `null` = requested but no data, object = has data):
+
+- `ProductResponseData.yaml`: `details`, `lcaEnvironmental`
+- `TradeItemResponseData.yaml`: `details`, `ordering`
+
+**4. Pagination metadata members** (`CursorPaginationMetadata.yaml`):
 
 - `cursor`, `prevCursor`, `estimatedTotal`
 

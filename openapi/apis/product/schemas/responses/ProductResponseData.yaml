@@ -16,7 +16,6 @@ description: |
 required:
   - manufacturerIdGln
   - manufacturerProductNumber
-  - details
   - descriptions
   - etimClassifications
   - attachments
@@ -34,10 +33,15 @@ properties:
     examples:
       - "929002376910"
   details:
-    $ref: ../domain/ProductDetails.yaml
+    anyOf:
+      - $ref: ../domain/ProductDetails.yaml
+      - type: "null"
     description: |
       Core product information including GTINs, brand,
       dates, customs data, status, type, warranties, and product groups.
+      - object — requested, has data
+      - `null` — requested, but no data exists for this product
+      - absent — not included in this response (not requested)
   descriptions:
     type: ["array", "null"]
     description: |
@@ -59,10 +63,14 @@ properties:
     items:
       $ref: ../domain/EtimClassification.yaml
   lcaEnvironmental:
-    $ref: ../domain/LcaEnvironmental.yaml
+    anyOf:
+      - $ref: ../domain/LcaEnvironmental.yaml
+      - type: "null"
     description: |
       Life Cycle Assessment and Environmental Product Declaration (EPD) data.
-      Absent if the product has no LCA/EPD data.
+      - object — requested, has data
+      - `null` — requested, but no LCA/EPD data exists for this product
+      - absent — not included in this response (not requested)
 
       **ETIM xChange**: `LcaEnvironmental`  
       **Path**: `Supplier[].Product[].LcaEnvironmental`

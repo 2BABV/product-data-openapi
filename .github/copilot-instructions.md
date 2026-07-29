@@ -39,6 +39,7 @@ When working with this repository:
    - Use JSON Schema null types only where the API intentionally gives `null` distinct semantics (NOT deprecated `nullable: true`)
    - Use `type: array` (required, never nullable) for collection properties in sub-resource response schemas — empty collections use `[]`, never `null`
    - **Exception**: Aggregate root response schemas (`ProductResponseData`, `TradeItemResponseData`) use `type: ["array", "null"]` for collection properties to support partial inclusion (`null` = not included in this response, `[]` = included but empty)
+   - **Exception**: Aggregate root response schemas also use `anyOf: [$ref, type: "null"]` + optional (not in `required`) for singular object properties (`details`, `lcaEnvironmental`, `ordering`) to support three-state field selection (absent = not requested, `null` = requested but no data, object = has data)
    - Use `anyOf`, `oneOf`, `allOf` for composition (avoid deprecated patterns)
   - Allow `additionalProperties` throughout the object model, including nested models, to preserve backward compatibility when optional fields are added
    - Use `examples` array (plural) in schemas, not `example` (singular, deprecated)
@@ -113,7 +114,8 @@ When working with this repository:
      Code-gen: `required ICollection<T>?` (nullable collection).
    - **Optional objects are absent**: Singular optional ETIM objects use a direct `$ref` and are omitted when unavailable. Required objects remain in `required`. Use nullable objects only for explicitly documented API-specific three-state semantics.
    - **Required-nullable singular sub-resource `data` (exactly four)**: `ProductDetailsResponseData.details`, `ProductLcaEnvironmentalResponseData.lcaEnvironmental`, `TradeItemDetailsResponseData.details`, and `TradeItemOrderingResponseData.ordering` are required and nullable (`anyOf: [$ref, type: "null"]`). `null` signals the singular resource is unavailable (parent entity not found, or no data of that kind); the endpoint returns `200`, never `404`.
-   - **Intentional `null` allowlist**: JSON `null` is permitted **only** in (1) aggregate response arrays in `ProductResponseData`/`TradeItemResponseData`, (2) the four required-nullable singular sub-resource `data` properties above, and (3) pagination metadata members `cursor`/`prevCursor`/`estimatedTotal` in `CursorPaginationMetadata`. Every other optional value is omitted (Option B), enforced by `scripts/validate-option-b.mjs`.
+   - **Optional-nullable singular objects in aggregate root (four total)**: `ProductResponseData.details`, `ProductResponseData.lcaEnvironmental`, `TradeItemResponseData.details`, and `TradeItemResponseData.ordering` are optional (not in `required`) and nullable (`anyOf: [$ref, type: "null"]`). Three-state semantics: object = has data, `null` = requested but no data exists, absent = not included in this response (not requested). Code-gen: `T?` (nullable, optional).
+   - **Intentional `null` allowlist**: JSON `null` is permitted **only** in (1) aggregate response arrays in `ProductResponseData`/`TradeItemResponseData`, (2) the four required-nullable singular sub-resource `data` properties above, (3) the four optional-nullable singular objects in aggregate root responses above, and (4) pagination metadata members `cursor`/`prevCursor`/`estimatedTotal` in `CursorPaginationMetadata`. Every other optional value is omitted (Option B), enforced by `scripts/validate-option-b.mjs`.
    - **Flattened pricing conditional absence**: In `TradeItemPricingSummary`, rows without an allowance/surcharge omit all seven `allowanceSurcharge*` fields (never `null`). `dependentRequired` couples `allowanceSurchargeIndicator` and `allowanceSurchargeType` and requires both whenever any other allowance/surcharge field is present.
    - **Errors RFC 9457 ProblemDetails**: All errors use Problem Details with `application/problem+json`. Branch on `type`/`status`, never on `detail`/`title`. Validation errors include `errors` extension member.
 
@@ -165,9 +167,16 @@ descriptions:
   items:
     $ref: '#/components/schemas/ProductDescription'
 
-# ✅ Optional objects — direct reference, not in required
+# ✅ Optional objects — direct reference, not in required (domain schemas)
 ordering:
   $ref: '#/components/schemas/TradeItemOrdering'
+
+# ✅ Aggregate root singular objects — optional + nullable (three-state field selection)
+# Only in ProductResponseData.yaml and TradeItemResponseData.yaml
+details:
+  anyOf:
+    - $ref: '#/components/schemas/ProductDetails'
+    - type: "null"
 ```
 
 ### Examples (OpenAPI 3.1+)
