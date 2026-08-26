@@ -4,6 +4,7 @@ description: |
 required:
   - code
   - description
+  - deprecated
   - mutationDate
 properties:
   code:
@@ -24,6 +25,11 @@ properties:
     description: Definition or extended description of this modelling group.
     examples:
       - "Group containing modelling classes for valve components"
+  deprecated:
+    type: boolean
+    description: Whether this modelling group is deprecated.
+    examples:
+      - false
   successors:
     type: array
     description: Codes of successor modelling groups that replace this one (typically when deprecated).
@@ -43,4 +49,5 @@ properties:
 examples:
   - code: "MG000001"
     description: "Valves"
+    deprecated: false
     mutationDate: "2024-05-01T12:00:00Z"

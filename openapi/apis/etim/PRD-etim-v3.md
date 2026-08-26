@@ -52,7 +52,7 @@ Create a new ETIM API v3 that:
 
 13. As an ETIM data consumer, I want to bulk-download translations for feature-groups, groups, modelling-classes, modelling-groups, units, and values filtered by language(s), so that translation sync is independent per entity type.
 
-14. As an ETIM data consumer, I want each flat entity to include a `description` in ETIM English (the default language), `deprecated` flag (where applicable), and `mutationDate`, so that I have enough metadata for local processing. Classes and modelling classes additionally include `status` and `revision` (these lifecycle properties do not apply to features, groups, units, or values). Units additionally include `abbreviation` in ETIM English.
+14. As an ETIM data consumer, I want each flat entity to include a `description` in ETIM English (the default language) and `mutationDate`, so that I have enough metadata for local processing. Lifecycle is represented differently per entity: classes and modelling classes expose `status` and `revision` (no `deprecated` flag — status = 9 means deleted); features, groups, feature groups, modelling groups, units, and values instead expose a `deprecated` flag (they have no `status`/`revision`). Units additionally include `abbreviation` in ETIM English.
 
 15. As an ETIM data consumer, I want features to include a `local` boolean indicating whether a feature is country-specific (local) or international, so that I can distinguish local extensions from the global ETIM standard.
 
@@ -102,10 +102,10 @@ Create a new ETIM API v3 that:
 
 | Endpoint | Description |
 |----------|-------------|
-| `GET /api/v3/etim/bulk/classes` | Flat classes (code, version, groupCode, status, description, mutationDate, revision, deprecated, sectors, successors) |
+| `GET /api/v3/etim/bulk/classes` | Flat classes (code, version, groupCode, status, description, mutationDate, revision, sectors, successors) |
 | `GET /api/v3/etim/bulk/features` | Flat features (code, type, description, deprecated, local, mutationDate, successors) |
-| `GET /api/v3/etim/bulk/feature-groups` | Flat feature-groups (code, description, mutationDate, successors) |
-| `GET /api/v3/etim/bulk/groups` | Flat groups (code, description, mutationDate, successors) |
+| `GET /api/v3/etim/bulk/feature-groups` | Flat feature-groups (code, description, deprecated, mutationDate, successors) |
+| `GET /api/v3/etim/bulk/groups` | Flat groups (code, description, deprecated, mutationDate, successors) |
 | `GET /api/v3/etim/bulk/units` | Flat units (code, description, abbreviation, deprecated, mutationDate, successors) |
 | `GET /api/v3/etim/bulk/values` | Flat values (code, description, deprecated, mutationDate, successors) |
 | `GET /api/v3/etim/bulk/class-features` | Flat relation (classCode, classVersion, classRevision, featureCode, orderNumber, unitCode, unitImperialCode, featureGroupCode, type, definition, local, mutationDate) |
@@ -118,7 +118,7 @@ Common query params for bulk: `cursor`, `limit`, `release` (filter by ETIM relea
 | Endpoint | Description |
 |----------|-------------|
 | `GET /api/v3/etim/bulk/modelling-classes` | Flat modelling-classes including revision, productClassCodes, and ports with connectionTypeCodes |
-| `GET /api/v3/etim/bulk/modelling-groups` | Flat modelling-groups (code, description, mutationDate, successors) |
+| `GET /api/v3/etim/bulk/modelling-groups` | Flat modelling-groups (code, description, deprecated, mutationDate, successors) |
 | `GET /api/v3/etim/bulk/modelling-class-features` | Flat relation (classCode, classVersion, classRevision, featureCode, orderNumber, unitCode, unitImperialCode, featureGroupCode, type, definition, portcode, mutationDate) |
 | `GET /api/v3/etim/bulk/modelling-class-feature-values` | Flat relation (classCode, classVersion, classRevision, featureCode, valueCode, orderNumber, mutationDate) |
 
@@ -238,7 +238,7 @@ GET /api/v3/etim/bulk/classes?release=ETIM-10.0&mutationDateTime=2026-07-01T00:0
 - **Client aggregate replacement**: Changed class rows are the authoritative rebuild list. Clients stage all matching structural relation rows by `(classCode, classVersion, classRevision)`, verify `classRevision == revision`, then transactionally delete and rebuild each local aggregate. No returned rows means the relation set is intentionally empty.
 - **Revision mismatch handling**: Clients must not combine relation rows from different revisions. On a mismatch, discard the affected staged aggregate and retry it from a cursor-consistent read.
 - **Watermark advancement**: Consumers should advance their stored watermark only after successfully processing all pages and rebuilding every changed aggregate.
-- **Shared entity lifecycle**: Features, values, units, groups, and feature groups are not hard-deleted; retirement is represented by `deprecated` or the applicable lifecycle status. Their translations remain independently synchronized.
+- **Shared entity lifecycle**: Features, values, units, groups, feature groups, and modelling groups are not hard-deleted; retirement is represented by their `deprecated` flag (classes and modelling classes use `status` instead). Their translations remain independently synchronized.
 - **Translation scope**: Class translations and synonyms remain outside the structural aggregate replacement contract and continue to use their dedicated incremental endpoints.
 - **`estimatedTotal` reflects the filter**: The `meta.estimatedTotal` value represents the approximate count of records matching the current filter set, not the total dataset size.
 - **Flat relation records**: `class-features` and `class-feature-values` are fully denormalized junction records with all foreign keys inline.

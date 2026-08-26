@@ -10,7 +10,6 @@ required:
   - status
   - description
   - mutationDate
-  - deprecated
   - sectors
   - releases
 properties:
@@ -63,11 +62,6 @@ properties:
     description: Date and time of last mutation.
     examples:
       - "2024-06-15T10:30:00Z"
-  deprecated:
-    type: boolean
-    description: Whether this class is deprecated (derived from status = 9).
-    examples:
-      - false
   sectors:
     type: array
     description: |
@@ -102,6 +96,5 @@ examples:
     status: 5
     description: "Socket outlet"
     mutationDate: "2024-06-15T10:30:00Z"
-    deprecated: false
     sectors: ["E", "B"]
     releases: ["ETIM-10.0", "ETIM-9.0", "DYNAMIC"]

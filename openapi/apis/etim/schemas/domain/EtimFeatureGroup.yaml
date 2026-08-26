@@ -4,6 +4,7 @@ description: |
 required:
   - code
   - description
+  - deprecated
   - mutationDate
 properties:
   code:
@@ -24,6 +25,11 @@ properties:
     description: Definition or extended description of this feature group.
     examples:
       - "General characteristics applicable to most product types"
+  deprecated:
+    type: boolean
+    description: Whether this feature group is deprecated.
+    examples:
+      - false
   successors:
     type: array
     description: Codes of successor feature groups that replace this one (typically when deprecated).
@@ -43,4 +49,5 @@ properties:
 examples:
   - code: "EFG00001"
     description: "General"
+    deprecated: false
     mutationDate: "2024-04-10T09:00:00Z"

@@ -4,6 +4,7 @@ description: |
 required:
   - code
   - description
+  - deprecated
   - mutationDate
 properties:
   code:
@@ -24,6 +25,11 @@ properties:
     description: Definition or extended description of this group.
     examples:
       - "Products used for low-voltage electrical installation"
+  deprecated:
+    type: boolean
+    description: Whether this group is deprecated.
+    examples:
+      - false
   successors:
     type: array
     description: Codes of successor groups that replace this one (typically when deprecated).
@@ -43,4 +49,5 @@ properties:
 examples:
   - code: "EG000017"
     description: "Installation (low voltage)"
+    deprecated: false
     mutationDate: "2024-06-15T10:30:00Z"
