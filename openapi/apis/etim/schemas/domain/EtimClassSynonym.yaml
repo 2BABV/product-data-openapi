@@ -1,19 +1,22 @@
 type: object
 description: |
-  Synonym record for ETIM classes and modelling classes.
+  Synonym record for regular ETIM classes (EC).
 required:
-  - code
-  - version
+  - classCode
+  - classVersion
   - languageCode
   - synonym
   - mutationDate
 properties:
-  code:
+  classCode:
     type: string
-    description: Class code (EC, MC, or CT prefix).
+    description: ETIM class code.
+    pattern: "^EC[0-9]{6}$"
+    minLength: 8
+    maxLength: 8
     examples:
       - "EC002714"
-  version:
+  classVersion:
     type: integer
     description: Class version number.
     minimum: 1
@@ -33,13 +36,13 @@ properties:
     examples:
       - "2024-06-15T10:30:00Z"
 examples:
-  - code: "EC002714"
-    version: 4
+  - classCode: "EC002714"
+    classVersion: 4
     languageCode: "nl-NL"
     synonym: "Stopcontact"
     mutationDate: "2024-06-15T10:30:00Z"
-  - code: "EC002714"
-    version: 4
+  - classCode: "EC002714"
+    classVersion: 4
     languageCode: "de-DE"
     synonym: "Wandsteckdose"
     mutationDate: "2024-06-15T10:30:00Z"

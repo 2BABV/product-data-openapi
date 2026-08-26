@@ -312,8 +312,15 @@ openapi/apis/etim/
 │   │   ├── EtimValue.yaml
 │   │   ├── EtimClassFeature.yaml
 │   │   ├── EtimClassFeatureValue.yaml
-│   │   ├── EtimTranslation.yaml
+│   │   ├── EtimFeatureTranslation.yaml
+│   │   ├── EtimFeatureGroupTranslation.yaml
+│   │   ├── EtimGroupTranslation.yaml
+│   │   ├── EtimModellingGroupTranslation.yaml
+│   │   ├── EtimValueTranslation.yaml
 │   │   ├── EtimClassTranslation.yaml
+│   │   ├── EtimModellingClassTranslation.yaml
+│   │   ├── EtimClassSynonym.yaml
+│   │   ├── EtimModellingClassSynonym.yaml
 │   │   ├── EtimUnitTranslation.yaml
 │   │   ├── EtimRelease.yaml
 │   │   └── EtimLanguage.yaml

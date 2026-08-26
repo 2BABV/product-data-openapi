@@ -9,6 +9,6 @@ properties:
     type: array
     description: Array of ETIM modelling class translations.
     items:
-      $ref: ../domain/EtimClassTranslation.yaml
+      $ref: ../domain/EtimModellingClassTranslation.yaml
   meta:
     $ref: ../../../../shared/schemas/common/CursorPaginationMetadata.yaml

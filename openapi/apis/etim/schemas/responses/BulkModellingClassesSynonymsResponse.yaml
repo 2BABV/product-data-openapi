@@ -9,6 +9,6 @@ properties:
     type: array
     description: Array of ETIM modelling class synonyms.
     items:
-      $ref: ../domain/EtimClassSynonym.yaml
+      $ref: ../domain/EtimModellingClassSynonym.yaml
   meta:
     $ref: ../../../../shared/schemas/common/CursorPaginationMetadata.yaml

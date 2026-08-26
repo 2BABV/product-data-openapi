@@ -1,6 +1,6 @@
 type: object
 description: |
-  Translation record for regular ETIM classes (EC).
+  Translation record for ETIM modelling classes and connection types (MC/CT).
 required:
   - classCode
   - classVersion
@@ -10,25 +10,25 @@ required:
 properties:
   classCode:
     type: string
-    description: ETIM class code.
-    pattern: "^EC[0-9]{6}$"
+    description: ETIM modelling class code (MC = modelling class, CT = connection type).
+    pattern: "^(MC|CT)[0-9]{6}$"
     minLength: 8
     maxLength: 8
     examples:
-      - "EC002714"
+      - "MC000001"
   classVersion:
     type: integer
     description: Class version number.
     minimum: 1
     examples:
-      - 4
+      - 2
   languageCode:
     $ref: ./EtimLanguageCode.yaml
   description:
     type: string
     description: Class description in the specified language.
     examples:
-      - "Wandcontactdoos"
+      - "Kleplichaam"
   mutationDate:
     type: string
     format: date-time
@@ -36,13 +36,13 @@ properties:
     examples:
       - "2024-06-15T10:30:00Z"
 examples:
-  - classCode: "EC002714"
-    classVersion: 4
+  - classCode: "MC000001"
+    classVersion: 2
     languageCode: "nl-NL"
-    description: "Wandcontactdoos"
+    description: "Kleplichaam"
     mutationDate: "2024-06-15T10:30:00Z"
-  - classCode: "EC002714"
-    classVersion: 4
+  - classCode: "MC000001"
+    classVersion: 2
     languageCode: "de-DE"
-    description: "Steckdose"
+    description: "Ventilkörper"
     mutationDate: "2024-06-15T10:30:00Z"

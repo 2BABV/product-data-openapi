@@ -3,15 +3,17 @@ description: |
   Translation record for ETIM units.
   Includes abbreviation in addition to the description.
 required:
-  - code
+  - unitCode
   - languageCode
   - description
   - mutationDate
 properties:
-  code:
+  unitCode:
     type: string
-    description: Unit code.
+    description: ETIM unit code.
     pattern: "^EU[0-9]{6}$"
+    minLength: 8
+    maxLength: 8
     examples:
       - "EU000001"
   languageCode:
@@ -33,12 +35,12 @@ properties:
     examples:
       - "2024-06-15T10:30:00Z"
 examples:
-  - code: "EU000001"
+  - unitCode: "EU000001"
     languageCode: "nl-NL"
     description: "Millimeter"
     abbreviation: "mm"
     mutationDate: "2024-06-15T10:30:00Z"
-  - code: "EU000001"
+  - unitCode: "EU000001"
     languageCode: "de-DE"
     description: "Millimeter"
     abbreviation: "mm"

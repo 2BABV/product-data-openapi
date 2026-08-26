@@ -7,6 +7,9 @@ sync) and single-resource endpoints, plus search and misc/mutation endpoints.
 
 For the full functional scope, endpoint inventory, and rationale, see [`PRD-etim-v3.md`](PRD-etim-v3.md).
 
+For the foreign-key field naming convention used across this API (and the schema mismatches it
+corrected), see [`naming-conventions.md`](naming-conventions.md).
+
 ## Directory Structure
 
 - `paths/` — path items, including `paths/bulk/` for bulk endpoints
@@ -33,7 +36,7 @@ specific releases):
 |----------|-----|
 | `classes`, `modelling-classes` | `EtimClass`/`EtimModellingClass` carry a `releases: string[]` array directly |
 | `class-features`, `class-feature-values`, `modelling-class-features`, `modelling-class-feature-values` | Relations are scoped to a specific class `version`, and class versions map to releases |
-| `classes/translations`, `classes/synonyms`, `modelling-classes/translations`, `modelling-classes/synonyms` | Records are keyed by `code` + `version` (`EtimClassTranslation`, `EtimClassSynonym`); `version` maps to the parent class's `releases` |
+| `classes/translations`, `classes/synonyms`, `modelling-classes/translations`, `modelling-classes/synonyms` | Records are keyed by `classCode` + `classVersion` (`EtimClassTranslation`/`EtimModellingClassTranslation`, `EtimClassSynonym`/`EtimModellingClassSynonym`); `classVersion` maps to the parent class's `releases` |
 
 **Does NOT apply `release` filter** (response schema is global master data with no
 `version`/`releases` field):
@@ -41,7 +44,7 @@ specific releases):
 | Endpoint | Why |
 |----------|-----|
 | `features`, `feature-groups`, `groups`, `units`, `values`, `modelling-groups` | `EtimFeature`, `EtimFeatureGroup`, `EtimGroup`, `EtimUnit`, `EtimValue`, `EtimModellingGroup` have no release/version field — these are global, release-independent master data |
-| `features/translations`, `feature-groups/translations`, `groups/translations`, `units/translations`, `values/translations`, `modelling-groups/translations` | Translation records (`EtimTranslation`, `EtimUnitTranslation`) are keyed only by `code` + `languageCode` — no release/version field to filter on |
+| `features/translations`, `feature-groups/translations`, `groups/translations`, `units/translations`, `values/translations`, `modelling-groups/translations` | Translation records (`EtimFeatureTranslation`, `EtimFeatureGroupTranslation`, `EtimGroupTranslation`, `EtimModellingGroupTranslation`, `EtimValueTranslation`, `EtimUnitTranslation`) are keyed only by their entity-specific code (e.g. `featureCode`, `unitCode`) + `languageCode` — no release/version field to filter on |
 
 **Rule of thumb for new endpoints:** only add the `release` filter if the response schema actually
 carries a field whose value varies per release (`releases` array, or a `version` that maps to

@@ -1,0 +1,37 @@
+type: object
+description: |
+  Translation record for ETIM features.
+required:
+  - featureCode
+  - languageCode
+  - description
+  - mutationDate
+properties:
+  featureCode:
+    type: string
+    description: ETIM feature code.
+    pattern: "^EF([0-9]{6}|I[0-9]{5}|[A-Z]{2}[0-9]{4})$"
+    examples:
+      - "EF000007"
+  languageCode:
+    $ref: ./EtimLanguageCode.yaml
+  description:
+    type: string
+    description: Feature description in the specified language.
+    examples:
+      - "Kleur"
+  mutationDate:
+    type: string
+    format: date-time
+    description: Date and time of last mutation.
+    examples:
+      - "2024-06-15T10:30:00Z"
+examples:
+  - featureCode: "EF000007"
+    languageCode: "nl-NL"
+    description: "Kleur"
+    mutationDate: "2024-06-15T10:30:00Z"
+  - featureCode: "EF000007"
+    languageCode: "de-DE"
+    description: "Farbe"
+    mutationDate: "2024-06-15T10:30:00Z"

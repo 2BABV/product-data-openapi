@@ -169,12 +169,24 @@ components:
       $ref: ./schemas/domain/EtimModellingClassPort.yaml
 
     # Domain schemas - translations
-    EtimTranslation:
-      $ref: ./schemas/domain/EtimTranslation.yaml
+    EtimFeatureTranslation:
+      $ref: ./schemas/domain/EtimFeatureTranslation.yaml
+    EtimFeatureGroupTranslation:
+      $ref: ./schemas/domain/EtimFeatureGroupTranslation.yaml
+    EtimGroupTranslation:
+      $ref: ./schemas/domain/EtimGroupTranslation.yaml
+    EtimModellingGroupTranslation:
+      $ref: ./schemas/domain/EtimModellingGroupTranslation.yaml
+    EtimValueTranslation:
+      $ref: ./schemas/domain/EtimValueTranslation.yaml
     EtimClassTranslation:
       $ref: ./schemas/domain/EtimClassTranslation.yaml
+    EtimModellingClassTranslation:
+      $ref: ./schemas/domain/EtimModellingClassTranslation.yaml
     EtimClassSynonym:
       $ref: ./schemas/domain/EtimClassSynonym.yaml
+    EtimModellingClassSynonym:
+      $ref: ./schemas/domain/EtimModellingClassSynonym.yaml
     EtimUnitTranslation:
       $ref: ./schemas/domain/EtimUnitTranslation.yaml
     EtimLanguageCode:
