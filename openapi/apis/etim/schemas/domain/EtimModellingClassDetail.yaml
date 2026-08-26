@@ -13,6 +13,7 @@ required:
   - descriptionEn
   - synonyms
   - mutationDate
+  - successors
   - releases
   - features
   - ports
@@ -90,7 +91,7 @@ properties:
       - "https://cdn.etim-international.com/drawings/MC000001.svg"
   successors:
     type: array
-    description: Codes of successor modelling classes that replace this one (typically when deprecated).
+    description: Codes of successor modelling classes that replace this one (typically when deprecated). Empty when none exist.
     items:
       type: string
       pattern: "^(MC|CT)[0-9]{6}$"
@@ -138,6 +139,7 @@ examples:
     synonyms: []
     mutationDate: "2024-05-01T12:00:00Z"
     dimensionalDrawingSvgUrl: "https://cdn.etim-international.com/drawings/MC000001.svg"
+    successors: []
     releases: ["ETIM-10.0", "DYNAMIC"]
     features:
       - featureCode: "EF000100"

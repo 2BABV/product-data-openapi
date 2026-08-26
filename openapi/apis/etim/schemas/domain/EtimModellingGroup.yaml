@@ -5,6 +5,7 @@ required:
   - code
   - description
   - deprecated
+  - successors
   - mutationDate
 properties:
   code:
@@ -32,7 +33,7 @@ properties:
       - false
   successors:
     type: array
-    description: Codes of successor modelling groups that replace this one (typically when deprecated).
+    description: Codes of successor modelling groups that replace this one (typically when deprecated). Empty when none exist.
     items:
       type: string
       pattern: "^MG[0-9]{6}$"
@@ -50,4 +51,5 @@ examples:
   - code: "MG000001"
     description: "Valves"
     deprecated: false
+    successors: []
     mutationDate: "2024-05-01T12:00:00Z"

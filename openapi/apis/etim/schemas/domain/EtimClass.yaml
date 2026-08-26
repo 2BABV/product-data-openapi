@@ -11,6 +11,7 @@ required:
   - description
   - mutationDate
   - sectors
+  - successors
   - releases
 properties:
   code:
@@ -73,7 +74,7 @@ properties:
       - ["E", "B"]
   successors:
     type: array
-    description: Codes of successor classes that replace this one (typically when deprecated).
+    description: Codes of successor classes that replace this one (typically when deprecated). Empty when none exist.
     items:
       type: string
       pattern: "^EC[0-9]{6}$"
@@ -97,4 +98,5 @@ examples:
     description: "Socket outlet"
     mutationDate: "2024-06-15T10:30:00Z"
     sectors: ["E", "B"]
+    successors: []
     releases: ["ETIM-10.0", "ETIM-9.0", "DYNAMIC"]

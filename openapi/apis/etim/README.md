@@ -19,6 +19,34 @@ corrected), see [`naming-conventions.md`](naming-conventions.md).
 - `generated/` — bundled output (`etim-api.yaml`); regenerate with `npm run bundle:etim` after any
   source change
 
+## TODO
+
+The following endpoints are defined in [`PRD-etim-v3.md`](PRD-etim-v3.md) but are not yet included
+in the OpenAPI contract:
+
+**Single-resource endpoints**
+
+- `GET /api/v3/etim/classes/{classCode}/diff`
+- `GET /api/v3/etim/features/{featureCode}`
+- `GET /api/v3/etim/feature-groups/{featureGroupCode}`
+- `GET /api/v3/etim/groups/{groupCode}`
+- `GET /api/v3/etim/units/{unitCode}`
+- `GET /api/v3/etim/values/{valueCode}`
+- `GET /api/v3/etim/modelling-groups/{groupCode}`
+
+**Search endpoints**
+
+- `GET /api/v3/etim/classes/search`
+- `GET /api/v3/etim/features/search`
+- `GET /api/v3/etim/modelling-classes/search`
+
+**Miscellaneous and mutation endpoints**
+
+- `GET /api/v3/etim/releases`
+- `GET /api/v3/etim/languages`
+- `GET /api/v3/etim/languages/allowed`
+- `POST /api/v3/etim/rfcs`
+
 ## Design Decisions
 
 ### `release` Filter Scoping

@@ -7,6 +7,7 @@ required:
   - description
   - deprecated
   - local
+  - successors
   - mutationDate
 properties:
   code:
@@ -54,7 +55,7 @@ properties:
       - false
   successors:
     type: array
-    description: Codes of successor features that replace this one (typically when deprecated).
+    description: Codes of successor features that replace this one (typically when deprecated). Empty when none exist.
     items:
       type: string
       pattern: "^EF([0-9]{6}|I[0-9]{5}|[A-Z]{2}[0-9]{4})$"
@@ -74,16 +75,19 @@ examples:
     description: "Colour"
     deprecated: false
     local: false
+    successors: []
     mutationDate: "2024-03-20T08:00:00Z"
   - code: "EFNL9999"
     type: "Alphanumeric"
     description: "Local NL feature"
     deprecated: false
     local: true
+    successors: []
     mutationDate: "2024-05-10T14:00:00Z"
   - code: "EFI00001"
     type: "Numeric"
     description: "Length (imperial)"
     deprecated: false
     local: false
+    successors: []
     mutationDate: "2024-01-15T09:00:00Z"

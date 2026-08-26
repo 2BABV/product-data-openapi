@@ -5,6 +5,7 @@ required:
   - code
   - description
   - deprecated
+  - successors
   - mutationDate
 properties:
   code:
@@ -32,7 +33,7 @@ properties:
       - false
   successors:
     type: array
-    description: Codes of successor feature groups that replace this one (typically when deprecated).
+    description: Codes of successor feature groups that replace this one (typically when deprecated). Empty when none exist.
     items:
       type: string
       pattern: "^EFG[0-9]{5}$"
@@ -50,4 +51,5 @@ examples:
   - code: "EFG00001"
     description: "General"
     deprecated: false
+    successors: []
     mutationDate: "2024-04-10T09:00:00Z"

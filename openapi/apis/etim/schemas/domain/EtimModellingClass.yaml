@@ -11,6 +11,7 @@ required:
   - status
   - description
   - mutationDate
+  - successors
   - releases
   - productClassCodes
   - ports
@@ -73,7 +74,7 @@ properties:
       - "https://cdn.etim-international.com/drawings/MC000001.svg"
   successors:
     type: array
-    description: Codes of successor modelling classes that replace this one (typically when deprecated).
+    description: Codes of successor modelling classes that replace this one (typically when deprecated). Empty when none exist.
     items:
       type: string
       pattern: "^(MC|CT)[0-9]{6}$"
@@ -113,6 +114,7 @@ examples:
     description: "Valve body"
     mutationDate: "2024-05-01T12:00:00Z"
     dimensionalDrawingSvgUrl: "https://cdn.etim-international.com/drawings/MC000001.svg"
+    successors: []
     releases: ["ETIM-10.0", "DYNAMIC"]
     productClassCodes: ["EC000099", "EC990022"]
     ports:
