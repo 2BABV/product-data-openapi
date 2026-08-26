@@ -122,7 +122,7 @@ Common query params for bulk: `cursor`, `limit`, `release` (filter by ETIM relea
 | `GET /api/v3/etim/bulk/modelling-class-features` | Flat relation (classCode, classVersion, classRevision, featureCode, orderNumber, unitCode, unitImperialCode, featureGroupCode, type, definition, portcode, mutationDate) |
 | `GET /api/v3/etim/bulk/modelling-class-feature-values` | Flat relation (classCode, classVersion, classRevision, featureCode, valueCode, orderNumber, mutationDate) |
 
-Common query params for modelling bulk: `cursor`, `limit`, `release`, `mutationDateTime`.
+Common query params for modelling bulk: `cursor`, `limit`, `mutationDateTime`. `release` additionally applies to `modelling-classes`, `modelling-class-features`, and `modelling-class-feature-values` (release-scoped via class `version`) — but not `modelling-groups`, which is global master data with no release/version field.
 
 #### Bulk Classification Translation Endpoints (Tag: `Classification bulk`)
 
@@ -138,6 +138,14 @@ Common query params for modelling bulk: `cursor`, `limit`, `release`, `mutationD
 
 Common query params for translations: `cursor`, `limit`, `language` (comma-separated, required — filters which languages to return), `mutationDateTime`.
 
+`release` is **only** supported on `classes/translations` and `classes/synonyms` (records are keyed by
+`code` + `version`, and class versions are release-scoped via the class's `releases` array). It is
+**not** supported on `features/translations`, `feature-groups/translations`, `groups/translations`,
+`units/translations`, or `values/translations` — these translate global master-data entities that
+have no `version`/`releases` field, so there is nothing release-specific to filter on; the endpoint
+always returns the full set for the requested language(s). See the [Design Decisions](README.md#design-decisions)
+in the ETIM API README for the general rule.
+
 #### Bulk Modelling Translation Endpoints (Tag: `Modelling bulk`)
 
 | Endpoint | Description |
@@ -147,6 +155,11 @@ Common query params for translations: `cursor`, `limit`, `language` (comma-separ
 | `GET /api/v3/etim/bulk/modelling-groups/translations` | Modelling-group translations (code, languageCode, description) |
 
 Common query params for modelling translations: `cursor`, `limit`, `language` (comma-separated, required), `mutationDateTime`.
+
+`release` is **only** supported on `modelling-classes/translations` and `modelling-classes/synonyms`
+(same `code` + `version` reasoning as classification classes). It is **not** supported on
+`modelling-groups/translations` — modelling groups are global master data with no `version`/`releases`
+field. See the [Design Decisions](README.md#design-decisions) in the ETIM API README for the general rule.
 
 #### Single Classification Endpoints (Tag: `Classification single`)
 
@@ -194,6 +207,7 @@ Common query params for modelling translations: `cursor`, `limit`, `language` (c
 - **All entities include `mutationDate`**: Every bulk entity (including relation tables like class-features and class-feature-values) AND all translation/synonym records includes a `mutationDate` field for incremental sync support.
 - **Embedded modelling links**: Modelling classes include `productClassCodes` and ports with `connectionTypeCodes`. These arrays are required, use `[]` when empty, and replace dedicated link endpoints.
 - **Release-based link resolution**: Embedded EC and CT links contain codes only. Their versions are resolved through the requested ETIM release; `DYNAMIC` resolves the current published version.
+- **`release` filter scoping**: The `release` query parameter is only applied where the response schema carries a `version`/`releases` field that is actually release-scoped (classes, class-features, class-feature-values, classes-translations, classes-synonyms, and their `modelling-*` equivalents). It is intentionally omitted from endpoints for global master data (features, feature-groups, groups, units, values, modelling-groups) and their translations, since those entities have no release/version field. See [README — Design Decisions](README.md#design-decisions) for the full rule.
 
 ### Delta Sync
 
