@@ -72,7 +72,7 @@ Create a new ETIM API v3 that:
 
 22. As an ETIM data consumer, I want to list available/allowed languages via a simple GET, so that I know which language codes I can use.
 
-23. As an ETIM data consumer, I want modelling classes to include ports with `connectionTypeCodes`, and modelling-class-features to include `portcode`, so that I can reconstruct modelling structures without separate port or connection-type relation endpoints.
+23. As an ETIM data consumer, I want a flat modelling-class ports service with one row per port and primitive `connectionTypeCodes`, and modelling-class-features to include `portcode`, so that I can reconstruct modelling structures without nested bulk records.
 
 24. As an ETIM data consumer, I want the API to use OAuth2 client credentials with a `read:etim` scope, so that authentication is consistent with other 2BA APIs.
 
@@ -117,12 +117,13 @@ Common query params for bulk: `cursor`, `limit`, `release` (filter by ETIM relea
 
 | Endpoint | Description |
 |----------|-------------|
-| `GET /api/v3/etim/bulk/modelling-classes` | Flat modelling-classes including revision, productClassCodes, and ports with connectionTypeCodes |
+| `GET /api/v3/etim/bulk/modelling-classes` | Flat modelling-classes including revision and primitive productClassCodes |
 | `GET /api/v3/etim/bulk/modelling-groups` | Flat modelling-groups (code, description, deprecated, mutationDate, successors) |
 | `GET /api/v3/etim/bulk/modelling-class-features` | Flat relation (classCode, classVersion, classRevision, featureCode, orderNumber, unitCode, unitImperialCode, featureGroupCode, type, definition, portcode, mutationDate) |
 | `GET /api/v3/etim/bulk/modelling-class-feature-values` | Flat relation (classCode, classVersion, classRevision, featureCode, valueCode, orderNumber, mutationDate) |
+| `GET /api/v3/etim/bulk/modelling-class-ports` | Flat relation with one row per port (classCode, classVersion, classRevision, portcode, connectionTypeCodes, mutationDate) |
 
-Common query params for modelling bulk: `cursor`, `limit`, `mutationDateTime`. `release` additionally applies to `modelling-classes`, `modelling-class-features`, and `modelling-class-feature-values` (release-scoped via class `version`) — but not `modelling-groups`, which is global master data with no release/version field.
+Common query params for modelling bulk: `cursor`, `limit`, `mutationDateTime`. `release` additionally applies to `modelling-classes`, `modelling-class-features`, `modelling-class-feature-values`, and `modelling-class-ports` (release-scoped via class `version`) — but not `modelling-groups`, which is global master data with no release/version field.
 
 #### Bulk Classification Translation Endpoints (Tag: `Classification bulk`)
 
@@ -205,8 +206,9 @@ field. See the [Design Decisions](README.md#design-decisions) in the ETIM API RE
 - **Class synonyms have dedicated bulk endpoints**: Class and modelling-class synonyms are served via dedicated `/synonyms` bulk endpoints instead of being embedded in translation records.
 - **Single English description on bulk endpoints**: All bulk entity endpoints return a single `description` field in ETIM English (EN) — no `language` query param and no `descriptionEn` separate field. Translated descriptions are available only via the dedicated `/translations` endpoints. Units include a single `abbreviation` field (ETIM English).
 - **All entities include `mutationDate`**: Every bulk entity (including relation tables like class-features and class-feature-values) AND all translation/synonym records includes a `mutationDate` field for incremental sync support.
-- **Embedded modelling links**: Modelling classes include `productClassCodes` and ports with `connectionTypeCodes`. These arrays are required, use `[]` when empty, and replace dedicated link endpoints.
-- **Release-based link resolution**: Embedded EC and CT links contain codes only. Their versions are resolved through the requested ETIM release; `DYNAMIC` resolves the current published version.
+- **Flat bulk rows**: Every bulk `data` item contains only primitive scalar properties and arrays whose items resolve to primitive scalar schemas. Nested objects and arrays of objects are not allowed. Primitive scalar `$ref` properties remain allowed because they do not change the JSON shape.
+- **Modelling links**: Bulk modelling classes include the primitive `productClassCodes` array. Ports are served by the dedicated `modelling-class-ports` relation endpoint, where each row contains one `portcode` and a primitive `connectionTypeCodes` array.
+- **Release-based link resolution**: EC and CT link arrays contain codes only. Their versions are resolved through the requested ETIM release; `DYNAMIC` resolves the current published version.
 - **`release` filter scoping**: The `release` query parameter is only applied where the response schema carries a `version`/`releases` field that is actually release-scoped (classes, class-features, class-feature-values, classes-translations, classes-synonyms, and their `modelling-*` equivalents). It is intentionally omitted from endpoints for global master data (features, feature-groups, groups, units, values, modelling-groups) and their translations, since those entities have no release/version field. See [README — Design Decisions](README.md#design-decisions) for the full rule.
 
 ### Delta Sync
@@ -230,21 +232,22 @@ GET /api/v3/etim/bulk/classes?release=ETIM-10.0&mutationDateTime=2026-07-01T00:0
   - Regular class-feature-value relations: `classCode` + `classVersion` + `featureCode` + `valueCode`
   - Modelling class-feature relations: `classCode` + `classVersion` + `featureCode` + optional `portcode`
   - Modelling class-feature-value relations: `classCode` + `classVersion` + `featureCode` + `valueCode` + optional `portcode`
+  - Modelling class-port relations: `classCode` + `classVersion` + `portcode`
   - Translations: `code` (+ `version`) + `languageCode`
   - Synonyms: `code` + `version` + `languageCode` + `synonym`
 - **Class aggregate revision**: `revision` on a class or modelling class identifies its complete structural aggregate. Every class-owned feature and feature-value relation carries the same value as required `classRevision`.
 - **Atomic aggregate publication**: When any structural part changes, the server increments `revision` and publishes the class row plus every current structural relation with the same `mutationDate`. Removed relations are absent from the new aggregate. Publication must be atomic.
-- **Embedded modelling structure**: `productClassCodes`, ports, and per-port `connectionTypeCodes` belong to the modelling class aggregate. Changes to these arrays increment the modelling class revision; no relation tombstones are needed.
+- **Modelling structure**: `productClassCodes` and the rows returned by `modelling-class-ports` belong to the modelling class aggregate. Changes to these values increment the modelling class revision; no relation tombstones are needed.
 - **Client aggregate replacement**: Changed class rows are the authoritative rebuild list. Clients stage all matching structural relation rows by `(classCode, classVersion, classRevision)`, verify `classRevision == revision`, then transactionally delete and rebuild each local aggregate. No returned rows means the relation set is intentionally empty.
 - **Revision mismatch handling**: Clients must not combine relation rows from different revisions. On a mismatch, discard the affected staged aggregate and retry it from a cursor-consistent read.
 - **Watermark advancement**: Consumers should advance their stored watermark only after successfully processing all pages and rebuilding every changed aggregate.
 - **Shared entity lifecycle**: Features, values, units, groups, feature groups, and modelling groups are not hard-deleted; retirement is represented by their `deprecated` flag (classes and modelling classes use `status` instead). Their translations remain independently synchronized.
 - **Translation scope**: Class translations and synonyms remain outside the structural aggregate replacement contract and continue to use their dedicated incremental endpoints.
 - **`estimatedTotal` reflects the filter**: The `meta.estimatedTotal` value represents the approximate count of records matching the current filter set, not the total dataset size.
-- **Flat relation records**: `class-features` and `class-feature-values` are fully denormalized junction records with all foreign keys inline.
+- **Flat relation records**: Feature, feature-value, and modelling-class port services return denormalized relation records with their owning keys inline.
 - **Modelling port inclusion**: Modelling class-feature relations include `portcode` in the flat record to indicate port association (absent = class-level feature, present ≥ 1 = port-specific).
-- **Modelling ports and links**: Modelling classes embed ports with `connectionTypeCodes` and a class-level `productClassCodes` array. Regular EC classes have no modelling-class link property.
-- **Modelling classes include connection types**: Connection type classes (CT) are a subtype of modelling class — they have features and values but use an empty ports array. They are served by the same modelling class endpoints (code pattern `^(MC|CT)[0-9]{6}$`). MC ports reference CT codes.
+- **Modelling ports and links**: Bulk modelling classes carry the class-level primitive `productClassCodes` array. The `modelling-class-ports` endpoint returns one flat row per port with primitive `connectionTypeCodes`. Single modelling-class responses retain embedded ports. Regular EC classes have no modelling-class link property.
+- **Modelling classes include connection types**: Connection type classes (CT) are a subtype of modelling class — they have features and values but produce no rows in the modelling-class ports service. They are served by the same modelling class endpoints (code pattern `^(MC|CT)[0-9]{6}$`). MC ports reference CT codes.
 - **Modelling classes stay separate**: Separate endpoint paths for modelling-classes vs regular classes (different entity codes: MC/CT vs EC, different groups: MG vs EG).
 - **Response envelope**: All responses wrap content in `data` (with a named `$ref` schema), bulk adds `meta` with `CursorPaginationMetadata`.
 - **Optional-absent fields (Option B)**: Optional properties are NOT listed in `required` and use simple types (e.g., `type: string`). Absence means "no value." This follows Microsoft/Google/Zalando guidelines. No `type: ["string", "null"]` patterns. Portcode fields: absent = class-level feature, present (≥ 1) = port-specific.
@@ -279,6 +282,9 @@ openapi/apis/etim/
 │   │   ├── modelling-classes-synonyms.yaml
 │   │   ├── modelling-groups.yaml
 │   │   ├── modelling-groups-translations.yaml
+│   │   ├── modelling-class-features.yaml
+│   │   ├── modelling-class-feature-values.yaml
+│   │   ├── modelling-class-ports.yaml
 │   │   ├── units.yaml
 │   │   ├── units-translations.yaml
 │   │   ├── values.yaml
@@ -312,6 +318,10 @@ openapi/apis/etim/
 │   │   ├── EtimValue.yaml
 │   │   ├── EtimClassFeature.yaml
 │   │   ├── EtimClassFeatureValue.yaml
+│   │   ├── EtimModellingClassFeature.yaml
+│   │   ├── EtimModellingClassFeatureValue.yaml
+│   │   ├── EtimModellingClassPort.yaml
+│   │   ├── EtimModellingClassPortRelation.yaml
 │   │   ├── EtimFeatureTranslation.yaml
 │   │   ├── EtimFeatureGroupTranslation.yaml
 │   │   ├── EtimGroupTranslation.yaml
@@ -328,6 +338,7 @@ openapi/apis/etim/
 │       ├── BulkClassesResponse.yaml
 │       ├── BulkClassesTranslationsResponse.yaml
 │       ├── BulkFeaturesResponse.yaml
+│       ├── BulkModellingClassPortsResponse.yaml
 │       ├── ... (one per bulk endpoint)
 │       ├── ClassResponse.yaml
 │       ├── ClassResponseData.yaml
@@ -368,7 +379,7 @@ openapi/apis/etim/
 - **Write operations** beyond RFC creation (no CRUD for entities)
 - **Rate limiting design** — left to implementation
 - **Versioning of individual entities** (version history queries beyond the existing diff endpoint)
-- **Bulk modelling-class-features and modelling-class-feature-values as separate endpoints** — modelling features are included in the regular `class-features` endpoint via the `portcode` field discriminator (portcode present = modelling class feature)
+- **Backend implementation details for modelling relation services** — the contract defines the separate modelling-class feature, feature-value, and port endpoints but not their storage or query implementation.
 
 ## Further Notes
 
@@ -376,5 +387,6 @@ openapi/apis/etim/
 - The v3 spec should be implemented as a proper multi-file OpenAPI 3.1 YAML structure following workspace conventions (like the Product and TradeItem APIs).
 - The `IncludeModel` pattern from v2 (selecting which nested fields to return) is replaced by the flat endpoint design — consumers fetch exactly the data they need from the appropriate endpoint.
 - Modelling class features with `portcode` field: when `portcode` is absent, the feature belongs to the class itself; when present (≥ 1), it belongs to that specific port.
+- Modelling-class ports are returned separately from bulk modelling classes. Each port row carries the owning class version and revision so clients can rebuild the modelling aggregate atomically.
 - The comma-separated `language` query param on translation endpoints allows fetching translations for multiple markets in a single pagination pass, reducing round-trips for multi-language deployments.
 - RFC endpoint should accept the same payload structure as v2 (or a simplified version) — exact schema TBD during implementation.

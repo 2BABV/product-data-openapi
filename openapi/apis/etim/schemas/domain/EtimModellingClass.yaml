@@ -14,7 +14,6 @@ required:
   - successors
   - releases
   - productClassCodes
-  - ports
 properties:
   code:
     type: string
@@ -100,11 +99,6 @@ properties:
       pattern: "^EC[0-9]{6}$"
     examples:
       - ["EC000099", "EC990022"]
-  ports:
-    type: array
-    description: Ports defined on this modelling class. Connection type classes use an empty array.
-    items:
-      $ref: ./EtimModellingClassPort.yaml
 examples:
   - code: "MC000001"
     version: 2
@@ -117,6 +111,3 @@ examples:
     successors: []
     releases: ["ETIM-10.0", "DYNAMIC"]
     productClassCodes: ["EC000099", "EC990022"]
-    ports:
-      - portcode: 1
-        connectionTypeCodes: ["CT000001", "CT000003"]

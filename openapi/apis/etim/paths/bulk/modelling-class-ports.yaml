@@ -1,0 +1,32 @@
+get:
+  operationId: getBulkEtimModellingClassPorts
+  tags:
+    - Modelling bulk
+  summary: List ETIM modelling-class ports
+  description: |
+    Retrieve all port records for ETIM modelling classes in bulk with cursor-based pagination.
+
+    Each row represents one port and includes the owning modelling-class version and revision.
+    Connection type assignments are represented by the primitive `connectionTypeCodes` array.
+    When a modelling class aggregate changes, every current port is returned with the owning
+    class `revision` copied to `classRevision`.
+  parameters:
+    - $ref: ../../../../shared/parameters/query/cursor.yaml
+    - $ref: ../../../../shared/parameters/query/limit.yaml
+    - $ref: ../../parameters/query/etim-release.yaml
+    - $ref: ../../../../shared/parameters/query/mutation-date-time.yaml
+  responses:
+    '200':
+      description: Successfully retrieved data
+      content:
+        application/json:
+          schema:
+            $ref: ../../schemas/responses/BulkModellingClassPortsResponse.yaml
+    '400':
+      $ref: ../../../../shared/responses/400-bad-request.yaml
+    '401':
+      $ref: ../../../../shared/responses/401-unauthorized.yaml
+    '403':
+      $ref: ../../../../shared/responses/403-forbidden.yaml
+    '500':
+      $ref: ../../../../shared/responses/500-internal-server-error.yaml

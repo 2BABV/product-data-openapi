@@ -49,6 +49,24 @@ in the OpenAPI contract:
 
 ## Design Decisions
 
+### Flat Bulk Data Rows
+
+Every item in a bulk response's `data` array is a flat record. Bulk row properties may be
+primitive scalar values or arrays whose items resolve to primitive scalar schemas. Nested objects
+and arrays of objects are not allowed in bulk data rows. A `$ref` to a primitive scalar schema,
+such as `EtimLanguageCode`, remains valid because it does not introduce nesting in the JSON
+payload.
+
+The response envelope is not subject to this row-shape restriction: bulk responses continue to
+use `data` plus the `CursorPaginationMetadata` object in `meta`. Single-resource responses may
+retain nested domain structures where they are useful for an aggregate view.
+
+Modelling-class ports therefore use a dedicated flat relation endpoint:
+`GET /api/v3/etim/bulk/modelling-class-ports`. Each row represents one port and carries
+`classCode`, `classVersion`, `classRevision`, `portcode`, `connectionTypeCodes`, and
+`mutationDate`. The `connectionTypeCodes` property is a primitive string array. The bulk
+modelling-class row no longer embeds `ports`; single modelling-class responses continue to do so.
+
 ### `release` Filter Scoping
 
 The `release` query parameter (`parameters/query/etim-release.yaml`) filters results by ETIM
@@ -63,7 +81,7 @@ specific releases):
 | Endpoint | Why |
 |----------|-----|
 | `classes`, `modelling-classes` | `EtimClass`/`EtimModellingClass` carry a `releases: string[]` array directly |
-| `class-features`, `class-feature-values`, `modelling-class-features`, `modelling-class-feature-values` | Relations are scoped to a specific class `version`, and class versions map to releases |
+| `class-features`, `class-feature-values`, `modelling-class-features`, `modelling-class-feature-values`, `modelling-class-ports` | Relations are scoped to a specific class `version`, and class versions map to releases |
 | `classes/translations`, `classes/synonyms`, `modelling-classes/translations`, `modelling-classes/synonyms` | Records are keyed by `classCode` + `classVersion` (`EtimClassTranslation`/`EtimModellingClassTranslation`, `EtimClassSynonym`/`EtimModellingClassSynonym`); `classVersion` maps to the parent class's `releases` |
 
 **Does NOT apply `release` filter** (response schema is global master data with no

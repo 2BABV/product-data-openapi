@@ -1,0 +1,14 @@
+type: object
+description: |
+  Bulk response containing flat ETIM modelling-class port relations with cursor-based pagination.
+required:
+  - data
+  - meta
+properties:
+  data:
+    type: array
+    description: Array containing one flat record per modelling-class port.
+    items:
+      $ref: ../domain/EtimModellingClassPortRelation.yaml
+  meta:
+    $ref: ../../../../shared/schemas/common/CursorPaginationMetadata.yaml
