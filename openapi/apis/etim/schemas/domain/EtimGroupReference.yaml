@@ -1,0 +1,23 @@
+type: object
+description: |
+  Reference to the ETIM group a class belongs to, embedded in class details.
+  Description is localized to the requested language.
+required:
+  - code
+properties:
+  code:
+    type: string
+    description: ETIM group code.
+    pattern: "^EG[0-9]{6}$"
+    minLength: 8
+    maxLength: 8
+    examples:
+      - "EG000017"
+  description:
+    type: string
+    description: Group description in the requested language. Absent when no translation is available for the requested language.
+    examples:
+      - "Installation (low voltage)"
+examples:
+  - code: "EG000017"
+    description: "Installation (low voltage)"

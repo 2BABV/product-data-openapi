@@ -2,10 +2,14 @@ name: language
 in: query
 required: false
 description: |
-  Single language code for the `description` field in the response.
+  Single language code for localized text in the response: `description` (class,
+  modelling class, feature, and value), `group.description`, `featureGroup.description`,
+  and unit reference `description`/`abbreviation` (`unit`, `unitImperial`,
+  `unitVariableAxis`, `unitVariableAxisImperial`).
   Uses the full locale format `xx-XX` (ISO 639-1 + ISO 3166-1 alpha-2, e.g., "nl-NL", "de-DE").
   The only exception is "EN" which is accepted as the short code for ETIM English.
   When omitted, the description defaults to ETIM English (EN).
 schema:
   $ref: ../../schemas/domain/EtimLanguageCode.yaml
+  default: "EN"
 example: "nl-NL"

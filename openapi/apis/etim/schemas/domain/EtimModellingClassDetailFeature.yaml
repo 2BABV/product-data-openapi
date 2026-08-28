@@ -4,7 +4,6 @@ description: |
   Extends class feature with modelling-specific fields (portcode, variable-axis units, dimensional drawing code).
 required:
   - featureCode
-  - descriptionEn
   - type
   - orderNumber
   - values
@@ -15,11 +14,6 @@ properties:
     pattern: "^EF([0-9]{6}|I[0-9]{5}|[A-Z]{2}[0-9]{4})$"
     examples:
       - "EF000100"
-  descriptionEn:
-    type: string
-    description: Feature description in ETIM English.
-    examples:
-      - "Nominal diameter"
   description:
     type: string
     description: Feature description in the requested language. Absent when no translation is available.
@@ -36,36 +30,16 @@ properties:
     minimum: 1
     examples:
       - 1
-  unitCode:
-    type: string
-    description: ETIM unit code. Absent for non-numeric features.
-    pattern: "^EU[0-9]{6}$"
-    examples:
-      - "EU000001"
-  unitImperialCode:
-    type: string
-    description: Imperial unit code. Absent when not applicable.
-    pattern: "^EU[0-9]{6}$"
-    examples:
-      - "EU000045"
-  unitVariableAxisCode:
-    type: string
-    description: Variable axis unit code (modelling-specific). Absent when not applicable.
-    pattern: "^EU[0-9]{6}$"
-    examples:
-      - "EU000020"
-  unitVariableAxisImperialCode:
-    type: string
-    description: Variable axis imperial unit code (modelling-specific). Absent when not applicable.
-    pattern: "^EU[0-9]{6}$"
-    examples:
-      - "EU000030"
-  featureGroupCode:
-    type: string
-    description: Feature group code. Absent when not assigned.
-    pattern: "^EFG[0-9]{5}$"
-    examples:
-      - "EFG00001"
+  unit:
+    $ref: ./EtimUnitReference.yaml
+  unitImperial:
+    $ref: ./EtimUnitReference.yaml
+  unitVariableAxis:
+    $ref: ./EtimUnitReference.yaml
+  unitVariableAxisImperial:
+    $ref: ./EtimUnitReference.yaml
+  featureGroup:
+    $ref: ./EtimFeatureGroupReference.yaml
   portcode:
     type: integer
     description: |
@@ -85,7 +59,6 @@ properties:
       type: object
       required:
         - valueCode
-        - descriptionEn
         - orderNumber
       properties:
         valueCode:
@@ -93,10 +66,6 @@ properties:
           pattern: "^EV[0-9]{6}$"
           examples:
             - "EV000050"
-        descriptionEn:
-          type: string
-          examples:
-            - "DN 15"
         description:
           type: string
           description: Value description in the requested language. Absent when no translation is available.
@@ -109,16 +78,21 @@ properties:
             - 1
 examples:
   - featureCode: "EF000100"
-    descriptionEn: "Nominal diameter"
     description: "Nominale diameter"
     type: "Numeric"
     orderNumber: 1
-    unitCode: "EU000001"
-    unitVariableAxisCode: "EU000020"
-    featureGroupCode: "EFG00001"
+    unit:
+      code: "EU000001"
+      description: "Millimeter"
+      abbreviation: "mm"
+    unitVariableAxis:
+      code: "EU000020"
+    featureGroup:
+      code: "EFG00001"
+      description: "Algemeen"
     dimensionalDrawingCode: "D1"
     values:
       - valueCode: "EV000050"
-        descriptionEn: "DN 15"
         description: "DN 15"
         orderNumber: 1
+

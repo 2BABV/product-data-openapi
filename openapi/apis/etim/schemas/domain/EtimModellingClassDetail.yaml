@@ -8,9 +8,8 @@ required:
   - code
   - version
   - revision
-  - groupCode
+  - group
   - status
-  - descriptionEn
   - synonyms
   - mutationDate
   - successors
@@ -37,17 +36,8 @@ properties:
     minimum: 0
     examples:
       - 1
-  groupCode:
-    type: string
-    description: Code of the modelling group this class belongs to.
-    pattern: "^MG[0-9]{6}$"
-    examples:
-      - "MG000001"
-  groupDescriptionEn:
-    type: string
-    description: Modelling group description in ETIM English.
-    examples:
-      - "Valves"
+  group:
+    $ref: ./EtimModellingGroupReference.yaml
   status:
     type: integer
     description: |
@@ -55,11 +45,6 @@ properties:
       2 = Under construction, 3 = Ready for publication, 5 = Published, 9 = Deleted.
     examples:
       - 5
-  descriptionEn:
-    type: string
-    description: Class description in ETIM English.
-    examples:
-      - "Valve body"
   definition:
     type: string
     description: Definition or extended description of this modelling class.
@@ -131,10 +116,10 @@ examples:
   - code: "MC000001"
     version: 2
     revision: 1
-    groupCode: "MG000001"
-    groupDescriptionEn: "Valves"
+    group:
+      code: "MG000001"
+      description: "Kleppen"
     status: 5
-    descriptionEn: "Valve body"
     description: "Kleplichaam"
     synonyms: []
     mutationDate: "2024-05-01T12:00:00Z"
@@ -143,13 +128,18 @@ examples:
     releases: ["ETIM-10.0", "DYNAMIC"]
     features:
       - featureCode: "EF000100"
-        descriptionEn: "Nominal diameter"
         description: "Nominale diameter"
         type: "Numeric"
         orderNumber: 1
-        unitCode: "EU000001"
-        unitVariableAxisCode: "EU000020"
-        featureGroupCode: "EFG00001"
+        unit:
+          code: "EU000001"
+          description: "Millimeter"
+          abbreviation: "mm"
+        unitVariableAxis:
+          code: "EU000020"
+        featureGroup:
+          code: "EFG00001"
+          description: "Algemeen"
         dimensionalDrawingCode: "D1"
         values: []
     ports:

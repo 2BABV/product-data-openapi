@@ -205,6 +205,14 @@ components:
       $ref: ./schemas/domain/EtimModellingClassDetail.yaml
     EtimModellingClassDetailFeature:
       $ref: ./schemas/domain/EtimModellingClassDetailFeature.yaml
+    EtimUnitReference:
+      $ref: ./schemas/domain/EtimUnitReference.yaml
+    EtimGroupReference:
+      $ref: ./schemas/domain/EtimGroupReference.yaml
+    EtimModellingGroupReference:
+      $ref: ./schemas/domain/EtimModellingGroupReference.yaml
+    EtimFeatureGroupReference:
+      $ref: ./schemas/domain/EtimFeatureGroupReference.yaml
 
     # Response schemas - bulk entities
     BulkClassesResponse:

@@ -7,9 +7,8 @@ required:
   - code
   - version
   - revision
-  - groupCode
+  - group
   - status
-  - descriptionEn
   - synonyms
   - mutationDate
   - sectors
@@ -35,17 +34,8 @@ properties:
     minimum: 0
     examples:
       - 3
-  groupCode:
-    type: string
-    description: Code of the ETIM group this class belongs to.
-    pattern: "^EG[0-9]{6}$"
-    examples:
-      - "EG000017"
-  groupDescriptionEn:
-    type: string
-    description: Group description in ETIM English.
-    examples:
-      - "Installation (low voltage)"
+  group:
+    $ref: ./EtimGroupReference.yaml
   status:
     type: integer
     description: |
@@ -53,11 +43,6 @@ properties:
       2 = Under construction, 3 = Ready for publication, 5 = Published, 9 = Deleted.
     examples:
       - 5
-  descriptionEn:
-    type: string
-    description: Class description in ETIM English.
-    examples:
-      - "Socket outlet"
   definition:
     type: string
     description: Definition or extended description of this class.
@@ -114,10 +99,10 @@ examples:
   - code: "EC002714"
     version: 4
     revision: 3
-    groupCode: "EG000017"
-    groupDescriptionEn: "Installation (low voltage)"
+    group:
+      code: "EG000017"
+      description: "Installatie (laagspanning)"
     status: 5
-    descriptionEn: "Socket outlet"
     description: "Wandcontactdoos"
     synonyms: ["Stopcontact"]
     mutationDate: "2024-06-15T10:30:00Z"
@@ -126,13 +111,13 @@ examples:
     releases: ["ETIM-10.0", "ETIM-9.0", "DYNAMIC"]
     features:
       - featureCode: "EF000007"
-        descriptionEn: "Colour"
         description: "Kleur"
         type: "Alphanumeric"
         orderNumber: 1
-        featureGroupCode: "EFG00001"
+        featureGroup:
+          code: "EFG00001"
+          description: "Algemeen"
         values:
           - valueCode: "EV000028"
-            descriptionEn: "White"
             description: "Wit"
             orderNumber: 1

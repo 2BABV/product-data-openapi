@@ -1,0 +1,29 @@
+type: object
+description: |
+  Reference to an ETIM unit, embedded in class/modelling-class feature details.
+  Description and abbreviation are localized to the requested language.
+required:
+  - code
+properties:
+  code:
+    type: string
+    description: ETIM unit code.
+    pattern: "^EU[0-9]{6}$"
+    minLength: 8
+    maxLength: 8
+    examples:
+      - "EU000001"
+  description:
+    type: string
+    description: Unit description in the requested language. Absent when no translation is available for the requested language.
+    examples:
+      - "Millimetre"
+  abbreviation:
+    type: string
+    description: Unit abbreviation in the requested language. Absent when no translation is available for the requested language.
+    examples:
+      - "mm"
+examples:
+  - code: "EU000001"
+    description: "Millimetre"
+    abbreviation: "mm"

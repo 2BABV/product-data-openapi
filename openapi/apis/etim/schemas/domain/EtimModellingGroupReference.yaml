@@ -1,0 +1,23 @@
+type: object
+description: |
+  Reference to the ETIM modelling group a modelling class belongs to, embedded in
+  modelling class details. Description is localized to the requested language.
+required:
+  - code
+properties:
+  code:
+    type: string
+    description: ETIM modelling group code.
+    pattern: "^MG[0-9]{6}$"
+    minLength: 8
+    maxLength: 8
+    examples:
+      - "MG000001"
+  description:
+    type: string
+    description: Modelling group description in the requested language. Absent when no translation is available for the requested language.
+    examples:
+      - "Valves"
+examples:
+  - code: "MG000001"
+    description: "Valves"
